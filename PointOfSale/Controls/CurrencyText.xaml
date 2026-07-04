@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="UI.Controls.CurrencyText"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:UI.Controls"
+             x:Name="root">
+
+    <UserControl.Resources>
+        <local:AutoIconSizeConverter x:Key="AutoIconSizeConverter"/>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Right"
+          VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <local:CurrencyIcon
+            Grid.Column="0"
+            Margin="0,0,4,0"
+            VerticalAlignment="Center">
+            <local:CurrencyIcon.IconSize>
+                <MultiBinding Converter="{StaticResource AutoIconSizeConverter}">
+                    <Binding Path="IconSize" ElementName="root"/>
+                    <Binding Path="FontSize" ElementName="root"/>
+                </MultiBinding>
+            </local:CurrencyIcon.IconSize>
+        </local:CurrencyIcon>
+
+        <TextBlock Grid.Column="1"
+                   Text="{Binding Amount, ElementName=root, StringFormat={}{0:N2}}"
+                   TextWrapping="NoWrap"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   FontSize="{Binding FontSize, ElementName=root}"
+                   FontWeight="{Binding FontWeight, ElementName=root}"
+                   Foreground="{Binding Foreground, ElementName=root}"/>
+    </Grid>
+
+</UserControl>

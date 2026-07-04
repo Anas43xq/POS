@@ -1,0 +1,134 @@
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+*.vspscc
+*.vssscc
+$tf/
+
+# Visual Studio
+.vs/
+*.userprefs
+*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+*.cache
+*.dbmdl
+*.dbproj.schemaview
+*.pfx
+*.publishsettings
+*.vsix
+*.vsixmanifest
+*.vspx
+*.vsmdi
+*.tlog
+TestResults/
+*.VisualState.xml
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.gpState
+*.ncrunch*
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.v11.suo
+*.code-workspace
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Files built by Visual Studio
+*.pidb
+*.svclog
+*.scc
+.builds
+
+# WPF specific
+*.dbmdl
+*.dbproj.schemaview
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Microsoft Fakes
+FakesAssemblies/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# StyleCop
+StyleCopReport.xml
+
+# User-specific files
+*.rsuser
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows Store app package
+*.appx
+*.appxbundle
+*.appxupload
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/

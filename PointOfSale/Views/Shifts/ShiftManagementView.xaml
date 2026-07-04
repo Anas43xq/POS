@@ -1,0 +1,397 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Cafeteria Hawa POS  –  Manager · Shift Management  ║
+    ║   Toolbar + dense shift list                         ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.ShiftManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="1420" d:DesignHeight="820">
+
+    <UserControl.Resources>
+
+        <!-- ── Palette ── -->
+        <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
+        <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
+        <SolidColorBrush x:Key="BrandLight"  Color="#F0F7FF"/>
+        <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
+        <SolidColorBrush x:Key="CardBg"      Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="CardHdrBg"   Color="#F0F7FF"/>
+        <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
+        <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
+        <SolidColorBrush x:Key="SuccessGreen" Color="#16A34A"/>
+        <SolidColorBrush x:Key="DangerRed"   Color="#DC2626"/>
+
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background"      Value="{StaticResource CardBg}"/>
+            <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
+            <Setter Property="BorderThickness" Value="0.5"/>
+            <Setter Property="CornerRadius"    Value="10"/>
+        </Style>
+
+        <!-- ── Outline button (Refresh) ── -->
+        <Style x:Key="OutlineBtn" TargetType="Button">
+            <Setter Property="Height"   Value="26"/>
+            <Setter Property="Padding"  Value="12,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+            <Setter Property="Cursor"   Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                CornerRadius="6"
+                                Background="{StaticResource BrandLight}"
+                                BorderBrush="{StaticResource BrandBorder}"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ── Status / payment badge ── -->
+        <Style x:Key="BadgeBase" TargetType="Border">
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding"      Value="8,2"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="BadgeText" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="10"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+
+        <!-- ── List header cell ── -->
+        <Style x:Key="ListHeaderCell" TargetType="TextBlock">
+            <Setter Property="Foreground"        Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontSize"          Value="10"/>
+            <Setter Property="FontWeight"        Value="Medium"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ── List row (hover) ── -->
+        <Style x:Key="ListRow" TargetType="Border">
+            <Setter Property="BorderBrush"     Value="#F0F7FF"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+            <Setter Property="Background"      Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8FCFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ── Row cell text ── -->
+        <Style x:Key="RowCellText" TargetType="TextBlock">
+            <Setter Property="FontSize"          Value="11"/>
+            <Setter Property="Foreground"        Value="{StaticResource TextDark}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ── Row cell CurrencyText ── -->
+        <Style x:Key="RowCellCurrency" TargetType="controls:CurrencyText">
+            <Setter Property="FontSize"          Value="11"/>
+            <Setter Property="Foreground"        Value="{StaticResource TextDark}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ── Difference cell color trigger style ── -->
+        <Style x:Key="DiffText" TargetType="TextBlock" BasedOn="{StaticResource RowCellText}">
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource SuccessGreen}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsShortfall}" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource DangerRed}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ── Difference cell CurrencyText with color triggers ── -->
+        <Style x:Key="DiffCurrency" TargetType="controls:CurrencyText">
+            <Setter Property="FontSize"          Value="11"/>
+            <Setter Property="FontWeight"        Value="Medium"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground"        Value="{StaticResource SuccessGreen}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsShortfall}" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource DangerRed}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ── Thin branded ScrollBar ── -->
+        <Style x:Key="ThinScrollThumb" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border Background="{StaticResource BrandBorder}"
+                                CornerRadius="4"
+                                Margin="2,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ThinScrollBar" TargetType="ScrollBar">
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ThinScrollThumb}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ThinScrollViewer" TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ScrollContentPresenter Grid.Column="0"/>
+                            <ScrollBar Grid.Column="1"
+                                       Style="{StaticResource ThinScrollBar}"
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Background="#EAF4FF">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Toolbar -->
+            <RowDefinition Height="*"/>
+            <!-- Table card -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════
+             TOOLBAR
+             ══════════════════════════════════════ -->
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="{StaticResource BrandBorder}"
+                BorderThickness="0.5"
+                CornerRadius="10"
+                Padding="14,10"
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🕓" FontSize="16" Foreground="{StaticResource BrandMid}"
+                               VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="Shift Management"
+                               FontSize="13" FontWeight="Medium"
+                               Foreground="{StaticResource TextDark}"
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Style="{StaticResource OutlineBtn}"
+                        Content="↻  Refresh"
+                        Command="{Binding RefreshCommand}"/>
+            </Grid>
+        </Border>
+
+        <!-- ══════════════════════════════════════
+             SHIFTS TABLE CARD
+             ══════════════════════════════════════ -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- column headings -->
+                    <RowDefinition Height="*"/>
+                    <!-- scrollable rows -->
+                </Grid.RowDefinitions>
+
+                <!-- Column headings -->
+                <Border Grid.Row="0"
+                        Background="{StaticResource CardHdrBg}"
+                        BorderBrush="{StaticResource BrandBorder}"
+                        BorderThickness="0,0,0,0.5"
+                        CornerRadius="10,10,0,0">
+                    <Grid Margin="12,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="SHIFT ID"   Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="1" Text="CASHIER"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="2" Text="OPENED AT"  Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="3" Text="CLOSED AT"  Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="4" Text="OPENING"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="5" Text="CLOSING"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="6" Text="EXPECTED"   Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="7" Text="DIFFERENCE" Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="8" Text="STATUS"     Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="9" Text="DURATION"   Style="{StaticResource ListHeaderCell}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Scrollable rows -->
+                <ScrollViewer Grid.Row="1"
+                              Style="{StaticResource ThinScrollViewer}"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="0,0,4,0">
+                    <ItemsControl ItemsSource="{Binding Shifts}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ListRow}" MinHeight="42">
+                                    <Grid Margin="12,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="130"/>
+                                            <ColumnDefinition Width="135"/>
+                                            <ColumnDefinition Width="135"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Shift ID -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding ShiftId}"
+                                                   FontWeight="Medium"
+                                                   Style="{StaticResource RowCellText}"/>
+
+                                        <!-- Cashier -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding CashierName}"
+                                                   Style="{StaticResource RowCellText}"/>
+
+                                        <!-- Opened At -->
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding OpenedAt, StringFormat='yyyy-MM-dd HH:mm'}"
+                                                   Style="{StaticResource RowCellText}"/>
+
+                                        <!-- Closed At -->
+                                        <TextBlock Grid.Column="3"
+                                                   Text="{Binding ClosedAtDisplay}"
+                                                   Style="{StaticResource RowCellText}"/>
+
+                                        <!-- Opening -->
+                                        <controls:CurrencyText Grid.Column="4"
+                                                   Amount="{Binding OpeningCash}"
+                                                   Style="{StaticResource RowCellCurrency}"/>
+
+                                        <!-- Closing -->
+                                        <controls:CurrencyText Grid.Column="5"
+                                                   Amount="{Binding ClosingCash}"
+                                                    Style="{StaticResource RowCellCurrency}"/>
+
+                                        <!-- Expected -->
+                                        <controls:CurrencyText Grid.Column="6"
+                                                   Amount="{Binding ExpectedCash}"
+                                                    Style="{StaticResource RowCellCurrency}"/>
+
+                                        <!-- Difference (red/green) -->
+                                        <controls:CurrencyText Grid.Column="7"
+                                                   Amount="{Binding CashDifference}"
+                                                    Style="{StaticResource DiffCurrency}"/>
+
+                                        <!-- Status badge -->
+                                        <Border Grid.Column="8" Style="{StaticResource BadgeBase}">
+                                            <Border.Resources>
+                                                <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                                                            <Setter Property="Background" Value="#DCFCE7"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsOpen}" Value="False">
+                                                            <Setter Property="Background" Value="#DBEAFE"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Resources>
+                                            <TextBlock Text="{Binding StatusLabel}">
+                                                <TextBlock.Resources>
+                                                    <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                                                                <Setter Property="Foreground" Value="#16A34A"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsOpen}" Value="False">
+                                                                <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Resources>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!-- Duration -->
+                                        <TextBlock Grid.Column="9"
+                                                   Text="{Binding DurationHours, StringFormat={}{0:F1}h}"
+                                                    Style="{StaticResource RowCellText}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

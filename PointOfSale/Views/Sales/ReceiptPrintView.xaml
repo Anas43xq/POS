@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="UI.Views.ReceiptPrintView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UI.Views"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" >
+
+    <StackPanel UseLayoutRounding="True"
+                SnapsToDevicePixels="True"
+                Margin="10">
+
+        <!-- Logo -->
+        <Image Source="pack://application:,,,/UI;component/Assets/receiptlogo.png"
+               Width="100"
+               Height="100"
+               Stretch="Uniform"
+               HorizontalAlignment="Center"
+               Margin="0,0,0,6"/>
+
+        <!-- Header -->
+        <TextBlock Text="{Binding StoreName}"
+                           FontSize="14"
+                           FontWeight="Bold"
+                           TextAlignment="Center"
+                           Margin="0,0,0,6"/>
+
+        <TextBlock Text="SALES RECEIPT"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           TextAlignment="Center"
+                           Margin="0,0,0,14"/>
+
+        <TextBlock Text="{Binding ReceiptNumber, StringFormat=Receipt: {0}}"
+                           FontSize="13"
+                           Margin="0,0,0,3"/>
+
+        <TextBlock Text="{Binding TransactionDate, StringFormat=Date: {0:yyyy-MM-dd HH:mm}}"
+                           FontSize="13"
+                           Margin="0,0,0,3"/>
+
+        <Separator Margin="0,0,0,8"/>
+
+        <!-- Items header -->
+        <TextBlock Text="ITEMS" FontWeight="Bold" Margin="0,0,0,6"/>
+
+        <!-- Items -->
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,8">
+                        <TextBlock Text="{Binding ProductName}"
+                                   TextWrapping="Wrap"
+                                   FontWeight="SemiBold"/>
+
+                        <Grid Margin="0,2,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center">
+                                <Run Text="{Binding Quantity, Mode=OneWay}"/>
+                                <Run Text=" x "/>
+                                <Run Text="{Binding UnitPrice, Mode=OneWay, StringFormat={}{0:N2}}"/>
+                            </TextBlock>
+
+                            <controls:CurrencyText Grid.Column="1"
+                                                   Amount="{Binding LineTotal}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Separator Margin="0,6,0,8"/>
+
+        <!-- Totals -->
+        <Grid Margin="0,0,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Subtotal"/>
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding Subtotal}"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Grid Margin="0,0,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Tax"/>
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding TaxTotal}"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Grid Margin="0,0,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Discount"/>
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding DiscountTotal}"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Grid Margin="0,8,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="GRAND TOTAL"
+                               FontSize="16"
+                               FontWeight="Bold"/>
+
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding GrandTotal}"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Separator Margin="0,4,0,10"/>
+
+        <!-- Payment -->
+        <TextBlock Text="{Binding PaymentMethod, StringFormat=Payment: {0}}"
+                           Margin="0,0,0,4"/>
+
+        <Grid Margin="0,0,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Amount Tendered:"/>
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding AmountTendered}"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Grid Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Change:"/>
+            <controls:CurrencyText Grid.Column="1"
+                                           Amount="{Binding ChangeGiven}"
+                                           HorizontalAlignment="Right"/>
+        </Grid>
+
+        <TextBlock Text="Thank you!"
+                           TextAlignment="Center"
+                           FontWeight="SemiBold"
+                           Margin="0,6,0,8"/>
+    </StackPanel>
+</UserControl>

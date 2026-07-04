@@ -1,0 +1,58 @@
+<Window x:Class="UI.Views.CardPaymentConfirmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:UI.Controls"
+        mc:Ignorable="d"
+        Title="Confirm Card Payment"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True">
+
+    <Border Width="460"
+            Background="White"
+            Padding="26"
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="8">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,18">
+                <TextBlock Text="Confirm card payment" FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
+                <TextBlock Text="Review the total before charging the card." FontSize="14" Foreground="#64748B" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" Padding="16" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Charge " FontSize="18" Foreground="#334155" VerticalAlignment="Center"/>
+                    <controls:CurrencyText Amount="{Binding GrandTotal, Mode=OneWay}"
+                                           FontWeight="Bold"
+                                           FontSize="28"
+                                           Foreground="#2563EB"
+                                           VerticalAlignment="Center"/>
+                    <TextBlock Text=" to the card?" FontSize="18" Foreground="#334155" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancel" Width="100" Height="38" Margin="0,0,10,0"
+                        Background="#E2E8F0" Foreground="#0F172A"
+                        Command="{Binding CancelCommand}"
+                        IsCancel="True"/>
+                <Button Content="Confirm" Width="110" Height="38"
+                        Background="#2563EB" Foreground="White"
+                        Command="{Binding ConfirmCommand}"
+                        IsDefault="True"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

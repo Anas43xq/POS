@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using BLL.Interfaces;
+using BLL.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace BLL;
+
+public static  class DependencyInjection
+{
+    public static IServiceCollection AddBLL(this IServiceCollection services)
+    {
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ITransactionService, TransactionService>();
+        services.AddScoped<ITransactionItemService, TransactionItemService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IShiftService, ShiftService>();
+        services.AddScoped<IShiftManagementService, ShiftManagementService>();
+        services.AddScoped<ITaxRateService, TaxRateService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITopProductService, TopProductService>();
+        services.AddSingleton<ISessionService, SessionService>();
+        services.AddScoped<ITransactionService, TransactionService>();
+        services.AddScoped<IReceiptService, ReceiptService>();
+        services.AddScoped<IRecentSaleService, RecentSaleService>();
+        services.AddScoped<IRecentTransactionService, RecentTransactionService>();
+        services.AddScoped<IShiftSummaryService, ShiftSummaryService>();
+        services.AddScoped<IKpiService, KpiService>();
+        services.AddSingleton<ICurrencyService, CurrencyService>();
+        services.AddScoped<IReportService, ReportService>();
+
+        return services;
+    }
+    
+}
+
