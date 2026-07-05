@@ -49,7 +49,7 @@ namespace UI.Behaviors
             }
         }
 
-        private static IInputElement FindFocusableElement(DependencyObject parent)
+        private static IInputElement? FindFocusableElement(DependencyObject parent)
         {
             for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
             {

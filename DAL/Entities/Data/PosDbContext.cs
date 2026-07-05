@@ -26,6 +26,12 @@ namespace DAL.Entities.Data
 
         public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<Supplier> Suppliers { get; set; }
+
+        public DbSet<PurchaseReceiptType> PurchaseReceiptTypes { get; set; }
+
+        public DbSet<PurchaseReceipt> PurchaseReceipts { get; set; }
+
         public DbSet<AuditLog> AuditLogs { get; set; }
 
         public DbSet<RecentTransactionView> vw_RecentTransactions { get; set; }

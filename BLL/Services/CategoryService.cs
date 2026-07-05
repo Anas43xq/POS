@@ -2,6 +2,7 @@ using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace BLL.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryrepo;
+        private readonly ILogger<CategoryService> _logger;
 
-        public CategoryService(ICategoryRepository CategoryRepo)
+        public CategoryService(ICategoryRepository CategoryRepo, ILogger<CategoryService> logger)
         {
             _categoryrepo = CategoryRepo;
+            _logger = logger;
         }
 
         public async Task<Result<List<Category>>> GetAllCategoriesAsync()
@@ -27,6 +30,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to load categories");
                 return Result<List<Category>>.Failure(ex.Message);
             }
         }
@@ -40,6 +44,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to load categories with children");
                 return Result<List<Category>>.Failure(ex.Message);
             }
         }
@@ -53,6 +58,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to load child categories for parent {ParentCategoryId}", parentCategoryId);
                 return Result<List<Category>>.Failure(ex.Message);
             }
         }

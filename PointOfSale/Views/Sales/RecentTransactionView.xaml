@@ -49,52 +49,10 @@
                                 Command="{Binding CloseRecentSalesCommand}"/>
                 </Grid>
 
-                <Border Grid.Row="1"
-                            BorderBrush="#CBD5E1"
-                            BorderThickness="1">
-                    <DataGrid ItemsSource="{Binding CashierDashboardViewModel.RecentSales}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserAddRows="False"
-                                  RowHeight="52"
-                                  ColumnHeaderHeight="42"
-                                  BorderThickness="0"
-                                  FontSize="14">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Receipt"
-                                                    Binding="{Binding ReceiptNumber}"
-                                                    Width="*"
-                                                    MinWidth="130"/>
-                            <DataGridTextColumn Header="Date"
-                                                    Binding="{Binding TransactionDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
-                                                    Width="155"/>
-                            <DataGridTextColumn Header="Payment"
-                                                    Binding="{Binding PaymentMethod}"
-                                                    Width="110"/>
-                            <DataGridTextColumn Header="Status"
-                                                    Binding="{Binding Status}"
-                                                    Width="100"/>
-                            <DataGridTemplateColumn Header="Total" Width="105">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <controls:CurrencyText Amount="{Binding GrandTotal}" HorizontalAlignment="Right" Margin="0,0,8,0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="" Width="95">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Open"
-                                                    Height="34"
-                                                    Command="{Binding DataContext.OpenRecentSaleReceiptCommand,
-                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
-                                                    CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
+                <controls:RecentSalesList Grid.Row="1"
+                                          ItemsSource="{Binding CashierDashboardViewModel.RecentSales}"
+                                          OpenCommand="{Binding DataContext.OpenRecentSaleReceiptCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"/>
 
                 <TextBlock Grid.Row="2"
                                Text="Select Open to view the receipt again."

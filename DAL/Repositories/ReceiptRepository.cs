@@ -44,7 +44,7 @@ namespace DAL.Repositories
 
                 CashierName = transaction.Cashier?.FullName ?? string.Empty,
 
-                StoreName = "Cafeteria Hawa",
+                StoreName = "POS SYS",
 
                 Subtotal = transaction.Subtotal,
                 TaxTotal = transaction.TaxTotal,

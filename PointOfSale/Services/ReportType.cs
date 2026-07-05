@@ -3,6 +3,8 @@ namespace UI.Services
     public enum ReportType
     {
         Transactions,
-        Product
+        Product,
+        VatPurchaseRegister,
+        NonVatPurchaseRegister
     }
 }

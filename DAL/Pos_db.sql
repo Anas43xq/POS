@@ -150,6 +150,64 @@ CREATE TABLE Transactions
 );
 GO
 
+CREATE TABLE Suppliers
+(
+    SupplierId      INT IDENTITY(1,1) NOT NULL,
+    CompanyName     NVARCHAR(200) NOT NULL,
+    TRN             NVARCHAR(50) NULL,
+    Address         NVARCHAR(300) NULL,
+    Phone           NVARCHAR(50) NULL,
+    Email           NVARCHAR(255) NULL,
+    Notes           NVARCHAR(500) NULL,
+    CreatedAt       DATETIME2(0) NOT NULL CONSTRAINT DF_Suppliers_CreatedAt DEFAULT SYSUTCDATETIME(),
+
+    CONSTRAINT PK_Suppliers PRIMARY KEY (SupplierId),
+    CONSTRAINT UQ_Suppliers_CompanyName UNIQUE (CompanyName)
+);
+GO
+
+CREATE TABLE PurchaseReceiptTypes
+(
+    ReceiptTypeId TINYINT NOT NULL,
+    Name          NVARCHAR(30) NOT NULL,
+
+    CONSTRAINT PK_PurchaseReceiptTypes PRIMARY KEY (ReceiptTypeId),
+    CONSTRAINT UQ_PurchaseReceiptTypes_Name UNIQUE (Name)
+);
+GO
+
+INSERT INTO PurchaseReceiptTypes (ReceiptTypeId, Name)
+VALUES (1, N'VAT'), (2, N'NonVAT');
+GO
+
+CREATE TABLE PurchaseReceipts
+(
+    ReceiptId           INT IDENTITY(1,1) NOT NULL,
+    ReceiptTypeId       TINYINT NOT NULL,
+    SupplierId          INT NULL,
+    InvoiceNumber       NVARCHAR(100) NOT NULL,
+    InvoiceDate         DATE NOT NULL,
+    Category            NVARCHAR(100) NOT NULL,
+    Description         NVARCHAR(500) NULL,
+    Subtotal            DECIMAL(18,2) NOT NULL CONSTRAINT DF_PurchaseReceipts_Subtotal DEFAULT 0,
+    VatRate             DECIMAL(5,2) NOT NULL CONSTRAINT DF_PurchaseReceipts_VatRate DEFAULT 0,
+    VatAmount           DECIMAL(18,2) NOT NULL CONSTRAINT DF_PurchaseReceipts_VatAmount DEFAULT 0,
+    GrandTotal          DECIMAL(18,2) NOT NULL,
+    Notes               NVARCHAR(1000) NULL,
+    ImagePath           NVARCHAR(500) NULL,
+    CreatedBy           INT NOT NULL,
+    CreatedAt           DATETIME2(0) NOT NULL CONSTRAINT DF_PurchaseReceipts_CreatedAt DEFAULT SYSUTCDATETIME(),
+
+    CONSTRAINT PK_PurchaseReceipts PRIMARY KEY (ReceiptId),
+    CONSTRAINT FK_PurchaseReceipts_ReceiptType FOREIGN KEY (ReceiptTypeId) REFERENCES PurchaseReceiptTypes(ReceiptTypeId),
+    CONSTRAINT FK_PurchaseReceipts_Supplier FOREIGN KEY (SupplierId) REFERENCES Suppliers(SupplierId),
+    CONSTRAINT FK_PurchaseReceipts_User FOREIGN KEY (CreatedBy) REFERENCES Users(UserId),
+    CONSTRAINT CK_PurchaseReceipts_Subtotal CHECK (Subtotal >= 0),
+    CONSTRAINT CK_PurchaseReceipts_VatAmount CHECK (VatAmount >= 0),
+    CONSTRAINT CK_PurchaseReceipts_GrandTotal CHECK (GrandTotal >= 0)
+);
+GO
+
 CREATE TABLE TransactionItems
 (
     TransactionItemId INT IDENTITY(1,1) NOT NULL,
@@ -226,6 +284,12 @@ CREATE INDEX IX_Transactions_ShiftId ON Transactions(ShiftId);
 CREATE INDEX IX_Transactions_CashierId ON Transactions(CashierId);
 CREATE INDEX IX_Transactions_TransactionDate ON Transactions(TransactionDate);
 CREATE INDEX IX_Transactions_Status ON Transactions(Status);
+CREATE INDEX IX_Suppliers_TRN ON Suppliers(TRN);
+CREATE INDEX IX_PurchaseReceipts_InvoiceDate ON PurchaseReceipts(InvoiceDate);
+CREATE INDEX IX_PurchaseReceipts_Supplier ON PurchaseReceipts(SupplierId);
+CREATE INDEX IX_PurchaseReceipts_ReceiptType ON PurchaseReceipts(ReceiptTypeId);
+CREATE INDEX IX_PurchaseReceipts_Category ON PurchaseReceipts(Category);
+CREATE INDEX IX_PurchaseReceipts_InvoiceNumber ON PurchaseReceipts(InvoiceNumber);
 CREATE INDEX IX_TransactionItems_TransactionId ON TransactionItems(TransactionId);
 CREATE INDEX IX_TransactionItems_ProductId ON TransactionItems(ProductId);
 CREATE INDEX IX_Payments_TransactionId ON Payments(TransactionId);

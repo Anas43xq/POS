@@ -2,14 +2,14 @@ using BLL;
 using BLL.Interfaces;
 using BLL.Services;
 using DAL;
-using DAL.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
+using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using UI.Services;
@@ -23,6 +23,7 @@ namespace UI
         public static ServiceProvider ServiceProvider { get; private set; } = null!;
 
         private readonly ServiceProvider _serviceProvider;
+        private readonly ILogger<App>? _logger;
         public App()
         {
             ServiceCollection services = new ServiceCollection();
@@ -31,6 +32,7 @@ namespace UI
 
             _serviceProvider = services.BuildServiceProvider();
             ServiceProvider = _serviceProvider;
+            _logger = _serviceProvider.GetService<ILogger<App>>();
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -39,6 +41,8 @@ namespace UI
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
+
+            services.AddLogging();
 
             // DAL
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -50,7 +54,6 @@ namespace UI
             // UI Services
             services.AddTransient<IDialogService, DialogService>();
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<ISessionService, SessionService>();
             services.AddTransient<IReceiptDisplayService, ReceiptDisplayService>();
             services.AddTransient<ExcelReportExporter>();
 
@@ -64,6 +67,7 @@ namespace UI
             services.AddTransient<ReportViewModel>();
             services.AddTransient<ProductManagementViewModel>();
             services.AddTransient<CategoryManagementViewModel>();
+            services.AddTransient<ReceiptManagementViewModel>();
             services.AddTransient<ManagerMainViewModel>();
             services.AddTransient<StartDayDialogViewModel>();
             services.AddTransient<EndDayDialogViewModel>();
@@ -76,10 +80,11 @@ namespace UI
             services.AddTransient<MainWindow>();
             services.AddTransient<HomeView>();
             services.AddTransient<TransactionsView>();
-            services.AddTransient<UI.Views.ShiftManagementView>();
+            services.AddTransient<ShiftManagementView>();
             services.AddTransient<CashierDashboardView>();
             services.AddTransient<ManagerMainView>();
             services.AddTransient<CategoryManagementView>();
+            services.AddTransient<ReceiptManagementView>();
             services.AddTransient<StartDayDialog>();
             services.AddTransient<EndDayDialog>();
             services.AddTransient<PaymentDialog>();
@@ -90,6 +95,10 @@ namespace UI
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
+            TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
 
             CultureInfo uaeCulture = new CultureInfo("en-AE");
             NumberFormatInfo aedFormat = (NumberFormatInfo)uaeCulture.NumberFormat.Clone();
@@ -105,100 +114,79 @@ namespace UI
                 new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage("en-AE")));
 
-            // Temporary startup flow for manager testing.
-            // Keep the original login flow commented out for later restoration.
-
-            //var loginView = _serviceProvider.GetRequiredService<LoginView>();
-
-            //if (loginView.DataContext is LoginViewModel loginViewModel)
-            //{
-            //    loginViewModel.LoginSucceeded += () =>
-            //    {
-            //        try
-            //        {
-            //            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            //            if (mainWindow.DataContext is MainViewModel mainViewModel)
-            //            {
-            //                mainViewModel.LogoutRequested += () =>
-            //                {
-            //                    var newLoginView = _serviceProvider.GetRequiredService<LoginView>();
-            //                    newLoginView.Show();
-            //                    mainWindow.Close();
-            //                };
-            //            }
-            //            mainWindow.Show();
-            //            loginView.Close();
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Debug.WriteLine($"Error opening main window: {ex.Message}\n{ex.StackTrace}");
-            //        }
-            //    };
-            //}
-
-            //loginView.Show();
-
-            var sessionService = _serviceProvider.GetRequiredService<ISessionService>();
-            sessionService.CurrentUser = new User
+            var loginView = _serviceProvider.GetRequiredService<LoginView>();
+            if (loginView.DataContext is LoginViewModel loginViewModel)
             {
-                //    UserId = 3,
-                //    FullName = "System Manager",
-                //    Username = "manager",
-                //    PasswordHash = "$2a$12$ZTDNXVRX/BZtJPmElXQ8buwjOmNwCWmzxVnBvOZ98FVL3.AJDVVsi",
-                //    RoleId = 2,
-                //    IsActive = true,
-                //    CreatedAt = DateTime.Parse("2026-06-23 14:12:36"),
-                //    UpdatedAt = DateTime.Parse("2026-06-23 14:12:36"),
-                //    Role = new Role
-                //    {
-                //        RoleId = 2,
-                //        RoleName = "Manager",
-                //        CreatedAt = DateTime.UtcNow
-                //    }
-                //};
-
-                UserId = 2,
-                FullName = "System Cashier",
-                Username = "cashier",
-                PasswordHash = "$2a$12$Zwju2F5K5taFZu3qp3BxleeFyLW5t6qWN1dbEloAo1v/RjjsgPFwC",
-                RoleId = 3,
-                IsActive = true,
-                CreatedAt = DateTime.Parse("2026-06-23 14:12:36"),
-                UpdatedAt = DateTime.Parse("2026-06-23 14:12:36"),
-                Role = new Role
+                loginViewModel.LoginSucceeded += () =>
                 {
-                    RoleId = 3,
-                    RoleName = "Cashier",
-                    CreatedAt = DateTime.UtcNow
-                }
-            };
+                    var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                    if (mainWindow.DataContext is MainViewModel mainViewModel)
+                    {
+                        mainViewModel.LogoutRequested += () =>
+                        {
+                            var newLoginView = _serviceProvider.GetRequiredService<LoginView>();
+                            newLoginView.Show();
+                            mainWindow.Close();
+                        };
+                    }
 
-            sessionService.CurrentShift = new Shift
-            {
-                ShiftId = 4,
-                UserId = 2,
-                OpenedAt = DateTime.Parse("2026-06-27 16:35:36"),
-                ClosedAt = null,
-                OpeningCash = 1000.00m,
-                ClosingCash = null,
-                ExpectedCash = null,
-                CashDifference = null,
-                Status = ShiftStatus.Open
-            };
-
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            if (mainWindow.DataContext is MainViewModel mainViewModel)
-            {
-                mainViewModel.LogoutRequested += () =>
-                {
-                    var newLoginView = _serviceProvider.GetRequiredService<LoginView>();
-                    newLoginView.Show();
-                    mainWindow.Close();
+                    mainWindow.Show();
+                    loginView.Close();
                 };
             }
 
-            mainWindow.Show();
+            loginView.Show();
+        }
 
+        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            LogUnhandledException(e.Exception, "Dispatcher");
+            ShowFatalError("An unexpected application error occurred.");
+            e.Handled = true;
+        }
+
+        private void OnCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception exception)
+            {
+                LogUnhandledException(exception, "AppDomain");
+            }
+            else
+            {
+                LogUnhandledException(new Exception("Unhandled non-exception object was raised."), "AppDomain");
+            }
+
+            ShowFatalError("An unexpected application error occurred.");
+        }
+
+        private void OnTaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            LogUnhandledException(e.Exception, "TaskScheduler");
+            e.SetObserved();
+        }
+
+        private void LogUnhandledException(Exception exception, string source)
+        {
+            _logger?.LogError(exception, "Unhandled exception from {Source}", source);
+
+            try
+            {
+                if (!EventLog.SourceExists("PointOfSale"))
+                {
+                    return;
+                }
+
+                EventLog.WriteEntry("PointOfSale", $"{source}: {exception}", EventLogEntryType.Error);
+            }
+            catch
+            {
+                // Event Log access is best-effort only.
+            }
+        }
+
+        private static void ShowFatalError(string message)
+        {
+            MessageBox.Show(message, "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

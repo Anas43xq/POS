@@ -1,0 +1,52 @@
+<UserControl x:Class="UI.Controls.RecentSalesList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:UI.Controls"
+             x:Name="root">
+    <Border BorderBrush="#CBD5E1"
+            BorderThickness="1">
+        <DataGrid ItemsSource="{Binding ItemsSource, ElementName=root}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserSortColumns="True"
+                  RowHeight="52"
+                  ColumnHeaderHeight="42"
+                  BorderThickness="0"
+                  FontSize="14">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Receipt"
+                                    Binding="{Binding ReceiptNumber}"
+                                    Width="*"
+                                    MinWidth="130"/>
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding TransactionDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                    Width="155"/>
+                <DataGridTextColumn Header="Payment"
+                                    Binding="{Binding PaymentMethod}"
+                                    Width="110"/>
+                <DataGridTextColumn Header="Status"
+                                    Binding="{Binding Status}"
+                                    Width="100"/>
+                <DataGridTemplateColumn Header="Total" Width="105">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:CurrencyText Amount="{Binding GrandTotal}" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="" Width="95">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Open"
+                                    Height="34"
+                                    Command="{Binding OpenCommand, ElementName=root}"
+                                    CommandParameter="{Binding TransactionId}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Border>
+</UserControl>

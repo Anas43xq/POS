@@ -2,6 +2,7 @@ using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace BLL.Services
 {
@@ -10,12 +11,18 @@ namespace BLL.Services
         private readonly IShiftRepository _shiftrepo;
         private readonly IPaymentService _paymentService;
         private readonly ITransactionRepository _transactionRepository;
+        private readonly ILogger<ShiftService> _logger;
 
-        public ShiftService(IShiftRepository ShiftRepo, IPaymentService paymentService, ITransactionRepository transactionRepository)
+        public ShiftService(
+            IShiftRepository ShiftRepo,
+            IPaymentService paymentService,
+            ITransactionRepository transactionRepository,
+            ILogger<ShiftService> logger)
         {
             _shiftrepo = ShiftRepo;
             _paymentService = paymentService;
             _transactionRepository = transactionRepository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Shift>> GetAllShiftsAsync() =>
@@ -86,6 +93,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to open shift for user {UserId}", userId);
                 return Result<Shift>.Failure($"Error opening shift: {ex.Message}");
             }
         }
@@ -143,6 +151,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to close shift {ShiftId}", shiftId);
                 return Result<Shift>.Failure($"Error closing shift: {ex.Message}");
             }
         }

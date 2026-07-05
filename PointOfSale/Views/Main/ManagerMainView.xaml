@@ -148,6 +148,10 @@
             <views:CategoryManagementView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:ReceiptManagementViewModel}">
+            <views:ReceiptManagementView />
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <Grid>
@@ -292,6 +296,14 @@
                              <TextBlock Text="🏷" Style="{StaticResource NavIcon}"/>
                          </RadioButton.Tag>
                          <TextBlock Text="Categories" Style="{StaticResource NavLabel}"/>
+                     </RadioButton>
+
+                     <RadioButton Style="{StaticResource NavItem}"
+                                  Command="{Binding NavigateReceiptManagementCommand}">
+                         <RadioButton.Tag>
+                             <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
+                         </RadioButton.Tag>
+                         <TextBlock Text="Receipt Management" Style="{StaticResource NavLabel}"/>
                      </RadioButton>
 
                  </StackPanel>

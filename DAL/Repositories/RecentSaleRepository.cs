@@ -35,7 +35,7 @@ namespace DAL.Repositories
             cmd.Parameters.Add("@ShiftId", SqlDbType.Int).Value = shiftId;
             cmd.Parameters.Add("@Limit", SqlDbType.Int).Value = take;
 
-            using var reader = await cmd.ExecuteReaderAsync();
+            using var reader = await cmd.ExecuteReaderAsync(ct);
             List<RecentTransactionDto> recentTransactions = new();
 
             while (await reader.ReadAsync())

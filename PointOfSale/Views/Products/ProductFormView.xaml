@@ -15,20 +15,12 @@
         KeyDown="ProductFormView_KeyDown">
 
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
-        <!-- ── Palette ── -->
-        <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
-        <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
-        <SolidColorBrush x:Key="BrandLight"  Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
-        <SolidColorBrush x:Key="CardHdrBg"   Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
-        <SolidColorBrush x:Key="ErrorFg"     Color="#A32D2D"/>
-        <SolidColorBrush x:Key="ErrorBg"     Color="#FFF0F0"/>
-        <SolidColorBrush x:Key="ErrorBorder" Color="#F5C1C1"/>
 
         <!-- ── Field label ── -->
         <Style x:Key="FieldLabel" TargetType="TextBlock">
@@ -231,6 +223,7 @@
             </Setter>
         </Style>
 
+        </ResourceDictionary>
     </Window.Resources>
 
     <!-- Transparent background — click outside closes dialog -->
@@ -243,10 +236,7 @@
                 Width="480"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                CornerRadius="14"
-                Background="White"
-                BorderBrush="{StaticResource BrandBorder}"
-                BorderThickness="0.5"
+                Style="{StaticResource ModalCardBorder}"
                 MouseDown="DialogCard_MouseDown">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="28" ShadowDepth="6"
@@ -267,10 +257,7 @@
 
                 <!-- ── HEADER ── -->
                 <Border Grid.Row="0"
-                        CornerRadius="14,14,0,0"
-                        Background="{StaticResource BrandLight}"
-                        BorderBrush="#E8F3FF"
-                        BorderThickness="0,0,0,0.5"
+                        Style="{StaticResource ModalHeaderBorder}"
                         Padding="16,12">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -280,7 +267,7 @@
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Width="28" Height="28" CornerRadius="7"
-                                    Background="{StaticResource BrandDark}"
+                                    Background="{StaticResource ModalBrandDark}"
                                     Margin="0,0,9,0">
                                 <TextBlock Text="📦" FontSize="14"
                                            HorizontalAlignment="Center"
@@ -288,30 +275,28 @@
                             </Border>
                             <TextBlock Text="{Binding FormTitle, FallbackValue='Add Product'}"
                                        FontSize="13" FontWeight="Medium"
-                                       Foreground="{StaticResource TextDark}"
+                                       Foreground="{StaticResource ModalTextDark}"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <Button Grid.Column="1"
                                 Content="✕" FontSize="13"
-                                Foreground="{StaticResource TextMuted}"
-                                Background="Transparent" BorderThickness="0"
-                                Cursor="Hand" Command="{Binding CancelCommand}"
-                                FocusVisualStyle="{x:Null}"/>
+                                Style="{StaticResource ModalCloseButton}"
+                                Command="{Binding CancelCommand}"/>
                     </Grid>
                 </Border>
 
                 <!-- ── DUPLICATE WARNING ── -->
                 <Border Grid.Row="1"
-                        Background="{StaticResource ErrorBg}"
-                        BorderBrush="{StaticResource ErrorBorder}"
+                        Background="{StaticResource ModalErrorBg}"
+                        BorderBrush="{StaticResource ModalErrorBorder}"
                         BorderThickness="1" CornerRadius="7"
                         Padding="11,8" Margin="16,10,16,0"
                         Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVis}}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ErrorFg}"/>
+                        <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
                         <TextBlock Text="A product with this name already exists in the selected category."
-                                   FontSize="11" Foreground="{StaticResource ErrorFg}"
+                                   FontSize="11" Foreground="{StaticResource ModalErrorFg}"
                                    TextWrapping="Wrap" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>
@@ -442,9 +427,7 @@
 
                 <!-- ── FOOTER ── -->
                 <Border Grid.Row="3"
-                        Background="{StaticResource CardHdrBg}"
-                        BorderBrush="{StaticResource BrandBorder}"
-                        BorderThickness="0,0.5,0,0"
+                        Style="{StaticResource ModalFooterBorder}"
                         CornerRadius="0,0,14,14"
                         Padding="16,10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

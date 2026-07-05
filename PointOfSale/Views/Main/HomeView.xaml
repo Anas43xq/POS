@@ -13,44 +13,12 @@
              mc:Ignorable="d" d:DesignHeight="820" Width="1225">
 
     <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DashboardChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
-        <!-- ── Palette ── -->
-        <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
-        <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
-        <SolidColorBrush x:Key="BrandLight"  Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
-        <SolidColorBrush x:Key="CardBg"      Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="CardHdrBg"   Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
-        <SolidColorBrush x:Key="SuccessGreen" Color="#16A34A"/>
-        <SolidColorBrush x:Key="DangerRed"   Color="#DC2626"/>
-
-        <!-- ── Card panel ── -->
-        <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource CardBg}"/>
-            <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="CornerRadius"    Value="10"/>
-        </Style>
-
-        <!-- ── Card header ── -->
-        <Style x:Key="CardHeaderBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource CardHdrBg}"/>
-            <Setter Property="BorderBrush"     Value="#E8F3FF"/>
-            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
-            <Setter Property="Padding"         Value="12,8"/>
-        </Style>
-
-        <!-- ── Card title ── -->
-        <Style x:Key="CardTitle" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
 
         <!-- ── Small action chip (e.g. "View all") ── -->
         <Style x:Key="CardActionBtn" TargetType="Button">
@@ -74,128 +42,14 @@
             </Setter>
         </Style>
 
-        <!-- ── Filter chip toggle ── -->
-        <Style x:Key="FilterChip" TargetType="RadioButton">
-            <Setter Property="GroupName" Value="DateFilter"/>
-            <Setter Property="Height"    Value="26"/>
-            <Setter Property="Padding"   Value="12,0"/>
-            <Setter Property="Margin"    Value="0,0,6,0"/>
-            <Setter Property="FontSize"  Value="11"/>
-            <Setter Property="Cursor"    Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="Bg"
-                                CornerRadius="6"
-                                Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Bg" Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#1A6FC4" Offset="0"/>
-                                            <GradientStop Color="#2589E0" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="White"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- ── Date textbox ── -->
-        <Style x:Key="DateInput" TargetType="DatePicker">
-            <Setter Property="Width"  Value="110"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Background" Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <!-- ── Apply button ── -->
-        <Style x:Key="ApplyBtn" TargetType="Button">
-            <Setter Property="Height"   Value="26"/>
-            <Setter Property="Padding"  Value="14,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="6">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!-- ── KPI tile ── -->
-        <Style x:Key="KpiTile" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush"     Value="#DBEEFF"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="CornerRadius"    Value="7"/>
-            <Setter Property="Padding"         Value="10,8"/>
-        </Style>
+        <Style x:Key="KpiTile" TargetType="Border" BasedOn="{StaticResource DashboardKpiTile}"/>
 
-        <Style x:Key="KpiLabel" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="9"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-            <Setter Property="Margin"     Value="0,0,0,3"/>
-        </Style>
+        <Style x:Key="KpiLabel" TargetType="TextBlock" BasedOn="{StaticResource DashboardKpiLabel}"/>
 
-        <Style x:Key="KpiValue" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="16"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
-        </Style>
+        <Style x:Key="KpiValue" TargetType="TextBlock" BasedOn="{StaticResource DashboardKpiValue}"/>
 
-        <Style x:Key="KpiValueCurrency" TargetType="controls:CurrencyText">
-            <Setter Property="FontSize"   Value="16"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
-        </Style>
+        <Style x:Key="KpiValueCurrency" TargetType="controls:CurrencyText" BasedOn="{StaticResource DashboardKpiValueCurrency}"/>
 
         <!-- ── List row separator ── -->
         <Style x:Key="ListRow" TargetType="Border">
@@ -210,7 +64,7 @@
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
         </Style>
-
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="#EAF4FF">
@@ -253,13 +107,13 @@
                     <TextBlock Text="From" FontSize="11" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <DatePicker Style="{StaticResource DateInput}"
-                                SelectedDate="{Binding FromDate}"
+                                SelectedDate="{Binding PeriodFromDate}"
                                 Margin="0,0,12,0"/>
 
                     <TextBlock Text="To" FontSize="11" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <DatePicker Style="{StaticResource DateInput}"
-                                SelectedDate="{Binding ToDate}"
+                                SelectedDate="{Binding PeriodToDate}"
                                 Margin="0,0,12,0"/>
 
                     <Button Style="{StaticResource ApplyBtn}"

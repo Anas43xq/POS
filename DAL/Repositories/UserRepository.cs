@@ -18,11 +18,20 @@ namespace DAL.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
+            var normalizedUsername = username?.Trim();
+
+            if (string.IsNullOrWhiteSpace(normalizedUsername))
+            {
+                return null;
+            }
+
             await using var context = await _contextFactory!.CreateDbContextAsync();
             return await context.Users
+                .AsNoTracking()
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync(
-                    u => u.Username == username);
+                .FirstOrDefaultAsync(u =>
+                    u.Username != null &&
+                    u.Username.Trim().ToLower() == normalizedUsername.ToLower());
         }
     }
 }

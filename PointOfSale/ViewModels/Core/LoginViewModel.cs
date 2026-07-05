@@ -1,6 +1,7 @@
-﻿using BLL.Interfaces;
+using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ namespace UI.ViewModels
         private readonly ISessionService _session;
         private readonly IShiftService _shiftService;
         private readonly IDialogService _dialogService;
+        private readonly ILogger<LoginViewModel> _logger;
         private string _password = string.Empty;
 
         public event Action? LoginSucceeded;
@@ -77,20 +79,12 @@ namespace UI.ViewModels
             }
         }
 
-        public string LoginbtnStatus
-        {
-            get
-            {
-                return IsLoading ? "Authenticating..." : "Login";
-            }
-        }
+        public string LoginbtnStatus => IsLoading ? "Authenticating..." : "Login";
 
         private async Task ShowErrorAsync(string message)
         {
             ErrorMessage = message;
-
             await Task.Delay(2000);
-
             ErrorMessage = null;
         }
 
@@ -108,9 +102,7 @@ namespace UI.ViewModels
                 {
                     _session.CurrentUser = result.Value;
 
-                    var shiftTask = _shiftService.GetOpenShiftAsync(result.Value!.UserId);
-                    
-                    var openShift = await shiftTask;
+                    var openShift = await _shiftService.GetOpenShiftAsync(result.Value!.UserId);
                     if (openShift.IsSuccess)
                     {
                         _session.CurrentShift = openShift.Value;
@@ -125,7 +117,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Login error: {ex}");
+                _logger.LogError(ex, "Login failed for user {Username}", Username);
                 await ShowErrorAsync("An unexpected error occurred. Please try again.");
             }
             finally
@@ -134,12 +126,18 @@ namespace UI.ViewModels
             }
         }
 
-        public LoginViewModel(IAuthService authService, ISessionService session, IShiftService shiftService, IDialogService dialogService)
+        public LoginViewModel(
+            IAuthService authService,
+            ISessionService session,
+            IShiftService shiftService,
+            IDialogService dialogService,
+            ILogger<LoginViewModel> logger)
         {
             _authService = authService;
             _session = session;
             _shiftService = shiftService;
             _dialogService = dialogService;
+            _logger = logger;
 
             LoginCommand = new AsyncRelayCommand(LoginAuth, CanLogin);
         }

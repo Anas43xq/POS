@@ -28,6 +28,7 @@ namespace DAL.Configurations
                    .IsRequired();
 
 
+
             builder.Property(t => t.LineSubtotal)
                    .HasColumnType("decimal(18,2)")
                    .IsRequired();

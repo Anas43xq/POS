@@ -1,5 +1,6 @@
 using BLL.Interfaces;
 using POS.Contracts.Receipts;
+using Microsoft.Extensions.Logging;
 using System.Windows;
 using UI.ViewModels;
 using UI.Views;
@@ -14,13 +15,16 @@ namespace UI.Services
     {
         private readonly IReceiptService _receiptService;
         private readonly ReceiptPrinterService _receiptPrinterService;
+        private readonly ILogger<ReceiptDisplayService> _logger;
 
         public ReceiptDisplayService(
             IReceiptService receiptService,
-            ReceiptPrinterService receiptPrinterService)
+            ReceiptPrinterService receiptPrinterService,
+            ILogger<ReceiptDisplayService> logger)
         {
             _receiptService = receiptService;
             _receiptPrinterService = receiptPrinterService;
+            _logger = logger;
         }
 
         public void ShowReceipt(int transactionId)
@@ -35,6 +39,7 @@ namespace UI.Services
 
             if (receipt == null)
             {
+                _logger.LogWarning("Receipt could not be loaded for transaction {TransactionId}", transactionId);
                 MessageBox.Show(
                     "Transaction completed, but receipt could not be loaded.",
                     "Receipt Error",
@@ -43,7 +48,7 @@ namespace UI.Services
                 return;
             }
 
-            var receiptViewModel = new ReceiptViewModel(receipt, _receiptPrinterService);
+            var receiptViewModel = new ReceiptViewModel(receipt, _receiptPrinterService, _logger);
             var receiptWindow = new ReceiptWindow(receiptViewModel);
 
             // Set owner to the active window, but avoid setting to itself
@@ -67,6 +72,7 @@ namespace UI.Services
 
             if (receipt == null)
             {
+                _logger.LogWarning("Receipt could not be loaded for printing transaction {TransactionId}", transactionId);
                 MessageBox.Show(
                     "No receipt is available to print.",
                     "Print Error",
@@ -81,8 +87,9 @@ namespace UI.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", transactionId);
                 MessageBox.Show(
-                    $"Printing failed: {ex.Message}",
+                    "Printing failed. Please check the printer and try again.",
                     "Print Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);

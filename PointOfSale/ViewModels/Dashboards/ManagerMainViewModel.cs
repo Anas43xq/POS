@@ -15,7 +15,7 @@ using UI.Views;
 
 namespace UI.ViewModels
 {
-    public class ManagerMainViewModel : BaseViewModel
+    public partial class ManagerMainViewModel : BaseViewModel
     {
         private readonly HomeViewModel _homeViewModel;
         private readonly TransactionsViewModel _transactionsViewModel;
@@ -23,6 +23,7 @@ namespace UI.ViewModels
         private readonly ReportViewModel _reportViewModel;
         private readonly ProductManagementViewModel _productManagementViewModel;
         private readonly CategoryManagementViewModel _categoryManagementViewModel;
+        private readonly ReceiptManagementViewModel _receiptManagementViewModel;
         private readonly ISessionService _sessionService;
         private CancellationTokenSource? _timeCancellationTokenSource;
 
@@ -40,6 +41,7 @@ namespace UI.ViewModels
         public ICommand NavigateReportsCommand { get; set; } = null!;
         public ICommand NavigateProductManagementCommand { get; set; } = null!;
         public ICommand NavigateCategoryManagementCommand { get; set; } = null!;
+        public ICommand NavigateReceiptManagementCommand { get; set; } = null!;
         public ICommand LogoutCommand { get; set; } = null!;
 
         public string ManagerName
@@ -117,6 +119,7 @@ namespace UI.ViewModels
             ReportViewModel reportViewModel,
             ProductManagementViewModel productManagementViewModel,
             CategoryManagementViewModel categoryManagementViewModel,
+            ReceiptManagementViewModel receiptManagementViewModel,
             ISessionService sessionService)
         {
             _homeViewModel = homeViewModel;
@@ -125,6 +128,7 @@ namespace UI.ViewModels
             _reportViewModel = reportViewModel;
             _productManagementViewModel = productManagementViewModel;
             _categoryManagementViewModel = categoryManagementViewModel;
+            _receiptManagementViewModel = receiptManagementViewModel;
             _sessionService = sessionService;
 
             _homeViewModel.ViewAllShiftsRequested -= NavigateToShiftManagement;
@@ -140,6 +144,7 @@ namespace UI.ViewModels
             NavigateReportsCommand = new RelayCommand(NavigateToReports);
             NavigateProductManagementCommand = new RelayCommand(NavigateToProductManagement);
             NavigateCategoryManagementCommand = new RelayCommand(NavigateToCategoryManagement);
+            NavigateReceiptManagementCommand = new RelayCommand(NavigateToReceiptManagement);
             LogoutCommand = new RelayCommand(_ => LogoutRequested?.Invoke());
 
             // Initialize manager info
@@ -147,74 +152,6 @@ namespace UI.ViewModels
 
             // Initialize with HomeViewModel (LOCAL property, not global service)
             CurrentPage = _homeViewModel;
-        }
-
-        private void UpdateCurrentDateTime()
-        {
-            CurrentDateTime = !string.IsNullOrWhiteSpace(CurrentDayName) && !string.IsNullOrWhiteSpace(CurrentDate) && !string.IsNullOrWhiteSpace(CurrentTime)
-                ? $"{CurrentDayName}, {CurrentDate}   {CurrentTime}"
-                : string.Empty;
-        }
-
-        private void NavigateToTransactions()
-        {
-            CurrentPage = _transactionsViewModel;
-            _ = _transactionsViewModel.RefreshAsync();
-        }
-
-        private void NavigateToShiftManagement()
-        {
-            CurrentPage = _shiftManagementViewModel;
-            _ = _shiftManagementViewModel.RefreshAsync();
-        }
-
-        private void NavigateToReports()
-        {
-            CurrentPage = _reportViewModel;
-        }
-
-        private void NavigateToProductManagement()
-        {
-            CurrentPage = _productManagementViewModel;
-        }
-
-        private void NavigateToCategoryManagement()
-        {
-            CurrentPage = _categoryManagementViewModel;
-        }
-
-        /// <summary>
-        /// Initialize manager information from session.
-        /// </summary>
-        private void InitializeManagerInfo()
-        {
-            var currentUser = _sessionService.CurrentUser;
-            ManagerName = currentUser?.FullName ?? "Manager";
-            CurrentDayName = DateTime.Now.ToString("dddd");
-            CurrentDate = DateTime.Now.ToString("MMMM dd, yyyy");
-            CurrentTime = DateTime.Now.ToString("hh:mm tt");
-            UpdateCurrentDateTime();
-            _ = UpdateTimeAsync();
-        }
-
-        /// <summary>
-        /// Update current time every minute.
-        /// </summary>
-        private async Task UpdateTimeAsync()
-        {
-            try
-            {
-                _timeCancellationTokenSource = new CancellationTokenSource();
-                while (!_timeCancellationTokenSource.Token.IsCancellationRequested)
-                {
-                    await Task.Delay(TimeSpan.FromMinutes(1), _timeCancellationTokenSource.Token);
-                    CurrentTime = DateTime.Now.ToString("hh:mm tt");
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                // Task was cancelled, exit gracefully
-            }
         }
 
     }

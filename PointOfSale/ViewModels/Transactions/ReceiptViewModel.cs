@@ -1,4 +1,5 @@
 using POS.Contracts.Receipts;
+using Microsoft.Extensions.Logging;
 using System.Windows.Input;
 using UI.Commands;
 using UI.Services;
@@ -8,6 +9,7 @@ namespace UI.ViewModels
     public class ReceiptViewModel : BaseViewModel
     {
         private readonly ReceiptPrinterService _printerService;
+        private readonly ILogger<UI.Services.ReceiptDisplayService> _logger;
 
         public ReceiptDetailsDto Receipt { get; }
 
@@ -26,10 +28,11 @@ namespace UI.ViewModels
 
         public ICommand PrintReceiptCommand { get; }
 
-        public ReceiptViewModel(ReceiptDetailsDto receipt, ReceiptPrinterService printerService)
+        public ReceiptViewModel(ReceiptDetailsDto receipt, ReceiptPrinterService printerService, ILogger<UI.Services.ReceiptDisplayService> logger)
         {
             Receipt = receipt;
             _printerService = printerService;
+            _logger = logger;
             PrintReceiptCommand = new RelayCommand(PrintReceipt);
         }
 
@@ -41,8 +44,9 @@ namespace UI.ViewModels
             }
             catch (System.Exception ex)
             {
+                _logger.LogError(ex, "Failed to print receipt preview for transaction {TransactionId}", Receipt.TransactionId);
                 System.Windows.MessageBox.Show(
-                    $"Printing failed: {ex.Message}",
+                    "Printing failed. Please check the printer and try again.",
                     "Print Error",
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Error);

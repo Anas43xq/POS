@@ -18,6 +18,11 @@ namespace DAL.Repositories
             GetTransactionsListRequest request,
             CancellationToken ct = default)
         {
+            if (string.Equals(request.PeriodType, "Custom", StringComparison.OrdinalIgnoreCase) && !request.FromDate.HasValue)
+            {
+                throw new InvalidOperationException("FromDate is required for a custom period.");
+            }
+
             await using var context = await _contextFactory!.CreateDbContextAsync(ct);
             string connectionString = context.Database.GetConnectionString()
                 ?? throw new InvalidOperationException("Connection string not found.");

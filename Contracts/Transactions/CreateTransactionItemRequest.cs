@@ -12,6 +12,7 @@ public class CreateTransactionItemRequest
 
     public decimal TaxRate { get; set; }
 
+
     public decimal LineSubtotal { get; set; }
 
     public decimal LineTax { get; set; }

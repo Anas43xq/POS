@@ -24,9 +24,10 @@ public static  class DependencyInjection
         services.AddScoped<IAuditLogService, AuditLogService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITopProductService, TopProductService>();
-        services.AddSingleton<ISessionService, SessionService>();
-        services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IReceiptService, ReceiptService>();
+        services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<ISupplierService, SupplierService>();
+        services.AddScoped<IPurchaseReceiptService, PurchaseReceiptService>();
         services.AddScoped<IRecentSaleService, RecentSaleService>();
         services.AddScoped<IRecentTransactionService, RecentTransactionService>();
         services.AddScoped<IShiftSummaryService, ShiftSummaryService>();

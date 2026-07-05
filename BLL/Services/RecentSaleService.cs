@@ -21,13 +21,13 @@ namespace BLL.Services
         public async Task<List<RecentTransactionDto>> GetRecentTransactionsByCashierId(int cashierId, int shiftId, int take = 10)
         {
             if (!_sessionService.IsAuthenticated)
-                throw new Exception("Not logged in");
+                throw new InvalidOperationException("Not logged in");
 
             if (!string.Equals(_sessionService.CurrentUser?.Role?.RoleName, "Cashier", StringComparison.OrdinalIgnoreCase))
-                throw new Exception("Only cashier allowed");
+                throw new InvalidOperationException("Only cashier allowed");
 
             if (_sessionService.CurrentShift?.Status != ShiftStatus.Open)
-                throw new Exception("Shift closed");
+                throw new InvalidOperationException("Shift closed");
 
             return await _recentSaleRepository.GetRecentTransactionsByCashierId(cashierId, shiftId, take);
         }

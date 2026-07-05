@@ -11,8 +11,8 @@ namespace UI.Converters
             if (value == null || parameter == null)
                 return false;
 
-            string enumValue = value.ToString()!;
-            string targetValue = parameter.ToString()!;
+            string enumValue = value.ToString() ?? string.Empty;
+            string targetValue = parameter.ToString() ?? string.Empty;
             return enumValue.Equals(targetValue, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -23,7 +23,7 @@ namespace UI.Converters
 
             if (value is bool useValue && useValue)
             {
-                return Enum.Parse(targetType, parameter.ToString()!);
+                return Enum.Parse(targetType, parameter.ToString() ?? string.Empty);
             }
 
             return Binding.DoNothing;

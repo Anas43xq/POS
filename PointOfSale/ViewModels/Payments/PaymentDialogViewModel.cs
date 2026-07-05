@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Extensions.Logging;
 using UI.Commands;
 
 namespace UI.ViewModels;
@@ -17,6 +18,7 @@ public class PaymentDialogViewModel : BaseViewModel
     private readonly ITransactionService _transactionService;
     private readonly ISessionService _sessionService;
     private readonly CashierDashboardViewModel _cashierDashboardViewModel;
+    private readonly ILogger<CashierDashboardViewModel> _logger;
 
     private decimal _paymentTotal;
     public decimal PaymentTotal
@@ -90,12 +92,14 @@ public class PaymentDialogViewModel : BaseViewModel
         decimal paymentTotal,
         CashierDashboardViewModel cashierDashboardViewModel,
         ITransactionService transactionService,
-        ISessionService sessionService)
+        ISessionService sessionService,
+        ILogger<CashierDashboardViewModel> logger)
     {
         _paymentTotal = paymentTotal;
         _cashierDashboardViewModel = cashierDashboardViewModel;
         _transactionService = transactionService;
         _sessionService = sessionService;
+        _logger = logger;
 
         ConfirmPaymentCommand = new AsyncRelayCommand(ConfirmPaymentAsync);
         CancelCommand = new RelayCommand(CancelPayment);
@@ -116,7 +120,8 @@ public class PaymentDialogViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            _logger.LogError(ex, "Cash payment confirmation failed for cashier {CashierId}", _sessionService.CurrentUser?.UserId);
+            ErrorMessage = "Unable to complete payment. Please try again.";
         }
     }
 

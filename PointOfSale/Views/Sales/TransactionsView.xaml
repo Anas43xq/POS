@@ -300,24 +300,14 @@
                     <RadioButton Style="{StaticResource FilterChip}" Content="Period"
                                  Command="{Binding LoadPeriodCommand}"/>
 
-                    <!-- Period date pickers – visible only when IsPeriodFilterVisible -->
-                    <StackPanel Orientation="Horizontal"
-                                Visibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVis}}">
-                        <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="6,0"/>
-                        <TextBlock Text="From" FontSize="11" Foreground="{StaticResource TextMuted}"
-                                   VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <DatePicker Style="{StaticResource DateInput}"
-                                    SelectedDate="{Binding FromDate}"
-                                    Margin="0,0,12,0"/>
-                        <TextBlock Text="To" FontSize="11" Foreground="{StaticResource TextMuted}"
-                                   VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <DatePicker Style="{StaticResource DateInput}"
-                                    SelectedDate="{Binding ToDate}"
-                                    Margin="0,0,12,0"/>
-                        <Button Style="{StaticResource ApplyBtn}"
-                                Content="Apply"
-                                Command="{Binding ApplyPeriodCommand}"/>
-                    </StackPanel>
+                    <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVis}}"
+                                                FromDate="{Binding FromDate}"
+                                                ToDate="{Binding ToDate}"
+                                                ApplyCommand="{Binding ApplyPeriodCommand}"
+                                                FromLabel="From"
+                                                ToLabel="To"
+                                                ApplyButtonText="Apply"
+                                                Margin="6,0,0,0"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"

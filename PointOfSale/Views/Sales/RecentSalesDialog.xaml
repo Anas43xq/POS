@@ -38,29 +38,10 @@
                 <Button Grid.Column="1" Content="✕" FontSize="16" Padding="8" Background="Transparent" Command="{Binding CloseDialogCommand}"/>
             </Grid>
 
-            <!-- DataGrid with Recent Sales -->
-            <DataGrid Grid.Row="1" ItemsSource="{Binding RecentSales}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True" IsReadOnly="True" Margin="0,0,0,18">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Receipt #" Binding="{Binding TransactionId}" Width="80"/>
-                    <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat={}{0:MM/dd/yyyy HH:mm}}" Width="140"/>
-                    <DataGridTextColumn Header="Payment Method" Binding="{Binding PaymentMethod}" Width="110"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90"/>
-                    <DataGridTemplateColumn Header="Total" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <controls:CurrencyText Amount="{Binding GrandTotal}" HorizontalAlignment="Right" Margin="0,0,8,0"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Receipt" Width="80">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Open" Padding="8,4" Command="{Binding DataContext.OpenReceiptCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding TransactionId}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <controls:RecentSalesList Grid.Row="1"
+                                      Margin="0,0,0,18"
+                                      ItemsSource="{Binding RecentSales}"
+                                      OpenCommand="{Binding OpenReceiptCommand}"/>
 
             <!-- Footer -->
             <Grid Grid.Row="2">

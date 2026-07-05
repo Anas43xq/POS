@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
 using DAL.Entities;
+using POS.Contracts.Receipts;
 
 namespace UI.Services
 {
@@ -96,6 +99,11 @@ namespace UI.Services
             WriteDataRows(ws, currentRow, request.ReportType, request.Data);
 
             // ================================================================
+            // FINAL FORMAT
+            // ================================================================
+            ws.Columns().AdjustToContents();
+
+            // ================================================================
             // OUTPUT
             // ================================================================
             using var stream = new MemoryStream();
@@ -189,6 +197,57 @@ namespace UI.Services
                     row++;
                 }
             }
+            else if (reportType == ReportType.VatPurchaseRegister && data is IEnumerable<PurchaseReceiptDto> vatReceipts)
+            {
+                var receipts = vatReceipts.ToList();
+                foreach (var item in receipts)
+                {
+                    ws.Cell(row, 1).Value = item.InvoiceDate.ToString("dd/MM/yyyy");
+                    ws.Cell(row, 2).Value = item.InvoiceNumber;
+                    ws.Cell(row, 3).Value = item.SupplierName;
+                    ws.Cell(row, 4).Value = string.Empty;
+                    ws.Cell(row, 5).Value = item.Category;
+                    ws.Cell(row, 6).Value = item.Description;
+                    ws.Cell(row, 7).Value = item.Subtotal;
+                    ws.Cell(row, 7).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 8).Value = item.VatRate;
+                    ws.Cell(row, 8).Style.NumberFormat.Format = "0.00";
+                    ws.Cell(row, 9).Value = item.VatAmount;
+                    ws.Cell(row, 9).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 10).Value = item.GrandTotal;
+                    ws.Cell(row, 10).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 11).Value = item.Notes;
+
+                    ApplyRowBorder(ws, row, 11, borderColor: XLColor.FromArgb(229, 231, 235));
+                    row++;
+                }
+
+                var totalTaxable = receipts.Sum(r => r.Subtotal);
+                var totalVat = receipts.Sum(r => r.VatAmount);
+                var totalGrand = receipts.Sum(r => r.GrandTotal);
+                WritePurchaseTotals(ws, row, totalTaxable, totalVat, totalGrand, headerColor: XLColor.FromArgb(21, 101, 192));
+            }
+            else if (reportType == ReportType.NonVatPurchaseRegister && data is IEnumerable<PurchaseReceiptDto> nonVatReceipts)
+            {
+                var receipts = nonVatReceipts.ToList();
+                foreach (var item in receipts)
+                {
+                    ws.Cell(row, 1).Value = item.InvoiceDate.ToString("dd/MM/yyyy");
+                    ws.Cell(row, 2).Value = item.InvoiceNumber;
+                    ws.Cell(row, 3).Value = item.SupplierName;
+                    ws.Cell(row, 4).Value = item.Category;
+                    ws.Cell(row, 5).Value = item.Description;
+                    ws.Cell(row, 6).Value = item.Subtotal;
+                    ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 7).Value = item.Notes;
+
+                    ApplyRowBorder(ws, row, 7, borderColor: XLColor.FromArgb(229, 231, 235));
+                    row++;
+                }
+
+                var totalExpenses = receipts.Sum(r => r.Subtotal);
+                WriteNonVatTotals(ws, row, totalExpenses, headerColor: XLColor.FromArgb(21, 101, 192));
+            }
         }
 
         private static void ApplyRowBorder(IXLWorksheet ws, int row, int columns, XLColor borderColor)
@@ -198,6 +257,32 @@ namespace UI.Services
                 ws.Cell(row, c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                 ws.Cell(row, c).Style.Border.BottomBorderColor = borderColor;
             }
+        }
+
+        private static void WritePurchaseTotals(IXLWorksheet ws, int row, decimal taxableAmount, decimal vatAmount, decimal grandTotal, XLColor headerColor)
+        {
+            ws.Cell(row, 1).Value = "Totals";
+            ws.Cell(row, 1).Style.Font.Bold = true;
+            ws.Cell(row, 1).Style.Font.FontColor = headerColor;
+            ws.Cell(row, 6).Value = taxableAmount;
+            ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 6).Style.Font.Bold = true;
+            ws.Cell(row, 9).Value = vatAmount;
+            ws.Cell(row, 9).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 9).Style.Font.Bold = true;
+            ws.Cell(row, 10).Value = grandTotal;
+            ws.Cell(row, 10).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 10).Style.Font.Bold = true;
+        }
+
+        private static void WriteNonVatTotals(IXLWorksheet ws, int row, decimal totalExpenses, XLColor headerColor)
+        {
+            ws.Cell(row, 1).Value = "Total Expenses";
+            ws.Cell(row, 1).Style.Font.Bold = true;
+            ws.Cell(row, 1).Style.Font.FontColor = headerColor;
+            ws.Cell(row, 6).Value = totalExpenses;
+            ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 6).Style.Font.Bold = true;
         }
     }
 
