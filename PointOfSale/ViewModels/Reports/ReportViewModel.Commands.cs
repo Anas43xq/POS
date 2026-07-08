@@ -126,23 +126,6 @@ namespace UI.ViewModels
             }
             else
             {
-                var request = new ExcelReportRequest
-                {
-                    ReportType = ReportType.Product,
-                    Title = "PRODUCT SALES SUMMARY REPORT",
-                    FromDate = from,
-                    ToDate = to,
-                    Summary = new ProductReportSummary
-                    {
-                        TotalQuantitySold = _totalQuantitySold,
-                        TotalRevenue = _totalRevenue,
-                        AveragePrice = _averagePrice
-                    },
-                    Data = ProductReports.ToList()
-                };
-
-                byte[] bytes = _excelExporter.Export(request);
-                File.WriteAllBytes(saveDialog.FileName, bytes);
             }
         }
 

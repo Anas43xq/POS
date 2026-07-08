@@ -76,14 +76,6 @@ namespace UI.Services
                     WriteSummaryRow(ws, currentRow, "", "", summaryLabelColor, summaryValueColor, col: 3);
                     WriteSummaryRow(ws, currentRow, "Card Total", summary.CardTotal, summaryLabelColor, summaryValueColor, col: 5);
                 }
-                else if (request.ReportType == ReportType.Product)
-                {
-                    var summary = (ProductReportSummary)request.Summary;
-                    WriteSummaryRow(ws, currentRow, "Total Qty Sold", summary.TotalQuantitySold, summaryLabelColor, summaryValueColor);
-                    WriteSummaryRow(ws, currentRow, "Total Revenue", summary.TotalRevenue, summaryLabelColor, summaryValueColor, col: 3);
-                    WriteSummaryRow(ws, currentRow, "Average Price", summary.AveragePrice, summaryLabelColor, summaryValueColor, col: 5);
-                }
-
                 currentRow += 2;
             }
 
@@ -141,9 +133,7 @@ namespace UI.Services
             XLColor bg,
             XLColor fontColor)
         {
-            string[] headers = reportType == ReportType.Transactions
-                ? new[] { "Receipt Number", "Transaction Date", "Payment Method", "Grand Total", "Note" }
-                : new[] { "Receipt Number", "Transaction Date", "Payment Method", "Quantity", "Line Total" };
+            string[] headers = BuildHeader(reportType);
 
             for (int i = 0; i < headers.Length; i++)
             {
@@ -157,6 +147,37 @@ namespace UI.Services
                 cell.Style.Border.BottomBorderColor = XLColor.FromArgb(229, 231, 235);
             }
         }
+
+private static readonly string[] PurchaseHeaders =
+{
+    "Invoice No",
+    "Supplier",
+    "Invoice Date",
+    "Amount",
+    "VAT",
+    "Total",
+    "Note"
+};
+
+private static string[] BuildHeader(ReportType reportType)
+{
+    return reportType switch
+    {
+        ReportType.Transactions => new[]
+        {
+            "Receipt Number",
+            "Transaction Date",
+            "Payment Method",
+            "Grand Total",
+            "Note"
+        },
+
+        ReportType.VatPurchaseRegister => PurchaseHeaders,
+        ReportType.NonVatPurchaseRegister => PurchaseHeaders,
+
+        _ => throw new ArgumentOutOfRangeException(nameof(reportType), reportType, null)
+    };
+}
 
         private static void WriteDataRows(
             IXLWorksheet ws,
@@ -179,21 +200,6 @@ namespace UI.Services
                     ws.Cell(row, 6).Value = item.Note;
 
                     ApplyRowBorder(ws, row, 6, borderColor: XLColor.FromArgb(229, 231, 235));
-                    row++;
-                }
-            }
-            else if (reportType == ReportType.Product && data is List<ProductReportEntity> products)
-            {
-                foreach (var item in products)
-                {
-                    ws.Cell(row, 1).Value = item.ReceiptNumber;
-                    ws.Cell(row, 2).Value = item.TransactionDate.ToString("g");
-                    ws.Cell(row, 3).Value = item.PaymentMethod;
-                    ws.Cell(row, 4).Value = item.Quantity;
-                    ws.Cell(row, 5).Value = item.LineTotal;
-                    ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
-
-                    ApplyRowBorder(ws, row, 5, borderColor: XLColor.FromArgb(229, 231, 235));
                     row++;
                 }
             }

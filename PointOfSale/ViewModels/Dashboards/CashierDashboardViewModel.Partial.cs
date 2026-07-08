@@ -81,6 +81,7 @@ namespace UI.ViewModels
             }
         }
 
+        #region Database Calls
         private async Task LoadCategoriesAsync()
         {
             try
@@ -103,6 +104,7 @@ namespace UI.ViewModels
                     {
                         Categories.Add(category);
                     }
+
                 }
 
                 SelectedCategory = Categories.FirstOrDefault();
@@ -167,6 +169,18 @@ namespace UI.ViewModels
             }
         }
 
+        #endregion
+
+        private async Task SelectParentCategoryAsync(Category? category)
+        {
+            await SelectCategoryAsync(category);
+        }
+
+        private async Task SelectSubCategoryAsync(Category? subCategory)
+        {
+            await SelectCategoryAsync(subCategory);
+        }
+
         private async Task SelectCategoryAsync(Category? category)
         {
             if (category == null)
@@ -179,39 +193,6 @@ namespace UI.ViewModels
             await Task.CompletedTask;
         }
 
-        private async Task SelectSubCategoryAsync(Category? subCategory)
-        {
-            if (subCategory == null)
-                return;
-
-            SelectedCategory = subCategory;
-            ProductsView.Refresh();
-            UpdateNoProductsMessage();
-
-            await Task.CompletedTask;
-        }
-
-        private void UpdateSubCategories()
-        {
-            SubCategories.Clear();
-
-            if (SelectedCategory == null || SelectedCategory.CategoryId == 0)
-                return;
-
-            if (SelectedCategory.ChildCategories != null && SelectedCategory.ChildCategories.Any())
-            {
-                foreach (Category child in SelectedCategory.ChildCategories)
-                    SubCategories.Add(child);
-            }
-            else if (SelectedCategory.ParentCategory != null)
-            {
-                foreach (Category sibling in SelectedCategory.ParentCategory.ChildCategories)
-                {
-                    if (sibling.CategoryId != SelectedCategory.CategoryId)
-                        SubCategories.Add(sibling);
-                }
-            }
-        }
 
         private bool FilterProduct(object item)
         {
@@ -241,13 +222,15 @@ namespace UI.ViewModels
             if (product.CategoryId == SelectedCategory.CategoryId)
                 return true;
 
+            // If the selected category has children (i.e. it's a parent),
+            // include products from any of those children.
             if (SelectedCategory.ChildCategories != null && SelectedCategory.ChildCategories.Any())
             {
                 return SelectedCategory.ChildCategories.Any(child => child.CategoryId == product.CategoryId);
             }
 
-            return SelectedCategory.ParentCategory != null &&
-                   SelectedCategory.ParentCategory.ChildCategories.Any(child => child.CategoryId == product.CategoryId);
+            // Selected category is a leaf (sub-category) — only its own products are shown.
+            return false;
         }
 
         private void UpdateNoProductsMessage()

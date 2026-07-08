@@ -1,56 +1,66 @@
-# .NET build outputs
-bin/
-obj/
-*.user
-*.suo
-*.cache
-*.dll
-*.exe
-*.pdb
-*.log
-*.vspscc
-*.vssscc
-$tf/
+# ==========================================================
+# IDEs
+# ==========================================================
 
 # Visual Studio
 .vs/
-.codex/
-*.userprefs
+*.code-workspace
 *.sln.docstates
+*.sln.ide
 *.suo
 *.user
 *.userosscache
-*.sln.ide
+*.userprefs
+*.rsuser
 *.cache
-*.dbmdl
-*.dbproj.schemaview
-*.pfx
-*.publishsettings
-*.vsix
-*.vsixmanifest
-*.vspx
-*.vsmdi
-*.tlog
-TestResults/
-*.VisualState.xml
-*.psess
-*.vsp
-*.vspx
-*.sap
-*.gpState
-*.ncrunch*
-*_i.c
-*_p.c
-*_h.h
-*.ilk
-*.meta
-*.obj
-*.iobj
-*.pch
+
+# Rider
+.idea/
+*.sln.iml
+
+# AI / Editor Tools
+.codex/*
+.cline/*
+.cursor/*
+.zcode/*
+.clinerules
+
+# ==========================================================
+# Build Output
+# ==========================================================
+
+bin/
+obj/
+
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+bld/
+artifacts/
+[Ll]og/
+
+# ==========================================================
+# Build Artifacts
+# ==========================================================
+
+*.dll
+*.exe
 *.pdb
 *.ipdb
-*.pgc
-*.pgd
+*.pidb
+*.iobj
+*.obj
+*.ilk
+*.pch
 *.rsp
 *.sbr
 *.tlb
@@ -58,78 +68,120 @@ TestResults/
 *.tlh
 *.tmp
 *.tmp_proj
-*.v11.suo
-*.code-workspace
+*.meta
 
-# NuGet Packages
+# ==========================================================
+# Logs & Diagnostics
+# ==========================================================
+
+*.log
+*.tlog
+*.svclog
+*.psess
+*.sap
+*.gpState
+*.VisualState.xml
+
+BenchmarkDotNet.Artifacts/
+
+# ==========================================================
+# NuGet
+# ==========================================================
+
+packages/
 *.nupkg
 *.snupkg
-packages/
 *.nuget.props
 *.nuget.targets
+
 project.lock.json
 project.fragment.lock.json
-artifacts/
 
-# Rider
-.idea/
-*.sln.iml
+# ==========================================================
+# Test Results
+# ==========================================================
 
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
 
-# Files built by Visual Studio
-*.pidb
-*.svclog
+# ==========================================================
+# Source Control Metadata
+# ==========================================================
+
+*.vspscc
+*.vssscc
 *.scc
-.builds
+$tf/
 
-# WPF specific
+# ==========================================================
+# WPF / Visual Studio
+# ==========================================================
+
 *.dbmdl
 *.dbproj.schemaview
+.builds
 
-# SQL Server files
+# ==========================================================
+# SQL Server
+# ==========================================================
+
 *.mdf
 *.ldf
 *.ndf
 
-# Microsoft Fakes
-FakesAssemblies/
+DAL/db/*
+DAL/Pos_dbtemp.sql
+seed.sql
 
-# .NET Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
+# ==========================================================
+# Security
+# ==========================================================
 
-# StyleCop
-StyleCopReport.xml
+*.pfx
+*.publishsettings
 
-# User-specific files
-*.rsuser
-*.userprefs
+# ==========================================================
+# Extensions & Packages
+# ==========================================================
 
-# Mono auto generated files
-mono_crash.*
-
-# Windows Store app package
+*.vsix
+*.vsixmanifest
 *.appx
 *.appxbundle
 *.appxupload
 
-# MSTest test Results
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
+# ==========================================================
+# Microsoft Fakes
+# ==========================================================
 
-# Benchmark Results
-BenchmarkDotNet.Artifacts/
+FakesAssemblies/
+
+# ==========================================================
+# StyleCop
+# ==========================================================
+
+StyleCopReport.xml
+
+# ==========================================================
+# Native / Generated Files
+# ==========================================================
+
+*_i.c
+*_p.c
+*_h.h
+
+# ==========================================================
+# Mono
+# ==========================================================
+
+mono_crash.*
+
+# ==========================================================
+# Misc
+# ==========================================================
+
+*.vsp
+*.vspx
+*.v11.suo
+*.ncrunch*

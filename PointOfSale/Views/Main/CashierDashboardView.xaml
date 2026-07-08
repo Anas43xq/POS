@@ -10,6 +10,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
              xmlns:behaviors="clr-namespace:UI.Behaviors"
              mc:Ignorable="d"
              d:DesignWidth="1600" d:DesignHeight="900">
@@ -304,7 +305,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Ghost footer button (Clear / Hold) ── -->
+        <!-- ── Ghost footer button (Clear) ── -->
         <Style x:Key="FooterGhostBtn" TargetType="Button">
             <Setter Property="Height"          Value="50"/>
             <Setter Property="Padding"         Value="16,0"/>
@@ -965,7 +966,7 @@
                             <ScrollViewer Grid.Column="1"
                                           HorizontalScrollBarVisibility="Auto"
                                           VerticalScrollBarVisibility="Disabled">
-                                <ItemsControl ItemsSource="{Binding SubCategories}">
+                                <ItemsControl ItemsSource="{Binding VisibleSubCategories}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal"/>
@@ -986,58 +987,81 @@
                         </Grid>
                     </Border>
 
-                    <!-- Product grid -->
-                    <ScrollViewer Grid.Row="3"
-                                  VerticalScrollBarVisibility="Auto"
-                                  Padding="8">
-                        <StackPanel>
+                    <!-- Product grid (virtualizing) -->
+                    <Grid Grid.Row="3">
+                        <!--
+                            Per the VirtualizingWrapPanel package's documented usage,
+                            the ScrollViewer must live INSIDE the ItemsControl.Template
+                            (with an ItemsPresenter), not as an external parent. The panel
+                            wires its IScrollInfo to that inner ScrollViewer at runtime.
+                            Without this, the panel never realizes any containers.
+                        -->
+                        <ItemsControl ItemsSource="{Binding ProductsView}"
+                                      ScrollViewer.CanContentScroll="True"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling"
+                                      VirtualizingPanel.ScrollUnit="Pixel">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <!--
+                                        ItemSize is the cell size the panel uses to compute
+                                        items-per-row. Width must be > 0 — when set, the panel
+                                        does NOT auto-compute it. Height 82 = 76 (ProductBtn.Height)
+                                        + 3 top + 3 bottom margin.
+                                    -->
+                                    <vwp:VirtualizingWrapPanel Orientation="Horizontal"
+                                                               ItemSize="140,82"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  Padding="8"
+                                                  CanContentScroll="True">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource ProductBtn}"
+                                            Command="{Binding DataContext.AddProductCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                        <StackPanel VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="4">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="11" FontWeight="Medium"
+                                                       Foreground="{StaticResource TextDark}"
+                                                       TextAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,0,0,5"/>
+                                            <controls:CurrencyText Amount="{Binding UnitPrice}"
+                                                       Style="{StaticResource CurrencyTextStyle}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                            <!-- No products banner -->
-                            <Border Background="#FEF3C7"
-                                    BorderBrush="#F59E0B"
-                                    BorderThickness="1"
-                                    CornerRadius="6"
-                                    Padding="10"
-                                    Margin="0,0,0,8"
-                                    Visibility="{Binding ShowNoProductsMessage, Converter={StaticResource BoolToVis}}">
-                                <TextBlock Text="No products found."
-                                           FontSize="12" FontWeight="Medium"
-                                           Foreground="#92400E"
-                                           TextAlignment="Center"/>
-                            </Border>
-
-                            <!-- Product cards -->
-                            <ItemsControl ItemsSource="{Binding ProductsView}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="4"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Style="{StaticResource ProductBtn}"
-                                                Command="{Binding DataContext.AddProductCommand,
-                                                          RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}">
-                                            <StackPanel VerticalAlignment="Center"
-                                                        HorizontalAlignment="Center"
-                                                        Margin="4">
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontSize="11" FontWeight="Medium"
-                                                           Foreground="{StaticResource TextDark}"
-                                                           TextAlignment="Center"
-                                                           TextWrapping="Wrap"
-                                                           Margin="0,0,0,5"/>
-                                                <controls:CurrencyText Amount="{Binding UnitPrice}"
-                                                           Style="{StaticResource CurrencyTextStyle}"/>
-                                            </StackPanel>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                        </StackPanel>
-                    </ScrollViewer>
+                        <!-- No products banner (overlay so it does not sit in the virtualizing panel) -->
+                        <Border Background="#FEF3C7"
+                                BorderBrush="#F59E0B"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="0,20,0,0"
+                                Visibility="{Binding ShowNoProductsMessage, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="No products found."
+                                       FontSize="12" FontWeight="Medium"
+                                       Foreground="#92400E"
+                                       TextAlignment="Center"/>
+                        </Border>
+                    </Grid>
 
                 </Grid>
             </Border>
@@ -1199,13 +1223,6 @@
                         Margin="0,0,8,0"
                         Command="{Binding ClearSaleCommand}"
                         Content="🗑  Clear Sale"/>
-
-                <!-- Hold Sale -->
-                <Button Style="{StaticResource FooterGhostBtn}"
-                        Width="140"
-                        IsEnabled="False"
-                        Content="⏸  Hold Sale"/>
-
             </StackPanel>
         </Border>
 
