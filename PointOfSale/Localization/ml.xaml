@@ -1,0 +1,574 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ========================================================= -->
+    <!-- Common -->
+    <!-- Reusable, generic UI vocabulary shared across the app.   -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Common.Add">ചേർക്കുക</sys:String>
+    <sys:String x:Key="Common.Edit">എഡിറ്റ് ചെയ്യുക</sys:String>
+    <sys:String x:Key="Common.Delete">ഇല്ലാതാക്കുക</sys:String>
+    <sys:String x:Key="Common.Save">സംരക്ഷിക്കുക</sys:String>
+    <sys:String x:Key="Common.Cancel">റദ്ദാക്കുക</sys:String>
+    <sys:String x:Key="Common.Close">അടയ്ക്കുക</sys:String>
+    <sys:String x:Key="Common.Open">തുറക്കുക</sys:String>
+    <sys:String x:Key="Common.View">കാണുക</sys:String>
+    <sys:String x:Key="Common.Export">എക്സ്പോർട്ട്</sys:String>
+    <sys:String x:Key="Common.Refresh">പുതുക്കുക</sys:String>
+    <sys:String x:Key="Common.Print">പ്രിന്റ്</sys:String>
+    <sys:String x:Key="Common.Void">റദ്ദാക്കുക</sys:String>
+
+    <sys:String x:Key="Common.Search">തിരയുക</sys:String>
+
+    <sys:String x:Key="Common.Apply">പ്രയോഗിക്കുക</sys:String>
+    <sys:String x:Key="Common.Reset">പുനഃസജ്ജമാക്കുക</sys:String>
+
+    <sys:String x:Key="Common.Today">ഇന്ന്</sys:String>
+    <sys:String x:Key="Common.ThisWeek">ഈ ആഴ്ച</sys:String>
+    <sys:String x:Key="Common.ThisMonth">ഈ മാസം</sys:String>
+    <sys:String x:Key="Common.Day">ദിവസം</sys:String>
+    <sys:String x:Key="Common.Week">ആഴ്ച</sys:String>
+    <sys:String x:Key="Common.Month">മാസം</sys:String>
+    <sys:String x:Key="Common.Period">കാലയളവ്</sys:String>
+
+    <sys:String x:Key="Common.From">മുതൽ</sys:String>
+    <sys:String x:Key="Common.To">വരെ</sys:String>
+
+    <sys:String x:Key="Common.Date">തീയതി</sys:String>
+    <sys:String x:Key="Common.Time">സമയം</sys:String>
+    <sys:String x:Key="Common.DateTime">തീയതിയും സമയവും</sys:String>
+    <sys:String x:Key="Common.DateFrom">തീയതി മുതൽ</sys:String>
+    <sys:String x:Key="Common.DateTo">തീയതി വരെ</sys:String>
+
+    <sys:String x:Key="Common.Name">പേര്</sys:String>
+    <sys:String x:Key="Common.Description">വിവരണം</sys:String>
+    <sys:String x:Key="Common.Notes">കുറിപ്പുകൾ</sys:String>
+    <sys:String x:Key="Common.Optional">(ഐച്ഛികം)</sys:String>
+    <sys:String x:Key="Common.Icon">ഐക്കൺ</sys:String>
+    <sys:String x:Key="Common.None">— ഒന്നുമില്ല —</sys:String>
+    <sys:String x:Key="Common.PointOfSale">പോയിന്റ് ഓഫ് സെയിൽ</sys:String>
+
+    <sys:String x:Key="Common.Category">വിഭാഗം</sys:String>
+    <sys:String x:Key="Common.Categories">വിഭാഗങ്ങൾ</sys:String>
+    <sys:String x:Key="Common.Supplier">വിതരണക്കാരൻ</sys:String>
+
+    <sys:String x:Key="Common.Product">ഉൽപ്പന്നം</sys:String>
+    <sys:String x:Key="Common.Products">ഉൽപ്പന്നങ്ങൾ</sys:String>
+
+    <sys:String x:Key="Common.Quantity">അളവ്</sys:String>
+    <sys:String x:Key="Common.Price">വില</sys:String>
+
+    <sys:String x:Key="Common.Subtotal">ഉപമൊത്തം</sys:String>
+    <sys:String x:Key="Common.Tax">നികുതി</sys:String>
+    <sys:String x:Key="Common.Discount">കിഴിവ്</sys:String>
+    <sys:String x:Key="Common.Total">ആകെ</sys:String>
+    <sys:String x:Key="Common.GrandTotal">മൊത്തം തുക</sys:String>
+
+    <sys:String x:Key="Common.Amount">തുക</sys:String>
+    <sys:String x:Key="Common.Change">ബാക്കി</sys:String>
+
+    <sys:String x:Key="Common.Status">നില</sys:String>
+
+    <sys:String x:Key="Common.Payment">പേയ്മെന്റ്</sys:String>
+    <sys:String x:Key="Common.PaymentMethod">പേയ്മെന്റ് രീതി</sys:String>
+    <sys:String x:Key="Common.Cash">ക്യാഷ്</sys:String>
+    <sys:String x:Key="Common.Card">കാർഡ്</sys:String>
+
+    <sys:String x:Key="Common.Receipt">രസീത്</sys:String>
+    <sys:String x:Key="Common.ReceiptNumber">രസീത് നമ്പർ</sys:String>
+    <sys:String x:Key="Common.ReceiptType">രസീത് തരം</sys:String>
+
+    <sys:String x:Key="Common.Loading">ലോഡ് ചെയ്യുന്നു...</sys:String>
+
+    <sys:String x:Key="Common.Warning">മുന്നറിയിപ്പ്</sys:String>
+    <sys:String x:Key="Common.Error">പിശക്</sys:String>
+    <sys:String x:Key="Common.Information">വിവരം</sys:String>
+    <sys:String x:Key="Common.Confirmation">സ്ഥിരീകരിക്കുക</sys:String>
+    <sys:String x:Key="Common.Yes">ഉവ്വ്</sys:String>
+    <sys:String x:Key="Common.No">ഇല്ല</sys:String>
+
+    <sys:String x:Key="Common.Clear">മായ്ക്കുക</sys:String>
+    <sys:String x:Key="Common.Logout">ലോഗൗട്ട്</sys:String>
+
+    <sys:String x:Key="Common.Start">ആരംഭിക്കുക</sys:String>
+    <sys:String x:Key="Common.End">അവസാനിപ്പിക്കുക</sys:String>
+
+    <sys:String x:Key="Common.Previous">മുമ്പത്തെ</sys:String>
+    <sys:String x:Key="Common.Next">അടുത്തത്</sys:String>
+
+    <sys:String x:Key="Common.Page">പേജ്</sys:String>
+    <sys:String x:Key="Common.Transactions">ഇടപാടുകൾ</sys:String>
+
+    <sys:String x:Key="Common.PagerTransactions">പേജ് {0}  ·  {1} ഇടപാടുകൾ</sys:String>
+
+    <sys:String x:Key="Common.ItemsCount">{0} ഇനങ്ങൾ</sys:String>
+
+    <sys:String x:Key="Common.OpenCloseLabel">തുറക്കുക {0}  ·  അടയ്ക്കുക {1}</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Login -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Login.Username">ഉപയോക്തൃനാമം</sys:String>
+    <sys:String x:Key="Login.Password">പാസ്‌വേഡ്</sys:String>
+
+    <sys:String x:Key="Login.SignIn">സൈൻ ഇൻ</sys:String>
+
+    <sys:String x:Key="Login.ShowHidePassword">
+        പാസ്‌വേഡ് കാണിക്കുക / മറയ്ക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Login.Footer">WFA സിസ്റ്റം  ·  പതിപ്പ് 2.0</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Cashier Dashboard -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Cashier.StartDay">ദിവസം ആരംഭിക്കുക</sys:String>
+    <sys:String x:Key="Cashier.EndDay">ദിവസം അവസാനിപ്പിക്കുക</sys:String>
+
+    <sys:String x:Key="Cashier.RecentSales">സമീപകാല വിൽപ്പനകൾ</sys:String>
+    <sys:String x:Key="Cashier.RecentTransactions">സമീപകാല ഇടപാടുകൾ</sys:String>
+
+    <sys:String x:Key="Cashier.CurrentSale">നിലവിലെ വിൽപ്പന</sys:String>
+
+    <sys:String x:Key="Cashier.Products">ഉൽപ്പന്നങ്ങൾ</sys:String>
+
+    <sys:String x:Key="Cashier.Actions">പ്രവർത്തനങ്ങൾ</sys:String>
+    <sys:String x:Key="Cashier.Sale">വിൽപ്പന</sys:String>
+
+    <sys:String x:Key="Cashier.CashButton">ക്യാഷ്</sys:String>
+    <sys:String x:Key="Cashier.CardButton">കാർഡ്</sys:String>
+
+    <sys:String x:Key="Cashier.Remove">നീക്കം ചെയ്യുക</sys:String>
+    <sys:String x:Key="Cashier.RemoveItemTooltip">
+        ഇനം നീക്കം ചെയ്യുക
+    </sys:String>
+
+    <sys:String x:Key="Cashier.Quantity">അളവ്</sys:String>
+
+    <sys:String x:Key="Cashier.NoProductsFound">
+        ഉൽപ്പന്നങ്ങളൊന്നും കണ്ടെത്തിയില്ല.
+    </sys:String>
+
+    <sys:String x:Key="Cashier.ClearSale">
+        വിൽപ്പന മായ്ക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Cashier.ColProduct">ഉൽപ്പന്നം</sys:String>
+    <sys:String x:Key="Cashier.ColQty">അളവ്</sys:String>
+    <sys:String x:Key="Cashier.ColPrice">വില</sys:String>
+    <sys:String x:Key="Cashier.ColTotal">ആകെ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Payment -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Payment.Cash.Title">ക്യാഷ് പേയ്മെന്റ്</sys:String>
+
+    <sys:String x:Key="Payment.Cash.Subtitle">
+        ക്യാഷിൽ വിൽപ്പന പൂർത്തിയാക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Payment.AmountDue">അടയ്ക്കേണ്ട തുക</sys:String>
+
+    <sys:String x:Key="Payment.CashReceived">
+        ലഭിച്ച തുക
+    </sys:String>
+
+    <sys:String x:Key="Payment.Cash.Confirm">
+        ക്യാഷ് സ്ഥിരീകരിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Title">
+        കാർഡ് പേയ്മെന്റ് സ്ഥിരീകരിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Subtitle">
+        കാർഡ് ചാർജ് ചെയ്യുന്നതിന് മുമ്പ് ആകെ തുക പരിശோധിക്കുക.
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.ConfirmCharge">
+        കാർഡിൽ നിന്ന് {0} ഈടാക്കണോ?
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Confirm">സ്ഥിരീകരിക്കുക</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shift -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shift.Start.Title">
+        പുതിയ ഷിഫ്റ്റ് ആരംഭിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Description">
+        പുതിയ ഷിഫ്റ്റ് ആരംഭിക്കാൻ ഡ്രോയറിലെ തുടക്ക ക്യാഷ് തുക നൽകുക.
+    </sys:String>
+
+    <sys:String x:Key="Shift.OpeningCash">
+        തുടക്ക ക്യാഷ്
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Button">
+        ഷിഫ്റ്റ് ആരംഭിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Title">
+        ഷിഫ്റ്റ് അവസാനിപ്പിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Shift.WarningMessage">
+        അവസാനിപ്പിച്ച ശേഷം കൂടുതൽ ഇടപാടുകൾ അനുവദിക്കില്ല. തുടരുന്നതിന് മുമ്പ് എല്ലാ വിൽപ്പനകളും പൂർത്തിയായെന്ന് ഉറപ്പാക്കുക.
+    </sys:String>
+
+    <sys:String x:Key="Shift.TotalSales">
+        ആകെ വിൽപ്പന
+    </sys:String>
+
+    <sys:String x:Key="Shift.ExpectedCash">
+        പ്രതീക്ഷിക്കുന്ന ക്യാഷ്
+    </sys:String>
+
+    <sys:String x:Key="Shift.ActualClosingCash">
+        യഥാർത്ഥ അവസാന ക്യാഷ്
+    </sys:String>
+
+    <sys:String x:Key="Shift.CashDifference">
+        ക്യാഷ് വ്യത്യാസം
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Button">
+        ഷിഫ്റ്റ് അവസാനിപ്പിക്കുക
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Recent Sales / Recent Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="RecentSales.Title">
+        സമീപകാല ഇടപാടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.Subtitle">
+        സമീപകാല രസീത് തുറക്കുക
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.FooterHint">
+        രസീത് വീണ്ടും കാണാൻ തുറക്കുക തിരഞ്ഞെടുക്കുക.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Navigation -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Nav.Menu">മെനു</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Home">ഹോം</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Transactions">
+        ഇടപാടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ShiftManagement">
+        ഷിഫ്റ്റ് മാനേജ്മെന്റ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Reports">
+        റിപ്പോർട്ടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Products">
+        ഉൽപ്പന്നങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Categories">
+        വിഭാഗങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ReceiptManagement">
+        രസീത് മാനേജ്മെന്റ്
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Dashboard / Home -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Home.KeyMetrics">
+        പ്രധാന മെട്രിക്സ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalSales">
+        ആകെ വിൽപ്പന
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.AverageSale">
+        ശരാശരി വിൽപ്പന
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCash">
+        ആകെ ക്യാഷ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCard">
+        ആകെ കാർഡ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalOrders">
+        ആകെ ഓർഡറുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TopProducts">
+        മികച്ച ഉൽപ്പന്നങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShiftSummary">
+        ഷിഫ്റ്റ് സംഗ്രഹം
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.RecentTransactions">
+        സമീപകാല ഇടപാടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ViewAll">
+        എല്ലാം കാണുക
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShowAll">
+        എല്ലാം കാണിക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ColProduct">ഉൽപ്പന്നം</sys:String>
+    <sys:String x:Key="Manager.Home.ColSales">വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashier">കാഷ്യർ</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashDifference">ക്യാഷ് വ്യത്യാസം</sys:String>
+    <sys:String x:Key="Manager.Home.ColReceipt">രസീത്</sys:String>
+    <sys:String x:Key="Manager.Home.ColAmount">തുക</sys:String>
+    <sys:String x:Key="Manager.Home.ColPayment">പേയ്മെന്റ്</sys:String>
+    <sys:String x:Key="Manager.Home.ColDate">തീയതി</sys:String>
+
+    <sys:String x:Key="Manager.Home.KpiTotalSales">ആകെ വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Home.KpiAverageSale">ശരാശരി വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCash">ആകെ ക്യാഷ്</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCard">ആകെ കാർഡ്</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalOrders">ആകെ ഓർഡറുകൾ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Reports -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Reports.Title">
+        റിപ്പോർട്ടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.SalesMode">
+        വിൽപ്പന മോഡ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ProductMode">
+        ഉൽപ്പന്ന മോഡ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.GenerateExport">
+        സൃഷ്ടിക്കുകയും എക്സ്പോർട്ട് ചെയ്യുകയും ചെയ്യുക
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ProductLabel">
+        ഉൽപ്പന്നം:
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalOrders">
+        ആകെ ഓർഡറുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalSales">
+        ആകെ വിൽപ്പന
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CashTotal">
+        ക്യാഷ് ആകെ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CardTotal">
+        കാർഡ് ആകെ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalQuantitySold">
+        ആകെ വിറ്റ അളവ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalRevenue">
+        ആകെ വരുമാനം
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.AveragePrice">
+        ശരാശരി വില
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ColReceiptNumber">രസീത് നമ്പർ</sys:String>
+    <sys:String x:Key="Manager.Reports.ColDateTime">തീയതിയും സമയവും</sys:String>
+    <sys:String x:Key="Manager.Reports.ColPaymentMethod">പേയ്മെന്റ് രീതി</sys:String>
+    <sys:String x:Key="Manager.Reports.ColGrandTotal">മൊത്തം തുക</sys:String>
+    <sys:String x:Key="Manager.Reports.ColNote">കുറിപ്പ്</sys:String>
+    <sys:String x:Key="Manager.Reports.ColQuantity">അളവ്</sys:String>
+    <sys:String x:Key="Manager.Reports.ColLineTotal">ലൈൻ ആകെ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Transactions.Title">
+        ഇടപാടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.StatusFilter">നില:</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.ColReceipt">രസീത്</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColAmount">തുക</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColPayment">പേയ്മെന്റ്</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColNotes">കുറിപ്പുകൾ</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColStatus">നില</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColDateTime">തീയതിയും സമയവും</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.VoidButton">റദ്ദാക്കുക</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Products -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Products.Title">
+        ഉൽപ്പന്ന മാനേജ്മെന്റ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.Subtitle">
+        ഉൽപ്പന്നങ്ങൾ വിഭാഗം അനുസരിച്ച് കൈകാര്യം ചെയ്യുക, പേര് ഉപയോഗിച്ച് തിരയുക, സ്റ്റോക്ക് ഒറ്റനോട്ടത്തിൽ കാണാവുന്നതാക്കുക.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.CategoriesTitle">
+        വിഭാഗങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ProductsTitle">
+        ഉൽപ്പന്നങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ColProductName">ഉൽപ്പന്നത്തിന്റെ പേര്</sys:String>
+    <sys:String x:Key="Manager.Products.ColCategory">വിഭാഗം</sys:String>
+    <sys:String x:Key="Manager.Products.ColPrice">വില</sys:String>
+    <sys:String x:Key="Manager.Products.ColStatus">നില</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager ProductForm -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.ProductForm.AddProduct">ഉൽപ്പന്നം ചേർക്കുക</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SaveProduct">ഉൽപ്പന്നം സംരക്ഷിക്കുക</sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.DuplicateWarning">
+        തിരഞ്ഞെടുത്ത വിഭാഗത്തിൽ ഈ പേരിൽ ഒരു ഉൽപ്പന്നം ഇതിനകം നിലവിലുണ്ട്.
+    </sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.FieldProductName">ഉൽപ്പന്നത്തിന്റെ പേര്</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldCategory">വിഭാഗം</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldPrice">വില (AED)</sys:String>
+    <sys:String x:Key="Manager.ProductForm.CurrencyAED">AED</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldTax">നികുതി</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldIsActive">
+        സജീവം (കാഷ്യർക്ക് ദൃശ്യമാണ്)
+    </sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldAdditionalTax">അധിക നികുതി</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldDescription">വിവരണം</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Categories -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Categories.Title">
+        വിഭാഗ മാനേജ്മെന്റ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.AddSubcategory">
+        ഉപവിഭാഗം ചേർക്കുക
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SectionCategories">വിഭാഗങ്ങൾ</sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySearchMessage">
+        നിങ്ങളുടെ തിരയലിന് യോജിക്കുന്ന വിഭാഗങ്ങളൊന്നുമില്ല.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SubcategoriesSuffix">
+         — ഉപവിഭാഗങ്ങൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySubcategoriesMessage">
+        ഇതുവരെ ഉപവിഭാഗങ്ങളൊന്നുമില്ല. താഴെ ആദ്യത്തേത് ചേർക്കുക.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager CategoryDialog (Add/Edit) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.CategoryDialog.Title">വിഭാഗം ചേർക്കുക</sys:String>
+
+    <sys:String x:Key="Manager.CategoryDialog.NameLabel">പേര്</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryLabel">മാതൃ വിഭാഗം</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryHint">
+        ഒരു മുകളിലത്തെ വിഭാഗം സൃഷ്ടിക്കാൻ "— ഒന്നുമില്ല —" ആയി വിടുക.
+    </sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.IconLabel">ഐക്കൺ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Receipt -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Receipt.Title">
+        രസീത് മാനേജ്മെന്റ്
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.Subtitle">
+        വിൽപ്പന രസീതുകൾ, വിതരണക്കാരന്റെ വാങ്ങലുകൾ, രസീത് രേഖകൾ ഒരു മാനേജർ വർക്ക്സ്പേസിൽ.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.TabSales">വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Receipt.TabVatPurchases">VAT വാങ്ങലുകൾ</sys:String>
+    <sys:String x:Key="Manager.Receipt.TabNonVatPurchases">നോൺ-VAT വാങ്ങലുകൾ</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.SalesReceiptsTitle">വിൽപ്പന രസീതുകൾ</sys:String>
+    <sys:String x:Key="Manager.Receipt.VatPurchaseReceiptsTitle">VAT വാങ്ങൽ രസീതുകൾ</sys:String>
+    <sys:String x:Key="Manager.Receipt.NonVatPurchaseReceiptsTitle">നോൺ-VAT വാങ്ങൽ രസീതുകൾ</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.FieldVatRate">VAT നിരക്ക്</sys:String>
+    <sys:String x:Key="Manager.Receipt.FieldVatAmount">VAT തുക</sys:String>
+    <sys:String x:Key="Manager.Receipt.FieldReceiptImage">രസീത് ചിത്രം</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.ColReceipt">രസീത്</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColDate">തീയതി</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSupplier">വിതരണക്കാരൻ</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColCategory">വിഭാഗം</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSubtotal">ഉപമൊത്തം</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColGrandTotal">മൊത്തം തുക</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColStatus">നില</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColPaymentMethod">പേയ്മെന്റ് രീതി</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColReceiptNumber">രസീത് നമ്പർ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Shifts -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Shifts.Title">ഷിഫ്റ്റ് മാനേജ്മെന്റ്</sys:String>
+
+    <sys:String x:Key="Manager.Shifts.ColShiftId">ഷിഫ്റ്റ് ഐഡി</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColCashier">കാഷ്യർ</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpenedAt">തുറന്ന സമയം</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosedAt">അടച്ച സമയം</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpening">തുടക്കം</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosing">അവസാനം</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColExpected">പ്രതീക്ഷിക്കുന്നത്</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDifference">വ്യത്യാസം</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColStatus">നില</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDuration">ദൈർഘ്യം</sys:String>
+
+</ResourceDictionary>

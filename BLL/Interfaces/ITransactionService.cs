@@ -1,3 +1,4 @@
+using BLL.Models;
 using Contracts.Transactions;
 using DAL.Entities;
 
@@ -18,5 +19,11 @@ namespace BLL.Interfaces
         Task DeleteTransactionAsync(int id);
 
         Task<int> CreateTransactionAsync(CreateTransactionRequest request);
+
+        /// <summary>
+        /// Voids a completed transaction, flipping its status to <see cref="DAL.Entities.TransactionStatus.Voided"/>.
+        /// Returns a failure Result if the transaction does not exist or is not in <see cref="DAL.Entities.TransactionStatus.Completed"/>.
+        /// </summary>
+        Task<Result<DAL.Entities.Transaction>> VoidTransactionAsync(int transactionId);
     }
 }

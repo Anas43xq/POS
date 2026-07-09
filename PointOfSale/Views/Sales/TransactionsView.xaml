@@ -10,258 +10,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:converters="clr-namespace:UI.Converters"
              mc:Ignorable="d"
              d:DesignWidth="1420" d:DesignHeight="820">
 
     <UserControl.Resources>
 
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
-        <!-- ── Palette ── -->
-        <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
-        <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
-        <SolidColorBrush x:Key="BrandLight"  Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
-        <SolidColorBrush x:Key="CardBg"      Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="CardHdrBg"   Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
-
-        <!-- ── Card panel ── -->
-        <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource CardBg}"/>
-            <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="CornerRadius"    Value="10"/>
-        </Style>
-
-        <Style x:Key="CardHeaderBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource CardHdrBg}"/>
-            <Setter Property="BorderBrush"     Value="#E8F3FF"/>
-            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
-            <Setter Property="Padding"         Value="14,8"/>
-        </Style>
-
-        <Style x:Key="CardTitle" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <!-- ── Filter chip toggle ── -->
-        <Style x:Key="FilterChip" TargetType="RadioButton">
-            <Setter Property="GroupName" Value="TxnDateFilter"/>
-            <Setter Property="Height"    Value="26"/>
-            <Setter Property="Padding"   Value="12,0"/>
-            <Setter Property="Margin"    Value="0,0,6,0"/>
-            <Setter Property="FontSize"  Value="11"/>
-            <Setter Property="Cursor"    Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="Bg"
-                                CornerRadius="6"
-                                Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Bg" Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#1A6FC4" Offset="0"/>
-                                            <GradientStop Color="#2589E0" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="White"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="DateInput" TargetType="DatePicker">
-            <Setter Property="Width"  Value="110"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Background" Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style x:Key="ApplyBtn" TargetType="Button">
-            <Setter Property="Height"   Value="26"/>
-            <Setter Property="Padding"  Value="14,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="6">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- ── Outline button (Refresh) ── -->
-        <Style x:Key="OutlineBtn" TargetType="Button">
-            <Setter Property="Height"   Value="26"/>
-            <Setter Property="Padding"  Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                CornerRadius="6"
-                                Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- ── Status / payment badge ── -->
-        <Style x:Key="BadgeBase" TargetType="Border">
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Padding"      Value="9,3"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment"   Value="Center"/>
-        </Style>
-        <Style x:Key="BadgeText" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-        </Style>
-
-        <!-- ── List header cell ── -->
-        <Style x:Key="ListHeaderCell" TargetType="TextBlock">
-            <Setter Property="Foreground"        Value="{StaticResource TextMuted}"/>
-            <Setter Property="FontSize"          Value="12"/>
-            <Setter Property="FontWeight"        Value="Medium"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <!-- ── List row (hover) ── -->
-        <Style x:Key="ListRow" TargetType="Border">
-            <Setter Property="BorderBrush"     Value="#F0F7FF"/>
-            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
-            <Setter Property="Background"      Value="Transparent"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#F8FCFF"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- ── Thin branded ScrollBar ── -->
-        <Style x:Key="ThinScrollThumb" TargetType="Thumb">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Border Background="{StaticResource BrandBorder}"
-                                CornerRadius="4"
-                                Margin="2,0"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ThinScrollBar" TargetType="ScrollBar">
-            <Setter Property="Width" Value="10"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ScrollBar">
-                        <Grid Background="Transparent">
-                            <Track x:Name="PART_Track" IsDirectionReversed="True">
-                                <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False"/>
-                                </Track.DecreaseRepeatButton>
-                                <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False"/>
-                                </Track.IncreaseRepeatButton>
-                                <Track.Thumb>
-                                    <Thumb Style="{StaticResource ThinScrollThumb}"/>
-                                </Track.Thumb>
-                            </Track>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ThinScrollViewer" TargetType="ScrollViewer">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ScrollViewer">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <ScrollContentPresenter Grid.Column="0"/>
-                            <ScrollBar Grid.Column="1"
-                                       Style="{StaticResource ThinScrollBar}"
-                                       Value="{TemplateBinding VerticalOffset}"
-                                       Maximum="{TemplateBinding ScrollableHeight}"
-                                       ViewportSize="{TemplateBinding ViewportHeight}"
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <converters:StatusToVoidVisConverter x:Key="StatusToVoidVis"/>
 
     </UserControl.Resources>
 
@@ -276,13 +32,7 @@
         <!-- ══════════════════════════════════════
              FILTER BAR
              ══════════════════════════════════════ -->
-        <Border Grid.Row="0"
-                Background="White"
-                BorderBrush="{StaticResource BrandBorder}"
-                BorderThickness="0.5"
-                CornerRadius="10"
-                Padding="12,9"
-                Margin="0,0,0,10">
+        <Border Grid.Row="0" Style="{StaticResource FilterPanel}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -308,12 +58,39 @@
                                                 ToLabel="To"
                                                 ApplyButtonText="Apply"
                                                 Margin="6,0,0,0"/>
+
+                    <!-- Status filter (Completed / Voided / Pending / All).
+                         Combines with the date filter — picking "Voided"
+                         + "Week" shows this week's voided transactions. -->
+                    <TextBlock Text="Status:"
+                               VerticalAlignment="Center"
+                               Margin="12,0,4,0"
+                               FontSize="11"
+                               Foreground="{StaticResource TextMuted}"/>
+                    <ComboBox Width="110"
+                              Height="26"
+                              FontSize="11"
+                              VerticalContentAlignment="Center"
+                              ItemsSource="{Binding StatusOptions}"
+                              SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
+                              DisplayMemberPath="Label"/>
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        Style="{StaticResource OutlineBtn}"
-                        Content="↻  Refresh"
-                        Command="{Binding RefreshCommand}"/>
+                <!-- Void + Refresh grouped together -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Destructive: red DangerBtn, only visible when the
+                         selected row is in Completed state. -->
+                    <Button Style="{StaticResource DangerBtn}"
+                            Content="✖  Void"
+                            Margin="0,0,6,0"
+                            Command="{Binding VoidTransactionCommand}"
+                            CommandParameter="{Binding SelectedTransaction}"
+                            Visibility="{Binding SelectedTransaction.Status, Converter={StaticResource StatusToVoidVis}}"/>
+
+                    <Button Style="{StaticResource OutlineBtn}"
+                            Content="↻  Refresh"
+                            Command="{Binding RefreshCommand}"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -376,121 +153,182 @@
                             <TextBlock Grid.Column="2" Text="PAYMENT"     Style="{StaticResource ListHeaderCell}"/>
                             <TextBlock Grid.Column="3" Text="NOTES"       Style="{StaticResource ListHeaderCell}"/>
                             <TextBlock Grid.Column="4" Text="STATUS"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="5" Text="DATE &amp; TIME" Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="5" Text="DATE &#38; TIME" Style="{StaticResource ListHeaderCell}"/>
                         </Grid>
                     </Border>
 
-                    <!-- Scrollable rows -->
-                    <ScrollViewer Grid.Row="1"
-                                  Style="{StaticResource ThinScrollViewer}"
-                                  VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Disabled"
-                                  Padding="0,0,4,0">
-                        <ItemsControl ItemsSource="{Binding TransactionsView}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Style="{StaticResource ListRow}" MinHeight="40">
-                                        <Grid Margin="14,8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="150"/>
-                                                <ColumnDefinition Width="110"/>
-                                                <ColumnDefinition Width="90"/>
-                                                <ColumnDefinition Width="*" MinWidth="80"/>
-                                                <ColumnDefinition Width="100"/>
-                                                <ColumnDefinition Width="150"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- Receipt + Open button -->
-                                            <Button Grid.Column="0"
-                                                    Content="{Binding ReceiptNumber}"
-                                                    FontSize="11"
-                                                    Cursor="Hand"
-                                                    HorizontalAlignment="Left"
-                                                    Command="{Binding DataContext.OpenReceiptCommand,
-                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}">
-                                                <Button.Template>
-                                                    <ControlTemplate TargetType="Button">
-                                                        <Border Background="#DBEEFF" CornerRadius="4" Padding="7,2">
-                                                            <ContentPresenter HorizontalAlignment="Center"
-                                                                              TextElement.Foreground="{StaticResource BrandDark}"/>
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Button.Template>
-                                            </Button>
-
-                                            <!-- Amount -->
-                                            <controls:CurrencyText Grid.Column="1"
-                                                       Amount="{Binding GrandTotal}"
-                                                       Foreground="{StaticResource TextDark}"
-                                                       VerticalAlignment="Center"/>
-
-                                            <!-- Payment badge -->
-                                            <Border Grid.Column="2" HorizontalAlignment="Left">
-                                                <Border.Style>
-                                                    <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
-                                                                <Setter Property="Background" Value="#DCFCE7"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
-                                                                <Setter Property="Background" Value="#DBEAFE"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
-                                                <TextBlock Text="{Binding PaymentMethod}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
-                                                                    <Setter Property="Foreground" Value="#16A34A"/>
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
-                                                                    <Setter Property="Foreground" Value="#1A6FC4"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
+                    <!-- Scrollable rows.  ListBox gives us built-in
+                         selection; SelectedItem is two-way bound to
+                         the VM so a click on a row sets SelectedTransaction
+                         and enables the Void action. -->
+                    <ListBox Grid.Row="1"
+                             x:Name="TransactionsList"
+                             ItemsSource="{Binding TransactionsView}"
+                             SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Stretch"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             Padding="0,0,4,0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="RowBorder"
+                                                    MinHeight="40"
+                                                    Background="White"
+                                                    BorderBrush="#EFF6FF"
+                                                    BorderThickness="0,0,0,0.5">
+                                                <ContentPresenter/>
                                             </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="RowBorder"
+                                                            Property="Background"
+                                                            Value="{StaticResource RowSelectedBg}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="RowBorder"
+                                                            Property="Background"
+                                                            Value="#F8FBFF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
 
-                                            <!-- Notes -->
-                                            <TextBlock Grid.Column="3"
-                                                       Text="{Binding Notes}"
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextDark}"
-                                                       VerticalAlignment="Center"
-                                                       TextTrimming="CharacterEllipsis"/>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="14,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*" MinWidth="80"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
 
-                                            <!-- Status badge -->
-                                            <Border Grid.Column="4"
-                                                    Style="{StaticResource BadgeBase}"
-                                                    Background="#DBEAFE">
-                                                <TextBlock Text="{Binding Status}"
-                                                           FontSize="12" FontWeight="Medium"
-                                                           Foreground="#1A6FC4"
-                                                           VerticalAlignment="Center"/>
-                                            </Border>
+                                    <!-- Receipt button -->
+                                    <Button Grid.Column="0"
+                                            Content="{Binding ReceiptNumber}"
+                                            FontSize="11"
+                                            Cursor="Hand"
+                                            HorizontalAlignment="Left"
+                                            Command="{Binding DataContext.OpenReceiptCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="#DBEEFF" CornerRadius="4" Padding="7,2">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      TextElement.Foreground="{StaticResource BrandDark}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
 
-                                            <!-- Date & time -->
-                                            <TextBlock Grid.Column="5"
-                                                       Text="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
-                                                       FontSize="13"
-                                                       Foreground="{StaticResource TextDark}"
-                                                       VerticalAlignment="Center"/>
-                                        </Grid>
+                                    <!-- Amount -->
+                                    <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding GrandTotal}"
+                                               Foreground="{StaticResource TextDark}"
+                                               VerticalAlignment="Center"/>
+
+                                    <!-- Payment badge -->
+                                    <Border Grid.Column="2" HorizontalAlignment="Left">
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                                                        <Setter Property="Background" Value="#DCFCE7"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                        <Setter Property="Background" Value="#DBEAFE"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding PaymentMethod}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                            <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+
+                                    <!-- Notes -->
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding Notes}"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextDark}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+
+                                    <!-- Status badge — color by status so a
+                                         voided row is visually unmistakable. -->
+                                    <Border Grid.Column="4">
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Background" Value="#DBEAFE"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Voided">
+                                                        <Setter Property="Background" Value="{StaticResource DangerLight}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                        <Setter Property="Background" Value="#FEF3C7"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Status}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                            <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Voided">
+                                                            <Setter Property="Foreground" Value="{StaticResource DangerDark}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                            <Setter Property="Foreground" Value="#92400E"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+
+                                    <!-- Date & time -->
+                                    <TextBlock Grid.Column="5"
+                                               Text="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextDark}"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
 
                 <!-- Pagination footer -->
@@ -526,15 +364,13 @@
                                     Content="Previous"
                                     Margin="0,0,6,0"
                                     Command="{Binding PreviousPageCommand}"/>
-                            <Button Style="{StaticResource ApplyBtn}"
+                            <Button Style="{StaticResource PrimaryGradientBtn}"
                                     Content="Next"
                                     Command="{Binding NextPageCommand}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
-
             </Grid>
         </Border>
-
     </Grid>
 </UserControl>

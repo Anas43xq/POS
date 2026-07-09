@@ -1,4 +1,5 @@
 using BLL.Interfaces;
+using BLL.Models;
 using Contracts.Transactions;
 using DAL.Entities;
 using DAL.Interfaces;
@@ -52,6 +53,34 @@ namespace BLL.Services
         }
 
         /// <summary>
+        /// Voids a completed transaction.  Delegates to the repository's
+        /// atomic <c>ExecuteUpdateAsync</c> — the status guard lives in the
+        /// SQL WHERE clause so a race with a concurrent update is safe.
+        /// </summary>
+        public async Task<Result<Transaction>> VoidTransactionAsync(int transactionId)
+        {
+            if (transactionId <= 0)
+                return Result<Transaction>.Failure("Invalid transaction id.");
+
+            bool updated = await _transactionRepository.VoidTransactionAsync(transactionId);
+            if (!updated)
+            {
+                // Either the row doesn't exist or its status is no longer
+                // Completed.  Disambiguate by re-reading so the user gets a
+                // helpful message.
+                var current = await _transactionRepository.GetByIdAsync(transactionId);
+                if (current == null)
+                    return Result<Transaction>.Failure("Transaction not found.");
+
+                return Result<Transaction>.Failure(
+                    $"Only completed transactions can be voided (current status: {current.Status}).");
+            }
+
+            var voided = await _transactionRepository.GetByIdAsync(transactionId);
+            return Result<Transaction>.Success(voided!);
+        }
+
+        /// <summary>
         /// Creates a new transaction with strict shift validation.
         /// Rule: Transactions can only be created if the shift is OPEN.
         /// </summary>
@@ -96,7 +125,7 @@ namespace BLL.Services
         private async Task ValidateShiftIsOpenAsync(int shiftId)
         {
             var shift = await _shiftRepository.GetByIdAsync(shiftId);
-            
+
             if (shift == null)
                 throw new InvalidOperationException(
                     "No active shift. Please start a shift first.");

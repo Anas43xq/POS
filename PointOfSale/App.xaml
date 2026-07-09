@@ -6,9 +6,18 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- 1. Converters (no dependencies) -->
                 <ResourceDictionary Source="Resources/Converters.xaml" />
+                <!-- 2. Dashboard chrome (brushes, KPI tiles, card styles) -->
+                <ResourceDictionary Source="Resources/DashboardChrome.xaml" />
+                <!-- 3. Dialog chrome (modal styles) -->
+                <ResourceDictionary Source="Resources/DialogChrome.xaml" />
+                <!-- 4. Shared app chrome (button + list + badge styles,
+                        plus the destructive-action palette).  Adds
+                        keys not present in DashboardChrome / DialogChrome
+                        so there are no duplicate-key conflicts. -->
+                <ResourceDictionary Source="Resources/AppChrome.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
-

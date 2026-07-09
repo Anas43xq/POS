@@ -14,6 +14,11 @@
 *.rsuser
 *.cache
 
+# docs
+
+docs/*
+
+
 # Rider
 .idea/
 *.sln.iml
@@ -23,6 +28,7 @@
 .cline/*
 .cursor/*
 .zcode/*
+AGENT.md
 .clinerules
 
 # ==========================================================

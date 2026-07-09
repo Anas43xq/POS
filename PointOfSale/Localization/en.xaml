@@ -1,0 +1,574 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ========================================================= -->
+    <!-- Common -->
+    <!-- Reusable, generic UI vocabulary shared across the app.   -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Common.Add">Add</sys:String>
+    <sys:String x:Key="Common.Edit">Edit</sys:String>
+    <sys:String x:Key="Common.Delete">Delete</sys:String>
+    <sys:String x:Key="Common.Save">Save</sys:String>
+    <sys:String x:Key="Common.Cancel">Cancel</sys:String>
+    <sys:String x:Key="Common.Close">Close</sys:String>
+    <sys:String x:Key="Common.Open">Open</sys:String>
+    <sys:String x:Key="Common.View">View</sys:String>
+    <sys:String x:Key="Common.Export">Export</sys:String>
+    <sys:String x:Key="Common.Refresh">Refresh</sys:String>
+    <sys:String x:Key="Common.Print">Print</sys:String>
+    <sys:String x:Key="Common.Void">Void</sys:String>
+
+    <sys:String x:Key="Common.Search">Search</sys:String>
+
+    <sys:String x:Key="Common.Apply">Apply</sys:String>
+    <sys:String x:Key="Common.Reset">Reset</sys:String>
+
+    <sys:String x:Key="Common.Today">Today</sys:String>
+    <sys:String x:Key="Common.ThisWeek">This Week</sys:String>
+    <sys:String x:Key="Common.ThisMonth">This Month</sys:String>
+    <sys:String x:Key="Common.Day">Day</sys:String>
+    <sys:String x:Key="Common.Week">Week</sys:String>
+    <sys:String x:Key="Common.Month">Month</sys:String>
+    <sys:String x:Key="Common.Period">Period</sys:String>
+
+    <sys:String x:Key="Common.From">From</sys:String>
+    <sys:String x:Key="Common.To">To</sys:String>
+
+    <sys:String x:Key="Common.Date">Date</sys:String>
+    <sys:String x:Key="Common.Time">Time</sys:String>
+    <sys:String x:Key="Common.DateTime">Date & Time</sys:String>
+    <sys:String x:Key="Common.DateFrom">Date From</sys:String>
+    <sys:String x:Key="Common.DateTo">Date To</sys:String>
+
+    <sys:String x:Key="Common.Name">Name</sys:String>
+    <sys:String x:Key="Common.Description">Description</sys:String>
+    <sys:String x:Key="Common.Notes">Notes</sys:String>
+    <sys:String x:Key="Common.Optional">(optional)</sys:String>
+    <sys:String x:Key="Common.Icon">Icon</sys:String>
+    <sys:String x:Key="Common.None">— None —</sys:String>
+    <sys:String x:Key="Common.PointOfSale">POINT OF SALE</sys:String>
+
+    <sys:String x:Key="Common.Category">Category</sys:String>
+    <sys:String x:Key="Common.Categories">Categories</sys:String>
+    <sys:String x:Key="Common.Supplier">Supplier</sys:String>
+
+    <sys:String x:Key="Common.Product">Product</sys:String>
+    <sys:String x:Key="Common.Products">Products</sys:String>
+
+    <sys:String x:Key="Common.Quantity">Quantity</sys:String>
+    <sys:String x:Key="Common.Price">Price</sys:String>
+
+    <sys:String x:Key="Common.Subtotal">Subtotal</sys:String>
+    <sys:String x:Key="Common.Tax">Tax</sys:String>
+    <sys:String x:Key="Common.Discount">Discount</sys:String>
+    <sys:String x:Key="Common.Total">Total</sys:String>
+    <sys:String x:Key="Common.GrandTotal">Grand Total</sys:String>
+
+    <sys:String x:Key="Common.Amount">Amount</sys:String>
+    <sys:String x:Key="Common.Change">Change</sys:String>
+
+    <sys:String x:Key="Common.Status">Status</sys:String>
+
+    <sys:String x:Key="Common.Payment">Payment</sys:String>
+    <sys:String x:Key="Common.PaymentMethod">Payment Method</sys:String>
+    <sys:String x:Key="Common.Cash">Cash</sys:String>
+    <sys:String x:Key="Common.Card">Card</sys:String>
+
+    <sys:String x:Key="Common.Receipt">Receipt</sys:String>
+    <sys:String x:Key="Common.ReceiptNumber">Receipt Number</sys:String>
+    <sys:String x:Key="Common.ReceiptType">Receipt Type</sys:String>
+
+    <sys:String x:Key="Common.Loading">Loading...</sys:String>
+
+    <sys:String x:Key="Common.Warning">Warning</sys:String>
+    <sys:String x:Key="Common.Error">Error</sys:String>
+    <sys:String x:Key="Common.Information">Information</sys:String>
+    <sys:String x:Key="Common.Confirmation">Confirm</sys:String>
+    <sys:String x:Key="Common.Yes">Yes</sys:String>
+    <sys:String x:Key="Common.No">No</sys:String>
+
+    <sys:String x:Key="Common.Clear">Clear</sys:String>
+    <sys:String x:Key="Common.Logout">Logout</sys:String>
+
+    <sys:String x:Key="Common.Start">Start</sys:String>
+    <sys:String x:Key="Common.End">End</sys:String>
+
+    <sys:String x:Key="Common.Previous">Previous</sys:String>
+    <sys:String x:Key="Common.Next">Next</sys:String>
+
+    <sys:String x:Key="Common.Page">Page</sys:String>
+    <sys:String x:Key="Common.Transactions">Transactions</sys:String>
+
+    <sys:String x:Key="Common.PagerTransactions">Page {0}  ·  {1} transactions</sys:String>
+
+    <sys:String x:Key="Common.ItemsCount">{0} items</sys:String>
+
+    <sys:String x:Key="Common.OpenCloseLabel">Open {0}  ·  Close {1}</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Login -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Login.Username">Username</sys:String>
+    <sys:String x:Key="Login.Password">Password</sys:String>
+
+    <sys:String x:Key="Login.SignIn">Sign In</sys:String>
+
+    <sys:String x:Key="Login.ShowHidePassword">
+        Show / Hide Password
+    </sys:String>
+
+    <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Cashier Dashboard -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Cashier.StartDay">Start Day</sys:String>
+    <sys:String x:Key="Cashier.EndDay">End Day</sys:String>
+
+    <sys:String x:Key="Cashier.RecentSales">Recent Sales</sys:String>
+    <sys:String x:Key="Cashier.RecentTransactions">Recent Transactions</sys:String>
+
+    <sys:String x:Key="Cashier.CurrentSale">Current Sale</sys:String>
+
+    <sys:String x:Key="Cashier.Products">Products</sys:String>
+
+    <sys:String x:Key="Cashier.Actions">Actions</sys:String>
+    <sys:String x:Key="Cashier.Sale">Sale</sys:String>
+
+    <sys:String x:Key="Cashier.CashButton">CASH</sys:String>
+    <sys:String x:Key="Cashier.CardButton">CARD</sys:String>
+
+    <sys:String x:Key="Cashier.Remove">Remove</sys:String>
+    <sys:String x:Key="Cashier.RemoveItemTooltip">
+        Remove item
+    </sys:String>
+
+    <sys:String x:Key="Cashier.Quantity">Qty</sys:String>
+
+    <sys:String x:Key="Cashier.NoProductsFound">
+        No products found.
+    </sys:String>
+
+    <sys:String x:Key="Cashier.ClearSale">
+        Clear Sale
+    </sys:String>
+
+    <sys:String x:Key="Cashier.ColProduct">PRODUCT</sys:String>
+    <sys:String x:Key="Cashier.ColQty">QTY</sys:String>
+    <sys:String x:Key="Cashier.ColPrice">PRICE</sys:String>
+    <sys:String x:Key="Cashier.ColTotal">TOTAL</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Payment -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Payment.Cash.Title">Cash Payment</sys:String>
+
+    <sys:String x:Key="Payment.Cash.Subtitle">
+        Complete the sale with cash
+    </sys:String>
+
+    <sys:String x:Key="Payment.AmountDue">Amount Due</sys:String>
+
+    <sys:String x:Key="Payment.CashReceived">
+        Cash Received
+    </sys:String>
+
+    <sys:String x:Key="Payment.Cash.Confirm">
+        Confirm Cash
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Title">
+        Confirm Card Payment
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Subtitle">
+        Review the total before charging the card.
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.ConfirmCharge">
+        Charge {0} to the card?
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Confirm">Confirm</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shift -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shift.Start.Title">
+        Start a New Shift
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Description">
+        Enter the opening cash amount in the drawer to start a new shift.
+    </sys:String>
+
+    <sys:String x:Key="Shift.OpeningCash">
+        Opening Cash
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Button">
+        Start Shift
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Title">
+        Close Shift
+    </sys:String>
+
+    <sys:String x:Key="Shift.WarningMessage">
+        After closing, no transactions will be allowed. Make sure all sales are finalized before proceeding.
+    </sys:String>
+
+    <sys:String x:Key="Shift.TotalSales">
+        Total Sales
+    </sys:String>
+
+    <sys:String x:Key="Shift.ExpectedCash">
+        Expected Cash
+    </sys:String>
+
+    <sys:String x:Key="Shift.ActualClosingCash">
+        Actual Closing Cash
+    </sys:String>
+
+    <sys:String x:Key="Shift.CashDifference">
+        Cash Difference
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Button">
+        Close Shift
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Recent Sales / Recent Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="RecentSales.Title">
+        Recent Transactions
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.Subtitle">
+        Open a recent receipt
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.FooterHint">
+        Select Open to view the receipt again.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Navigation -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Nav.Menu">Menu</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Home">Home</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Transactions">
+        Transactions
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ShiftManagement">
+        Shift Management
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Reports">
+        Reports
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Products">
+        Products
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Categories">
+        Categories
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ReceiptManagement">
+        Receipt Management
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Dashboard / Home -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Home.KeyMetrics">
+        Key Metrics
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalSales">
+        Total Sales
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.AverageSale">
+        Average Sale
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCash">
+        Total Cash
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCard">
+        Total Card
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalOrders">
+        Total Orders
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TopProducts">
+        Top Products
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShiftSummary">
+        Shift Summary
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.RecentTransactions">
+        Recent Transactions
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ViewAll">
+        View All
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShowAll">
+        Show All
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ColProduct">PRODUCT</sys:String>
+    <sys:String x:Key="Manager.Home.ColSales">SALES</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashier">CASHIER</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashDifference">CASH DIFF.</sys:String>
+    <sys:String x:Key="Manager.Home.ColReceipt">RECEIPT</sys:String>
+    <sys:String x:Key="Manager.Home.ColAmount">AMOUNT</sys:String>
+    <sys:String x:Key="Manager.Home.ColPayment">PAYMENT</sys:String>
+    <sys:String x:Key="Manager.Home.ColDate">DATE</sys:String>
+
+    <sys:String x:Key="Manager.Home.KpiTotalSales">TOTAL SALES</sys:String>
+    <sys:String x:Key="Manager.Home.KpiAverageSale">AVG. SALE</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCash">TOTAL CASH</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCard">TOTAL CARD</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalOrders">TOTAL ORDERS</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Reports -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Reports.Title">
+        Reports
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.SalesMode">
+        Sales Mode
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ProductMode">
+        Product Mode
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.GenerateExport">
+        Generate and Export
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ProductLabel">
+        Product:
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalOrders">
+        Total Orders
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalSales">
+        Total Sales
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CashTotal">
+        Cash Total
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CardTotal">
+        Card Total
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalQuantitySold">
+        Total Quantity Sold
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalRevenue">
+        Total Revenue
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.AveragePrice">
+        Average Price
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ColReceiptNumber">Receipt Number</sys:String>
+    <sys:String x:Key="Manager.Reports.ColDateTime">Date & Time</sys:String>
+    <sys:String x:Key="Manager.Reports.ColPaymentMethod">Payment Method</sys:String>
+    <sys:String x:Key="Manager.Reports.ColGrandTotal">Grand Total</sys:String>
+    <sys:String x:Key="Manager.Reports.ColNote">Note</sys:String>
+    <sys:String x:Key="Manager.Reports.ColQuantity">Quantity</sys:String>
+    <sys:String x:Key="Manager.Reports.ColLineTotal">Line Total</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Transactions.Title">
+        Transactions
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.StatusFilter">Status:</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.ColReceipt">RECEIPT</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColAmount">AMOUNT</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColPayment">PAYMENT</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColNotes">NOTES</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColStatus">STATUS</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColDateTime">DATE & TIME</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.VoidButton">Void</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Products -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Products.Title">
+        Product Management
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.Subtitle">
+        Manage products by category, search by name and keep stock visible at a glance.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.CategoriesTitle">
+        Categories
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ProductsTitle">
+        Products
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ColProductName">Product Name</sys:String>
+    <sys:String x:Key="Manager.Products.ColCategory">Category</sys:String>
+    <sys:String x:Key="Manager.Products.ColPrice">Price</sys:String>
+    <sys:String x:Key="Manager.Products.ColStatus">Status</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager ProductForm -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.ProductForm.AddProduct">Add Product</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SaveProduct">Save Product</sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.DuplicateWarning">
+        A product with this name already exists in the selected category.
+    </sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.FieldProductName">Product Name</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldCategory">Category</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldPrice">Price (AED)</sys:String>
+    <sys:String x:Key="Manager.ProductForm.CurrencyAED">AED</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldTax">Tax</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldIsActive">
+        Is active (visible to cashiers)
+    </sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldAdditionalTax">Additional tax</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldDescription">Description</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Categories -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Categories.Title">
+        Category Management
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.AddSubcategory">
+        Add Subcategory
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SectionCategories">CATEGORIES</sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySearchMessage">
+        No categories match your search.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SubcategoriesSuffix">
+         — subcategories
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySubcategoriesMessage">
+        No subcategories yet. Add the first one below.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager CategoryDialog (Add/Edit) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.CategoryDialog.Title">Add Category</sys:String>
+
+    <sys:String x:Key="Manager.CategoryDialog.NameLabel">Name</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryLabel">Parent Category</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryHint">
+        Leave as "— None —" to create a top-level category.
+    </sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.IconLabel">Icon</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Receipt -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Receipt.Title">
+        Receipt Management
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.Subtitle">
+        Sales receipts, supplier purchases and receipt documents in one manager workspace.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.TabSales">Sales</sys:String>
+    <sys:String x:Key="Manager.Receipt.TabVatPurchases">VAT Purchases</sys:String>
+    <sys:String x:Key="Manager.Receipt.TabNonVatPurchases">Non-VAT Purchases</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.SalesReceiptsTitle">Sales receipts</sys:String>
+    <sys:String x:Key="Manager.Receipt.VatPurchaseReceiptsTitle">VAT purchase receipts</sys:String>
+    <sys:String x:Key="Manager.Receipt.NonVatPurchaseReceiptsTitle">Non-VAT purchase receipts</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.FieldVatRate">VAT Rate</sys:String>
+    <sys:String x:Key="Manager.Receipt.FieldVatAmount">VAT Amount</sys:String>
+    <sys:String x:Key="Manager.Receipt.FieldReceiptImage">Receipt Image</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.ColReceipt">Receipt</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColDate">Date</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSupplier">Supplier</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColCategory">Category</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSubtotal">Subtotal</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColGrandTotal">Grand Total</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColStatus">Status</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColPaymentMethod">Payment Method</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColReceiptNumber">Receipt Number</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Shifts -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Shifts.Title">Shift Management</sys:String>
+
+    <sys:String x:Key="Manager.Shifts.ColShiftId">SHIFT ID</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColCashier">CASHIER</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpenedAt">OPENED AT</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosedAt">CLOSED AT</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpening">OPENING</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosing">CLOSING</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColExpected">EXPECTED</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDifference">DIFFERENCE</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColStatus">STATUS</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDuration">DURATION</sys:String>
+
+</ResourceDictionary>

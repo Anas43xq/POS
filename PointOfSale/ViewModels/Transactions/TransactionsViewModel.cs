@@ -44,13 +44,18 @@ namespace UI.ViewModels
             OpenReceiptCommand = new RelayCommand<TransactionListItemDto>(OpenReceipt);
             PreviousPageCommand = new RelayCommand(_ => PreviousPage(), _ => CanGoPreviousPage);
             NextPageCommand = new RelayCommand(_ => NextPage(), _ => CanGoNextPage);
+            VoidTransactionCommand = new AsyncRelayCommand<TransactionListItemDto?>(
+                VoidTransactionAsync,
+                CanVoidTransaction);
 
             Transactions = _transactions;
             TransactionsView = CollectionViewSource.GetDefaultView(Transactions);
             TransactionsView.Filter = FilterTransactions;
 
             CurrentFilterMode = TransactionFilterMode.Day;
-            SelectedStatusFilter = "Completed";
+            // Initialise the status filter from the options list so the
+            // combobox shows "Completed" on first render.
+            _selectedStatusFilter = StatusOptions[0];
             IsPeriodFilterVisible = false;
         }
 
@@ -108,19 +113,38 @@ namespace UI.ViewModels
             }
         }
 
-        private string _selectedStatusFilter = string.Empty;
-        public string SelectedStatusFilter
+        /// <summary>
+        /// Status filter options shown in the combobox.  The wrapper class
+        /// carries a user-facing label and the underlying nullable enum
+        /// (null = "All", no status filter).  Bound to the XAML combobox;
+        /// the enum value is passed to the SP via <c>ToString()</c>.
+        /// </summary>
+        public IReadOnlyList<StatusFilterOption> StatusOptions { get; } = new[]
+        {
+            new StatusFilterOption("Completed", TransactionStatus.Completed),
+            new StatusFilterOption("Voided",    TransactionStatus.Voided),
+            new StatusFilterOption("Pending",   TransactionStatus.Pending),
+            new StatusFilterOption("All",       null),
+        };
+
+        private StatusFilterOption _selectedStatusFilter;
+        public StatusFilterOption SelectedStatusFilter
         {
             get => _selectedStatusFilter;
             set
             {
-                var normalized = value ?? string.Empty;
-                if (string.Equals(_selectedStatusFilter, normalized, StringComparison.Ordinal))
+                if (value == null || _selectedStatusFilter == value)
                     return;
 
-                _selectedStatusFilter = normalized;
-                OnPropertyChanged();
-                RefreshView();
+                _selectedStatusFilter = value;
+
+                // Status and date filters compose: changing the status keeps
+                // the active date filter intact so the two can be combined
+                // (e.g. "this week's Voided transactions").  We just clear
+                // any stale error message and reload with the new status.
+                ErrorMessage = string.Empty;
+                CurrentPage = 1;
+                _ = LoadTransactions();
             }
         }
 
@@ -179,6 +203,21 @@ namespace UI.ViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand NextPageCommand { get; }
         public ICommand OpenReceiptCommand { get; }
+        public ICommand VoidTransactionCommand { get; }
+
+        private TransactionListItemDto? _selectedTransaction;
+        public TransactionListItemDto? SelectedTransaction
+        {
+            get => _selectedTransaction;
+            set
+            {
+                if (_selectedTransaction == value)
+                    return;
+
+                _selectedTransaction = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int CurrentPage
         {
@@ -207,7 +246,6 @@ namespace UI.ViewModels
 
                 _pageSize = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(PageInfo));
             }
         }
 
@@ -233,6 +271,24 @@ namespace UI.ViewModels
         public bool CanGoPreviousPage => CurrentPage > 1;
         public bool CanGoNextPage => CurrentPage < TotalPages;
 
+    }
+
+    /// <summary>
+    /// A single option in the Status filter combobox.  Wraps a user-facing
+    /// label and a nullable <see cref="TransactionStatus"/> (null = "All").
+    /// </summary>
+    public sealed class StatusFilterOption
+    {
+        public StatusFilterOption(string label, TransactionStatus? value)
+        {
+            Label = label;
+            Value = value;
+        }
+
+        public string Label { get; }
+        public TransactionStatus? Value { get; }
+
+        public override string ToString() => Label;
     }
 
     public enum TransactionFilterMode

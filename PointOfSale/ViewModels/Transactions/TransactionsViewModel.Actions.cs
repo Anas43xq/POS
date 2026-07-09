@@ -2,6 +2,7 @@ using Contracts.Transactions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using UI.Commands;
 
 namespace UI.ViewModels
@@ -18,19 +19,19 @@ namespace UI.ViewModels
                 IsBusy = true;
                 ErrorMessage = string.Empty;
 
-if (CurrentFilterMode == TransactionFilterMode.Period)
-            {
-                if (!FromDate.HasValue)
+                if (CurrentFilterMode == TransactionFilterMode.Period)
                 {
-                    ErrorMessage = "From date is required for a custom period.";
-                    return;
-                }
+                    if (!FromDate.HasValue)
+                    {
+                        ErrorMessage = "From date is required for a custom period.";
+                        return;
+                    }
 
-                if (ToDate.HasValue && ToDate.Value < FromDate.Value)
-                {
-                    ErrorMessage = "To date cannot be earlier than From date.";
-                    return;
-                }
+                    if (ToDate.HasValue && ToDate.Value < FromDate.Value)
+                    {
+                        ErrorMessage = "To date cannot be earlier than From date.";
+                        return;
+                    }
                 }
 
                 var request = new GetTransactionsListRequest
@@ -45,6 +46,7 @@ if (CurrentFilterMode == TransactionFilterMode.Period)
                     },
                     FromDate = FromDate,
                     ToDate = ToDate,
+                    StatusFilter = SelectedStatusFilter?.Value?.ToString(),
                     PageNumber = CurrentPage,
                     PageSize = PageSize
                 };
@@ -183,6 +185,70 @@ if (CurrentFilterMode == TransactionFilterMode.Period)
                 return;
 
             _receiptDisplayService.ShowReceipt(transaction.TransactionId);
+        }
+
+        /// <summary>
+        /// CanExecute for <see cref="VoidTransactionCommand"/>: only fire
+        /// for a non-null row whose current status is "Completed".
+        /// </summary>
+        private bool CanVoidTransaction(TransactionListItemDto? transaction)
+        {
+            return transaction != null
+                && string.Equals(transaction.Status, "Completed", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Voids the supplied transaction.  Shows a confirmation dialog
+        /// (destructive action), then delegates to <see cref="ITransactionService.VoidTransactionAsync"/>
+        /// and refreshes the list on success.
+        /// </summary>
+        private async Task VoidTransactionAsync(TransactionListItemDto? transaction)
+        {
+            if (transaction == null)
+                return;
+
+            var confirm = MessageBox.Show(
+                $"Void transaction {transaction.ReceiptNumber} for {transaction.GrandTotal:C}?\n\n" +
+                "This will mark the transaction as voided and cannot be undone.",
+                "Confirm Void",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                IsBusy = true;
+                ErrorMessage = string.Empty;
+
+                var result = await _transactionService.VoidTransactionAsync(transaction.TransactionId);
+
+                // Always clear the now-stale selection so the Void button
+                // disappears (and the list doesn't keep a phantom highlight).
+                SelectedTransaction = null;
+
+                if (!result.IsSuccess)
+                {
+                    ErrorMessage = result.Error ?? "Failed to void transaction.";
+                    // Refresh anyway so the row's status (if it changed
+                    // concurrently) is reflected in the list.
+                    await RefreshAsync();
+                    return;
+                }
+
+                // The voided row no longer matches the SP filter (Status = 1)
+                // so the refreshed list simply won't contain it.
+                await RefreshAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }
