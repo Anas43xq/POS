@@ -35,8 +35,8 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0,0,0,22">
-                <TextBlock Text="Cash Payment" FontSize="28" FontWeight="Bold" Foreground="#0F172A"/>
-                <TextBlock Text="Complete the sale with cash" FontSize="15" Foreground="#64748B" Margin="0,4,0,0"/>
+                <TextBlock Text="{DynamicResource Payment.Cash.Title}" FontSize="28" FontWeight="Bold" Foreground="#0F172A"/>
+                <TextBlock Text="{DynamicResource Payment.Cash.Subtitle}" FontSize="15" Foreground="#64748B" Margin="0,4,0,0"/>
             </StackPanel>
 
             <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" Padding="18" Margin="0,0,0,20">
@@ -45,7 +45,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Amount Due" FontSize="17" FontWeight="SemiBold" Foreground="#475569" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Payment.AmountDue}" FontSize="17" FontWeight="SemiBold" Foreground="#475569" VerticalAlignment="Center"/>
                     <controls:CurrencyText Grid.Column="1"
                                            Amount="{Binding PaymentTotal}"
                                            FontSize="32"
@@ -57,7 +57,7 @@
 
             <Grid Grid.Row="2" Margin="0,0,0,24">
                 <StackPanel>
-                    <TextBlock Text="Cash Received" FontSize="16" FontWeight="SemiBold" Foreground="#0F172A" Margin="0,0,0,8"/>
+                    <TextBlock Text="{DynamicResource Payment.CashReceived}" FontSize="16" FontWeight="SemiBold" Foreground="#0F172A" Margin="0,0,0,8"/>
                 <TextBox Text="{Binding CashReceivedText, UpdateSourceTrigger=PropertyChanged}"
                              Height="48"
                              FontSize="18"
@@ -72,7 +72,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Change" FontSize="16" Foreground="#64748B" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Common.Change}" FontSize="16" Foreground="#64748B" VerticalAlignment="Center"/>
                         <controls:CurrencyText Grid.Column="1"
                                                Amount="{Binding ChangeAmount}"
                                                FontSize="24"
@@ -87,11 +87,11 @@
             </Border>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Width="100" Height="38" Margin="0,0,10,0"
+                <Button Content="{DynamicResource Common.Cancel}" Width="100" Height="38" Margin="0,0,10,0"
                         Background="#E2E8F0" Foreground="#0F172A"
                         Command="{Binding CancelCommand}"
                         IsCancel="True"/>
-                <Button Content="Confirm Cash" Width="120" Height="38"
+                <Button Content="{DynamicResource Payment.Cash.Confirm}" Width="120" Height="38"
                         Background="#16A34A" Foreground="White"
                         Command="{Binding ConfirmPaymentCommand}"
                         IsDefault="True"/>

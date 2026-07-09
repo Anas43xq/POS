@@ -48,7 +48,7 @@
     <sys:String x:Key="Common.Optional">(اختياري)</sys:String>
     <sys:String x:Key="Common.Icon">أيقونة</sys:String>
     <sys:String x:Key="Common.None">— لا شيء —</sys:String>
-    <sys:String x:Key="Common.PointOfSale">نقطة بيع</sys:String>
+    <sys:String x:Key="Common.PointOfSale">POINT OF SALE</sys:String>
 
     <sys:String x:Key="Common.Category">الفئة</sys:String>
     <sys:String x:Key="Common.Categories">الفئات</sys:String>
@@ -111,6 +111,9 @@
     <!-- Login -->
     <!-- ========================================================= -->
 
+    <sys:String x:Key="Login.Title">Cafeteria Hawa – تسجيل الدخول</sys:String>
+    <sys:String x:Key="Login.Brand">Cafeteria Hawa</sys:String>
+
     <sys:String x:Key="Login.Username">اسم المستخدم</sys:String>
     <sys:String x:Key="Login.Password">كلمة المرور</sys:String>
 
@@ -120,7 +123,12 @@
         إظهار / إخفاء كلمة المرور
     </sys:String>
 
-    <sys:String x:Key="Login.Footer">نظام WFA  ·  الإصدار 2.0</sys:String>
+    <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="LoginAs.Title">تسجيل الدخول باسم</sys:String>
+    <sys:String x:Key="LoginAs.Subtitle">اختر كيف تريد المتابعة.</sys:String>
+    <sys:String x:Key="LoginAs.Manager">المدير</sys:String>
+    <sys:String x:Key="LoginAs.Cashier">الكاشير</sys:String>
 
     <!-- ========================================================= -->
     <!-- Cashier Dashboard -->
@@ -162,6 +170,10 @@
     <sys:String x:Key="Cashier.ColPrice">السعر</sys:String>
     <sys:String x:Key="Cashier.ColTotal">الإجمالي</sys:String>
 
+    <sys:String x:Key="Cashier.ShiftOpen">الدوام مفتوح ({0})</sys:String>
+    <sys:String x:Key="Cashier.ShiftClosed">الدوام مغلق</sys:String>
+    <sys:String x:Key="Cashier.NoShift">لا يوجد دوام</sys:String>
+
     <!-- ========================================================= -->
     <!-- Payment -->
     <!-- ========================================================= -->
@@ -201,11 +213,11 @@
     <!-- ========================================================= -->
 
     <sys:String x:Key="Shift.Start.Title">
-        بدء وردية جديدة
+        بدء دوام جديد
     </sys:String>
 
     <sys:String x:Key="Shift.Start.Description">
-        أدخل مبلغ النقدية الافتتاحي في الدرج لبدء وردية جديدة.
+        أدخل مبلغ النقدية الافتتاحي في الدرج لبدء دوام جديد.
     </sys:String>
 
     <sys:String x:Key="Shift.OpeningCash">
@@ -213,11 +225,11 @@
     </sys:String>
 
     <sys:String x:Key="Shift.Start.Button">
-        بدء الوردية
+        بدء الدوام
     </sys:String>
 
     <sys:String x:Key="Shift.End.Title">
-        إغلاق الوردية
+        إغلاق الدوام
     </sys:String>
 
     <sys:String x:Key="Shift.WarningMessage">
@@ -241,7 +253,7 @@
     </sys:String>
 
     <sys:String x:Key="Shift.End.Button">
-        إغلاق الوردية
+        إغلاق الدوام
     </sys:String>
 
     <!-- ========================================================= -->
@@ -273,7 +285,7 @@
     </sys:String>
 
     <sys:String x:Key="Manager.Nav.ShiftManagement">
-        إدارة الورديات
+        إدارة الدوامات
     </sys:String>
 
     <sys:String x:Key="Manager.Nav.Reports">
@@ -325,7 +337,7 @@
     </sys:String>
 
     <sys:String x:Key="Manager.Home.ShiftSummary">
-        ملخص الوردية
+        ملخص الدوام
     </sys:String>
 
     <sys:String x:Key="Manager.Home.RecentTransactions">
@@ -558,9 +570,9 @@
     <!-- Manager Shifts -->
     <!-- ========================================================= -->
 
-    <sys:String x:Key="Manager.Shifts.Title">إدارة الورديات</sys:String>
+    <sys:String x:Key="Manager.Shifts.Title">إدارة الدوامات</sys:String>
 
-    <sys:String x:Key="Manager.Shifts.ColShiftId">معرّف الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColShiftId">معرّف الدوام</sys:String>
     <sys:String x:Key="Manager.Shifts.ColCashier">الكاشير</sys:String>
     <sys:String x:Key="Manager.Shifts.ColOpenedAt">وقت الفتح</sys:String>
     <sys:String x:Key="Manager.Shifts.ColClosedAt">وقت الإغلاق</sys:String>

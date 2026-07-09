@@ -17,13 +17,13 @@ namespace UI.ViewModels
         private readonly IShiftService _shiftService;
         private readonly ISessionService _sessionService;
 
-        private string _openingCash = "0.00";
+        private string _openingCash = "";
         public string OpeningCash
         {
             get => _openingCash;
             set
             {
-                _openingCash = value ?? "0.00";
+                _openingCash = value ?? "";
                 OnPropertyChanged();
             }
         }

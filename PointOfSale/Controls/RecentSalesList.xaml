@@ -16,20 +16,20 @@
                   BorderThickness="0"
                   FontSize="14">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Receipt"
+                <DataGridTextColumn Header="{DynamicResource Common.Receipt}"
                                     Binding="{Binding ReceiptNumber}"
                                     Width="*"
                                     MinWidth="130"/>
-                <DataGridTextColumn Header="Date"
+                <DataGridTextColumn Header="{DynamicResource Common.Date}"
                                     Binding="{Binding TransactionDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
                                     Width="155"/>
-                <DataGridTextColumn Header="Payment"
+                <DataGridTextColumn Header="{DynamicResource Common.Payment}"
                                     Binding="{Binding PaymentMethod}"
                                     Width="110"/>
-                <DataGridTextColumn Header="Status"
+                <DataGridTextColumn Header="{DynamicResource Common.Status}"
                                     Binding="{Binding Status}"
                                     Width="100"/>
-                <DataGridTemplateColumn Header="Total" Width="105">
+                <DataGridTemplateColumn Header="{DynamicResource Common.Total}" Width="105">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <controls:CurrencyText Amount="{Binding GrandTotal}" HorizontalAlignment="Right" Margin="0,0,8,0"/>
@@ -39,7 +39,7 @@
                 <DataGridTemplateColumn Header="" Width="95">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Open"
+                            <Button Content="{DynamicResource Common.Open}"
                                     Height="34"
                                     Command="{Binding OpenCommand, ElementName=root}"
                                     CommandParameter="{Binding TransactionId}"/>

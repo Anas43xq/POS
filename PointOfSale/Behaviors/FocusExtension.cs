@@ -1,14 +1,32 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace UI.Behaviors
 {
     /// <summary>
-    /// Attached behavior to set keyboard focus to the first item in an ItemsControl
+    /// Attached behaviors for setting keyboard focus from XAML /
+    /// ViewModels without code-behind.
+    ///
+    /// Two attached dependency properties are exposed:
+    ///
+    /// • <c>FocusFirstItem</c> — for an <see cref="ItemsControl"/>,
+    ///   focuses the first focusable descendant after the items
+    ///   have been generated.
+    ///
+    /// • <c>IsFocused</c> — for any <see cref="IInputElement"/> (e.g.
+    ///   <see cref="TextBox"/>, <see cref="PasswordBox"/>), focuses
+    ///   the element when the bound value transitions to <c>true</c>.
+    ///   Subsequent transitions back to <c>false</c> are ignored so
+    ///   the user can keep typing without the VM stealing focus.
     /// </summary>
     public static class FocusExtension
     {
+        // ─────────────────────────────────────────────────────────
+        //  FocusFirstItem  (existing, for ItemsControl)
+        // ─────────────────────────────────────────────────────────
+
         public static readonly DependencyProperty FocusFirstItemProperty =
             DependencyProperty.RegisterAttached(
                 "FocusFirstItem",
@@ -34,7 +52,7 @@ namespace UI.Behaviors
                 {
                     // Wait for the items to be generated
                     itemsControl.Dispatcher.BeginInvoke(
-                        System.Windows.Threading.DispatcherPriority.Background,
+                        DispatcherPriority.Background,
                         new Action(() =>
                         {
                             var firstContainer = itemsControl.ItemContainerGenerator.ContainerFromIndex(0);
@@ -54,7 +72,7 @@ namespace UI.Behaviors
             for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
             {
                 var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
-                
+
                 if (child is Button button && button.Focusable)
                 {
                     return button;
@@ -67,6 +85,51 @@ namespace UI.Behaviors
                 }
             }
             return null;
+        }
+
+        // ─────────────────────────────────────────────────────────
+        //  IsFocused  (new — for TextBox / PasswordBox / etc.)
+        // ─────────────────────────────────────────────────────────
+
+        public static readonly DependencyProperty IsFocusedProperty =
+            DependencyProperty.RegisterAttached(
+                "IsFocused",
+                typeof(bool),
+                typeof(FocusExtension),
+                new PropertyMetadata(false, OnIsFocusedChanged));
+
+        public static bool GetIsFocused(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsFocusedProperty);
+        }
+
+        public static void SetIsFocused(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsFocusedProperty, value);
+        }
+
+        private static void OnIsFocusedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // Only act on the false→true transition. We don't want the VM
+            // to yank focus away from the user on every property update.
+            if (d is UIElement element && (bool)e.NewValue)
+            {
+                // The element may not yet be in the visual tree when the
+                // bound value flips true during construction. Defer one
+                // dispatcher pass and focus after layout has had a chance
+                // to attach the element.
+                element.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Input,
+                    new Action(() =>
+                    {
+                        element.Focusable = true;
+                        element.Focus();
+                        // Select-all for editable text surfaces is a nice
+                        // touch if a remembered username is being re-shown.
+                        if (element is TextBox textBox)
+                            textBox.SelectAll();
+                    }));
+            }
         }
     }
 }

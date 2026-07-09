@@ -3,6 +3,7 @@ using BLL.Models;
 using Contracts.Sales;
 using Contracts.Transactions;
 using DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
@@ -29,6 +30,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
     private readonly IDialogService _dialogService;
     private readonly ITransactionService _transactionService;
     private readonly IReceiptDisplayService _receiptDisplayService;
+    private readonly ILocalizationService _localization;
+
     private readonly ILogger<CashierDashboardViewModel> _logger;
 
     private string _cashierName = string.Empty;
@@ -71,6 +74,26 @@ public partial class CashierDashboardViewModel : BaseViewModel
     /// </summary>
     public bool CanEndDay => IsShiftOpen;
 
+    /// <summary>
+    /// Top-of-window error banner. Always shown at the very top of the
+    /// cashier dashboard so the user immediately sees failures
+    /// (e.g. "session expired, please re-login").
+    /// </summary>
+    private string? _headerErrorMessage;
+    public string? HeaderErrorMessage
+    {
+        get => _headerErrorMessage;
+        private set
+        {
+            if (_headerErrorMessage == value) return;
+            _headerErrorMessage = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasHeaderError));
+        }
+    }
+
+    public bool HasHeaderError => !string.IsNullOrEmpty(_headerErrorMessage);
+
     public event Action? LogoutRequested;
 
     private string _searchText = string.Empty;
@@ -88,6 +111,17 @@ public partial class CashierDashboardViewModel : BaseViewModel
     }
 
     public int SaleItemsCount => SaleItems.Count;
+
+    /// <summary>
+    /// Localized count-badge text for the cart header
+    /// (e.g. "0 items" / "3 items" / "0 عناصر" / "0 ഇനങ്ങൾ").
+    /// Resolved via <see cref="ILocalizationService.GetString"/> so the
+    /// <c>{0}</c> placeholder in the resource is properly substituted
+    /// with <see cref="SaleItemsCount"/>. Re-evaluated on cart changes
+    /// and on language switch.
+    /// </summary>
+    public string CartCountDisplay =>
+        _localization.GetString("Common.ItemsCount", SaleItemsCount);
 
     public ObservableCollection<Product> Products { get; } = new();
 
@@ -134,7 +168,6 @@ public partial class CashierDashboardViewModel : BaseViewModel
         get => _selectedCategory;
         set
         {
-            var sw = Stopwatch.StartNew();
 
             _selectedCategory = value;
             OnPropertyChanged();
@@ -142,12 +175,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
             OnPropertyChanged(nameof(VisibleSubCategories));
             OnPropertyChanged(nameof(HasSubCategories));
             ProductsView.Refresh();
-            Debug.WriteLine(
-    $"SelectedCategory {SelectedCategory?.Name}: {ProductsView.Cast<object>().Count()} products\n");
             UpdateNoProductsMessage();
-
-            sw.Stop();
-            Debug.WriteLine($"SelectedCategory {_selectedCategory?.Name ?? "All"} Setter: {sw.ElapsedMilliseconds} ms\n");
         }
     }
     public bool HasSubCategories => VisibleSubCategories.Any();
@@ -227,6 +255,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     public ICommand EndDayCommand { get; }
 
+    public ICommand ShowSetting { get; }
+
     public CashierDashboardViewModel(
         ISessionService session,
         IShiftService shiftService,
@@ -236,6 +266,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         IDialogService dialogService,
         ITransactionService transactionService,
         IReceiptDisplayService receiptDisplayService,
+        ILocalizationService localization,
         ILogger<CashierDashboardViewModel> logger)
     {
         _session = session;
@@ -246,7 +277,13 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _dialogService = dialogService;
         _transactionService = transactionService;
         _receiptDisplayService = receiptDisplayService;
+        _localization = localization;
         _logger = logger;
+
+        // Cart count badge uses a localized format string ("{0} items"),
+        // so it must re-evaluate when the language changes \u2014 not just
+        // when the count changes.
+        _localization.LanguageChanged += OnLocalizationLanguageChanged;
 
         SaleItems.CollectionChanged += SaleItems_CollectionChanged;
 
@@ -271,6 +308,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ClearSaleCommand = new RelayCommand(
             ClearSales,
             () => SaleItems.Any());
+
+            ShowSetting = new AsyncRelayCommand(OpenSetting);
 
         SelectCategoryCommand = new AsyncRelayCommand<Category>(SelectParentCategoryAsync);
 
@@ -306,4 +345,21 @@ public partial class CashierDashboardViewModel : BaseViewModel
         SelectedCategory = null;
     }
 
+    /// <summary>
+    /// Sets the top-of-window error banner message. Pass
+    /// <c>null</c> or empty to clear the banner.
+    /// </summary>
+    public void ShowHeaderError(string? message)
+    {
+        HeaderErrorMessage = string.IsNullOrWhiteSpace(message) ? null : message;
+    }
+
+    private void OnLocalizationLanguageChanged(object? sender, EventArgs e)
+    {
+        // The cart count badge binds to CartCountDisplay, which is a
+        // computed string from ILocalizationService.GetString(...). The
+        // underlying count (SaleItemsCount) hasn't changed, but the
+        // resource value has, so raise PropertyChanged explicitly.
+        OnPropertyChanged(nameof(CartCountDisplay));
+    }
 }

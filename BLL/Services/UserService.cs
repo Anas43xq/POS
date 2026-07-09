@@ -1,9 +1,8 @@
 ﻿using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -15,29 +14,26 @@ namespace BLL.Services
         {
             _userRepo = userRepo;
         }
-        public async Task<IEnumerable<User>> GetAllUsersAsync() =>
 
+        public async Task<IEnumerable<User>> GetAllUsersAsync() =>
             await _userRepo.GetAllAsync();
 
         public async Task<User?> GetUserByIdAsync(int id) =>
-
             await _userRepo.GetByIdAsync(id);
 
         public async Task AddUserAsync(User User) =>
-
             await _userRepo.AddAsync(User);
 
         public async Task UpdateUserAsync(User User) =>
-
             await _userRepo.UpdateAsync(User);
 
         public async Task DeleteUserAsync(int id) =>
-
             await _userRepo.DeleteAsync(id);
 
-        public async Task<bool?> IsActiveUser(int id)
-        {
-            return await _userRepo.IsActiveUser(id);
-        }
+        public async Task<bool?> IsActiveUser(int id) =>
+            await _userRepo.IsActiveUser(id);
+
+        public Task<User?> GetDefaultCashierAsync() =>
+            _userRepo.GetDefaultCashierAsync();
     }
 }

@@ -2,7 +2,10 @@ using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
 using Microsoft.Extensions.Logging;
+using POS.Contracts.Localization;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using UI.Commands;
@@ -16,8 +19,26 @@ namespace UI.ViewModels
         private readonly ISessionService _session;
         private readonly IShiftService _shiftService;
         private readonly IDialogService _dialogService;
+        private readonly ILocalizationService _localizationService;
         private readonly ILogger<LoginViewModel> _logger;
         private string _password = string.Empty;
+
+        public ObservableCollection<LanguageDto> SupportedLanguages { get; }
+
+        private LanguageDto? _selectedLanguage;
+        public LanguageDto? SelectedLanguage
+        {
+            get => _selectedLanguage;
+            set
+            {
+                if (value is not null && value.Code != _selectedLanguage?.Code)
+                {
+                    _selectedLanguage = value;
+                    OnPropertyChanged();
+                    _ = _localizationService.SetLanguageAsync(value.Code);
+                }
+            }
+        }
 
         public event Action? LoginSucceeded;
 
@@ -131,13 +152,21 @@ namespace UI.ViewModels
             ISessionService session,
             IShiftService shiftService,
             IDialogService dialogService,
+            ILocalizationService localizationService,
             ILogger<LoginViewModel> logger)
         {
             _authService = authService;
             _session = session;
             _shiftService = shiftService;
             _dialogService = dialogService;
+            _localizationService = localizationService;
             _logger = logger;
+
+            SupportedLanguages = new ObservableCollection<LanguageDto>(
+                _localizationService.GetSupportedLanguages());
+
+            _selectedLanguage = SupportedLanguages
+                .FirstOrDefault(l => l.Code == _localizationService.CurrentLanguage.Code);
 
             LoginCommand = new AsyncRelayCommand(LoginAuth, CanLogin);
         }

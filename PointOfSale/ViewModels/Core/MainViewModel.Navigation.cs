@@ -105,6 +105,12 @@ namespace UI.ViewModels
             _currentManagerHomeViewModel = null;
         }
 
+        /// <summary>
+        /// The user wants the logout MessageBox to live on the
+        /// <see cref="MainViewModel"/> (not on the child VM), so
+        /// the same prompt is shown no matter which child VM
+        /// (manager or cashier) initiated the logout.
+        /// </summary>
         private async Task LogoutAsync()
         {
             MessageBoxResult result = MessageBox.Show(
@@ -121,6 +127,15 @@ namespace UI.ViewModels
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Bridge between a child VM's <c>LogoutRequested</c> and
+        /// this <see cref="MainViewModel"/>'s <c>LogoutAsync</c>.
+        /// The child VM just raises its event; this handler shows
+        /// the confirmation MessageBox here (so it lives on the
+        /// MainViewModel per the user's request) and, on Yes,
+        /// raises <see cref="LogoutRequested"/> for the
+        /// <c>ApplicationShellService</c>.
+        /// </summary>
         private void EveLogoutRequested()
         {
             _ = LogoutAsync();

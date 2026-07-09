@@ -48,7 +48,7 @@
     <sys:String x:Key="Common.Optional">(ഐച്ഛികം)</sys:String>
     <sys:String x:Key="Common.Icon">ഐക്കൺ</sys:String>
     <sys:String x:Key="Common.None">— ഒന്നുമില്ല —</sys:String>
-    <sys:String x:Key="Common.PointOfSale">പോയിന്റ് ഓഫ് സെയിൽ</sys:String>
+    <sys:String x:Key="Common.PointOfSale">POINT OF SALE</sys:String>
 
     <sys:String x:Key="Common.Category">വിഭാഗം</sys:String>
     <sys:String x:Key="Common.Categories">വിഭാഗങ്ങൾ</sys:String>
@@ -111,6 +111,9 @@
     <!-- Login -->
     <!-- ========================================================= -->
 
+    <sys:String x:Key="Login.Title">Cafeteria Hawa – ലോഗിൻ</sys:String>
+    <sys:String x:Key="Login.Brand">Cafeteria Hawa</sys:String>
+
     <sys:String x:Key="Login.Username">ഉപയോക്തൃനാമം</sys:String>
     <sys:String x:Key="Login.Password">പാസ്‌വേഡ്</sys:String>
 
@@ -120,7 +123,12 @@
         പാസ്‌വേഡ് കാണിക്കുക / മറയ്ക്കുക
     </sys:String>
 
-    <sys:String x:Key="Login.Footer">WFA സിസ്റ്റം  ·  പതിപ്പ് 2.0</sys:String>
+    <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="LoginAs.Title">ആയി ലോഗിൻ ചെയ്യുക</sys:String>
+    <sys:String x:Key="LoginAs.Subtitle">എങ്ങനെ തുടരണമെന്ന് തിരഞ്ഞെടുക്കുക.</sys:String>
+    <sys:String x:Key="LoginAs.Manager">മാനേജർ</sys:String>
+    <sys:String x:Key="LoginAs.Cashier">കാഷ്യർ</sys:String>
 
     <!-- ========================================================= -->
     <!-- Cashier Dashboard -->
@@ -161,6 +169,10 @@
     <sys:String x:Key="Cashier.ColQty">അളവ്</sys:String>
     <sys:String x:Key="Cashier.ColPrice">വില</sys:String>
     <sys:String x:Key="Cashier.ColTotal">ആകെ</sys:String>
+
+    <sys:String x:Key="Cashier.ShiftOpen">ഷിഫ്റ്റ് തുറന്നു ({0})</sys:String>
+    <sys:String x:Key="Cashier.ShiftClosed">ഷിഫ്റ്റ് അടച്ചു</sys:String>
+    <sys:String x:Key="Cashier.NoShift">ഷിഫ്റ്റ് ഇല്ല</sys:String>
 
     <!-- ========================================================= -->
     <!-- Payment -->

@@ -18,6 +18,13 @@ using UI.Views;
 
 namespace UI
 {
+    /// <summary>
+    /// Composition root. Builds the DI container, configures the
+    /// runtime culture / unhandled-exception hooks, and hands
+    /// control of the application shell to
+    /// <see cref="IApplicationShellService"/>. All login and
+    /// navigation orchestration lives in that service, not here.
+    /// </summary>
     public partial class App : Application
     {
         public static ServiceProvider ServiceProvider { get; private set; } = null!;
@@ -56,6 +63,10 @@ namespace UI
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddTransient<IReceiptDisplayService, ReceiptDisplayService>();
             services.AddTransient<ExcelReportExporter>();
+            services.AddSingleton<IRegistryService, RegistryService>();
+            services.AddSingleton<IApplicationShellService, ApplicationShellService>();
+
+            services.AddSingleton<BLL.Interfaces.ILocalizationService, UI.Services.LocalizationService>();
 
             // ViewModels
             services.AddTransient<LoginViewModel>();
@@ -74,9 +85,14 @@ namespace UI
             services.AddTransient<PaymentDialogViewModel>();
             services.AddTransient<RecentSalesDialogViewModel>();
             services.AddTransient<ReceiptPrinterService>();
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<LoginAsViewModel>();
+            services.AddTransient<ManagerLoginViewModel>();
 
             // Views / Windows
             services.AddTransient<LoginView>();
+            services.AddTransient<LoginAsWindow>();
+            services.AddTransient<ManagerLoginDialog>();
             services.AddTransient<MainWindow>();
             services.AddTransient<HomeView>();
             services.AddTransient<TransactionsView>();
@@ -90,16 +106,35 @@ namespace UI
             services.AddTransient<PaymentDialog>();
             services.AddTransient<RecentSalesDialog>();
             services.AddTransient<ReceiptWindow>();
+            services.AddTransient<SettingsView>();
+            services.AddTransient<SettingsWindow>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            // Cross-cutting: unhandled-exception hooks.
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
             TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
 
+            // Cross-cutting: culture (AED formatting, en-AE UI language).
+            ConfigureCulture();
+
+            // Cross-cutting: localization must initialize BEFORE any
+            // view is shown, so the first window's resources resolve.
+            _serviceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>()
+                .Initialize();
+
+            // Hand off to the shell service. Everything else — showing
+            // Login-As, swapping to MainWindow, handling logout —
+            // lives in IApplicationShellService, not here.
+            _serviceProvider.GetRequiredService<IApplicationShellService>().Start();
+        }
+
+        private static void ConfigureCulture()
+        {
             CultureInfo uaeCulture = new CultureInfo("en-AE");
             NumberFormatInfo aedFormat = (NumberFormatInfo)uaeCulture.NumberFormat.Clone();
             aedFormat.CurrencySymbol = "AED";
@@ -113,29 +148,6 @@ namespace UI
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage("en-AE")));
-
-            var loginView = _serviceProvider.GetRequiredService<LoginView>();
-            if (loginView.DataContext is LoginViewModel loginViewModel)
-            {
-                loginViewModel.LoginSucceeded += () =>
-                {
-                    var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-                    if (mainWindow.DataContext is MainViewModel mainViewModel)
-                    {
-                        mainViewModel.LogoutRequested += () =>
-                        {
-                            var newLoginView = _serviceProvider.GetRequiredService<LoginView>();
-                            newLoginView.Show();
-                            mainWindow.Close();
-                        };
-                    }
-
-                    mainWindow.Show();
-                    loginView.Close();
-                };
-            }
-
-            loginView.Show();
         }
 
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -189,4 +201,4 @@ namespace UI
             MessageBox.Show(message, "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-}
+} 

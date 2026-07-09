@@ -27,8 +27,8 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0,0,0,18">
-                <TextBlock Text="Confirm card payment" FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
-                <TextBlock Text="Review the total before charging the card." FontSize="14" Foreground="#64748B" Margin="0,4,0,0"/>
+                <TextBlock Text="{DynamicResource Payment.Card.Title}" FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
+                <TextBlock Text="{DynamicResource Payment.Card.Subtitle}" FontSize="14" Foreground="#64748B" Margin="0,4,0,0"/>
             </StackPanel>
 
             <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" Padding="16" Margin="0,0,0,20">
@@ -44,11 +44,11 @@
             </Border>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Width="100" Height="38" Margin="0,0,10,0"
+                <Button Content="{DynamicResource Common.Cancel}" Width="100" Height="38" Margin="0,0,10,0"
                         Background="#E2E8F0" Foreground="#0F172A"
                         Command="{Binding CancelCommand}"
                         IsCancel="True"/>
-                <Button Content="Confirm" Width="110" Height="38"
+                <Button Content="{DynamicResource Payment.Card.Confirm}" Width="110" Height="38"
                         Background="#2563EB" Foreground="White"
                         Command="{Binding ConfirmCommand}"
                         IsDefault="True"/>

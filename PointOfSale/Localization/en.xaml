@@ -38,7 +38,7 @@
 
     <sys:String x:Key="Common.Date">Date</sys:String>
     <sys:String x:Key="Common.Time">Time</sys:String>
-    <sys:String x:Key="Common.DateTime">Date & Time</sys:String>
+    <sys:String x:Key="Common.DateTime">Date &amp; Time</sys:String>
     <sys:String x:Key="Common.DateFrom">Date From</sys:String>
     <sys:String x:Key="Common.DateTo">Date To</sys:String>
 
@@ -111,6 +111,9 @@
     <!-- Login -->
     <!-- ========================================================= -->
 
+    <sys:String x:Key="Login.Title">Cafeteria Hawa – Login</sys:String>
+    <sys:String x:Key="Login.Brand">Cafeteria Hawa</sys:String>
+
     <sys:String x:Key="Login.Username">Username</sys:String>
     <sys:String x:Key="Login.Password">Password</sys:String>
 
@@ -121,6 +124,11 @@
     </sys:String>
 
     <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="LoginAs.Title">Login As</sys:String>
+    <sys:String x:Key="LoginAs.Subtitle">Choose how you want to continue.</sys:String>
+    <sys:String x:Key="LoginAs.Manager">Manager</sys:String>
+    <sys:String x:Key="LoginAs.Cashier">Cashier</sys:String>
 
     <!-- ========================================================= -->
     <!-- Cashier Dashboard -->
@@ -161,6 +169,10 @@
     <sys:String x:Key="Cashier.ColQty">QTY</sys:String>
     <sys:String x:Key="Cashier.ColPrice">PRICE</sys:String>
     <sys:String x:Key="Cashier.ColTotal">TOTAL</sys:String>
+
+    <sys:String x:Key="Cashier.ShiftOpen">Shift Open ({0})</sys:String>
+    <sys:String x:Key="Cashier.ShiftClosed">Shift Closed</sys:String>
+    <sys:String x:Key="Cashier.NoShift">No Shift</sys:String>
 
     <!-- ========================================================= -->
     <!-- Payment -->
@@ -408,7 +420,7 @@
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.ColReceiptNumber">Receipt Number</sys:String>
-    <sys:String x:Key="Manager.Reports.ColDateTime">Date & Time</sys:String>
+    <sys:String x:Key="Manager.Reports.ColDateTime">Date &amp;  Time</sys:String>
     <sys:String x:Key="Manager.Reports.ColPaymentMethod">Payment Method</sys:String>
     <sys:String x:Key="Manager.Reports.ColGrandTotal">Grand Total</sys:String>
     <sys:String x:Key="Manager.Reports.ColNote">Note</sys:String>
@@ -430,7 +442,7 @@
     <sys:String x:Key="Manager.Transactions.ColPayment">PAYMENT</sys:String>
     <sys:String x:Key="Manager.Transactions.ColNotes">NOTES</sys:String>
     <sys:String x:Key="Manager.Transactions.ColStatus">STATUS</sys:String>
-    <sys:String x:Key="Manager.Transactions.ColDateTime">DATE & TIME</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColDateTime">DATE &amp;  TIME</sys:String>
 
     <sys:String x:Key="Manager.Transactions.VoidButton">Void</sys:String>
 

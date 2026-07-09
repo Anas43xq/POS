@@ -8,18 +8,21 @@ public static class SupportedLanguages
         {
             Code = LanguageCode.English,
             DisplayName = "English",
+            FilePrefix = "en",
             IsRightToLeft = false
         },
         new()
         {
             Code = LanguageCode.Arabic,
             DisplayName = "العربية",
+            FilePrefix = "ar",
             IsRightToLeft = true
         },
         new()
         {
             Code = LanguageCode.Malayalam,
             DisplayName = "മലയാളം",
+            FilePrefix = "ml",
             IsRightToLeft = false
         }
        

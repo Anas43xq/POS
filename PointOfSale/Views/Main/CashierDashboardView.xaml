@@ -1,8 +1,8 @@
 ﻿<!--
-    ╔══════════════════════════════════════════════════════╗
-    ║   Cafeteria Hawa POS  –  Cashier Dashboard          ║
-    ║   Redesigned: compact light-blue style              ║
-    ╚══════════════════════════════════════════════════════╝
+    +-+
+    ¦   Cafeteria Hawa POS  –  Cashier Dashboard          ¦
+    ¦   Redesigned: compact light-blue style              ¦
+    +-+
 -->
 <UserControl x:Class="UI.Views.CashierDashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -17,10 +17,10 @@
 
     <UserControl.Resources>
 
-        <!-- ── Converters ── -->
+        <!-- - Converters -->
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-        <!-- ── Palette ── -->
+        <!-- - Palette -->
         <SolidColorBrush x:Key="BrandDark"      Color="#1A6FC4"/>
         <SolidColorBrush x:Key="BrandMid"       Color="#2589E0"/>
         <SolidColorBrush x:Key="BrandLight"     Color="#F0F7FF"/>
@@ -36,11 +36,11 @@
         <SolidColorBrush x:Key="DangerHover"    Color="#B91C1C"/>
         <SolidColorBrush x:Key="FooterBg"       Color="#1A6FC4"/>
 
-        <!-- ══════════════════════════════════════
+        <!-- -
              STYLES
-             ══════════════════════════════════════ -->
+             -->
 
-        <!-- ── Card panel ── -->
+        <!-- - Card panel -->
         <Style x:Key="CardBorder" TargetType="Border">
             <Setter Property="Background"      Value="{StaticResource CardBg}"/>
             <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
@@ -48,7 +48,7 @@
             <Setter Property="CornerRadius"    Value="10"/>
         </Style>
 
-        <!-- ── Card panel header ── -->
+        <!-- - Card panel header -->
         <Style x:Key="CardHeaderBorder" TargetType="Border">
             <Setter Property="Background"      Value="{StaticResource CardHdrBg}"/>
             <Setter Property="BorderBrush"     Value="#E8F3FF"/>
@@ -56,7 +56,7 @@
             <Setter Property="Padding"         Value="12,8"/>
         </Style>
 
-        <!-- ── Panel title ── -->
+        <!-- - Panel title -->
         <Style x:Key="PanelTitle" TargetType="TextBlock">
             <Setter Property="FontSize"     Value="13"/>
             <Setter Property="FontWeight"   Value="Medium"/>
@@ -64,7 +64,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <!-- ── Keyboard shortcut key-cap (header strip) ── -->
+        <!-- - Keyboard shortcut key-cap (header strip) -->
         <Style x:Key="ShortcutKeyCap" TargetType="Border">
             <Setter Property="Background"      Value="#33FFFFFF"/>
             <Setter Property="BorderBrush"      Value="#55FFFFFF"/>
@@ -93,7 +93,7 @@
             <Setter Property="Margin" Value="0,0,18,0"/>
         </Style>
 
-        <!-- ── Item count badge ── -->
+        <!-- - Item count badge -->
         <Style x:Key="CountBadge" TargetType="Border">
             <Setter Property="Background"      Value="#DBEEFF"/>
             <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
@@ -104,7 +104,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <!-- ── Primary blue button ── -->
+        <!-- - Primary blue button -->
         <Style x:Key="PrimaryBtn" TargetType="Button">
             <Setter Property="Foreground"      Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -141,7 +141,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Header icon button (Start Day / End Day / Logout) ── -->
+        <!-- - Header icon button (Start Day / End Day / Logout) -->
         <Style x:Key="HdrBtn" TargetType="Button" BasedOn="{StaticResource PrimaryBtn}">
             <Setter Property="Height"   Value="30"/>
             <Setter Property="Padding"  Value="12,0"/>
@@ -149,7 +149,7 @@
             <Setter Property="FontWeight" Value="Medium"/>
         </Style>
 
-        <!-- ── Danger (red) header button ── -->
+        <!-- - Danger (red) header button -->
         <Style x:Key="HdrDangerBtn" TargetType="Button" BasedOn="{StaticResource HdrBtn}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -179,7 +179,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Category tab ── -->
+        <!-- - Category tab -->
         <Style x:Key="CategoryBtn" TargetType="Button">
             <Setter Property="Height"      Value="26"/>
             <Setter Property="Padding"     Value="12,0"/>
@@ -219,7 +219,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Sub-category tab ── -->
+        <!-- - Sub-category tab -->
         <Style x:Key="SubCategoryBtn" TargetType="Button" BasedOn="{StaticResource CategoryBtn}">
             <Setter Property="Height"   Value="22"/>
             <Setter Property="Padding"  Value="10,0"/>
@@ -227,7 +227,7 @@
             <Setter Property="FontSize" Value="10"/>
         </Style>
 
-        <!-- ── Product card ── -->
+        <!-- - Product card -->
         <Style x:Key="ProductBtn" TargetType="Button">
             <Setter Property="Height"              Value="76"/>
             <Setter Property="Margin"              Value="3"/>
@@ -265,7 +265,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Quick-action tile ── -->
+        <!-- - Quick-action tile -->
         <Style x:Key="QuickActionBtn" TargetType="Button">
             <Setter Property="Height"              Value="70"/>
             <Setter Property="Margin"              Value="5,0,5,5"/>
@@ -305,7 +305,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Ghost footer button (Clear) ── -->
+        <!-- - Ghost footer button (Clear) -->
         <Style x:Key="FooterGhostBtn" TargetType="Button">
             <Setter Property="Height"          Value="50"/>
             <Setter Property="Padding"         Value="16,0"/>
@@ -343,7 +343,7 @@
             </Setter>
         </Style>
 
-        <!-- ── DataGrid column header ── -->
+        <!-- - DataGrid column header -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background"      Value="#F0F7FF"/>
             <Setter Property="Foreground"      Value="{StaticResource TextMuted}"/>
@@ -355,7 +355,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
-        <!-- ── DataGrid row ── -->
+        <!-- - DataGrid row -->
         <Style TargetType="DataGridRow">
             <Setter Property="BorderBrush"     Value="#F0F7FF"/>
             <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
@@ -369,7 +369,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ── DataGrid cell ── -->
+        <!-- - DataGrid cell -->
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding"         Value="10,0"/>
@@ -384,7 +384,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ── Currency value in DataGrid / KPI ── -->
+        <!-- - Currency value in DataGrid / KPI -->
         <Style x:Key="CurrencyTextStyle" TargetType="controls:CurrencyText">
             <Setter Property="FontSize"   Value="11"/>
             <Setter Property="FontWeight" Value="Medium"/>
@@ -408,9 +408,9 @@
 
     </UserControl.Resources>
 
-    <!-- ════════════════════════════════════════
+    <!-- -
          ROOT  –  3 rows: header | content | footer
-         ════════════════════════════════════════ -->
+         -->
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -420,6 +420,8 @@
         </Grid.Background>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Error   -->
             <RowDefinition Height="56"/>
             <!-- Header  -->
             <RowDefinition Height="*"/>
@@ -428,9 +430,9 @@
             <!-- Footer  -->
         </Grid.RowDefinitions>
 
-        <!-- ══════════════════════════════════════
+        <!-- -
              ROW 0 · HEADER
-             ══════════════════════════════════════ -->
+             -->
         <Border Grid.Row="0" Padding="14,0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -508,56 +510,56 @@
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F2" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Start Day" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.StartDay}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F3" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="End Day" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.EndDay}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F4" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Recent Sales" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.RecentSales}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F6" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Cash" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.CashButton}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F7" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Card" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.CardButton}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="F8" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Clear" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Common.Clear}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="+/-" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Qty" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.Quantity}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                         <StackPanel Style="{StaticResource ShortcutChip}">
                             <Border Style="{StaticResource ShortcutKeyCap}">
                                 <TextBlock Text="Del" Style="{StaticResource ShortcutKeyText}"/>
                             </Border>
-                            <TextBlock Text="Remove" Style="{StaticResource ShortcutLabelText}"/>
+                            <TextBlock Text="{DynamicResource Cashier.Remove}" Style="{StaticResource ShortcutLabelText}"/>
                         </StackPanel>
 
                     </StackPanel>
@@ -568,6 +570,18 @@
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             Margin="0,0,10,0">
+
+                    <!-- Settings -->
+                    <Button Style="{StaticResource HdrBtn}"
+                            Margin="0,0,6,0"
+                            Command="{Binding ShowSetting}"
+                            ToolTip="Settings">
+                        <TextBlock Text="&#xE713;"
+                                   FontSize="14"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </Button>
 
                     <Button Style="{StaticResource HdrBtn}"
                             Margin="0,0,6,0"
@@ -593,9 +607,18 @@
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
-                        <TextBlock Text="▶  Start Day"
-                                   FontSize="11" FontWeight="Medium"
-                                   Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="&#xE768;"
+                                       FontSize="11"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0"/>
+                            <TextBlock Text="{DynamicResource Cashier.StartDay}"
+                                       FontSize="11" FontWeight="Medium"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
 
                     <Button Style="{StaticResource HdrBtn}"
@@ -621,9 +644,18 @@
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
-                        <TextBlock Text="⏹  End Day"
-                                   FontSize="11" FontWeight="Medium"
-                                   Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="&#xE71A;"
+                                       FontSize="11"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0"/>
+                            <TextBlock Text="{DynamicResource Cashier.EndDay}"
+                                       FontSize="11" FontWeight="Medium"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
                 </StackPanel>
 
@@ -632,7 +664,9 @@
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             Margin="0,0,10,0">
-                    <TextBlock Text="👤 " FontSize="13" Foreground="#A8D4F5" VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xE77B; " FontSize="13" Foreground="#A8D4F5"
+                               VerticalAlignment="Center"
+                               FontFamily="Segoe MDL2 Assets"/>
                     <TextBlock Text="{Binding CashierName}"
                                FontSize="12" FontWeight="Medium"
                                Foreground="White" VerticalAlignment="Center"/>
@@ -641,16 +675,28 @@
                 <!-- Logout -->
                 <Button Grid.Column="4"
                         Style="{StaticResource HdrDangerBtn}"
-                        Command="{Binding LogoutCommand}"
-                        Content="⎋  Logout"/>
+                        Command="{Binding LogoutCommand}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="&#xF3B1;"
+                                   FontSize="11"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,6,0"/>
+                        <TextBlock Text="{DynamicResource Common.Logout}"
+                                   FontSize="11" FontWeight="Medium"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
             </Grid>
         </Border>
 
-        <!-- ══════════════════════════════════════
+        <!-- -
              ROW 1 · MAIN CONTENT
              3 columns: Cart | Products | Quick Actions
-             ══════════════════════════════════════ -->
-        <Grid Grid.Row="1" Margin="8">
+             -->
+        <Grid Grid.Row="2" Margin="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3.15*"/>
                 <!-- Cart          -->
@@ -660,9 +706,9 @@
                 <!-- Quick Actions -->
             </Grid.ColumnDefinitions>
 
-            <!-- ─────────────────────────────────
+            <!-- -
                  LEFT · CURRENT SALE
-                 ───────────────────────────────── -->
+                 -->
             <Border Grid.Column="0"
                     Style="{StaticResource CardBorder}"
                     Margin="0,0,8,0">
@@ -679,13 +725,11 @@
                     <!-- Panel header -->
                     <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Current Sale" Style="{StaticResource PanelTitle}"/>
+                            <TextBlock Text="{DynamicResource Cashier.CurrentSale}" Style="{StaticResource PanelTitle}"/>
                             <Border Style="{StaticResource CountBadge}">
                                 <TextBlock FontSize="11" FontWeight="Medium"
-                                           Foreground="{StaticResource BrandDark}">
-                                    <Run Text="{Binding SaleItemsCount, Mode=OneWay}"/>
-                                    <Run Text=" items"/>
-                                </TextBlock>
+                                           Foreground="{StaticResource BrandDark}"
+                                           Text="{Binding CartCountDisplay, Mode=OneWay}"/>
                             </Border>
                         </StackPanel>
                     </Border>
@@ -707,16 +751,21 @@
 
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn Header="PRODUCT"
-                                                Binding="{Binding ProductName}"
+                            <DataGridTextColumn Binding="{Binding ProductName}"
                                                 IsReadOnly="True"
                                                 Width="*"
-                                                MinWidth="100"/>
+                                                MinWidth="100">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Cashier.ColProduct}"/>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="QTY"
-                                                Width="56"
+                            <DataGridTextColumn Width="56"
                                                 Binding="{Binding Quantity, Mode=TwoWay,
                                                           UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Cashier.ColQty}"/>
+                                </DataGridTextColumn.Header>
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment"     Value="Center"/>
@@ -732,23 +781,20 @@
                                 </DataGridTextColumn.EditingElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="PRICE"
-                                                Binding="{Binding UnitPrice}"
+                            <DataGridTextColumn Binding="{Binding UnitPrice}"
                                                 Width="80"
                                                 IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="TextAlignment"     Value="Center"/>
-                                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                                        <Setter Property="VerticalAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Cashier.ColPrice}"/>
+                                </DataGridTextColumn.Header>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="TOTAL"
-                                                Binding="{Binding LineTotal}"
+                            <DataGridTextColumn Binding="{Binding LineTotal}"
                                                 Width="85"
                                                 IsReadOnly="True">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Cashier.ColTotal}"/>
+                                </DataGridTextColumn.Header>
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment"     Value="Center"/>
@@ -764,16 +810,17 @@
                             <DataGridTemplateColumn Header="" Width="44" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="✕"
+                                        <Button Content="&#xE711;"
                                                 FontSize="13"
                                                 FontWeight="Bold"
+                                                FontFamily="Segoe MDL2 Assets"
                                                 Foreground="{StaticResource DangerRed}"
                                                 Background="Transparent"
                                                 BorderThickness="0"
                                                 Cursor="Hand"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                ToolTip="Remove item"
+                                                ToolTip="{DynamicResource Cashier.RemoveItemTooltip}"
                                                 Command="{Binding DataContext.RemoveSaleItemCommand,
                                                           RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"/>
@@ -798,7 +845,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Subtotal"
+                                <TextBlock Text="{DynamicResource Common.Subtotal}"
                                            FontSize="20"
                                            Foreground="{StaticResource TextMuted}"/>
                                 <TextBlock Grid.Column="1"
@@ -813,7 +860,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Tax"
+                                <TextBlock Text="{DynamicResource Common.Tax}"
                                            FontSize="17"
                                            Foreground="{StaticResource TextMuted}"/>
                                 <TextBlock Grid.Column="1"
@@ -833,7 +880,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="TOTAL"
+                                <TextBlock Text="{DynamicResource Common.Total}"
                                            FontSize="25" FontWeight="Medium"
                                            Foreground="{StaticResource TextDark}"
                                            VerticalAlignment="Center"/>
@@ -849,9 +896,9 @@
                 </Grid>
             </Border>
 
-            <!-- ─────────────────────────────────
+            <!-- -
                  MIDDLE · PRODUCTS
-                 ───────────────────────────────── -->
+                 -->
             <Border Grid.Column="1"
                     Style="{StaticResource CardBorder}"
                     Margin="0,0,8,0">
@@ -870,7 +917,7 @@
                     <!-- Panel header + search -->
                     <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}">
                         <StackPanel>
-                            <TextBlock Text="Products"
+                            <TextBlock Text="{DynamicResource Cashier.Products}"
                                        Style="{StaticResource PanelTitle}"
                                        Margin="0,0,0,8"/>
 
@@ -886,8 +933,9 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
-                                               Text="🔍"
+                                               Text="&#xE721;"
                                                FontSize="13"
+                                               FontFamily="Segoe MDL2 Assets"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Foreground="{StaticResource BrandIcon}"/>
@@ -1056,7 +1104,7 @@
                                 VerticalAlignment="Top"
                                 Margin="0,20,0,0"
                                 Visibility="{Binding ShowNoProductsMessage, Converter={StaticResource BoolToVis}}">
-                            <TextBlock Text="No products found."
+                            <TextBlock Text="{DynamicResource Cashier.NoProductsFound}"
                                        FontSize="12" FontWeight="Medium"
                                        Foreground="#92400E"
                                        TextAlignment="Center"/>
@@ -1066,9 +1114,9 @@
                 </Grid>
             </Border>
 
-            <!-- ─────────────────────────────────
+            <!-- -
                  RIGHT · QUICK ACTIONS
-                 ───────────────────────────────── -->
+                 -->
             <Border Grid.Column="2"
                     Style="{StaticResource CardBorder}">
                 <Grid>
@@ -1079,7 +1127,7 @@
 
                     <!-- Header -->
                     <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}" Padding="8,6">
-                        <TextBlock Text="Actions"
+                        <TextBlock Text="{DynamicResource Cashier.Actions}"
                                    FontSize="11" FontWeight="Medium"
                                    Foreground="{StaticResource TextDark}"/>
                     </Border>
@@ -1090,7 +1138,7 @@
                                   Padding="0,6,0,0">
                         <StackPanel>
 
-                            <TextBlock Text="SALE"
+                            <TextBlock Text="{DynamicResource Cashier.Sale}"
                                        FontSize="9" FontWeight="Medium"
                                        Foreground="{StaticResource TextMuted}"
                                        Margin="8,0,0,4"/>
@@ -1098,9 +1146,10 @@
                             <Button Style="{StaticResource QuickActionBtn}"
                                     Command="{Binding ShowRecentSalesCommand}">
                                 <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="📋" FontSize="18"
+                                    <TextBlock Text="&#xE81C;" FontSize="18"
+                                               FontFamily="Segoe MDL2 Assets"
                                                HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Recent Sales"
+                                    <TextBlock Text="{DynamicResource Cashier.RecentSales}"
                                                FontSize="9" FontWeight="Medium"
                                                Foreground="{StaticResource BrandDark}"
                                                TextAlignment="Center"
@@ -1117,10 +1166,10 @@
 
         </Grid>
 
-        <!-- ══════════════════════════════════════
+        <!-- -
              ROW 2 · FOOTER ACTION BAR
-             ══════════════════════════════════════ -->
-        <Border Grid.Row="2"
+             -->
+        <Border Grid.Row="3"
                 BorderBrush="#1460A8"
                 BorderThickness="0,0.5,0,0"
                 Padding="12,0">
@@ -1149,10 +1198,18 @@
                                     CornerRadius="9">
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-                                    <TextBlock Text="💵  CASH"
-                                               FontSize="11" FontWeight="Medium"
-                                               Foreground="White"
-                                               HorizontalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="&#xE8C7;"
+                                                   FontSize="11"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   Foreground="White"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,6,0"/>
+                                        <TextBlock Text="{DynamicResource Cashier.CashButton}"
+                                                   FontSize="11" FontWeight="Medium"
+                                                   Foreground="White"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
                                     <controls:CurrencyText Amount="{Binding Total}"
                                                Style="{StaticResource CurrencyTextStyleWhite}"/>
                                 </StackPanel>
@@ -1188,10 +1245,18 @@
                                     CornerRadius="9">
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-                                    <TextBlock Text="💳  CARD"
-                                               FontSize="11" FontWeight="Medium"
-                                               Foreground="White"
-                                               HorizontalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="&#xE8C7;"
+                                                   FontSize="11"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   Foreground="White"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,6,0"/>
+                                        <TextBlock Text="{DynamicResource Cashier.CardButton}"
+                                                   FontSize="11" FontWeight="Medium"
+                                                   Foreground="White"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
                                     <controls:CurrencyText Amount="{Binding Total}"
                                                Style="{StaticResource CurrencyTextStyleWhite}"/>
                                 </StackPanel>
@@ -1221,8 +1286,20 @@
                 <Button Style="{StaticResource FooterGhostBtn}"
                         Width="140"
                         Margin="0,0,8,0"
-                        Command="{Binding ClearSaleCommand}"
-                        Content="🗑  Clear Sale"/>
+                        Command="{Binding ClearSaleCommand}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="&#xE74D;"
+                                   FontSize="11"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,6,0"/>
+                        <TextBlock Text="{DynamicResource Cashier.ClearSale}"
+                                   FontSize="11" FontWeight="Medium"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 

@@ -34,7 +34,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Recent Transactions" FontSize="22" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{DynamicResource RecentSales.Title}" FontSize="22" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Content="✕" FontSize="16" Padding="8" Background="Transparent" Command="{Binding CloseDialogCommand}"/>
             </Grid>
 
@@ -45,7 +45,7 @@
 
             <!-- Footer -->
             <Grid Grid.Row="2">
-                <TextBlock Text="Select Open to view the receipt again." Foreground="#64748B" FontSize="13" Margin="0,14,0,0"/>
+                <TextBlock Text="{DynamicResource RecentSales.FooterHint}" Foreground="#64748B" FontSize="13" Margin="0,14,0,0"/>
             </Grid>
         </Grid>
     </Border>

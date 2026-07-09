@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using UI.Commands;
 using UI.ViewModels;
 using UI.Views;
@@ -69,15 +70,17 @@ namespace UI.ViewModels
 
             if (_session.CurrentShift != null && _session.CurrentShift.Status == DAL.Entities.ShiftStatus.Open)
             {
-                ShiftStatus = $"Shift Open ({_session.CurrentShift.OpeningCash:C2})";
+                ShiftStatus = _localization.GetString(
+                    "Cashier.ShiftOpen",
+                    _session.CurrentShift.OpeningCash.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-AE")));
             }
             else if (_session.CurrentShift != null)
             {
-                ShiftStatus = "Shift Closed";
+                ShiftStatus = _localization.GetString("Cashier.ShiftClosed");
             }
             else
             {
-                ShiftStatus = "No Shift";
+                ShiftStatus = _localization.GetString("Cashier.NoShift");
             }
         }
 
@@ -171,6 +174,15 @@ namespace UI.ViewModels
 
         #endregion
 
+
+        public async Task OpenSetting()
+        {
+            var vm = new SettingsViewModel(
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>());
+            _dialogService.ShowDialog<SettingsWindow>(vm);
+            await Task.CompletedTask;
+        }
+
         private async Task SelectParentCategoryAsync(Category? category)
         {
             await SelectCategoryAsync(category);
@@ -256,6 +268,7 @@ namespace UI.ViewModels
 
             RefreshTotals();
             OnPropertyChanged(nameof(SaleItemsCount));
+            OnPropertyChanged(nameof(CartCountDisplay));
             ClearSaleCommand.RaiseCanExecuteChanged();
             PayCashCommand.RaiseCanExecuteChanged();
             PayCardCommand.RaiseCanExecuteChanged();

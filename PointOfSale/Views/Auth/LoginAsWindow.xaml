@@ -1,0 +1,155 @@
+<Window x:Class="UI.Views.LoginAsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource LoginAs.Title}"
+        SizeToContent="Height"
+        Width="520"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F5F7FA">
+
+    <Window.Resources>
+
+        <Style x:Key="RoleButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D9DEE7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,0,18"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="18">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#EEF5FF"/>
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#2563EB"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#DCEBFF"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="40">
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+
+            <RowDefinition Height="*"/>
+
+            <RowDefinition Height="20"/>
+
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            FontSize="30"
+            FontWeight="SemiBold"
+            Text="{DynamicResource LoginAs.Title}"/>
+
+        <TextBlock
+            Grid.Row="1"
+            Margin="0,8,0,0"
+            HorizontalAlignment="Center"
+            FontSize="15"
+            Foreground="#6B7280"
+            Text="{DynamicResource LoginAs.Subtitle}"/>
+
+        <!-- Manager -->
+
+        <Button
+            Grid.Row="3"
+            Style="{StaticResource RoleButtonStyle}"
+            Command="{Binding OpenManagerCommand}">
+
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                <TextBlock
+                    FontFamily="Segoe Fluent Icons"
+                    FontSize="64"
+                    HorizontalAlignment="Center"
+                    Text="&#xE77B;"/>
+
+                <TextBlock
+                    Margin="0,18,0,0"
+                    FontSize="24"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Center"
+                    Text="{DynamicResource LoginAs.Manager}"/>
+
+            </StackPanel>
+
+        </Button>
+
+        <!-- Cashier -->
+
+        <Button
+            Grid.Row="5"
+            Style="{StaticResource RoleButtonStyle}"
+            Command="{Binding OpenCashierCommand}">
+
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                <TextBlock
+                    FontFamily="Segoe Fluent Icons"
+                    FontSize="64"
+                    HorizontalAlignment="Center"
+                    Text="&#xE8C7;"/>
+
+                <TextBlock
+                    Margin="0,18,0,0"
+                    FontSize="24"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Center"
+                    Text="{DynamicResource LoginAs.Cashier}"/>
+
+            </StackPanel>
+
+        </Button>
+
+    </Grid>
+
+</Window>

@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localization="clr-namespace:POS.Contracts.Localization;assembly=Contracts"
         mc:Ignorable="d"
-        Title="Cafeteria Hawa – Login"
+        Title="{DynamicResource Login.Title}"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -104,6 +105,20 @@
             </Setter>
         </Style>
 
+        <!-- ── Language picker ComboBox ── -->
+        <Style x:Key="LangCombo" TargetType="ComboBox">
+            <Setter Property="Width"             Value="110"/>
+            <Setter Property="Height"            Value="26"/>
+            <Setter Property="FontSize"          Value="10"/>
+            <Setter Property="Foreground"        Value="White"/>
+            <Setter Property="Background"        Value="#33FFFFFF"/>
+            <Setter Property="BorderBrush"       Value="#55FFFFFF"/>
+            <Setter Property="BorderThickness"   Value="1"/>
+            <Setter Property="Cursor"            Value="Hand"/>
+            <Setter Property="FocusVisualStyle"  Value="{x:Null}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
         <!-- ── Close (X) button ── -->
         <Style x:Key="CloseBtn" TargetType="Button">
             <Setter Property="Width"            Value="26"/>
@@ -171,6 +186,21 @@
                 </Border.Background>
 
                 <Grid>
+                    <!-- ── Language picker, top-left ── -->
+                    <ComboBox x:Name="LanguageCombo"
+                              Style="{StaticResource LangCombo}"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              Margin="6,6,0,0"
+                              ItemsSource="{Binding SupportedLanguages}"
+                              SelectedItem="{Binding SelectedLanguage}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type localization:LanguageDto}">
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
                     <StackPanel HorizontalAlignment="Center">
 
                         <!-- Icon tile -->
@@ -186,7 +216,7 @@
                         </Border>
 
                         <!-- Brand name -->
-                        <TextBlock Text="Cafeteria Hawa"
+                        <TextBlock Text="{DynamicResource Login.Brand}"
                                    FontSize="15"
                                    FontWeight="Medium"
                                    Foreground="White"
@@ -194,7 +224,7 @@
                                    Margin="0,0,0,2"/>
 
                         <!-- Sub-label -->
-                        <TextBlock Text="POINT OF SALE"
+                        <TextBlock Text="{DynamicResource Common.PointOfSale}"
                                    FontSize="11"
                                    Foreground="#A8D4F5"
                                    HorizontalAlignment="Center"/>
@@ -208,7 +238,7 @@
                             VerticalAlignment="Top"
                             Margin="0,-6,-6,0"
                             Click="CloseBtn_Click"
-                            ToolTip="Close"/>
+                            ToolTip="{DynamicResource Common.Close}"/>
                 </Grid>
             </Border>
 
@@ -216,7 +246,7 @@
             <StackPanel Grid.Row="1" Margin="22,18,22,20">
 
                 <!-- Username -->
-                <TextBlock Text="Username" Style="{StaticResource FieldLabel}"/>
+                <TextBlock Text="{DynamicResource Login.Username}" Style="{StaticResource FieldLabel}"/>
                 <Border Style="{StaticResource InputFieldBorder}" Margin="0,0,0,12">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -245,7 +275,7 @@
                 </Border>
 
                 <!-- Password -->
-                <TextBlock Text="Password" Style="{StaticResource FieldLabel}"/>
+                <TextBlock Text="{DynamicResource Login.Password}" Style="{StaticResource FieldLabel}"/>
                 <Border Style="{StaticResource InputFieldBorder}" Margin="0,0,0,14">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -295,7 +325,7 @@
                                 HorizontalAlignment="Center"
                                 Click="EyeToggleBtn_Click"
                                 FocusVisualStyle="{x:Null}"
-                                ToolTip="Show / hide password"/>
+                                ToolTip="{DynamicResource Login.ShowHidePassword}"/>
                     </Grid>
                 </Border>
 
@@ -337,7 +367,7 @@
                 </Button>
 
                 <!-- Footer label -->
-                <TextBlock Text="WFA System  ·  v2.0"
+                <TextBlock Text="{DynamicResource Login.Footer}"
                            FontSize="10"
                            Foreground="{StaticResource TextMuted}"
                            HorizontalAlignment="Center"
