@@ -1,0 +1,215 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:UI.Controls">
+    <SolidColorBrush x:Key="DashboardBrandDark" Color="#1A6FC4"/>
+    <SolidColorBrush x:Key="DashboardBrandMid" Color="#2589E0"/>
+    <SolidColorBrush x:Key="DashboardBrandLight" Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="DashboardBrandBorder" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="DashboardCardBg" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="DashboardCardHdrBg" Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="DashboardTextDark" Color="#1A3A5C"/>
+    <SolidColorBrush x:Key="DashboardTextMuted" Color="#8AB0CC"/>
+
+    <SolidColorBrush x:Key="BrandDark" Color="#1A6FC4"/>
+    <SolidColorBrush x:Key="BrandMid" Color="#2589E0"/>
+    <SolidColorBrush x:Key="BrandLight" Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="TextDark" Color="#1A3A5C"/>
+    <SolidColorBrush x:Key="TextMuted" Color="#8AB0CC"/>
+    <SolidColorBrush x:Key="SuccessGreen" Color="#2E9D5A"/>
+
+    <!-- Destructive-action palette (red) -->
+    <SolidColorBrush x:Key="DangerDark" Color="#B91C1C"/>
+    <SolidColorBrush x:Key="DangerMid" Color="#DC2626"/>
+    <SolidColorBrush x:Key="DangerLight" Color="#FEE2E2"/>
+    <SolidColorBrush x:Key="DangerBorder" Color="#FECACA"/>
+    <SolidColorBrush x:Key="RowSelectedBg" Color="#EFF6FF"/>
+
+    <!-- Unprefixed card-header alias (used by list views) -->
+    <SolidColorBrush x:Key="CardHdrBg" Color="#F0F7FF"/>
+
+    <Style x:Key="DashboardCardBorder" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource DashboardCardBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DashboardBrandBorder}"/>
+        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+
+    <Style x:Key="DashboardCardHeaderBorder" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource DashboardCardHdrBg}"/>
+        <Setter Property="BorderBrush" Value="#E8F3FF"/>
+        <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+    <Style x:Key="DashboardCardTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource DashboardTextDark}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="DashboardFilterChip" TargetType="RadioButton">
+        <Setter Property="GroupName" Value="DateFilter"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Margin" Value="0,0,6,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <Style x:Key="FilterChip" TargetType="RadioButton" BasedOn="{StaticResource DashboardFilterChip}"/>
+
+    <Style x:Key="DashboardDateInput" TargetType="DatePicker">
+        <Setter Property="Width" Value="110"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Background" Value="{StaticResource DashboardBrandLight}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DashboardBrandBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="DashboardApplyBtn" TargetType="Button">
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <Style x:Key="ApplyBtn" TargetType="Button" BasedOn="{StaticResource DashboardApplyBtn}"/>
+    <Style x:Key="DateInput" TargetType="DatePicker" BasedOn="{StaticResource DashboardDateInput}"/>
+    <Style x:Key="CardBorder" TargetType="Border" BasedOn="{StaticResource DashboardCardBorder}"/>
+    <Style x:Key="CardHeaderBorder" TargetType="Border" BasedOn="{StaticResource DashboardCardHeaderBorder}"/>
+    <Style x:Key="CardTitle" TargetType="TextBlock" BasedOn="{StaticResource DashboardCardTitle}"/>
+
+    <Style x:Key="DashboardKpiTile" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource DashboardBrandLight}"/>
+        <Setter Property="BorderBrush" Value="#DBEEFF"/>
+        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="CornerRadius" Value="7"/>
+        <Setter Property="Padding" Value="10,8"/>
+    </Style>
+
+    <Style x:Key="DashboardKpiLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="9"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource DashboardTextMuted}"/>
+        <Setter Property="Margin" Value="0,0,0,3"/>
+    </Style>
+
+    <Style x:Key="DashboardKpiValue" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource DashboardTextDark}"/>
+    </Style>
+
+    <Style x:Key="DashboardKpiValueCurrency" TargetType="controls:CurrencyText">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource DashboardTextDark}"/>
+    </Style>
+
+    <!--
+        Shared button + list styles (used by TransactionsView and any
+        other list-based view).  Brand palette matches the values above.
+    -->
+
+    <!-- Outline button (Void / Refresh / Previous / Delete etc.) -->
+    <Style x:Key="OutlineBtn" TargetType="Button">
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <!-- Filter panel container — the toolbar/card that groups
+         filter chips, period pickers, and action buttons at the top
+         of a list view.  Matches the chrome of a list-view card. -->
+    <Style x:Key="FilterPanel" TargetType="Border">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="12,9"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+    </Style>
+
+    <!-- Danger button (Void / Delete / Remove — destructive actions) -->
+    <Style x:Key="DangerBtn" TargetType="Button">
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource DangerMid}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DangerDark}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <!-- Primary gradient button (Next / apply actions) -->
+    <Style x:Key="PrimaryGradientBtn" TargetType="Button">
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Padding" Value="18,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource BrandMid}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <!-- Column-header cell text (any list view) -->
+    <Style x:Key="ListHeaderCell" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <!-- Slim ScrollViewer used by the rows area -->
+    <Style x:Key="ThinScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <!-- List row background / divider (unselected) -->
+    <Style x:Key="ListRow" TargetType="Border">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#EFF6FF"/>
+        <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+    </Style>
+
+    <!-- Selected list row — same divider, blue tint background. -->
+    <Style x:Key="SelectedListRow" TargetType="Border" BasedOn="{StaticResource ListRow}">
+        <Setter Property="Background" Value="{StaticResource RowSelectedBg}"/>
+    </Style>
+
+    <!-- Pill-shaped badge border (Payment / Status etc.) -->
+    <Style x:Key="BadgeBase" TargetType="Border">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="8,2"/>
+        <Setter Property="Background" Value="#F1F5F9"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Text inside a badge -->
+    <Style x:Key="BadgeText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+</ResourceDictionary>
