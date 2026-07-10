@@ -197,7 +197,7 @@
                                            Foreground="{StaticResource BrandDark}"
                                            HorizontalAlignment="Center"
                                            Margin="0,0,0,4"/>
-                                <TextBlock Text="Add Subcategory"
+                                <TextBlock Text="{DynamicResource Manager.Categories.AddSubcategory}"
                                            FontSize="10"
                                            FontWeight="Medium"
                                            Foreground="{StaticResource BrandDark}"
@@ -235,7 +235,7 @@
         <!-- ══════════════════════════════════════
              PAGE HEADER
              ══════════════════════════════════════ -->
-        <TextBlock Grid.Row="0" Text="Category Management"
+        <TextBlock Grid.Row="0" Text="{DynamicResource Manager.Categories.Title}"
                        FontSize="18" FontWeight="Medium"
                        Foreground="{StaticResource TextDark}"/>
 
@@ -265,7 +265,7 @@
                             Command="{Binding AddCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
-                            <TextBlock Text="Add" FontSize="12" FontWeight="Medium" Foreground="White"/>
+                            <TextBlock Text="{DynamicResource Common.Add}" FontSize="12" FontWeight="Medium" Foreground="White"/>
                         </StackPanel>
                     </Button>
 
@@ -276,7 +276,7 @@
                             Command="{Binding EditCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="✏  " FontSize="12"/>
-                            <TextBlock Text="Edit" FontSize="12"/>
+                            <TextBlock Text="{DynamicResource Common.Edit}" FontSize="12"/>
                         </StackPanel>
                     </Button>
 
@@ -287,7 +287,7 @@
                             Command="{Binding DeleteCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🗑  " FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                            <TextBlock Text="Delete" FontSize="12" Foreground="{StaticResource DangerRed}"/>
+                            <TextBlock Text="{DynamicResource Common.Delete}" FontSize="12" Foreground="{StaticResource DangerRed}"/>
                         </StackPanel>
                     </Button>
 
@@ -296,7 +296,7 @@
                             Command="{Binding RefreshCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🔄  " FontSize="12"/>
-                            <TextBlock Text="Refresh" FontSize="12"/>
+                            <TextBlock Text="{DynamicResource Common.Refresh}" FontSize="12"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -357,7 +357,7 @@
                     <StackPanel>
 
                         <!-- Section label -->
-                        <TextBlock Text="CATEGORIES"
+                        <TextBlock Text="{DynamicResource Manager.Categories.SectionCategories}"
                                    FontSize="10" FontWeight="Medium"
                                    Foreground="{StaticResource TextMuted}"
                                    Margin="0,0,0,12"/>
@@ -370,7 +370,7 @@
                                 Padding="12,10"
                                 Margin="0,0,0,8"
                                 Visibility="{Binding IsEmptySearch, Converter={StaticResource BoolToVis}}">
-                            <TextBlock Text="No categories match your search."
+                            <TextBlock Text="{DynamicResource Manager.Categories.EmptySearchMessage}"
                                        FontSize="12" FontWeight="Medium"
                                        Foreground="#92400E"
                                        TextAlignment="Center"/>
@@ -495,14 +495,14 @@
                                        Foreground="{StaticResource TextDark}"
                                        VerticalAlignment="Center">
                                 <Run Text="{Binding SelectedCategory.Name}"/>
-                                <Run Text=" — subcategories"
+                                <Run Text="{DynamicResource Manager.Categories.SubcategoriesSuffix}"
                                      Foreground="{StaticResource TextMuted}"
                                      FontWeight="Normal"/>
                             </TextBlock>
                         </StackPanel>
 
                         <!-- Empty state for subcategories -->
-                        <TextBlock Text="No subcategories yet. Add the first one below."
+                        <TextBlock Text="{DynamicResource Manager.Categories.EmptySubcategoriesMessage}"
                                    FontSize="12"
                                    Foreground="{StaticResource TextMuted}"
                                    Margin="0,0,0,10"

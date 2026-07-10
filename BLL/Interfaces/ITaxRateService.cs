@@ -1,17 +1,17 @@
+using BLL.DTOs;
 using BLL.Models;
-using DAL.Entities;
 
 namespace BLL.Interfaces
 {
     public interface ITaxRateService
     {
-        Task<Result<List<TaxRate>>> GetAllTaxRatesAsync();
+        Task<Result<List<TaxRateDto>>> GetAllTaxRatesAsync();
 
-        Task<Result<TaxRate?>> GetTaxRateByIdAsync(int id);
+        Task<Result<TaxRateDto?>> GetTaxRateByIdAsync(int id);
 
-        Task AddTaxRateAsync(TaxRate TaxRate);
+        Task AddTaxRateAsync(TaxRateDto TaxRate);
 
-        Task UpdateTaxRateAsync(TaxRate TaxRate);
+        Task UpdateTaxRateAsync(TaxRateDto TaxRate);
 
         Task DeleteTaxRateAsync(int id);
     }

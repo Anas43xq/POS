@@ -1,7 +1,8 @@
+using BLL.DTOs;
 using BLL.Models;
 using Contracts.Sales;
 using Contracts.Transactions;
-using DAL.Entities;
+using Contracts.Enum;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -68,7 +69,7 @@ namespace UI.ViewModels
         {
             CashierName = _session.CurrentUser?.FullName ?? "Unknown Cashier";
 
-            if (_session.CurrentShift != null && _session.CurrentShift.Status == DAL.Entities.ShiftStatus.Open)
+            if (_session.CurrentShift != null && _session.CurrentShift.Status == Contracts.Enum.ShiftStatus.Open)
             {
                 ShiftStatus = _localization.GetString(
                     "Cashier.ShiftOpen",
@@ -89,13 +90,13 @@ namespace UI.ViewModels
         {
             try
             {
-                Result<List<Category>> result =
+                Result<List<CategoryDto>> result =
                     await _categoryService.GetAllCategoriesWithChildrenAsync();
 
                 Categories.Clear();
                 SubCategories.Clear();
 
-                Categories.Add(new Category
+                Categories.Add(new CategoryDto
                 {
                     CategoryId = 0,
                     Name = "All"
@@ -103,7 +104,7 @@ namespace UI.ViewModels
 
                 if (result.IsSuccess && result.Value != null)
                 {
-                    foreach (Category category in result.Value.Where(c => !c.ParentCategoryId.HasValue))
+                    foreach (CategoryDto category in result.Value.Where(c => !c.ParentCategoryId.HasValue))
                     {
                         Categories.Add(category);
                     }
@@ -122,14 +123,14 @@ namespace UI.ViewModels
         {
             try
             {
-                Result<List<Product>> result =
-                    await _productService.GetAllProductsWithTaxRateAsync();
+                Result<List<ProductDto>> result =
+                    await _productService.GetAllVariantsAsync();
 
                 Products.Clear();
 
                 if (result.IsSuccess && result.Value != null)
                 {
-                    foreach (Product product in result.Value)
+                    foreach (ProductDto product in result.Value)
                     {
                         Products.Add(product);
                     }
@@ -183,17 +184,17 @@ namespace UI.ViewModels
             await Task.CompletedTask;
         }
 
-        private async Task SelectParentCategoryAsync(Category? category)
+        private async Task SelectParentCategoryAsync(CategoryDto? category)
         {
             await SelectCategoryAsync(category);
         }
 
-        private async Task SelectSubCategoryAsync(Category? subCategory)
+        private async Task SelectSubCategoryAsync(CategoryDto? subCategory)
         {
             await SelectCategoryAsync(subCategory);
         }
 
-        private async Task SelectCategoryAsync(Category? category)
+        private async Task SelectCategoryAsync(CategoryDto? category)
         {
             if (category == null)
                 return;
@@ -208,7 +209,7 @@ namespace UI.ViewModels
 
         private bool FilterProduct(object item)
         {
-            if (item is not Product product)
+            if (item is not ProductDto product)
                 return false;
 
             if (!IsProductInSelectedCategory(product))
@@ -226,7 +227,7 @@ namespace UI.ViewModels
             return true;
         }
 
-        private bool IsProductInSelectedCategory(Product product)
+        private bool IsProductInSelectedCategory(ProductDto product)
         {
             if (SelectedCategory == null || SelectedCategory.CategoryId == 0)
                 return true;

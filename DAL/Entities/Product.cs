@@ -28,6 +28,8 @@ namespace DAL.Entities
 
         public TaxRate? TaxRate { get; set; }
 
-        public ICollection<TransactionItem> TransactionItems { get; set; } = new List<TransactionItem>();
+        public ICollection<ProductTranslation> ProductTranslations { get; set; } = new List<ProductTranslation>();
+
+        public ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
     }
 }

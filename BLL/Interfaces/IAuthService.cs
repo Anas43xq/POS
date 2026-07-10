@@ -1,14 +1,10 @@
-﻿using BLL.Models;
-using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BLL.DTOs;
+using BLL.Models;
 
 namespace BLL.Interfaces
 {
     public interface IAuthService
     {
-        Task<Result<User>> LoginAsync(string username, string password);
-
+        Task<Result<UserDto>> LoginAsync(string username, string password);
     }
 }

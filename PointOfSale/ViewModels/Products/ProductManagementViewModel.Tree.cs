@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using DAL.Entities;
+using BLL.DTOs;
 
 namespace UI.ViewModels
 {
@@ -35,7 +35,7 @@ namespace UI.ViewModels
             SelectedCategory = null;
         }
 
-        private CategoryNodeViewModel ToCategoryNode(Category category)
+        private CategoryNodeViewModel ToCategoryNode(CategoryDto category)
         {
             var node = new CategoryNodeViewModel
             {
@@ -57,19 +57,17 @@ namespace UI.ViewModels
             return node;
         }
 
-        private ProductRowViewModel ToProductRow(Product product)
+        private ProductRowViewModel ToProductRow(ProductSummaryDto product)
         {
             return new ProductRowViewModel
             {
                 Id = product.ProductId,
                 Name = product.Name,
                 CategoryId = product.CategoryId,
-                CategoryName = product.Category?.ParentCategoryId == null && product.Category != null
-                    ? product.Category.Name
-                    : (product.Category?.ParentCategory?.Name ?? string.Empty),
+                CategoryName = string.Empty,
                 Price = product.UnitPrice,
                 TaxRateId = product.TaxRateId,
-                TaxRateName = product.TaxRate?.Name ?? string.Empty,
+                TaxRateName = product.TaxRateName,
                 Status = product.IsActive ? "Active" : "Inactive"
             };
         }

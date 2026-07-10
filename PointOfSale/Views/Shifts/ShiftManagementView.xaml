@@ -221,7 +221,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="🕓" FontSize="16" Foreground="{StaticResource BrandMid}"
                                VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <TextBlock Text="Shift Management"
+                    <TextBlock Text="{DynamicResource Manager.Shifts.Title}"
                                FontSize="13" FontWeight="Medium"
                                Foreground="{StaticResource TextDark}"
                                VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -229,7 +229,7 @@
 
                 <Button Grid.Column="1"
                         Style="{StaticResource OutlineBtn}"
-                        Content="↻  Refresh"
+                        Content="{DynamicResource Common.Refresh}"
                         Command="{Binding RefreshCommand}"/>
             </Grid>
         </Border>
@@ -265,16 +265,16 @@
                             <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="90"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="SHIFT ID"   Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="1" Text="CASHIER"    Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="2" Text="OPENED AT"  Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="3" Text="CLOSED AT"  Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="4" Text="OPENING"    Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="5" Text="CLOSING"    Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="6" Text="EXPECTED"   Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="7" Text="DIFFERENCE" Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="8" Text="STATUS"     Style="{StaticResource ListHeaderCell}"/>
-                        <TextBlock Grid.Column="9" Text="DURATION"   Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Shifts.ColShiftId}"   Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Shifts.ColCashier}"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Shifts.ColOpenedAt}"  Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Shifts.ColClosedAt}"  Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Shifts.ColOpening}"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="5" Text="{DynamicResource Manager.Shifts.ColClosing}"    Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="6" Text="{DynamicResource Manager.Shifts.ColExpected}"   Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="7" Text="{DynamicResource Manager.Shifts.ColDifference}" Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="8" Text="{DynamicResource Manager.Shifts.ColStatus}"     Style="{StaticResource ListHeaderCell}"/>
+                        <TextBlock Grid.Column="9" Text="{DynamicResource Manager.Shifts.ColDuration}"   Style="{StaticResource ListHeaderCell}"/>
                     </Grid>
                 </Border>
 

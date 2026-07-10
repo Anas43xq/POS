@@ -46,9 +46,9 @@ namespace DAL.Configurations
                    .HasForeignKey(t => t.TransactionId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(t => t.Product)
-                   .WithMany(p => p.TransactionItems)
-                   .HasForeignKey(t => t.ProductId)
+            builder.HasOne(t => t.ProductVariant)
+                   .WithMany(pv => pv.TransactionItems)
+                   .HasForeignKey(t => t.VariantId)
                    .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -1,6 +1,7 @@
+using BLL.DTOs;
+using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
-using BLL.Interfaces;
 
 namespace BLL.Services
 {
@@ -13,19 +14,47 @@ namespace BLL.Services
             _paymentrepo = PaymentRepo;
         }
 
-        public async Task<IEnumerable<Payment>> GetAllPaymentsAsync() =>
-            await _paymentrepo.GetAllAsync();
+        public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync()
+        {
+            var entities = await _paymentrepo.GetAllAsync();
+            return entities.Select(MapToDto);
+        }
 
-        public async Task<Payment?> GetPaymentByIdAsync(int id) =>
-            await _paymentrepo.GetByIdAsync(id);
+        public async Task<PaymentDto?> GetPaymentByIdAsync(int id)
+        {
+            var entity = await _paymentrepo.GetByIdAsync(id);
+            return entity is null ? null : MapToDto(entity);
+        }
 
-        public async Task AddPaymentAsync(Payment Payment) =>
-            await _paymentrepo.AddAsync(Payment);
+        public async Task AddPaymentAsync(PaymentDto Payment) =>
+            await _paymentrepo.AddAsync(MapToEntity(Payment));
 
-        public async Task UpdatePaymentAsync(Payment Payment) =>
-            await _paymentrepo.UpdateAsync(Payment);
+        public async Task UpdatePaymentAsync(PaymentDto Payment) =>
+            await _paymentrepo.UpdateAsync(MapToEntity(Payment));
 
         public async Task DeletePaymentAsync(int id) =>
             await _paymentrepo.DeleteAsync(id);
+
+        private static PaymentDto MapToDto(Payment e) => new()
+        {
+            PaymentId = e.PaymentId,
+            TransactionId = e.TransactionId,
+            PaymentMethod = e.PaymentMethod,
+            AmountTendered = e.AmountTendered,
+            ChangeGiven = e.ChangeGiven,
+            ReferenceNumber = e.ReferenceNumber,
+            PaidAt = e.PaidAt
+        };
+
+        private static Payment MapToEntity(PaymentDto d) => new()
+        {
+            PaymentId = d.PaymentId,
+            TransactionId = d.TransactionId,
+            PaymentMethod = d.PaymentMethod,
+            AmountTendered = d.AmountTendered,
+            ChangeGiven = d.ChangeGiven,
+            ReferenceNumber = d.ReferenceNumber,
+            PaidAt = d.PaidAt
+        };
     }
 }

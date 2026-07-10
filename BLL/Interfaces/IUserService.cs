@@ -1,16 +1,16 @@
-﻿using DAL.Entities;
+﻿using BLL.DTOs;
 
 namespace BLL.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<IEnumerable<UserDto>> GetAllUsersAsync();
 
-        Task<User?> GetUserByIdAsync(int id);
+        Task<UserDto?> GetUserByIdAsync(int id);
 
-        Task AddUserAsync(User User);
+        Task AddUserAsync(UserDto User);
 
-        Task UpdateUserAsync(User User);
+        Task UpdateUserAsync(UserDto User);
 
         Task DeleteUserAsync(int id);
 
@@ -18,12 +18,8 @@ namespace BLL.Interfaces
 
         /// <summary>
         /// Returns the default cashier account used by the Login-As
-        /// window's cashier flow (no password required). Currently
-        /// resolves to the first active user with role
-        /// <c>"Cashier"</c>; the name is intentionally
-        /// forward-compatible so the resolution policy can be
-        /// extended later without breaking callers.
+        /// window's cashier flow (no password required).
         /// </summary>
-        Task<User?> GetDefaultCashierAsync();
+        Task<UserDto?> GetDefaultCashierAsync();
     }
 }

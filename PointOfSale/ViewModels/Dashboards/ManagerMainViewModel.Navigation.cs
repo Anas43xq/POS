@@ -1,6 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BLL.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -72,6 +75,20 @@ namespace UI.ViewModels
             catch (OperationCanceledException)
             {
             }
+        }
+
+        /// <summary>
+        /// Opens the same Settings dialog the cashier header uses. The dialog
+        /// resolves <see cref="SettingsViewModel"/> via the application's
+        /// service provider so it picks up the current language without the
+        /// manager having to know about DI.
+        /// </summary>
+        private async Task OpenSetting()
+        {
+            var vm = new SettingsViewModel(
+                App.ServiceProvider.GetRequiredService<ILocalizationService>());
+            _dialogService.ShowDialog<SettingsWindow>(vm);
+            await Task.CompletedTask;
         }
     }
 }

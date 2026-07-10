@@ -1,5 +1,5 @@
 using BLL.Interfaces;
-using DAL.Entities;
+using BLL.DTOs;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -17,7 +17,7 @@ namespace UI.ViewModels
         private readonly IShiftService _shiftService;
         private readonly ISessionService _sessionService;
 
-        private Shift? _currentShift;
+        private ShiftDto? _currentShift;
 
         private string _closingCash;
         public string ClosingCash

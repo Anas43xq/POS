@@ -33,6 +33,48 @@
         <SolidColorBrush x:Key="NavHoverBg"  Color="#12FFFFFF"/>
         <SolidColorBrush x:Key="NavActiveBg" Color="#402589E0"/>
 
+        <!-- ── Header neutral button (e.g. Settings) ── -->
+        <Style x:Key="HdrBtn" TargetType="Button">
+            <Setter Property="Height"   Value="30"/>
+            <Setter Property="Padding"  Value="10,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                CornerRadius="7"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
+                                <Setter TargetName="Bg" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- ── Header icon/danger button ── -->
         <Style x:Key="HdrDangerBtn" TargetType="Button">
             <Setter Property="Height"   Value="30"/>
@@ -179,6 +221,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <!-- Date/time     -->
                     <ColumnDefinition Width="Auto"/>
+                    <!-- Settings      -->
+                    <ColumnDefinition Width="Auto"/>
                     <!-- Logout        -->
                 </Grid.ColumnDefinitions>
 
@@ -195,7 +239,7 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Border>
-                    <TextBlock Text="Cafeteria Hawa"
+                    <TextBlock Text="{DynamicResource Login.Brand}"
                                FontSize="14" FontWeight="Medium"
                                Foreground="{StaticResource TextDark}"
                                VerticalAlignment="Center"/>
@@ -217,11 +261,28 @@
                            VerticalAlignment="Center"
                            Margin="0,0,12,0"/>
 
-                <!-- Logout -->
+                <!-- Settings (gear icon) — mirrors the cashier header -->
                 <Button Grid.Column="3"
+                        Style="{StaticResource HdrBtn}"
+                        Margin="0,0,6,0"
+                        Command="{Binding ShowSetting}"
+                        ToolTip="{DynamicResource Settings.Title}">
+                    <TextBlock Text="&#xE713;"
+                               FontSize="14"
+                               FontFamily="Segoe MDL2 Assets"
+                               Foreground="{StaticResource BrandDark}"
+                               VerticalAlignment="Center"/>
+                </Button>
+
+                <!-- Logout -->
+                <Button Grid.Column="4"
                         Style="{StaticResource HdrDangerBtn}"
-                        Command="{Binding LogoutCommand}"
-                        Content="⎋  Logout"/>
+                        Command="{Binding LogoutCommand}">
+                    <TextBlock>
+                        <Run Text="⎋  "/>
+                        <Run Text="{DynamicResource Common.Logout}"/>
+                    </TextBlock>
+                </Button>
             </Grid>
         </Border>
 
@@ -247,7 +308,7 @@
 
                 <StackPanel Margin="0,10,0,0">
 
-                    <TextBlock Text="MENU" Style="{StaticResource SidebarSectionLabel}"/>
+                    <TextBlock Text="{DynamicResource Manager.Nav.Menu}" Style="{StaticResource SidebarSectionLabel}"/>
 
                     <RadioButton Style="{StaticResource NavItem}"
                                  IsChecked="True"
@@ -255,7 +316,7 @@
                         <RadioButton.Tag>
                             <TextBlock Text="🏠" Style="{StaticResource NavIcon}"/>
                         </RadioButton.Tag>
-                        <TextBlock Text="Home" Style="{StaticResource NavLabel}"/>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Home}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource NavItem}"
@@ -263,7 +324,7 @@
                         <RadioButton.Tag>
                             <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
                         </RadioButton.Tag>
-                        <TextBlock Text="Transactions" Style="{StaticResource NavLabel}"/>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Transactions}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource NavItem}"
@@ -271,7 +332,7 @@
                         <RadioButton.Tag>
                             <TextBlock Text="🕓" Style="{StaticResource NavIcon}"/>
                         </RadioButton.Tag>
-                        <TextBlock Text="Shift Management" Style="{StaticResource NavLabel}"/>
+                        <TextBlock Text="{DynamicResource Manager.Nav.ShiftManagement}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource NavItem}"
@@ -279,7 +340,7 @@
                         <RadioButton.Tag>
                             <TextBlock Text="📊" Style="{StaticResource NavIcon}"/>
                         </RadioButton.Tag>
-                        <TextBlock Text="Reports" Style="{StaticResource NavLabel}"/>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Reports}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
                      <RadioButton Style="{StaticResource NavItem}"
@@ -287,7 +348,7 @@
                          <RadioButton.Tag>
                              <TextBlock Text="📦" Style="{StaticResource NavIcon}"/>
                          </RadioButton.Tag>
-                         <TextBlock Text="Products" Style="{StaticResource NavLabel}"/>
+                         <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource NavLabel}"/>
                      </RadioButton>
 
                      <RadioButton Style="{StaticResource NavItem}"
@@ -295,7 +356,7 @@
                          <RadioButton.Tag>
                              <TextBlock Text="🏷" Style="{StaticResource NavIcon}"/>
                          </RadioButton.Tag>
-                         <TextBlock Text="Categories" Style="{StaticResource NavLabel}"/>
+                         <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource NavLabel}"/>
                      </RadioButton>
 
                      <RadioButton Style="{StaticResource NavItem}"
@@ -303,7 +364,7 @@
                          <RadioButton.Tag>
                              <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
                          </RadioButton.Tag>
-                         <TextBlock Text="Receipt Management" Style="{StaticResource NavLabel}"/>
+                         <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource NavLabel}"/>
                      </RadioButton>
 
                  </StackPanel>

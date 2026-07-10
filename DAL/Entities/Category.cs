@@ -18,13 +18,15 @@ namespace DAL.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
-
+        
         public ICollection<Category> ChildCategories { get; set; } 
          = new List<Category>();
 
         public ICollection<Product> Products { get; set; }
          = new List<Product>();
+
+        public ICollection<CategoryTranslation> CategoryTranslations { get; set; }
+         = new List<CategoryTranslation>();
 
     }
 }

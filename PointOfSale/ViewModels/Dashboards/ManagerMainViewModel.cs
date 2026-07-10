@@ -25,6 +25,7 @@ namespace UI.ViewModels
         private readonly CategoryManagementViewModel _categoryManagementViewModel;
         private readonly ReceiptManagementViewModel _receiptManagementViewModel;
         private readonly ISessionService _sessionService;
+        private readonly IDialogService _dialogService;
         private CancellationTokenSource? _timeCancellationTokenSource;
 
         private string _managerName = string.Empty;
@@ -43,6 +44,12 @@ namespace UI.ViewModels
         public ICommand NavigateCategoryManagementCommand { get; set; } = null!;
         public ICommand NavigateReceiptManagementCommand { get; set; } = null!;
         public ICommand LogoutCommand { get; set; } = null!;
+
+        /// <summary>
+        /// Opens the Settings dialog (same dialog the cashier header uses).
+        /// Mirrors <c>CashierDashboardViewModel.ShowSetting</c>.
+        /// </summary>
+        public ICommand ShowSetting { get; set; } = null!;
 
         public string ManagerName
         {
@@ -120,7 +127,8 @@ namespace UI.ViewModels
             ProductManagementViewModel productManagementViewModel,
             CategoryManagementViewModel categoryManagementViewModel,
             ReceiptManagementViewModel receiptManagementViewModel,
-            ISessionService sessionService)
+            ISessionService sessionService,
+            IDialogService dialogService)
         {
             _homeViewModel = homeViewModel;
             _transactionsViewModel = transactionsViewModel;
@@ -130,6 +138,7 @@ namespace UI.ViewModels
             _categoryManagementViewModel = categoryManagementViewModel;
             _receiptManagementViewModel = receiptManagementViewModel;
             _sessionService = sessionService;
+            _dialogService = dialogService;
 
             _homeViewModel.ViewAllShiftsRequested -= NavigateToShiftManagement;
             _homeViewModel.ShowAllTransactionsRequested -= NavigateToTransactions;
@@ -146,6 +155,10 @@ namespace UI.ViewModels
             NavigateCategoryManagementCommand = new RelayCommand(NavigateToCategoryManagement);
             NavigateReceiptManagementCommand = new RelayCommand(NavigateToReceiptManagement);
             LogoutCommand = new RelayCommand(_ => LogoutRequested?.Invoke());
+
+            // Settings — mirrors the cashier header's gear button so the
+            // manager can also change the UI language.
+            ShowSetting = new AsyncRelayCommand(OpenSetting);
 
             // Initialize manager info
             InitializeManagerInfo();

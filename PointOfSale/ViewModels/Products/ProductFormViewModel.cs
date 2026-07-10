@@ -1,6 +1,6 @@
 using BLL.Interfaces;
 using BLL.Models;
-using DAL.Entities;
+using BLL.DTOs;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace UI.ViewModels
         private string _productName = string.Empty;
         private decimal _price;
         private CategoryNodeViewModel? _selectedCategory;
-        private TaxRate? _selectedTax;
+        private TaxRateDto? _selectedTax;
         private bool _isActive = true;
         private bool _hasAdditionalTax;
         private string _additionalTaxAmount = string.Empty;
@@ -67,9 +67,9 @@ namespace UI.ViewModels
             }
         }
 
-        public ObservableCollection<TaxRate> TaxOptions { get; } = new();
+        public ObservableCollection<TaxRateDto> TaxOptions { get; } = new();
 
-        public TaxRate? SelectedTax
+        public TaxRateDto? SelectedTax
         {
             get => _selectedTax;
             set
@@ -208,7 +208,7 @@ namespace UI.ViewModels
             }
         }
 
-        private void AddCategoryToOptions(Category category)
+        private void AddCategoryToOptions(CategoryDto category)
         {
             var node = new CategoryNodeViewModel
             {
@@ -282,7 +282,7 @@ namespace UI.ViewModels
                 if (_existingProduct == null)
                 {
                     // Add new product
-                    var product = new Product
+                    var product = new ProductWriteDto
                     {
                         Name = ProductName.Trim(),
                         CategoryId = SelectedCategory.Id,
@@ -297,17 +297,21 @@ namespace UI.ViewModels
                 else
                 {
                     // Update existing product
-                    var product = await _productService.GetProductByIdAsync(_existingProduct.Id);
-                    if (product != null)
+                    var existing = await _productService.GetProductByIdAsync(_existingProduct.Id);
+                    if (existing != null)
                     {
-                        product.Name = ProductName.Trim();
-                        product.CategoryId = SelectedCategory.Id;
-                        product.UnitPrice = Price;
-                        product.TaxRateId = SelectedTax.TaxRateId;
-                        product.IsActive = IsActive;
-                        product.Description = string.IsNullOrWhiteSpace(Description) ? null : Description.Trim();
+                        var updated = new ProductWriteDto
+                        {
+                            ProductId = _existingProduct.Id,
+                            Name = ProductName.Trim(),
+                            CategoryId = SelectedCategory.Id,
+                            UnitPrice = Price,
+                            TaxRateId = SelectedTax.TaxRateId,
+                            IsActive = IsActive,
+                            Description = string.IsNullOrWhiteSpace(Description) ? null : Description.Trim()
+                        };
 
-                        await _productService.UpdateProductAsync(product);
+                        await _productService.UpdateProductAsync(updated);
                     }
                 }
 

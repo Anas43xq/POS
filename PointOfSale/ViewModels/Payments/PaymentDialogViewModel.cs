@@ -135,7 +135,7 @@ public class PaymentDialogViewModel : BaseViewModel
         if (_sessionService.CurrentUser == null)
             throw new InvalidOperationException("No logged-in cashier.");
 
-        if (_sessionService.CurrentShift == null || _sessionService.CurrentShift.Status != DAL.Entities.ShiftStatus.Open)
+        if (_sessionService.CurrentShift == null || _sessionService.CurrentShift.Status != Contracts.Enum.ShiftStatus.Open)
             throw new InvalidOperationException("No open shift.");
 
         if (!_cashierDashboardViewModel.SaleItems.Any())
@@ -167,7 +167,7 @@ public class PaymentDialogViewModel : BaseViewModel
         return _cashierDashboardViewModel.SaleItems
             .Select(item => new CreateTransactionItemRequest
             {
-                ProductId = item.ProductId,
+                VariantId = item.VariantId,
                 ProductName = item.ProductName,
                 UnitPrice = item.UnitPrice,
                 Quantity = item.Quantity,

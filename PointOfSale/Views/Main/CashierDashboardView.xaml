@@ -1080,7 +1080,7 @@
                                         <StackPanel VerticalAlignment="Center"
                                                     HorizontalAlignment="Center"
                                                     Margin="4">
-                                            <TextBlock Text="{Binding Name}"
+                                            <TextBlock Text="{Binding DisplayName}"
                                                        FontSize="11" FontWeight="Medium"
                                                        Foreground="{StaticResource TextDark}"
                                                        TextAlignment="Center"

@@ -1,3 +1,4 @@
+using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -14,25 +15,39 @@ namespace BLL.Services
             _taxraterepo = TaxRateRepo;
         }
 
-        public async Task<Result<List<TaxRate>>> GetAllTaxRatesAsync()
+        public async Task<Result<List<TaxRateDto>>> GetAllTaxRatesAsync()
         {
             var taxRates = await _taxraterepo.GetAllAsync();
-            return Result<List<TaxRate>>.Success(taxRates.ToList());
+            return Result<List<TaxRateDto>>.Success(taxRates.Select(MapToDto).ToList());
         }
 
-        public async Task<Result<TaxRate?>> GetTaxRateByIdAsync(int id)
+        public async Task<Result<TaxRateDto?>> GetTaxRateByIdAsync(int id)
         {
             var taxRate = await _taxraterepo.GetByIdAsync(id);
-            return Result<TaxRate?>.Success(taxRate);
+            return Result<TaxRateDto?>.Success(taxRate is null ? null : MapToDto(taxRate));
         }
 
-        public async Task AddTaxRateAsync(TaxRate TaxRate) =>
-            await _taxraterepo.AddAsync(TaxRate);
+        public async Task AddTaxRateAsync(TaxRateDto TaxRate) =>
+            await _taxraterepo.AddAsync(MapToEntity(TaxRate));
 
-        public async Task UpdateTaxRateAsync(TaxRate TaxRate) =>
-            await _taxraterepo.UpdateAsync(TaxRate);
+        public async Task UpdateTaxRateAsync(TaxRateDto TaxRate) =>
+            await _taxraterepo.UpdateAsync(MapToEntity(TaxRate));
 
         public async Task DeleteTaxRateAsync(int id) =>
             await _taxraterepo.DeleteAsync(id);
+
+        private static TaxRateDto MapToDto(TaxRate e) => new()
+        {
+            TaxRateId = e.TaxRateId,
+            Name = e.Name,
+            Rate = e.Rate
+        };
+
+        private static TaxRate MapToEntity(TaxRateDto d) => new()
+        {
+            TaxRateId = d.TaxRateId,
+            Name = d.Name,
+            Rate = d.Rate
+        };
     }
 }

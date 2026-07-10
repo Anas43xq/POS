@@ -20,6 +20,20 @@ namespace DAL.Repositories
              .Where(p => p.IsActive)
              .ToListAsync();
         }
+
+        public async Task<IEnumerable<ProductVariant>> GetAllVariantsAsync()
+        {
+            await using var context = await _contextFactory!.CreateDbContextAsync();
+            return await context.ProductVariants
+                .AsNoTracking()
+                .Where(v => v.IsActive)
+                .Include(v => v.Product)
+                    .ThenInclude(p => p.TaxRate)
+                .Include(v => v.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(v => v.Size)
+                .AsSplitQuery()
+                .ToListAsync();
+        }
     }
 }
-

@@ -1,6 +1,7 @@
+using BLL.DTOs;
+using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
-using BLL.Interfaces;
 
 namespace BLL.Services
 {
@@ -13,19 +14,49 @@ namespace BLL.Services
             _auditlogrepo = AuditLogRepo;
         }
 
-        public async Task<IEnumerable<AuditLog>> GetAllAuditLogsAsync() =>
-            await _auditlogrepo.GetAllAsync();
+        public async Task<IEnumerable<AuditLogDto>> GetAllAuditLogsAsync()
+        {
+            var entities = await _auditlogrepo.GetAllAsync();
+            return entities.Select(MapToDto);
+        }
 
-        public async Task<AuditLog?> GetAuditLogByIdAsync(int id) =>
-            await _auditlogrepo.GetByIdAsync(id);
+        public async Task<AuditLogDto?> GetAuditLogByIdAsync(int id)
+        {
+            var entity = await _auditlogrepo.GetByIdAsync(id);
+            return entity is null ? null : MapToDto(entity);
+        }
 
-        public async Task AddAuditLogAsync(AuditLog AuditLog) =>
-            await _auditlogrepo.AddAsync(AuditLog);
+        public async Task AddAuditLogAsync(AuditLogDto auditLog) =>
+            await _auditlogrepo.AddAsync(MapToEntity(auditLog));
 
-        public async Task UpdateAuditLogAsync(AuditLog AuditLog) =>
-            await _auditlogrepo.UpdateAsync(AuditLog);
+        public async Task UpdateAuditLogAsync(AuditLogDto auditLog) =>
+            await _auditlogrepo.UpdateAsync(MapToEntity(auditLog));
 
         public async Task DeleteAuditLogAsync(int id) =>
             await _auditlogrepo.DeleteAsync(id);
+
+        private static AuditLogDto MapToDto(AuditLog e) => new()
+        {
+            AuditLogId = e.AuditLogId,
+            UserId = e.UserId,
+            ActionType = e.ActionType,
+            EntityName = e.EntityName,
+            EntityId = e.EntityId,
+            OldValue = e.OldValue,
+            NewValue = e.NewValue,
+            OccurredAt = e.OccurredAt
+        };
+
+        private static AuditLog MapToEntity(AuditLogDto d) => new()
+        {
+            AuditLogId = d.AuditLogId,
+            UserId = d.UserId,
+            ActionType = d.ActionType,
+            EntityName = d.EntityName,
+            EntityId = d.EntityId,
+            OldValue = d.OldValue,
+            NewValue = d.NewValue,
+            OccurredAt = d.OccurredAt
+        };
     }
 }

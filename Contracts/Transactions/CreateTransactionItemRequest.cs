@@ -2,7 +2,7 @@
 
 public class CreateTransactionItemRequest
 {
-    public int ProductId { get; set; }
+    public int VariantId { get; set; }
 
     public string ProductName { get; set; } = string.Empty;
 

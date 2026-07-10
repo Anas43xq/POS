@@ -36,7 +36,7 @@ namespace UI.ViewModels
         private void NavigateToDashboardByRole()
         {
             var user = _sessionService.CurrentUser;
-            if (user?.Role != null && user.Role.RoleName.Equals("Manager", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(user?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
             {
                 _navigationService.NavigateTo<ManagerMainViewModel>();
                 if (_navigationService.CurrentViewModel is ManagerMainViewModel managerViewModel)

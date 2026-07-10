@@ -1,16 +1,16 @@
-using DAL.Entities;
+using BLL.DTOs;
 
 namespace BLL.Interfaces
 {
     public interface IPaymentService
     {
-        Task<IEnumerable<Payment>> GetAllPaymentsAsync();
+        Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync();
 
-        Task<Payment?> GetPaymentByIdAsync(int id);
+        Task<PaymentDto?> GetPaymentByIdAsync(int id);
 
-        Task AddPaymentAsync(Payment Payment);
+        Task AddPaymentAsync(PaymentDto Payment);
 
-        Task UpdatePaymentAsync(Payment Payment);
+        Task UpdatePaymentAsync(PaymentDto Payment);
 
         Task DeletePaymentAsync(int id);
     }

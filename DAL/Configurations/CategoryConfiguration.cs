@@ -34,6 +34,11 @@ namespace DAL.Configurations
                    .WithMany(c => c.ChildCategories)
                    .HasForeignKey(c => c.ParentCategoryId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(c => c.CategoryTranslations)
+                   .WithOne(t => t.Category)
+                   .HasForeignKey(t => t.CategoryId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -18,6 +18,16 @@ namespace DAL.Entities.Data
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Size> Sizes { get; set; }
+
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+
+        public DbSet<ProductTranslation> ProductTranslations { get; set; }
+
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
+
+        public DbSet<SizeTranslation> SizeTranslations { get; set; }
+
         public DbSet<Shift> Shifts { get; set; }
 
         public DbSet<Transaction> Transactions { get; set; }

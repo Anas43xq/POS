@@ -25,7 +25,7 @@ namespace BLL.Services
             if (!_sessionService.IsAuthenticated)
                 throw new InvalidOperationException("Not logged in.");
 
-            if (!string.Equals(_sessionService.CurrentUser?.Role?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(_sessionService.CurrentUser?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Only managers allowed.");
 
             return await _recentTransactionRepository.GetRecentTransactionsAsync(take);

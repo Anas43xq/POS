@@ -446,6 +446,18 @@
 
     <sys:String x:Key="Manager.Transactions.VoidButton">റദ്ദാക്കുക</sys:String>
 
+    <sys:String x:Key="Manager.Transactions.TransactionsCardTitle">
+        ഇടപാടുകൾ
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.Loading">
+        ലോഡ് ചെയ്യുന്നു…
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.PagerSuffix">
+        ഇടപാടുകൾ
+    </sys:String>
+
     <!-- ========================================================= -->
     <!-- Manager Products -->
     <!-- ========================================================= -->
@@ -582,5 +594,12 @@
     <sys:String x:Key="Manager.Shifts.ColDifference">വ്യത്യാസം</sys:String>
     <sys:String x:Key="Manager.Shifts.ColStatus">നില</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">ദൈർഘ്യം</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings (Cashier + Manager) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Title">ക്രമീകരണങ്ങൾ</sys:String>
+    <sys:String x:Key="Settings.Language">ഭാഷ</sys:String>
 
 </ResourceDictionary>

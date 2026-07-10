@@ -1,16 +1,16 @@
-using DAL.Entities;
+using BLL.DTOs;
 
 namespace BLL.Interfaces
 {
     public interface IAuditLogService
     {
-        Task<IEnumerable<AuditLog>> GetAllAuditLogsAsync();
+        Task<IEnumerable<AuditLogDto>> GetAllAuditLogsAsync();
 
-        Task<AuditLog?> GetAuditLogByIdAsync(int id);
+        Task<AuditLogDto?> GetAuditLogByIdAsync(int id);
 
-        Task AddAuditLogAsync(AuditLog AuditLog);
+        Task AddAuditLogAsync(AuditLogDto AuditLog);
 
-        Task UpdateAuditLogAsync(AuditLog AuditLog);
+        Task UpdateAuditLogAsync(AuditLogDto AuditLog);
 
         Task DeleteAuditLogAsync(int id);
     }

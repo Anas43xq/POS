@@ -446,6 +446,18 @@
 
     <sys:String x:Key="Manager.Transactions.VoidButton">إلغاء</sys:String>
 
+    <sys:String x:Key="Manager.Transactions.TransactionsCardTitle">
+        المعاملات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.Loading">
+        جاري التحميل…
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.PagerSuffix">
+        معاملة
+    </sys:String>
+
     <!-- ========================================================= -->
     <!-- Manager Products -->
     <!-- ========================================================= -->
@@ -582,5 +594,12 @@
     <sys:String x:Key="Manager.Shifts.ColDifference">الفرق</sys:String>
     <sys:String x:Key="Manager.Shifts.ColStatus">الحالة</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">المدة</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings (Cashier + Manager) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Title">الإعدادات</sys:String>
+    <sys:String x:Key="Settings.Language">اللغة</sys:String>
 
 </ResourceDictionary>

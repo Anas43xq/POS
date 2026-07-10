@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using DAL.Entities;
+using BLL.DTOs;
 using UI.ViewModels;
 
 namespace UI.Views
@@ -34,7 +34,7 @@ namespace UI.Views
             }
         }
 
-        private void OnLoginSucceeded(User user)
+        private void OnLoginSucceeded(UserDto user)
         {
             // Closing with DialogResult=true lets IDialogService.
             // ShowDialogWithResult return true to its caller.

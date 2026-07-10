@@ -1,3 +1,4 @@
+using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -25,56 +26,54 @@ namespace BLL.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Shift>> GetAllShiftsAsync() =>
-            await _shiftrepo.GetAllAsync();
+        public async Task<IEnumerable<ShiftDto>> GetAllShiftsAsync()
+        {
+            var entities = await _shiftrepo.GetAllAsync();
+            return entities.Select(MapToDto);
+        }
 
-        public async Task<Shift?> GetShiftByIdAsync(int id) =>
-            await _shiftrepo.GetByIdAsync(id);
+        public async Task<ShiftDto?> GetShiftByIdAsync(int id)
+        {
+            var entity = await _shiftrepo.GetByIdAsync(id);
+            return entity is null ? null : MapToDto(entity);
+        }
 
-        public async Task AddShiftAsync(Shift Shift) =>
-            await _shiftrepo.AddAsync(Shift);
+        public async Task AddShiftAsync(ShiftDto shift) =>
+            await _shiftrepo.AddAsync(MapToEntity(shift));
 
-        public async Task UpdateShiftAsync(Shift Shift) =>
-            await _shiftrepo.UpdateAsync(Shift);
+        public async Task UpdateShiftAsync(ShiftDto shift) =>
+            await _shiftrepo.UpdateAsync(MapToEntity(shift));
 
         public async Task DeleteShiftAsync(int id) =>
             await _shiftrepo.DeleteAsync(id);
 
-        /// <summary>
-        /// Gets the current open shift for a user.
-        /// </summary>
-        public async Task<Result<Shift>> GetOpenShiftAsync(int userId)
+        public async Task<Result<ShiftDto>> GetOpenShiftAsync(int userId)
         {
             if (userId <= 0)
-                return Result<Shift>.Failure("Invalid user ID.");
+                return Result<ShiftDto>.Failure("Invalid user ID.");
 
             Shift? shift = await _shiftrepo.GetOpenShiftAsync(userId);
             if (shift != null)
             {
-                return Result<Shift>.Success(shift);
+                return Result<ShiftDto>.Success(MapToDto(shift));
             }
-            return Result<Shift>.Failure("No active shift. Please start a shift first.");
+            return Result<ShiftDto>.Failure("No active shift. Please start a shift first.");
         }
 
-        /// <summary>
-        /// Opens a new shift for a cashier.
-        /// Enforces business rule: only one open shift per cashier.
-        /// </summary>
-        public async Task<Result<Shift>> OpenShiftAsync(int userId, decimal openingCash)
+        public async Task<Result<ShiftDto>> OpenShiftAsync(int userId, decimal openingCash)
         {
             try
             {
                 if (userId <= 0)
-                    return Result<Shift>.Failure("Invalid user ID.");
+                    return Result<ShiftDto>.Failure("Invalid user ID.");
 
                 if (openingCash < 0)
-                    return Result<Shift>.Failure("Opening cash cannot be negative.");
+                    return Result<ShiftDto>.Failure("Opening cash cannot be negative.");
 
-                // Check if user already has an open shift
                 var existingOpenShift = await _shiftrepo.GetOpenShiftAsync(userId);
                 if (existingOpenShift != null)
                 {
-                    return Result<Shift>.Failure(
+                    return Result<ShiftDto>.Failure(
                         $"Cannot start a new shift. An open shift already exists (opened at {existingOpenShift.OpenedAt:g}).");
                 }
 
@@ -83,54 +82,47 @@ namespace BLL.Services
                     UserId = userId,
                     OpeningCash = openingCash,
                     OpenedAt = DateTime.Now,
-                    Status = ShiftStatus.Open,
+                    Status = DAL.Entities.ShiftStatus.Open,
                     ClosedAt = null,
                     ClosingCash = null
                 };
 
                 await _shiftrepo.AddAsync(shift);
-                return Result<Shift>.Success(shift);
+                return Result<ShiftDto>.Success(MapToDto(shift));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to open shift for user {UserId}", userId);
-                return Result<Shift>.Failure($"Error opening shift: {ex.Message}");
+                return Result<ShiftDto>.Failure($"Error opening shift: {ex.Message}");
             }
         }
 
-        /// <summary>
-        /// Closes a shift for a cashier.
-        /// Enforces business rules: cannot close already closed shift, calculates cash reconciliation.
-        /// </summary>
-        public async Task<Result<Shift>> CloseShiftAsync(int shiftId, decimal closingCash)
+        public async Task<Result<ShiftDto>> CloseShiftAsync(int shiftId, decimal closingCash)
         {
             try
             {
                 if (shiftId <= 0)
-                    return Result<Shift>.Failure("Invalid shift ID.");
+                    return Result<ShiftDto>.Failure("Invalid shift ID.");
 
                 if (closingCash < 0)
-                    return Result<Shift>.Failure("Closing cash cannot be negative.");
+                    return Result<ShiftDto>.Failure("Closing cash cannot be negative.");
 
                 var shift = await _shiftrepo.GetByIdAsync(shiftId);
                 if (shift == null)
                 {
-                    return Result<Shift>.Failure("Shift not found.");
+                    return Result<ShiftDto>.Failure("Shift not found.");
                 }
 
-                // Prevent closing already closed shift
-                if (shift.Status == ShiftStatus.Closed)
+                if (shift.Status == DAL.Entities.ShiftStatus.Closed)
                 {
-                    return Result<Shift>.Failure(
+                    return Result<ShiftDto>.Failure(
                         $"This shift is already closed (closed at {shift.ClosedAt:g}).");
                 }
 
-                // Update shift closing details
                 shift.ClosingCash = closingCash;
                 shift.ClosedAt = DateTime.Now;
-                shift.Status = ShiftStatus.Closed;
+                shift.Status = DAL.Entities.ShiftStatus.Closed;
 
-                // Calculate expected cash: opening cash + sum of cash payments for transactions in this shift
                 var payments = (await _paymentService.GetAllPaymentsAsync()).ToList();
                 var transactions = (await _transactionRepository.GetAllAsync()).ToList();
                 var txIdsInShift = transactions
@@ -147,18 +139,45 @@ namespace BLL.Services
                 shift.CashDifference = closingCash - shift.ExpectedCash;
 
                 await _shiftrepo.UpdateAsync(shift);
-                return Result<Shift>.Success(shift);
+                return Result<ShiftDto>.Success(MapToDto(shift));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to close shift {ShiftId}", shiftId);
-                return Result<Shift>.Failure($"Error closing shift: {ex.Message}");
+                return Result<ShiftDto>.Failure($"Error closing shift: {ex.Message}");
             }
         }
 
-        public async Task<IEnumerable<Shift>> GetLastShiftsAsync(int count)
+        public async Task<IEnumerable<ShiftDto>> GetLastShiftsAsync(int count)
         {
-            return await _shiftrepo.GetLastShiftsAsync(count);
+            var entities = await _shiftrepo.GetLastShiftsAsync(count);
+            return entities.Select(MapToDto);
         }
+
+        private static ShiftDto MapToDto(Shift e) => new()
+        {
+            ShiftId = e.ShiftId,
+            UserId = e.UserId,
+            OpenedAt = e.OpenedAt,
+            ClosedAt = e.ClosedAt,
+            OpeningCash = e.OpeningCash,
+            ClosingCash = e.ClosingCash,
+            ExpectedCash = e.ExpectedCash,
+            CashDifference = e.CashDifference,
+            Status = (Contracts.Enum.ShiftStatus)(byte)e.Status
+        };
+
+        private static Shift MapToEntity(ShiftDto d) => new()
+        {
+            ShiftId = d.ShiftId,
+            UserId = d.UserId,
+            OpenedAt = d.OpenedAt,
+            ClosedAt = d.ClosedAt,
+            OpeningCash = d.OpeningCash,
+            ClosingCash = d.ClosingCash,
+            ExpectedCash = d.ExpectedCash,
+            CashDifference = d.CashDifference,
+            Status = (DAL.Entities.ShiftStatus)(byte)d.Status
+        };
     }
 }

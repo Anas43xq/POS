@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using BLL.DTOs;
 using BLL.Interfaces;
 using UI.Commands;
 using UI.Views;
@@ -119,7 +120,7 @@ namespace UI.ViewModels
             ApplyFilters();
         }
 
-        private CategoryCardViewModel ToCategoryCard(DAL.Entities.Category category)
+        private CategoryCardViewModel ToCategoryCard(CategoryDto category)
         {
             var card = new CategoryCardViewModel
             {
@@ -130,7 +131,7 @@ namespace UI.ViewModels
                 IsExpanded = false
             };
 
-            int totalProducts = category.Products?.Count ?? 0;
+            int totalProducts = category.ProductCount;
 
             if (category.ChildCategories != null)
             {
@@ -139,9 +140,9 @@ namespace UI.ViewModels
                     card.Subcategories.Add(new SubcategoryCardViewModel
                     {
                         Name = child.Name,
-                        CountLabel = $"{child.Products?.Count ?? 0} products"
+                        CountLabel = $"{child.ProductCount} products"
                     });
-                    totalProducts += child.Products?.Count ?? 0;
+                    totalProducts += child.ProductCount;
                 }
             }
 

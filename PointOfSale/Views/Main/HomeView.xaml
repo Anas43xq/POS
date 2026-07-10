@@ -93,36 +93,35 @@
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
 
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Today" IsChecked="True"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Today}" IsChecked="True"
                                  Command="{Binding FilterTodayCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="This Week"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.ThisWeek}"
                                  Command="{Binding FilterThisWeekCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="This Month"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.ThisMonth}"
                                  Command="{Binding FilterMonthCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Period"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
                                  Command="{Binding ShowPeriodFilterCommand}"/>
 
                     <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="6,0"/>
 
-                    <TextBlock Text="From" FontSize="11" Foreground="{StaticResource TextMuted}"
+                    <TextBlock Text="{DynamicResource Common.From}" FontSize="11" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <DatePicker Style="{StaticResource DateInput}"
                                 SelectedDate="{Binding PeriodFromDate}"
                                 Margin="0,0,12,0"/>
 
-                    <TextBlock Text="To" FontSize="11" Foreground="{StaticResource TextMuted}"
+                    <TextBlock Text="{DynamicResource Common.To}" FontSize="11" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <DatePicker Style="{StaticResource DateInput}"
                                 SelectedDate="{Binding PeriodToDate}"
                                 Margin="0,0,12,0"/>
 
                     <Button Style="{StaticResource ApplyBtn}"
-                            Content="Apply"
+                            Content="{DynamicResource Common.Apply}"
                             Command="{Binding ApplyPeriodFilterCommand}"/>
                 </StackPanel>
 
                 <Button Grid.Column="1"
-                        Content="🔄 Refresh"
                         Height="34"
                         Padding="16,0"
                         FontSize="12"
@@ -131,7 +130,12 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         Command="{Binding RefreshCommand}"
-                        HorizontalAlignment="Right"/>
+                        HorizontalAlignment="Right">
+                    <TextBlock>
+                        <Run Text="🔄 "/>
+                        <Run Text="{DynamicResource Common.Refresh}"/>
+                    </TextBlock>
+                </Button>
             </Grid>
         </Border>
 
@@ -160,13 +164,16 @@
                 <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="0,0,0,10">
                     <StackPanel>
                         <Border Style="{StaticResource CardHeaderBorder}">
-                            <TextBlock Text="📈  Key metrics" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Style="{StaticResource CardTitle}">
+                                <Run Text="📈  "/>
+                                <Run Text="{DynamicResource Manager.Home.KeyMetrics}"/>
+                            </TextBlock>
                         </Border>
 
                         <UniformGrid Columns="2" Margin="12,10,12,6">
                             <Border Style="{StaticResource KpiTile}" Margin="0,0,5,5">
                                 <StackPanel>
-                                    <TextBlock Text="TOTAL SALES" Style="{StaticResource KpiLabel}"/>
+                                    <TextBlock Text="{DynamicResource Manager.Home.KpiTotalSales}" Style="{StaticResource KpiLabel}"/>
                                     <controls:CurrencyText
                                            Amount="{Binding TotalSales}"
                                            Style="{StaticResource KpiValueCurrency}"/>
@@ -174,7 +181,7 @@
                             </Border>
                             <Border Style="{StaticResource KpiTile}" Margin="5,0,0,5">
                                 <StackPanel>
-                                    <TextBlock Text="AVG. SALE" Style="{StaticResource KpiLabel}"/>
+                                    <TextBlock Text="{DynamicResource Manager.Home.KpiAverageSale}" Style="{StaticResource KpiLabel}"/>
                                     <controls:CurrencyText
                                            Amount="{Binding AverageSales}"
                                            Style="{StaticResource KpiValueCurrency}"/>
@@ -182,7 +189,7 @@
                             </Border>
                             <Border Style="{StaticResource KpiTile}" Margin="0,0,5,0">
                                 <StackPanel>
-                                    <TextBlock Text="TOTAL CASH" Style="{StaticResource KpiLabel}"/>
+                                    <TextBlock Text="{DynamicResource Manager.Home.KpiTotalCash}" Style="{StaticResource KpiLabel}"/>
                                     <controls:CurrencyText
                                            Amount="{Binding TotalCash}"
                                            Style="{StaticResource KpiValueCurrency}"
@@ -191,7 +198,7 @@
                             </Border>
                             <Border Style="{StaticResource KpiTile}" Margin="5,0,0,0">
                                 <StackPanel>
-                                    <TextBlock Text="TOTAL CARD" Style="{StaticResource KpiLabel}"/>
+                                    <TextBlock Text="{DynamicResource Manager.Home.KpiTotalCard}" Style="{StaticResource KpiLabel}"/>
                                     <controls:CurrencyText
                                            Amount="{Binding TotalCard}"
                                            Style="{StaticResource KpiValueCurrency}"
@@ -206,7 +213,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="TOTAL ORDERS" Style="{StaticResource KpiLabel}"
+                                <TextBlock Text="{DynamicResource Manager.Home.KpiTotalOrders}" Style="{StaticResource KpiLabel}"
                                            Margin="0" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1"
                                            Text="{Binding TotalOrders}"
@@ -227,7 +234,10 @@
                         </Grid.RowDefinitions>
 
                         <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}">
-                            <TextBlock Text="🏆  Top products" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Style="{StaticResource CardTitle}">
+                                <Run Text="🏆  "/>
+                                <Run Text="{DynamicResource Manager.Home.TopProducts}"/>
+                            </TextBlock>
                         </Border>
 
                         <ScrollViewer Grid.Row="1" Padding="12,4,12,8" VerticalScrollBarVisibility="Auto">
@@ -237,8 +247,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="PRODUCT" Style="{StaticResource ColLabel}"/>
-                                    <TextBlock Grid.Column="1" Text="SALES" Style="{StaticResource ColLabel}"/>
+                                    <TextBlock Text="{DynamicResource Manager.Home.ColProduct}" Style="{StaticResource ColLabel}"/>
+                                    <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColSales}" Style="{StaticResource ColLabel}"/>
                                 </Grid>
                                 <Border BorderBrush="#E8F3FF" BorderThickness="0,0,0,0.5" Margin="0,0,0,4"/>
 
@@ -287,10 +297,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="👥  Shift summary" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Style="{StaticResource CardTitle}">
+                                <Run Text="👥  "/>
+                                <Run Text="{DynamicResource Manager.Home.ShiftSummary}"/>
+                            </TextBlock>
                             <Button Grid.Column="1"
                                     Style="{StaticResource CardActionBtn}"
-                                    Content="View all"
+                                    Content="{DynamicResource Manager.Home.ViewAll}"
                                     Command="{Binding OpenShiftManagementCommand}"/>
                         </Grid>
                     </Border>
@@ -300,8 +313,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="CASHIER" Style="{StaticResource ColLabel}"/>
-                        <TextBlock Grid.Column="1" Text="CASH DIFF." Style="{StaticResource ColLabel}"/>
+                        <TextBlock Text="{DynamicResource Manager.Home.ColCashier}" Style="{StaticResource ColLabel}"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColCashDifference}" Style="{StaticResource ColLabel}"/>
                     </Grid>
                     <Border Grid.Row="1" BorderBrush="#E8F3FF" BorderThickness="0,0,0,0.5"
                             Margin="12,26,12,0" VerticalAlignment="Top"/>
@@ -336,9 +349,9 @@
                                                 </TextBlock>
                                             </Grid>
                                             <TextBlock FontSize="10" Foreground="{StaticResource TextMuted}" Margin="0,2,0,0">
-                                                <Run Text="Open "/>
+                                                <Run Text="{DynamicResource Common.Open}"/><Run Text=" "/>
                                                 <Run Text="{Binding OpenedAt, StringFormat=HH:mm}"/>
-                                                <Run Text="  ·  Close "/>
+                                                <Run Text="  ·  "/><Run Text="{DynamicResource Common.Close}"/><Run Text=" "/>
                                                 <Run Text="{Binding ClosedAtDisplay}"/>
                                             </TextBlock>
                                         </StackPanel>
@@ -367,10 +380,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="📃  Recent transactions" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Style="{StaticResource CardTitle}">
+                                <Run Text="📃  "/>
+                                <Run Text="{DynamicResource Manager.Home.RecentTransactions}"/>
+                            </TextBlock>
                             <Button Grid.Column="1"
                                     Style="{StaticResource CardActionBtn}"
-                                    Content="Show all"
+                                    Content="{DynamicResource Manager.Home.ShowAll}"
                                     Command="{Binding ShowAllTransactionsCommand}"/>
                         </Grid>
                     </Border>
@@ -382,10 +398,10 @@
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="75"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="RECEIPT" Style="{StaticResource ColLabel}"/>
-                        <TextBlock Grid.Column="1" Text="AMOUNT" Style="{StaticResource ColLabel}"/>
-                        <TextBlock Grid.Column="2" Text="PAYMENT" Style="{StaticResource ColLabel}"/>
-                        <TextBlock Grid.Column="3" Text="DATE" Style="{StaticResource ColLabel}" TextAlignment="Right"/>
+                        <TextBlock Text="{DynamicResource Manager.Home.ColReceipt}" Style="{StaticResource ColLabel}"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColAmount}" Style="{StaticResource ColLabel}"/>
+                        <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Home.ColPayment}" Style="{StaticResource ColLabel}"/>
+                        <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Home.ColDate}" Style="{StaticResource ColLabel}" TextAlignment="Right"/>
                     </Grid>
                     <Border Grid.Row="1" BorderBrush="#E8F3FF" BorderThickness="0,0,0,0.5"
                             Margin="12,26,12,0" VerticalAlignment="Top"/>

@@ -1,6 +1,6 @@
 using BLL.Interfaces;
 using BLL.Models;
-using DAL.Entities;
+using BLL.DTOs;
 using Microsoft.Extensions.Logging;
 using POS.Contracts.Localization;
 using System;
@@ -117,7 +117,7 @@ namespace UI.ViewModels
             IsLoading = true;
             try
             {
-                Result<User> result = await _authService.LoginAsync(Username, _password);
+                Result<UserDto> result = await _authService.LoginAsync(Username, _password);
 
                 if (result.IsSuccess)
                 {

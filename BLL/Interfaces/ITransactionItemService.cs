@@ -1,16 +1,16 @@
-using DAL.Entities;
+using BLL.DTOs;
 
 namespace BLL.Interfaces
 {
     public interface ITransactionItemService
     {
-        Task<IEnumerable<TransactionItem>> GetAllTransactionItemsAsync();
+        Task<IEnumerable<TransactionItemDto>> GetAllTransactionItemsAsync();
 
-        Task<TransactionItem?> GetTransactionItemByIdAsync(int id);
+        Task<TransactionItemDto?> GetTransactionItemByIdAsync(int id);
 
-        Task AddTransactionItemAsync(TransactionItem TransactionItem);
+        Task AddTransactionItemAsync(TransactionItemDto TransactionItem);
 
-        Task UpdateTransactionItemAsync(TransactionItem TransactionItem);
+        Task UpdateTransactionItemAsync(TransactionItemDto TransactionItem);
 
         Task DeleteTransactionItemAsync(int id);
     }

@@ -1,6 +1,6 @@
 ﻿using BLL.Interfaces;
 using Contracts.Sales;
-using DAL.Entities;
+using Contracts.Enum;
 using DAL.Interfaces;
 
 namespace BLL.Services
@@ -23,7 +23,7 @@ namespace BLL.Services
             if (!_sessionService.IsAuthenticated)
                 throw new InvalidOperationException("Not logged in");
 
-            if (!string.Equals(_sessionService.CurrentUser?.Role?.RoleName, "Cashier", StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(_sessionService.CurrentUser?.RoleName, "Cashier", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Only cashier allowed");
 
             if (_sessionService.CurrentShift?.Status != ShiftStatus.Open)

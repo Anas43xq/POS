@@ -25,7 +25,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Reports"
+                    <TextBlock Text="{DynamicResource Manager.Reports.Title}"
                                FontSize="20"
                                FontWeight="SemiBold"
                                Foreground="#333333"
@@ -35,20 +35,20 @@
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center">
-                        <RadioButton Content="Sales Mode"
+                        <RadioButton Content="{DynamicResource Manager.Reports.SalesMode}"
                                      GroupName="ReportMode"
                                      IsChecked="{Binding IsSalesMode}"
                                      Margin="0,0,12,0"
                                      FontSize="13"
                                      Foreground="#555555"/>
-                        <RadioButton Content="Product Mode"
+                        <RadioButton Content="{DynamicResource Manager.Reports.ProductMode}"
                                      GroupName="ReportMode"
                                      IsChecked="{Binding IsProductMode}"
                                      Margin="0,0,16,0"
                                      FontSize="13"
                                      Foreground="#555555"/>
 
-                        <Button Content="Generate and Export"
+                        <Button Content="{DynamicResource Manager.Reports.GenerateExport}"
                                 Command="{Binding ReportCommand}"
                                 CommandParameter="GenerateAndExport"
                                 Padding="14,6"
@@ -69,7 +69,7 @@
                         Margin="0,10,0,0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Today"
+                            <Button Content="{DynamicResource Common.Today}"
                                     Command="{Binding FilterTodayCommand}"
                                     Padding="14,6"
                                     Margin="0,0,8,0"
@@ -79,7 +79,7 @@
                                     Foreground="#1F2328"
                                     BorderThickness="0"
                                     Cursor="Hand"/>
-                            <Button Content="This Week"
+                            <Button Content="{DynamicResource Common.ThisWeek}"
                                     Command="{Binding FilterThisWeekCommand}"
                                     Padding="14,6"
                                     Margin="0,0,8,0"
@@ -89,7 +89,7 @@
                                     Foreground="#1F2328"
                                     BorderThickness="0"
                                     Cursor="Hand"/>
-                            <Button Content="This Month"
+                            <Button Content="{DynamicResource Common.ThisMonth}"
                                     Command="{Binding FilterMonthCommand}"
                                     Padding="14,6"
                                     Margin="0,0,8,0"
@@ -99,7 +99,7 @@
                                     Foreground="#1F2328"
                                     BorderThickness="0"
                                     Cursor="Hand"/>
-                            <Button Content="Period"
+                            <Button Content="{DynamicResource Common.Period}"
                                     Command="{Binding ShowPeriodFilterCommand}"
                                     Padding="14,6"
                                     Margin="0,0,0,0"
@@ -120,7 +120,7 @@
                             <StackPanel Orientation="Horizontal"
                                         Visibility="{Binding ProductGridVisibility}"
                                         Margin="12,0,0,0">
-                                <TextBlock Text="Product:" VerticalAlignment="Center" Margin="0,0,6,0"
+                                <TextBlock Text="{DynamicResource Manager.Reports.ProductLabel}" VerticalAlignment="Center" Margin="0,0,6,0"
                                            Foreground="#6B7280" FontSize="12"/>
                                 <ComboBox ItemsSource="{Binding Products}"
                                           SelectedItem="{Binding SelectedProduct}"
@@ -174,7 +174,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Total Orders"
+                                <TextBlock Text="{DynamicResource Manager.Reports.TotalOrders}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding TotalOrders}"
@@ -193,7 +193,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Total Sales"
+                                <TextBlock Text="{DynamicResource Manager.Reports.TotalSales}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding TotalSales}"
@@ -212,7 +212,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Cash Total"
+                                <TextBlock Text="{DynamicResource Manager.Reports.CashTotal}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding CashTotal}"
@@ -231,7 +231,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Card Total"
+                                <TextBlock Text="{DynamicResource Manager.Reports.CardTotal}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding CardTotal}"
@@ -267,7 +267,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Total Qty Sold"
+                                <TextBlock Text="{DynamicResource Manager.Reports.TotalQuantitySold}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding TotalQuantitySold}"
@@ -286,7 +286,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Total Revenue"
+                                <TextBlock Text="{DynamicResource Manager.Reports.TotalRevenue}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding TotalRevenue}"
@@ -305,7 +305,7 @@
                                 Margin="4"
                                 Background="#F8FAFF">
                             <StackPanel>
-                                <TextBlock Text="Average Price"
+                                <TextBlock Text="{DynamicResource Manager.Reports.AveragePrice}"
                                            FontSize="11"
                                            Foreground="#6B7280"/>
                                 <TextBlock Text="{Binding AveragePrice}"
@@ -350,19 +350,19 @@
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Receipt Number"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColReceiptNumber}"
                                             Binding="{Binding ReceiptNumber}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Date &#38; Time"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColDateTime}"
                                             Binding="{Binding TransactionDate, StringFormat={}{0:g}}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Payment Method"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColPaymentMethod}"
                                             Binding="{Binding PaymentMethod}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Grand Total"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColGrandTotal}"
                                             Binding="{Binding GrandTotal, StringFormat={}{0:N2}}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Note"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColNote}"
                                             Binding="{Binding Note}"
                                             Width="*"/>
                     </DataGrid.Columns>
@@ -400,19 +400,19 @@
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Receipt Number"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColReceiptNumber}"
                                             Binding="{Binding ReceiptNumber}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Date &#38; Time"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColDateTime}"
                                             Binding="{Binding TransactionDate, StringFormat={}{0:g}}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Payment Method"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColPaymentMethod}"
                                             Binding="{Binding PaymentMethod}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Quantity"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColQuantity}"
                                             Binding="{Binding Quantity}"
                                             Width="*"/>
-                        <DataGridTextColumn Header="Line Total"
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColLineTotal}"
                                             Binding="{Binding LineTotal, StringFormat={}{0:N2}}"
                                             Width="*"/>
                     </DataGrid.Columns>

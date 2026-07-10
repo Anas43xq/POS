@@ -1,0 +1,13 @@
+using BLL.DTOs;
+
+namespace BLL.Interfaces
+{
+    public interface ICategoryTranslationService
+    {
+        Task<IEnumerable<CategoryTranslationDto>> GetByCategoryIdAsync(int categoryId);
+
+        Task<CategoryTranslationDto?> GetByNameAndLanguageCodeAsync(string name, string languageCode);
+
+        Task<CategoryTranslationDto?> GetByIdAndLanguageCodeAsync(int categoryId, string languageCode);
+    }
+}

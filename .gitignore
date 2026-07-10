@@ -191,3 +191,4 @@ mono_crash.*
 *.vspx
 *.v11.suo
 *.ncrunch*
+zip-manager-views.ps1

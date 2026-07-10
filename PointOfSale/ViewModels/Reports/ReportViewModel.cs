@@ -1,5 +1,5 @@
 ﻿using BLL.Interfaces;
-using DAL.Entities;
+using BLL.DTOs;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -48,8 +48,8 @@ namespace UI.ViewModels
 
             ReportCommand = new RelayCommand<string>(OnReportAction, _ => !_isLoading);
 
-            TransactionReports = new ObservableCollection<TransactionReportEntity>();
-            ProductReports = new ObservableCollection<ProductReportEntity>();
+            TransactionReports = new ObservableCollection<TransactionReportDto>();
+            ProductReports = new ObservableCollection<ProductReportDto>();
             Products = new ObservableCollection<object>();
 
             IsSalesMode = true;
@@ -223,8 +223,8 @@ namespace UI.ViewModels
         // ================================================================
         // COLLECTIONS
         // ================================================================
-        public ObservableCollection<TransactionReportEntity> TransactionReports { get; }
-        public ObservableCollection<ProductReportEntity> ProductReports { get; }
+        public ObservableCollection<TransactionReportDto> TransactionReports { get; }
+        public ObservableCollection<ProductReportDto> ProductReports { get; }
         public ObservableCollection<object> Products { get; }
     }
 }

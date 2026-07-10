@@ -1,6 +1,6 @@
 using BLL.Interfaces;
 using Contracts.Transactions;
-using DAL.Entities;
+using Contracts.Enum;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;

@@ -1,3 +1,4 @@
+using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Models;
 using Contracts.Transactions;
@@ -32,19 +33,21 @@ namespace BLL.Services
             return await _transactionRepository.GetTransactionsListAsync(request, ct);
         }
 
-        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync()
         {
-            return await _transactionRepository.GetAllAsync();
+            var entities = await _transactionRepository.GetAllAsync();
+            return entities.Select(MapToDto);
         }
 
-        public async Task<Transaction?> GetTransactionByIdAsync(int id)
+        public async Task<TransactionDto?> GetTransactionByIdAsync(int id)
         {
-            return await _transactionRepository.GetByIdAsync(id);
+            var entity = await _transactionRepository.GetByIdAsync(id);
+            return entity is null ? null : MapToDto(entity);
         }
 
-        public async Task UpdateTransactionAsync(Transaction transaction)
+        public async Task UpdateTransactionAsync(TransactionDto transaction)
         {
-            await _transactionRepository.UpdateAsync(transaction);
+            await _transactionRepository.UpdateAsync(MapToEntity(transaction));
         }
 
         public async Task DeleteTransactionAsync(int id)
@@ -52,51 +55,33 @@ namespace BLL.Services
             await _transactionRepository.DeleteAsync(id);
         }
 
-        /// <summary>
-        /// Voids a completed transaction.  Delegates to the repository's
-        /// atomic <c>ExecuteUpdateAsync</c> — the status guard lives in the
-        /// SQL WHERE clause so a race with a concurrent update is safe.
-        /// </summary>
-        public async Task<Result<Transaction>> VoidTransactionAsync(int transactionId)
+        public async Task<Result<TransactionDto>> VoidTransactionAsync(int transactionId)
         {
             if (transactionId <= 0)
-                return Result<Transaction>.Failure("Invalid transaction id.");
+                return Result<TransactionDto>.Failure("Invalid transaction id.");
 
             bool updated = await _transactionRepository.VoidTransactionAsync(transactionId);
             if (!updated)
             {
-                // Either the row doesn't exist or its status is no longer
-                // Completed.  Disambiguate by re-reading so the user gets a
-                // helpful message.
                 var current = await _transactionRepository.GetByIdAsync(transactionId);
                 if (current == null)
-                    return Result<Transaction>.Failure("Transaction not found.");
+                    return Result<TransactionDto>.Failure("Transaction not found.");
 
-                return Result<Transaction>.Failure(
+                return Result<TransactionDto>.Failure(
                     $"Only completed transactions can be voided (current status: {current.Status}).");
             }
 
             var voided = await _transactionRepository.GetByIdAsync(transactionId);
-            return Result<Transaction>.Success(voided!);
+            return Result<TransactionDto>.Success(MapToDto(voided!));
         }
 
-        /// <summary>
-        /// Creates a new transaction with strict shift validation.
-        /// Rule: Transactions can only be created if the shift is OPEN.
-        /// </summary>
         public async Task<int> CreateTransactionAsync(CreateTransactionRequest request)
         {
             ValidateCreateTransactionRequest(request);
-
-            // Validate shift is open
             await ValidateShiftIsOpenAsync(request.ShiftId);
-
             return await _transactionCommandRepository.CreateTransactionAsync(request);
         }
 
-        /// <summary>
-        /// Validates the transaction request has all required fields.
-        /// </summary>
         private static void ValidateCreateTransactionRequest(CreateTransactionRequest request)
         {
             if (request == null)
@@ -118,21 +103,43 @@ namespace BLL.Services
                 throw new InvalidOperationException("Cash received is less than total.");
         }
 
-        /// <summary>
-        /// Validates that the shift exists and is in Open status.
-        /// Throws an exception if shift is not open.
-        /// </summary>
         private async Task ValidateShiftIsOpenAsync(int shiftId)
         {
             var shift = await _shiftRepository.GetByIdAsync(shiftId);
 
             if (shift == null)
-                throw new InvalidOperationException(
-                    "No active shift. Please start a shift first.");
+                throw new InvalidOperationException("No active shift. Please start a shift first.");
 
             if (shift.Status != ShiftStatus.Open)
-                throw new InvalidOperationException(
-                    "No active shift. Please start a shift first.");
+                throw new InvalidOperationException("No active shift. Please start a shift first.");
         }
+
+        private static TransactionDto MapToDto(Transaction e) => new()
+        {
+            TransactionId = e.TransactionId,
+            ReceiptNumber = e.ReceiptNumber,
+            ShiftId = e.ShiftId,
+            CashierId = e.CashierId,
+            TransactionDate = e.TransactionDate,
+            Subtotal = e.Subtotal,
+            TaxTotal = e.TaxTotal,
+            GrandTotal = e.GrandTotal,
+            Status = (Contracts.Enum.TransactionStatus)(byte)e.Status,
+            Notes = e.Notes
+        };
+
+        private static Transaction MapToEntity(TransactionDto d) => new()
+        {
+            TransactionId = d.TransactionId,
+            ReceiptNumber = d.ReceiptNumber,
+            ShiftId = d.ShiftId,
+            CashierId = d.CashierId,
+            TransactionDate = d.TransactionDate,
+            Subtotal = d.Subtotal,
+            TaxTotal = d.TaxTotal,
+            GrandTotal = d.GrandTotal,
+            Status = (DAL.Entities.TransactionStatus)(byte)d.Status,
+            Notes = d.Notes
+        };
     }
 }

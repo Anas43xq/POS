@@ -10,7 +10,7 @@ namespace DAL.Entities
 
         public int TransactionId { get; set; }
 
-        public int ProductId { get; set; }
+        public int VariantId { get; set; }
 
         public string ProductName { get; set; } = string.Empty;
 
@@ -31,6 +31,6 @@ namespace DAL.Entities
 
         public Transaction? Transaction { get; set; }
 
-        public Product? Product { get; set; }
+        public ProductVariant ProductVariant { get; set; } = null!;
     }
 }

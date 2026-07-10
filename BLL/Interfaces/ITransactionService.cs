@@ -1,6 +1,6 @@
+using BLL.DTOs;
 using BLL.Models;
 using Contracts.Transactions;
-using DAL.Entities;
 
 namespace BLL.Interfaces
 {
@@ -10,20 +10,20 @@ namespace BLL.Interfaces
             GetTransactionsListRequest request,
             CancellationToken ct = default);
 
-        Task<IEnumerable<Transaction>> GetAllTransactionsAsync();
+        Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync();
 
-        Task<Transaction?> GetTransactionByIdAsync(int id);
+        Task<TransactionDto?> GetTransactionByIdAsync(int id);
 
-        Task UpdateTransactionAsync(Transaction transaction);
+        Task UpdateTransactionAsync(TransactionDto transaction);
 
         Task DeleteTransactionAsync(int id);
 
         Task<int> CreateTransactionAsync(CreateTransactionRequest request);
 
         /// <summary>
-        /// Voids a completed transaction, flipping its status to <see cref="DAL.Entities.TransactionStatus.Voided"/>.
-        /// Returns a failure Result if the transaction does not exist or is not in <see cref="DAL.Entities.TransactionStatus.Completed"/>.
+        /// Voids a completed transaction.
+        /// Returns a failure Result if the transaction does not exist or is not completed.
         /// </summary>
-        Task<Result<DAL.Entities.Transaction>> VoidTransactionAsync(int transactionId);
+        Task<Result<TransactionDto>> VoidTransactionAsync(int transactionId);
     }
 }

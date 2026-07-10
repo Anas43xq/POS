@@ -1,8 +1,9 @@
-﻿using BLL.Interfaces;
+﻿using BLL.DTOs;
+using BLL.Interfaces;
 using BLL.Models;
 using Contracts.Sales;
 using Contracts.Transactions;
-using DAL.Entities;
+using Contracts.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,7 +63,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
     /// <summary>
     /// Gets whether a shift is currently open.
     /// </summary>
-    public bool IsShiftOpen => _session.CurrentShift?.Status == DAL.Entities.ShiftStatus.Open;
+        public bool IsShiftOpen => _session.CurrentShift?.Status == Contracts.Enum.ShiftStatus.Open;
 
     /// <summary>
     /// Gets whether the Start Day button should be enabled (no shift open).
@@ -123,7 +124,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
     public string CartCountDisplay =>
         _localization.GetString("Common.ItemsCount", SaleItemsCount);
 
-    public ObservableCollection<Product> Products { get; } = new();
+    public ObservableCollection<ProductDto> Products { get; } = new();
 
     public ICollectionView ProductsView { get; }
 
@@ -140,30 +141,35 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     public ObservableCollection<CartItem> SaleItems { get; } = new();
 
-    public ObservableCollection<Category> Categories { get; } = new();
+        public ObservableCollection<CategoryDto> Categories { get; } = new();
 
-    public ObservableCollection<Category> SubCategories { get; } = new();
+        public ObservableCollection<CategoryDto> SubCategories { get; } = new();
 
-    public IEnumerable<Category> VisibleSubCategories
+        public IEnumerable<CategoryDto> VisibleSubCategories
     {
         get
         {
             if (SelectedCategory == null || SelectedCategory.CategoryId == 0)
-                return Enumerable.Empty<Category>();
+                return Enumerable.Empty<CategoryDto>();
 
             if (SelectedCategory.ChildCategories?.Any() == true)
                 return SelectedCategory.ChildCategories;
 
-            return SelectedCategory.ParentCategory?.ChildCategories
-                ?.Where(c => c.CategoryId != SelectedCategory.CategoryId)
-                ?? Enumerable.Empty<Category>();
+            if (SelectedCategory.ParentCategoryId.HasValue)
+            {
+                var parent = Categories.FirstOrDefault(c => c.CategoryId == SelectedCategory.ParentCategoryId.Value);
+                if (parent?.ChildCategories != null)
+                    return parent.ChildCategories.Where(c => c.CategoryId != SelectedCategory.CategoryId);
+            }
+
+            return Enumerable.Empty<CategoryDto>();
         }
     }
 
     public ObservableCollection<RecentTransactionDto> RecentSales { get; } = new();
 
-    private Category? _selectedCategory;
-    public Category? SelectedCategory
+        private CategoryDto? _selectedCategory;
+        public CategoryDto? SelectedCategory
     {
         get => _selectedCategory;
         set
@@ -287,7 +293,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
         SaleItems.CollectionChanged += SaleItems_CollectionChanged;
 
-        AddProductCommand = new AsyncRelayCommand<Product>(
+        AddProductCommand = new AsyncRelayCommand<ProductDto>(
             AddProductAsync,
             product => product != null && product.IsActive && IsShiftOpen);
 
@@ -311,9 +317,9 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
             ShowSetting = new AsyncRelayCommand(OpenSetting);
 
-        SelectCategoryCommand = new AsyncRelayCommand<Category>(SelectParentCategoryAsync);
+        SelectCategoryCommand = new AsyncRelayCommand<CategoryDto>(SelectParentCategoryAsync);
 
-        SelectSubCategoryCommand = new AsyncRelayCommand<Category>(SelectSubCategoryAsync);
+        SelectSubCategoryCommand = new AsyncRelayCommand<CategoryDto>(SelectSubCategoryAsync);
 
         PayCashCommand = new AsyncRelayCommand(
             PayCashAsync,

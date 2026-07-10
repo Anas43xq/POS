@@ -47,6 +47,10 @@ public static class DependencyInjection
         services.AddScoped<IKpiRepository, KpiRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
 
+        services.AddScoped<ICategoryTranslationRepository, CategoryTranslationRepository>();
+        services.AddScoped<IProductTranslationRepository, ProductTranslationRepository>();
+        services.AddScoped<ISizeTranslationRepository, SizeTranslationRepository>();
+
         return services;
     }
 }

@@ -44,8 +44,18 @@ namespace DAL.Configurations
                    .HasForeignKey(p => p.TaxRateId)
                    .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(p => p.ProductTranslations)
+                   .WithOne(t => t.Product)
+                   .HasForeignKey(t => t.ProductId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(p => p.ProductVariants)
+                   .WithOne(v => v.Product)
+                   .HasForeignKey(v => v.ProductId)
+                   .OnDelete(DeleteBehavior.NoAction);
+
             builder.Property(p => p.TaxRateId)
             .HasColumnName("TaxRateId");
         }
     }
-}   
+}

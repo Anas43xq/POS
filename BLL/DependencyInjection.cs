@@ -35,6 +35,10 @@ public static  class DependencyInjection
         services.AddSingleton<ICurrencyService, CurrencyService>();
         services.AddScoped<IReportService, ReportService>();
 
+        services.AddScoped<ICategoryTranslationService, CategoryTranslationService>();
+        services.AddScoped<IProductTranslationService, ProductTranslationService>();
+        services.AddScoped<ISizeTranslationService, SizeTranslationService>();
+
         services.AddSingleton<ISettingsService, UI.Services.SettingsService>();
 
         return services;

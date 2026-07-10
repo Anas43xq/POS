@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using BLL.Interfaces;
-using DAL.Entities;
+using BLL.DTOs;
 using UI.Commands;
 
 namespace UI.ViewModels

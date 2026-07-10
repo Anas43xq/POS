@@ -1,6 +1,6 @@
+using BLL.DTOs;
 using BLL.Models;
 using Contracts.Transactions;
-using DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,13 +12,14 @@ namespace UI.ViewModels
 {
     public partial class CashierDashboardViewModel
     {
-        private async Task AddProductAsync(Product? product)
+        private async Task AddProductAsync(ProductDto? product)
         {
             if (product == null)
                 return;
 
             CartItem? existingItem = SaleItems
-                .FirstOrDefault(item => item.ProductId == product.ProductId);
+                .FirstOrDefault(item => item.VariantId == product.VariantId
+                                    && item.UnitPrice == product.UnitPrice);
 
             if (existingItem != null)
             {
@@ -28,11 +29,11 @@ namespace UI.ViewModels
             {
                 CartItem item = new CartItem
                 {
-                    ProductId = product.ProductId,
-                    ProductName = product.Name,
+                    VariantId = product.VariantId,
+                    ProductName = product.DisplayName,
                     Quantity = 1,
                     UnitPrice = product.UnitPrice,
-                    TaxRate = product.TaxRate?.Rate ?? 0m
+                    TaxRate = product.TaxRate
                 };
                 SaleItems.Add(item);
             }
@@ -179,7 +180,7 @@ namespace UI.ViewModels
             return SaleItems
                 .Select(item => new CreateTransactionItemRequest
                 {
-                    ProductId = item.ProductId,
+                    VariantId = item.VariantId,
                     ProductName = item.ProductName,
                     UnitPrice = item.UnitPrice,
                     Quantity = item.Quantity,

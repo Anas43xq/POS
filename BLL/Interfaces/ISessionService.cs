@@ -1,11 +1,11 @@
-using DAL.Entities;
+using BLL.DTOs;
 
 namespace BLL.Interfaces
 {
     public interface ISessionService
     {
-        User? CurrentUser { get; set; }
-        Shift? CurrentShift { get; set; }
+        UserDto? CurrentUser { get; set; }
+        ShiftDto? CurrentShift { get; set; }
         bool IsAuthenticated { get; }
     }
 }

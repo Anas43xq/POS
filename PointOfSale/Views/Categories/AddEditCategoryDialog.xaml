@@ -10,7 +10,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Category"
+        Title="{DynamicResource Common.Category}"
         Width="440" Height="400"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
@@ -299,7 +299,7 @@
                 <StackPanel Grid.Row="2" Margin="18,16,18,8">
 
                     <!-- Name -->
-                        <TextBlock Text="Name" Style="{StaticResource ModalLabel}"/>
+                        <TextBlock Text="{DynamicResource Common.Name}" Style="{StaticResource ModalLabel}"/>
                     <Border Style="{StaticResource ModalInputBorder}" Margin="0,0,0,14">
                         <TextBox x:Name="NameBox"
                                  Style="{StaticResource FieldTextBox}"
@@ -312,19 +312,19 @@
                     </Border>
 
                     <!-- Parent Category -->
-                    <TextBlock Text="Parent Category" Style="{StaticResource ModalLabel}"/>
+                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryLabel}" Style="{StaticResource ModalLabel}"/>
                     <ComboBox Style="{StaticResource FieldComboBox}"
                               ItemsSource="{Binding ParentCategoryOptions}"
                               SelectedItem="{Binding SelectedParent}"
                               DisplayMemberPath="DisplayName"
                               Margin="0,0,0,4"/>
-                    <TextBlock Text="Leave as &quot;— None —&quot; to create a top-level category."
+                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryHint}"
                                FontSize="10"
                                Foreground="{StaticResource TextMuted}"
                                Margin="0,0,0,14"/>
 
                     <!-- Icon -->
-                    <TextBlock Text="Icon" Style="{StaticResource ModalLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.Icon}" Style="{StaticResource ModalLabel}"/>
                     <Border Style="{StaticResource ModalInputBorder}" Width="80" HorizontalAlignment="Left">
                         <TextBox Style="{StaticResource FieldTextBox}"
                                  Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"
@@ -349,11 +349,11 @@
                         Padding="18,12">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Style="{StaticResource CancelBtn}"
-                                Content="Cancel"
+                                Content="{DynamicResource Common.Cancel}"
                                 Margin="0,0,10,0"
                                 Command="{Binding CancelCommand}"/>
                         <Button Style="{StaticResource SaveBtn}"
-                                Content="Save"
+                                Content="{DynamicResource Common.Save}"
                                 Command="{Binding SaveCommand}"/>
                     </StackPanel>
                 </Border>

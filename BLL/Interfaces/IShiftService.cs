@@ -1,26 +1,26 @@
+using BLL.DTOs;
 using BLL.Models;
-using DAL.Entities;
 
 namespace BLL.Interfaces
 {
     public interface IShiftService
     {
-        Task<IEnumerable<Shift>> GetAllShiftsAsync();
+        Task<IEnumerable<ShiftDto>> GetAllShiftsAsync();
 
-        Task<Shift?> GetShiftByIdAsync(int id);
+        Task<ShiftDto?> GetShiftByIdAsync(int id);
 
-        Task AddShiftAsync(Shift Shift);
+        Task AddShiftAsync(ShiftDto Shift);
 
-        Task UpdateShiftAsync(Shift Shift);
+        Task UpdateShiftAsync(ShiftDto Shift);
 
         Task DeleteShiftAsync(int id);
 
-        Task<Result<Shift>> GetOpenShiftAsync(int userId);
+        Task<Result<ShiftDto>> GetOpenShiftAsync(int userId);
 
-        Task<Result<Shift>> OpenShiftAsync(int userId, decimal openingCash);
+        Task<Result<ShiftDto>> OpenShiftAsync(int userId, decimal openingCash);
 
-        Task<Result<Shift>> CloseShiftAsync(int shiftId, decimal closingCash);
+        Task<Result<ShiftDto>> CloseShiftAsync(int shiftId, decimal closingCash);
 
-        Task<IEnumerable<Shift>> GetLastShiftsAsync(int count);
+        Task<IEnumerable<ShiftDto>> GetLastShiftsAsync(int count);
     }
 }

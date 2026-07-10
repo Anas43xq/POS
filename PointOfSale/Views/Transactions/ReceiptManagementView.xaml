@@ -145,16 +145,16 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Receipt Management"
+                    <TextBlock Text="{DynamicResource Manager.Receipt.Title}"
                                Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Sales receipts, supplier purchases and receipt documents in one manager workspace."
+                    <TextBlock Text="{DynamicResource Manager.Receipt.Subtitle}"
                                FontSize="12"
                                Foreground="{StaticResource TextMuted}"
                                Margin="0,4,0,0"/>
                 </StackPanel>
                 <Button Grid.Column="1"
                         Style="{StaticResource OutlineBtn}"
-                        Content="↻ Refresh"
+                        Content="{DynamicResource Common.Refresh}"
                         Command="{Binding RefreshCommand}"/>
             </Grid>
         </Border>
@@ -177,45 +177,45 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="Search" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.Search}" Style="{StaticResource FieldLabel}"/>
                     <TextBox Style="{StaticResource FilterField}" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Padding="8,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                    <TextBlock Text="Date From" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.DateFrom}" Style="{StaticResource FieldLabel}"/>
                     <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding DateFrom}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Margin="0,0,10,0">
-                    <TextBlock Text="Date To" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.DateTo}" Style="{StaticResource FieldLabel}"/>
                     <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding DateTo}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="3" Margin="0,0,10,0">
-                    <TextBlock Text="Supplier" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.Supplier}" Style="{StaticResource FieldLabel}"/>
                     <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="CompanyName"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="4" Margin="0,0,10,0">
-                    <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.Category}" Style="{StaticResource FieldLabel}"/>
                     <TextBox Style="{StaticResource FilterField}" Text="{Binding CategoryFilter, UpdateSourceTrigger=PropertyChanged}" Padding="8,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="5" Margin="0,0,10,0">
-                    <TextBlock Text="Receipt Type" Style="{StaticResource FieldLabel}"/>
+                    <TextBlock Text="{DynamicResource Common.ReceiptType}" Style="{StaticResource FieldLabel}"/>
                     <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding ReceiptTypeFilterOptions}" SelectedItem="{Binding SelectedReceiptTypeFilter}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <Button Style="{StaticResource PrimaryBtn}" Content="Apply" Margin="0,0,8,0" Command="{Binding ApplyFiltersCommand}"/>
-                    <Button Style="{StaticResource OutlineBtn}" Content="Reset" Command="{Binding ResetFiltersCommand}"/>
+                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Apply}" Margin="0,0,8,0" Command="{Binding ApplyFiltersCommand}"/>
+                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Reset}" Command="{Binding ResetFiltersCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <Border Grid.Row="2" Style="{StaticResource CardBorder}">
             <TabControl Background="Transparent" BorderThickness="0" Padding="0" Margin="0">
-                <TabItem Header="Sales" Style="{StaticResource TabItemStyle}">
+                <TabItem Header="{DynamicResource Manager.Receipt.TabSales}" Style="{StaticResource TabItemStyle}">
                     <Grid Margin="0,8,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -233,10 +233,10 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Sales receipts" Style="{StaticResource SectionTitle}"/>
+                                <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Receipt.SalesReceiptsTitle}" Style="{StaticResource SectionTitle}"/>
                                 <Button Grid.Column="1"
                                         Style="{StaticResource OutlineBtn}"
-                                        Content="Open"
+                                        Content="{DynamicResource Common.Open}"
                                         Command="{Binding OpenSalesReceiptCommand}"/>
                             </Grid>
                         </Border>
@@ -256,17 +256,17 @@
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNumber}" Width="1.2*"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=d}" Width="1*"/>
-                                <DataGridTextColumn Header="Payment Method" Binding="{Binding PaymentMethod}" Width="1.2*"/>
-                                <DataGridTextColumn Header="Grand Total" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="1*"/>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="0.8*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColReceiptNumber}" Binding="{Binding ReceiptNumber}" Width="1.2*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.Date}" Binding="{Binding TransactionDate, StringFormat=d}" Width="1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.PaymentMethod}" Binding="{Binding PaymentMethod}" Width="1.2*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.GrandTotal}" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.Status}" Binding="{Binding Status}" Width="0.8*"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="VAT Purchases" Style="{StaticResource TabItemStyle}">
+                <TabItem Header="{DynamicResource Manager.Receipt.TabVatPurchases}" Style="{StaticResource TabItemStyle}">
                     <Grid Margin="0,8,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -285,13 +285,13 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="VAT purchase receipts" Style="{StaticResource SectionTitle}"/>
+                                <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Receipt.VatPurchaseReceiptsTitle}" Style="{StaticResource SectionTitle}"/>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="Add" Margin="0,0,8,0" Command="{Binding AddVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Edit" Margin="0,0,8,0" Command="{Binding EditVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Delete" Margin="0,0,8,0" Command="{Binding DeleteVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="View" Margin="0,0,8,0" Command="{Binding ViewVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Export" Command="{Binding ExportVatPurchasesCommand}"/>
+                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Edit}" Margin="0,0,8,0" Command="{Binding EditVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.View}" Margin="0,0,8,0" Command="{Binding ViewVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Export}" Command="{Binding ExportVatPurchasesCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -311,12 +311,12 @@
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Receipt" Binding="{Binding InvoiceNumber}" Width="1.1*"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat=d}" Width="1*"/>
-                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="1.3*"/>
-                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="1.2*"/>
-                                <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat=0.00}" Width="0.9*"/>
-                                <DataGridTextColumn Header="Grand Total" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="0.9*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColReceipt}" Binding="{Binding InvoiceNumber}" Width="1.1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.Date}" Binding="{Binding InvoiceDate, StringFormat=d}" Width="1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColSupplier}" Binding="{Binding SupplierName}" Width="1.3*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColCategory}" Binding="{Binding Category}" Width="1.2*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.Subtotal}" Binding="{Binding Subtotal, StringFormat=0.00}" Width="0.9*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColGrandTotal}" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="0.9*"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -359,57 +359,57 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,8">
-                                            <TextBlock Text="Supplier" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Supplier}" Style="{StaticResource FieldLabel}"/>
                                             <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="CompanyName" IsEnabled="{Binding IsFormEditable}"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,8">
-                                            <TextBlock Text="Receipt Number" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.ReceiptNumber}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
-                                            <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Date}" Style="{StaticResource FieldLabel}"/>
                                             <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding InvoiceDate}" IsEnabled="{Binding IsFormEditable}"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,8">
-                                            <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Category}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,10,8">
-                                            <TextBlock Text="Subtotal" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Subtotal}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Subtotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,8">
-                                            <TextBlock Text="VAT Rate" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Manager.Receipt.FieldVatRate}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding VatRate, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,10,8">
-                                            <TextBlock Text="VAT Amount" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Manager.Receipt.FieldVatAmount}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding VatAmount, StringFormat=N2}" IsReadOnly="True" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,10,8">
-                                            <TextBlock Text="Grand Total" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.GrandTotal}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding GrandTotal, StringFormat=N2}" IsReadOnly="True" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,8">
-                                            <TextBlock Text="Receipt Image" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Manager.Receipt.FieldReceiptImage}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,8">
-                                            <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Description}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
-                                            <TextBlock Text="Notes" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Notes}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                         </StackPanel>
                                     </Grid>
@@ -427,58 +427,58 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,8">
-                                            <TextBlock Text="Supplier" Style="{StaticResource FieldLabel}"/>
-                                            <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="CompanyName" IsEnabled="{Binding IsFormEditable}"/>
-                                        </StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,8">
+                                        <TextBlock Text="{DynamicResource Common.Supplier}" Style="{StaticResource FieldLabel}"/>
+                                        <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="CompanyName" IsEnabled="{Binding IsFormEditable}"/>
+                                    </StackPanel>
 
-                                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,8">
-                                            <TextBlock Text="Receipt Number" Style="{StaticResource FieldLabel}"/>
-                                            <TextBox Style="{StaticResource FilterField}" Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
-                                        </StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,8">
+                                        <TextBlock Text="{DynamicResource Common.ReceiptNumber}" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox Style="{StaticResource FilterField}" Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
+                                    </StackPanel>
 
-                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
-                                            <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
-                                            <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding InvoiceDate}" IsEnabled="{Binding IsFormEditable}"/>
-                                        </StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
+                                        <TextBlock Text="{DynamicResource Common.Date}" Style="{StaticResource FieldLabel}"/>
+                                        <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding InvoiceDate}" IsEnabled="{Binding IsFormEditable}"/>
+                                    </StackPanel>
 
-                                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,8">
-                                            <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
-                                            <TextBox Style="{StaticResource FilterField}" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
-                                        </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,8">
+                                        <TextBlock Text="{DynamicResource Common.Category}" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox Style="{StaticResource FilterField}" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
+                                    </StackPanel>
 
                                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,10,8">
-                                            <TextBlock Text="Amount" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Amount}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Subtotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,8">
-                                            <TextBlock Text="Receipt Image" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Manager.Receipt.FieldReceiptImage}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,8">
-                                            <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Description}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-                                            <TextBlock Text="Notes" Style="{StaticResource FieldLabel}"/>
+                                            <TextBlock Text="{DynamicResource Common.Notes}" Style="{StaticResource FieldLabel}"/>
                                             <TextBox Style="{StaticResource FilterField}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                         </StackPanel>
                                     </Grid>
                                 </Grid>
 
                                 <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="Save" Margin="0,0,8,0" Command="{Binding SaveReceiptCommand}" Visibility="{Binding IsFormEditable, Converter={StaticResource BoolToVis}}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelReceiptCommand}"/>
+                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Save}" Margin="0,0,8,0" Command="{Binding SaveReceiptCommand}" Visibility="{Binding IsFormEditable, Converter={StaticResource BoolToVis}}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Cancel}" Command="{Binding CancelReceiptCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Non-VAT Purchases" Style="{StaticResource TabItemStyle}">
+                <TabItem Header="{DynamicResource Manager.Receipt.TabNonVatPurchases}" Style="{StaticResource TabItemStyle}">
                     <Grid Margin="0,8,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -496,13 +496,13 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Non-VAT purchase receipts" Style="{StaticResource SectionTitle}"/>
+                                <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Receipt.NonVatPurchaseReceiptsTitle}" Style="{StaticResource SectionTitle}"/>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="Add" Margin="0,0,8,0" Command="{Binding AddNonVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Edit" Margin="0,0,8,0" Command="{Binding EditNonVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Delete" Margin="0,0,8,0" Command="{Binding DeleteNonVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="View" Margin="0,0,8,0" Command="{Binding ViewNonVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Export" Command="{Binding ExportNonVatPurchasesCommand}"/>
+                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Edit}" Margin="0,0,8,0" Command="{Binding EditNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.View}" Margin="0,0,8,0" Command="{Binding ViewNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Export}" Command="{Binding ExportNonVatPurchasesCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -522,11 +522,11 @@
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Receipt" Binding="{Binding InvoiceNumber}" Width="1.1*"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat=d}" Width="1*"/>
-                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="1.3*"/>
-                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="1.2*"/>
-                                <DataGridTextColumn Header="Grand Total" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="0.9*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColReceipt}" Binding="{Binding InvoiceNumber}" Width="1.1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Common.Date}" Binding="{Binding InvoiceDate, StringFormat=d}" Width="1*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColSupplier}" Binding="{Binding SupplierName}" Width="1.3*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColCategory}" Binding="{Binding Category}" Width="1.2*"/>
+                                <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColGrandTotal}" Binding="{Binding GrandTotal, StringFormat=0.00}" Width="0.9*"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -567,49 +567,49 @@
                                     </Grid.RowDefinitions>
 
                                     <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,8">
-                                        <TextBlock Text="Supplier" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Supplier}" Style="{StaticResource FieldLabel}"/>
                                         <ComboBox Style="{StaticResource FilterField}" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="CompanyName" IsEnabled="{Binding IsFormEditable}"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,8">
-                                        <TextBlock Text="Receipt Number" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.ReceiptNumber}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
-                                        <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Date}" Style="{StaticResource FieldLabel}"/>
                                         <DatePicker Style="{StaticResource FilterField}" SelectedDate="{Binding InvoiceDate}" IsEnabled="{Binding IsFormEditable}"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,8">
-                                        <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Category}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,10,8">
-                                        <TextBlock Text="Amount" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Amount}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding Subtotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,8">
-                                        <TextBlock Text="Receipt Image" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Manager.Receipt.FieldReceiptImage}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFormEditable}" Padding="8,0"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,8">
-                                        <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Description}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-                                        <TextBlock Text="Notes" Style="{StaticResource FieldLabel}"/>
+                                        <TextBlock Text="{DynamicResource Common.Notes}" Style="{StaticResource FieldLabel}"/>
                                         <TextBox Style="{StaticResource FilterField}" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Height="72" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding IsFormEditable}" Padding="8,6"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="Save" Margin="0,0,8,0" Command="{Binding SaveReceiptCommand}" Visibility="{Binding IsFormEditable, Converter={StaticResource BoolToVis}}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelReceiptCommand}"/>
+                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Save}" Margin="0,0,8,0" Command="{Binding SaveReceiptCommand}" Visibility="{Binding IsFormEditable, Converter={StaticResource BoolToVis}}"/>
+                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Cancel}" Command="{Binding CancelReceiptCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>

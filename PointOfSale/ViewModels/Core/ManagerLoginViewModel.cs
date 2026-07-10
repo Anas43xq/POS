@@ -1,6 +1,6 @@
 using BLL.Interfaces;
 using BLL.Models;
-using DAL.Entities;
+using BLL.DTOs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -130,7 +130,7 @@ namespace UI.ViewModels
         private bool _isNonManagerRejection;
 
         /// <summary>Raised after a successful manager login. The dialog's owner should close.</summary>
-        public event Action<User>? LoginSucceeded;
+        public event Action<UserDto>? LoginSucceeded;
 
         public ICommand LoginCommand { get; }
         public ICommand CancelCommand { get; }
@@ -207,7 +207,7 @@ namespace UI.ViewModels
 
             try
             {
-                Result<User> result = await _authService.LoginAsync(Username, Password);
+                Result<UserDto> result = await _authService.LoginAsync(Username, Password);
 
                 if (!result.IsSuccess || result.Value is null)
                 {
@@ -223,10 +223,9 @@ namespace UI.ViewModels
                 // pass through the Manager login. Reject everything else
                 // with an actionable message that names the actual role
                 // and points the user at the Cashier button.
-                if (user.Role is null ||
-                    !string.Equals(user.Role.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(user.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
                 {
-                    var actualRole = user.Role?.RoleName ?? "(no role)";
+                    var actualRole = string.IsNullOrWhiteSpace(user.RoleName) ? "(no role)" : user.RoleName;
 
                     ErrorMessage =
                         $"This account is a {actualRole} account, not a Manager. " +

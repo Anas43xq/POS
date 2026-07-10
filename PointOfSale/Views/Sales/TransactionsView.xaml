@@ -40,29 +40,29 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Day"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Day}"
                                  IsChecked="True"
                                  Command="{Binding LoadDayCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Week"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Week}"
                                  Command="{Binding LoadWeekCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Month"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Month}"
                                  Command="{Binding LoadMonthCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="Period"
+                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
                                  Command="{Binding LoadPeriodCommand}"/>
 
                     <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVis}}"
                                                 FromDate="{Binding FromDate}"
                                                 ToDate="{Binding ToDate}"
                                                 ApplyCommand="{Binding ApplyPeriodCommand}"
-                                                FromLabel="From"
-                                                ToLabel="To"
-                                                ApplyButtonText="Apply"
+                                                FromLabel="{DynamicResource Common.From}"
+                                                ToLabel="{DynamicResource Common.To}"
+                                                ApplyButtonText="{DynamicResource Common.Apply}"
                                                 Margin="6,0,0,0"/>
 
                     <!-- Status filter (Completed / Voided / Pending / All).
                          Combines with the date filter — picking "Voided"
                          + "Week" shows this week's voided transactions. -->
-                    <TextBlock Text="Status:"
+                    <TextBlock Text="{DynamicResource Manager.Transactions.StatusFilter}"
                                VerticalAlignment="Center"
                                Margin="12,0,4,0"
                                FontSize="11"
@@ -81,14 +81,14 @@
                     <!-- Destructive: red DangerBtn, only visible when the
                          selected row is in Completed state. -->
                     <Button Style="{StaticResource DangerBtn}"
-                            Content="✖  Void"
+                            Content="{DynamicResource Manager.Transactions.VoidButton}"
                             Margin="0,0,6,0"
                             Command="{Binding VoidTransactionCommand}"
                             CommandParameter="{Binding SelectedTransaction}"
                             Visibility="{Binding SelectedTransaction.Status, Converter={StaticResource StatusToVoidVis}}"/>
 
                     <Button Style="{StaticResource OutlineBtn}"
-                            Content="↻  Refresh"
+                            Content="{DynamicResource Common.Refresh}"
                             Command="{Binding RefreshCommand}"/>
                 </StackPanel>
             </Grid>
@@ -114,10 +114,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="🧾  Transactions" Style="{StaticResource CardTitle}"/>
+                        <TextBlock Text="{DynamicResource Manager.Transactions.TransactionsCardTitle}" Style="{StaticResource CardTitle}"/>
                         <!-- Busy spinner -->
                         <TextBlock Grid.Column="1"
-                                   Text="Loading…"
+                                   Text="{DynamicResource Manager.Transactions.Loading}"
                                    FontSize="11"
                                    Foreground="{StaticResource TextMuted}"
                                    VerticalAlignment="Center"
@@ -148,12 +148,12 @@
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="RECEIPT"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="1" Text="AMOUNT"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="2" Text="PAYMENT"     Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="3" Text="NOTES"       Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="4" Text="STATUS"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="5" Text="DATE &#38; TIME" Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Transactions.ColReceipt}"      Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Transactions.ColAmount}"      Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Transactions.ColPayment}"     Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Transactions.ColNotes}"       Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Transactions.ColStatus}"      Style="{StaticResource ListHeaderCell}"/>
+                            <TextBlock Grid.Column="5" Text="{DynamicResource Manager.Transactions.ColDateTime}" Style="{StaticResource ListHeaderCell}"/>
                         </Grid>
                     </Border>
 
@@ -345,11 +345,13 @@
 
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock FontSize="11" Foreground="{StaticResource TextMuted}">
-                                <Run Text="Page "/>
+                                <Run Text="{DynamicResource Common.Page}"/>
+                                <Run Text=" "/>
                                 <Run Text="{Binding PageInfo, Mode=OneWay}"/>
                                 <Run Text="  ·  "/>
                                 <Run Text="{Binding TotalCount, Mode=OneWay}"/>
-                                <Run Text=" transactions"/>
+                                <Run Text=" "/>
+                                <Run Text="{DynamicResource Manager.Transactions.PagerSuffix}"/>
                             </TextBlock>
                             <!-- Error banner -->
                             <TextBlock Text="{Binding ErrorMessage}"
@@ -361,11 +363,11 @@
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Button Style="{StaticResource OutlineBtn}"
-                                    Content="Previous"
+                                    Content="{DynamicResource Common.Previous}"
                                     Margin="0,0,6,0"
                                     Command="{Binding PreviousPageCommand}"/>
                             <Button Style="{StaticResource PrimaryGradientBtn}"
-                                    Content="Next"
+                                    Content="{DynamicResource Common.Next}"
                                     Command="{Binding NextPageCommand}"/>
                         </StackPanel>
                     </Grid>

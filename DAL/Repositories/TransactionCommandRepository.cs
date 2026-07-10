@@ -70,7 +70,7 @@ namespace DAL.Repositories
                     return new InvalidOperationException("No open shift found for this cashier.", ex);
 
                 if (ex.Message.Contains("inactive or do not exist", StringComparison.OrdinalIgnoreCase))
-                    return new InvalidOperationException("One or more products are inactive or do not exist.", ex);
+                    return new InvalidOperationException("One or more product variants are inactive or do not exist.", ex);
 
                 // Any other deliberately raised business-rule error from the SP.
                 return new InvalidOperationException(ex.Message, ex);
@@ -81,7 +81,7 @@ namespace DAL.Repositories
         private static DataTable BuildItemsTable(IEnumerable<CreateTransactionItemRequest> items)
         {
             var table = new DataTable();
-            table.Columns.Add("ProductId", typeof(int));
+            table.Columns.Add("VariantId", typeof(int));
             table.Columns.Add("ProductName", typeof(string));
             table.Columns.Add("UnitPrice", typeof(decimal));
             table.Columns.Add("Quantity", typeof(int));
@@ -93,7 +93,7 @@ namespace DAL.Repositories
             foreach (CreateTransactionItemRequest item in items)
             {
                 table.Rows.Add(
-                    item.ProductId,
+                    item.VariantId,
                     item.ProductName,
                     item.UnitPrice,
                     item.Quantity,

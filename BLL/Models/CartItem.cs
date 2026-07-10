@@ -10,7 +10,7 @@ namespace BLL.Models
     [SupportedOSPlatform("windows")]
     public class CartItem : INotifyPropertyChanged
     {
-        public int ProductId { get; set; }
+        public int VariantId { get; set; }
 
         public string ProductName { get; set; } = string.Empty;
 

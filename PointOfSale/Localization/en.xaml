@@ -446,6 +446,18 @@
 
     <sys:String x:Key="Manager.Transactions.VoidButton">Void</sys:String>
 
+    <sys:String x:Key="Manager.Transactions.TransactionsCardTitle">
+        Transactions
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.Loading">
+        Loading…
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.PagerSuffix">
+        transactions
+    </sys:String>
+
     <!-- ========================================================= -->
     <!-- Manager Products -->
     <!-- ========================================================= -->
@@ -582,5 +594,12 @@
     <sys:String x:Key="Manager.Shifts.ColDifference">DIFFERENCE</sys:String>
     <sys:String x:Key="Manager.Shifts.ColStatus">STATUS</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">DURATION</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings (Cashier + Manager) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Title">Settings</sys:String>
+    <sys:String x:Key="Settings.Language">Language</sys:String>
 
 </ResourceDictionary>
