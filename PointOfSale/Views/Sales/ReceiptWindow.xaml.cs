@@ -5,9 +5,13 @@ namespace UI.Views
 {
     public partial class ReceiptWindow : Window
     {
-        public ReceiptWindow(ReceiptViewModel viewModel)
+        public ReceiptWindow()
         {
             InitializeComponent();
+        }
+
+        public ReceiptWindow(ReceiptViewModel viewModel) : this()
+        {
             DataContext = viewModel;
         }
 

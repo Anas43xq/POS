@@ -302,6 +302,10 @@
         Categories
     </sys:String>
 
+    <sys:String x:Key="Manager.Nav.Sizes">
+        Sizes
+    </sys:String>
+
     <sys:String x:Key="Manager.Nav.ReceiptManagement">
         Receipt Management
     </sys:String>

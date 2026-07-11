@@ -13,5 +13,9 @@ namespace Contracts.Shifts
         public decimal? ExpectedCash { get; set; }
         public decimal? CashDifference { get; set; }
         public string Status { get; set; } = string.Empty;
+
+        public string OpenedAt => OpenTime.ToString("HH:mm");
+        public string ClosedAtDisplay => CloseTime.HasValue ? CloseTime.Value.ToString("HH:mm") : "--";
+        public bool IsShortfall => CashDifference.HasValue && CashDifference.Value < 0;
     }
 }

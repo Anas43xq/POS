@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using BLL.Interfaces;
 using BLL.Services;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Contracts.Printing;
 
 namespace BLL;
 
-public static  class DependencyInjection
+public static class DependencyInjection
 {
     public static IServiceCollection AddBLL(this IServiceCollection services)
     {
@@ -38,11 +39,12 @@ public static  class DependencyInjection
         services.AddScoped<ICategoryTranslationService, CategoryTranslationService>();
         services.AddScoped<IProductTranslationService, ProductTranslationService>();
         services.AddScoped<ISizeTranslationService, SizeTranslationService>();
+        services.AddScoped<ISizeService, SizeService>();
 
         services.AddSingleton<ISettingsService, UI.Services.SettingsService>();
+        services.AddSingleton<IPrintingService, PrintingService>();
 
         return services;
     }
-    
 }
 

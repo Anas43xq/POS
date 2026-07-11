@@ -113,6 +113,7 @@ namespace UI.ViewModels
             {
                 ClearCurrentSale();
                 await LoadRecentSalesAsync();
+                _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
                 _receiptDisplayService.ShowReceipt(transactionId);
             };
 
@@ -130,6 +131,7 @@ namespace UI.ViewModels
 
             ClearCurrentSale();
             await LoadRecentSalesAsync();
+            _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
             _receiptDisplayService.ShowReceipt(transactionId);
         }
 

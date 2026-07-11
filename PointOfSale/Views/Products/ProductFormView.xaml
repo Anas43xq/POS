@@ -252,6 +252,8 @@
                     <RowDefinition Height="*"/>
                     <!-- Form body      -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Action buttons -->
+                    <RowDefinition Height="Auto"/>
                     <!-- Footer         -->
                 </Grid.RowDefinitions>
 
@@ -425,8 +427,17 @@
 
                 </Grid>
 
+                <!-- ── ACTION BUTTONS (Translations) ── -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal"
+                            HorizontalAlignment="Center" Margin="16,6,16,2">
+                    <Button Style="{StaticResource CancelBtn}"
+                            Content="🌐 Translations..."
+                            Command="{Binding TranslationsCommand}"
+                            Padding="14,0"/>
+                </StackPanel>
+
                 <!-- ── FOOTER ── -->
-                <Border Grid.Row="3"
+                <Border Grid.Row="4"
                         Style="{StaticResource ModalFooterBorder}"
                         CornerRadius="0,0,14,14"
                         Padding="16,10">

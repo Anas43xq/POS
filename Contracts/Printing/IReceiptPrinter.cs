@@ -1,9 +1,12 @@
-﻿using POS.Contracts.Receipts;
+using POS.Contracts.Receipts;
 
-namespace POS.Contracts.Printing
+namespace POS.Contracts.Printing;
+
+/// <summary>
+/// Receipt-specific printer.
+/// Extends the generic <see cref="IPrinter"/> with receipt-typed convenience overloads.
+/// </summary>
+public interface IReceiptPrinter : IPrinter
 {
-    public interface IReceiptPrinter
-    {
-        public void Print(ReceiptDetailsDto receipt);
-    }
+    Task PrintReceiptAsync(ReceiptDetailsDto receipt, PrinterSettings settings, bool showDialog, CancellationToken cancellationToken = default);
 }

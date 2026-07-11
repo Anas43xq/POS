@@ -1,6 +1,7 @@
 using BLL.Interfaces;
 using Microsoft.Extensions.Logging;
 using POS.Contracts.Localization;
+using POS.Contracts.Printing;
 using System.Text.Json;
 
 namespace UI.Services;
@@ -53,6 +54,38 @@ public sealed class SettingsService : ISettingsService
         }
     }
 
+    public Task<PrinterSettings> GetPrinterSettingsAsync()
+    {
+        try
+        {
+            var settings = LoadSettings();
+            return Task.FromResult(settings.Printer ?? new PrinterSettings());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to read printer settings; using defaults.");
+            return Task.FromResult(new PrinterSettings());
+        }
+    }
+
+    public Task SetPrinterSettingsAsync(PrinterSettings settings)
+    {
+        try
+        {
+            var userSettings = LoadSettings();
+            userSettings.Printer = settings;
+            SaveSettings(userSettings);
+
+            _logger.LogInformation("Printer settings saved.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to persist printer settings.");
+        }
+
+        return Task.CompletedTask;
+    }
+
     private static UserSettings LoadSettings()
     {
         if (!File.Exists(SettingsFilePath))
@@ -78,5 +111,6 @@ public sealed class SettingsService : ISettingsService
     private sealed class UserSettings
     {
         public LanguageCode LanguageCode { get; set; } = LanguageCode.English;
+        public PrinterSettings? Printer { get; set; }
     }
 }

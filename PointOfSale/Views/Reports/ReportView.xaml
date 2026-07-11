@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="UI.Views.ReportView"
+<UserControl x:Class="UI.Views.ReportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:UI.Controls"
@@ -111,8 +111,8 @@
                                     Cursor="Hand"/>
 
                             <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                        FromDate="{Binding FromDate}"
-                                                        ToDate="{Binding ToDate}"
+                                                        FromDate="{Binding FromDate, Mode=TwoWay}"
+                                                        ToDate="{Binding ToDate, Mode=TwoWay}"
                                                         ApplyCommand="{Binding ApplyPeriodFilterCommand}"
                                                         Margin="12,0,0,0"/>
 
@@ -125,7 +125,7 @@
                                 <ComboBox ItemsSource="{Binding Products}"
                                           SelectedItem="{Binding SelectedProduct}"
                                           Width="140"
-                                          DisplayMemberPath="ProductName"/>
+                                          DisplayMemberPath="Name"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>

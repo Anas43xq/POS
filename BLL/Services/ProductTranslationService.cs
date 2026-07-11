@@ -38,6 +38,33 @@ namespace BLL.Services
             return entities.Select(MapToDto);
         }
 
+        public async Task AddAsync(ProductTranslationDto dto)
+        {
+            var entity = new ProductTranslation
+            {
+                ProductId = dto.ProductId,
+                LanguageCode = dto.LanguageCode,
+                Name = dto.TranslatedName,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _repo.AddAsync(entity);
+        }
+
+        public async Task UpdateAsync(ProductTranslationDto dto)
+        {
+            var existing = await _repo.GetByIdAsync(dto.ProductTranslationId);
+            if (existing is null) return;
+
+            existing.Name = dto.TranslatedName;
+            existing.LanguageCode = dto.LanguageCode;
+            await _repo.UpdateAsync(existing);
+        }
+
+        public async Task DeleteAsync(int translationId)
+        {
+            await _repo.DeleteAsync(translationId);
+        }
+
         private static ProductTranslationDto MapToDto(ProductTranslation e) => new()
         {
             ProductTranslationId = e.ProductTranslationId,

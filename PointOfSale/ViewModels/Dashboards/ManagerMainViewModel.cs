@@ -23,6 +23,7 @@ namespace UI.ViewModels
         private readonly ReportViewModel _reportViewModel;
         private readonly ProductManagementViewModel _productManagementViewModel;
         private readonly CategoryManagementViewModel _categoryManagementViewModel;
+        private readonly SizeManagementViewModel _sizeManagementViewModel;
         private readonly ReceiptManagementViewModel _receiptManagementViewModel;
         private readonly ISessionService _sessionService;
         private readonly IDialogService _dialogService;
@@ -42,6 +43,7 @@ namespace UI.ViewModels
         public ICommand NavigateReportsCommand { get; set; } = null!;
         public ICommand NavigateProductManagementCommand { get; set; } = null!;
         public ICommand NavigateCategoryManagementCommand { get; set; } = null!;
+        public ICommand NavigateSizeManagementCommand { get; set; } = null!;
         public ICommand NavigateReceiptManagementCommand { get; set; } = null!;
         public ICommand LogoutCommand { get; set; } = null!;
 
@@ -126,6 +128,7 @@ namespace UI.ViewModels
             ReportViewModel reportViewModel,
             ProductManagementViewModel productManagementViewModel,
             CategoryManagementViewModel categoryManagementViewModel,
+            SizeManagementViewModel sizeManagementViewModel,
             ReceiptManagementViewModel receiptManagementViewModel,
             ISessionService sessionService,
             IDialogService dialogService)
@@ -136,6 +139,7 @@ namespace UI.ViewModels
             _reportViewModel = reportViewModel;
             _productManagementViewModel = productManagementViewModel;
             _categoryManagementViewModel = categoryManagementViewModel;
+            _sizeManagementViewModel = sizeManagementViewModel;
             _receiptManagementViewModel = receiptManagementViewModel;
             _sessionService = sessionService;
             _dialogService = dialogService;
@@ -153,6 +157,7 @@ namespace UI.ViewModels
             NavigateReportsCommand = new RelayCommand(NavigateToReports);
             NavigateProductManagementCommand = new RelayCommand(NavigateToProductManagement);
             NavigateCategoryManagementCommand = new RelayCommand(NavigateToCategoryManagement);
+            NavigateSizeManagementCommand = new RelayCommand(NavigateToSizeManagement);
             NavigateReceiptManagementCommand = new RelayCommand(NavigateToReceiptManagement);
             LogoutCommand = new RelayCommand(_ => LogoutRequested?.Invoke());
 

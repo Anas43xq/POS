@@ -5,6 +5,7 @@ using DAL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using POS.Contracts.Printing;
 using System;
 using System.Globalization;
 using System.Diagnostics;
@@ -31,6 +32,11 @@ namespace UI
 
         private readonly ServiceProvider _serviceProvider;
         private readonly ILogger<App>? _logger;
+        private static readonly string LogFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "PointOfSale",
+            "ErrorLog.txt");
+            
         public App()
         {
             ServiceCollection services = new ServiceCollection();
@@ -62,6 +68,7 @@ namespace UI
             services.AddTransient<IDialogService, DialogService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddTransient<IReceiptDisplayService, ReceiptDisplayService>();
+            services.AddSingleton<IReceiptPrinter, ReceiptPrinter>();
             services.AddTransient<ExcelReportExporter>();
             services.AddSingleton<IRegistryService, RegistryService>();
             services.AddSingleton<IApplicationShellService, ApplicationShellService>();
@@ -78,13 +85,13 @@ namespace UI
             services.AddTransient<ReportViewModel>();
             services.AddTransient<ProductManagementViewModel>();
             services.AddTransient<CategoryManagementViewModel>();
+            services.AddTransient<SizeManagementViewModel>();
             services.AddTransient<ReceiptManagementViewModel>();
             services.AddTransient<ManagerMainViewModel>();
             services.AddTransient<StartDayDialogViewModel>();
             services.AddTransient<EndDayDialogViewModel>();
             services.AddTransient<PaymentDialogViewModel>();
             services.AddTransient<RecentSalesDialogViewModel>();
-            services.AddTransient<ReceiptPrinterService>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<LoginAsViewModel>();
             services.AddTransient<ManagerLoginViewModel>();
@@ -153,7 +160,7 @@ namespace UI
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             LogUnhandledException(e.Exception, "Dispatcher");
-            ShowFatalError("An unexpected application error occurred.");
+            ShowFatalError($"Application Error\n\n{e.Exception.GetType().Name}: {e.Exception.Message}", e.Exception);
             e.Handled = true;
         }
 
@@ -162,33 +169,89 @@ namespace UI
             if (e.ExceptionObject is Exception exception)
             {
                 LogUnhandledException(exception, "AppDomain");
+                ShowFatalError($"Application Error\n\n{exception.GetType().Name}: {exception.Message}", exception);
             }
             else
             {
                 LogUnhandledException(new Exception("Unhandled non-exception object was raised."), "AppDomain");
+                ShowFatalError("An unexpected application error occurred.", null);
             }
-
-            ShowFatalError("An unexpected application error occurred.");
         }
 
         private void OnTaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
         {
             LogUnhandledException(e.Exception, "TaskScheduler");
             e.SetObserved();
+            ShowFatalError($"Background Task Error\n\n{e.Exception.GetType().Name}: {e.Exception.Message}", e.Exception);
         }
 
         private void LogUnhandledException(Exception exception, string source)
         {
-            _logger?.LogError(exception, "Unhandled exception from {Source}", source);
+            var errorDetails = new System.Text.StringBuilder();
+            errorDetails.AppendLine($"=== Unhandled Exception [{source}] ===");
+            errorDetails.AppendLine($"Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            errorDetails.AppendLine($"Exception Type: {exception.GetType().FullName}");
+            errorDetails.AppendLine($"Message: {exception.Message}");
+            errorDetails.AppendLine($"Source: {exception.Source}");
+            errorDetails.AppendLine($"Target Site: {exception.TargetSite?.Name ?? "N/A"}");
+            errorDetails.AppendLine($"HResult: 0x{exception.HResult:X8}");
+            
+            if (exception.StackTrace != null)
+            {
+                errorDetails.AppendLine($"StackTrace:\n{exception.StackTrace}");
+            }
+            
+            if (exception.InnerException != null)
+            {
+                errorDetails.AppendLine($"\n--- Inner Exception ---");
+                errorDetails.AppendLine($"Type: {exception.InnerException.GetType().FullName}");
+                errorDetails.AppendLine($"Message: {exception.InnerException.Message}");
+                if (exception.InnerException.StackTrace != null)
+                {
+                    errorDetails.AppendLine($"StackTrace:\n{exception.InnerException.StackTrace}");
+                }
+            }
+
+            _logger?.LogError(exception, "Unhandled exception from {Source}\n{Details}", source, errorDetails.ToString());
+
+            // Write to file-based log (always works)
+            try
+            {
+                var logDirectory = Path.GetDirectoryName(LogFilePath);
+                if (!string.IsNullOrEmpty(logDirectory) && !Directory.Exists(logDirectory))
+                {
+                    Directory.CreateDirectory(logDirectory);
+                }
+                
+                if (!string.IsNullOrEmpty(LogFilePath))
+                {
+                    File.AppendAllText(LogFilePath, errorDetails.ToString());
+                    File.AppendAllText(LogFilePath, "\n" + new string('=', 80) + "\n\n");
+                }
+            }
+            catch
+            {
+                // File logging is best-effort only
+            }
 
             try
             {
                 if (!EventLog.SourceExists("PointOfSale"))
                 {
-                    return;
+                    try
+                    {
+                        EventLog.CreateEventSource("PointOfSale", "Application");
+                    }
+                    catch
+                    {
+                        // Cannot create event source - may need admin rights
+                    }
                 }
 
-                EventLog.WriteEntry("PointOfSale", $"{source}: {exception}", EventLogEntryType.Error);
+                if (EventLog.SourceExists("PointOfSale"))
+                {
+                    EventLog.WriteEntry("PointOfSale", errorDetails.ToString(), EventLogEntryType.Error);
+                }
             }
             catch
             {
@@ -196,9 +259,54 @@ namespace UI
             }
         }
 
-        private static void ShowFatalError(string message)
+        private static void ShowFatalError(string message, Exception? exception)
         {
+#if DEBUG
+            // In DEBUG mode, show full exception details with stack trace
+            if (exception != null)
+            {
+                var debugMessage = new System.Text.StringBuilder();
+                debugMessage.AppendLine(message);
+                debugMessage.AppendLine();
+                debugMessage.AppendLine("== Debug Information ==");
+                debugMessage.AppendLine();
+                
+                var currentEx = exception;
+                int level = 1;
+                while (currentEx != null)
+                {
+                    debugMessage.AppendLine($"[Level {level}] {currentEx.GetType().FullName}");
+                    debugMessage.AppendLine($"Message: {currentEx.Message}");
+                    debugMessage.AppendLine($"Source: {currentEx.Source}");
+                    debugMessage.AppendLine($"Target Site: {currentEx.TargetSite?.Name ?? "N/A"}");
+                    
+                    if (currentEx.StackTrace != null)
+                    {
+                        debugMessage.AppendLine();
+                        debugMessage.AppendLine("StackTrace:");
+                        debugMessage.AppendLine(currentEx.StackTrace);
+                    }
+                    
+                    if (currentEx.InnerException != null)
+                    {
+                        debugMessage.AppendLine();
+                        debugMessage.AppendLine("--- Inner Exception ---");
+                    }
+                    
+                    currentEx = currentEx.InnerException;
+                    level++;
+                }
+                
+                MessageBox.Show(debugMessage.ToString(), "Application Error (Debug Mode)", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show(message, "Application Error (Debug Mode)", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+#else
+            // In Release mode, show simplified message
             MessageBox.Show(message, "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
+#endif
         }
     }
 } 

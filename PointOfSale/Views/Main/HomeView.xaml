@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Manager · Home View         ║
     ║   Filter bar + 3-column dashboard                    ║
@@ -266,7 +266,7 @@
                                                                Foreground="{StaticResource TextDark}"
                                                                TextTrimming="CharacterEllipsis"/>
                                                     <TextBlock Grid.Column="1"
-                                                               Text="{Binding SalesAmount, StringFormat={}{0:C}}"
+                                                               Text="{Binding TotalSales, StringFormat={}{0:C}}"
                                                                FontSize="11" FontWeight="Medium"
                                                                Foreground="{StaticResource SuccessGreen}"/>
                                                 </Grid>
@@ -350,9 +350,9 @@
                                             </Grid>
                                             <TextBlock FontSize="10" Foreground="{StaticResource TextMuted}" Margin="0,2,0,0">
                                                 <Run Text="{DynamicResource Common.Open}"/><Run Text=" "/>
-                                                <Run Text="{Binding OpenedAt, StringFormat=HH:mm}"/>
+                                                <Run Text="{Binding OpenedAt, Mode=OneWay, StringFormat=HH:mm}"/>
                                                 <Run Text="  ·  "/><Run Text="{DynamicResource Common.Close}"/><Run Text=" "/>
-                                                <Run Text="{Binding ClosedAtDisplay}"/>
+                                                <Run Text="{Binding ClosedAtDisplay, Mode=OneWay}"/>
                                             </TextBlock>
                                         </StackPanel>
                                     </Border>

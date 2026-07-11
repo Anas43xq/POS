@@ -302,8 +302,12 @@
         الفئات
     </sys:String>
 
+    <sys:String x:Key="Manager.Nav.Sizes">
+        الأحجام
+    </sys:String>
+
     <sys:String x:Key="Manager.Nav.ReceiptManagement">
-        إدارة الإيصالات
+        إدارة الفواتير
     </sys:String>
 
     <!-- ========================================================= -->

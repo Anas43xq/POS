@@ -11,5 +11,11 @@ namespace BLL.Interfaces
         Task<ProductTranslationDto?> GetByIdAndLanguageCodeAsync(int productId, string languageCode);
 
         Task<IEnumerable<ProductTranslationDto>> GetAllByLanguageCodeAsync(string languageCode);
+
+        Task AddAsync(ProductTranslationDto dto);
+
+        Task UpdateAsync(ProductTranslationDto dto);
+
+        Task DeleteAsync(int translationId);
     }
 }

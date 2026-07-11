@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Manager · Transactions      ║
     ║   Filter bar + grouped DataGrid + pagination         ║
@@ -51,8 +51,8 @@
                                  Command="{Binding LoadPeriodCommand}"/>
 
                     <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVis}}"
-                                                FromDate="{Binding FromDate}"
-                                                ToDate="{Binding ToDate}"
+                                                FromDate="{Binding FromDate, Mode=TwoWay}"
+                                                ToDate="{Binding ToDate, Mode=TwoWay}"
                                                 ApplyCommand="{Binding ApplyPeriodCommand}"
                                                 FromLabel="{DynamicResource Common.From}"
                                                 ToLabel="{DynamicResource Common.To}"

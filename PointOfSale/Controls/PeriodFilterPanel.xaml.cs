@@ -10,10 +10,10 @@ public partial class PeriodFilterPanel : UserControl
         DependencyProperty.Register(nameof(FilterVisibility), typeof(Visibility), typeof(PeriodFilterPanel), new PropertyMetadata(Visibility.Collapsed));
 
     public static readonly DependencyProperty FromDateProperty =
-        DependencyProperty.Register(nameof(FromDate), typeof(object), typeof(PeriodFilterPanel), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(FromDate), typeof(DateTime?), typeof(PeriodFilterPanel), new PropertyMetadata(null));
 
     public static readonly DependencyProperty ToDateProperty =
-        DependencyProperty.Register(nameof(ToDate), typeof(object), typeof(PeriodFilterPanel), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(ToDate), typeof(DateTime?), typeof(PeriodFilterPanel), new PropertyMetadata(null));
 
     public static readonly DependencyProperty ApplyCommandProperty =
         DependencyProperty.Register(nameof(ApplyCommand), typeof(ICommand), typeof(PeriodFilterPanel), new PropertyMetadata(null));
@@ -38,15 +38,15 @@ public partial class PeriodFilterPanel : UserControl
         set => SetValue(FilterVisibilityProperty, value);
     }
 
-    public object? FromDate
+    public DateTime? FromDate
     {
-        get => GetValue(FromDateProperty);
+        get => (DateTime?)GetValue(FromDateProperty);
         set => SetValue(FromDateProperty, value);
     }
 
-    public object? ToDate
+    public DateTime? ToDate
     {
-        get => GetValue(ToDateProperty);
+        get => (DateTime?)GetValue(ToDateProperty);
         set => SetValue(ToDateProperty, value);
     }
 

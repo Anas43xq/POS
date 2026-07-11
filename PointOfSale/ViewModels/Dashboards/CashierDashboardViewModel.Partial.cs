@@ -184,7 +184,8 @@ namespace UI.ViewModels
         public async Task OpenSetting()
         {
             var vm = new SettingsViewModel(
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>());
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>(),
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISettingsService>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

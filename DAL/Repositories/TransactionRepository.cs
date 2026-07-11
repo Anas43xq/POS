@@ -18,9 +18,10 @@ namespace DAL.Repositories
             GetTransactionsListRequest request,
             CancellationToken ct = default)
         {
+            // If Custom period is requested but FromDate is null, default to Today
             if (string.Equals(request.PeriodType, "Custom", StringComparison.OrdinalIgnoreCase) && !request.FromDate.HasValue)
             {
-                throw new InvalidOperationException("FromDate is required for a custom period.");
+                request.PeriodType = "Today";
             }
 
             await using var context = await _contextFactory!.CreateDbContextAsync(ct);
@@ -68,8 +69,12 @@ namespace DAL.Repositories
                         Notes = reader.IsDBNull(reader.GetOrdinal("Notes"))
                             ? null
                             : reader.GetString(reader.GetOrdinal("Notes")),
-                        PaymentMethod = reader.GetString(reader.GetOrdinal("PaymentMethod")),
-                        Status = reader.GetString(reader.GetOrdinal("Status")) ?? String.Empty,
+                        PaymentMethod = reader.IsDBNull(reader.GetOrdinal("PaymentMethod"))
+                            ? string.Empty
+                            : reader.GetString(reader.GetOrdinal("PaymentMethod")),
+                        Status = reader.IsDBNull(reader.GetOrdinal("Status"))
+                            ? string.Empty
+                            : reader.GetString(reader.GetOrdinal("Status")),
                         TransactionDate = reader.GetDateTime(reader.GetOrdinal("TransactionDate"))
                     });
                 }

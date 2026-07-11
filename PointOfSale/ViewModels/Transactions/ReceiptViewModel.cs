@@ -1,5 +1,7 @@
+using POS.Contracts.Printing;
 using POS.Contracts.Receipts;
 using Microsoft.Extensions.Logging;
+using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
 using UI.Services;
@@ -8,8 +10,8 @@ namespace UI.ViewModels
 {
     public class ReceiptViewModel : BaseViewModel
     {
-        private readonly ReceiptPrinterService _printerService;
-        private readonly ILogger<UI.Services.ReceiptDisplayService> _logger;
+        private readonly IPrintingService _printingService;
+        private readonly ILogger<ReceiptDisplayService> _logger;
 
         public ReceiptDetailsDto Receipt { get; }
 
@@ -20,36 +22,36 @@ namespace UI.ViewModels
         public List<ReceiptItemDto> Items => Receipt.Items;
         public decimal Subtotal => Receipt.Subtotal;
         public decimal TaxTotal => Receipt.TaxTotal;
-
         public decimal GrandTotal => Receipt.GrandTotal;
+        public decimal DiscountTotal => Receipt.DiscountTotal;
         public string PaymentMethod => Receipt.PaymentMethod;
         public decimal AmountTendered => Receipt.AmountTendered;
         public decimal ChangeGiven => Receipt.ChangeGiven;
 
         public ICommand PrintReceiptCommand { get; }
 
-        public ReceiptViewModel(ReceiptDetailsDto receipt, ReceiptPrinterService printerService, ILogger<UI.Services.ReceiptDisplayService> logger)
+        public ReceiptViewModel(ReceiptDetailsDto receipt, IPrintingService printingService, ILogger<ReceiptDisplayService> logger)
         {
             Receipt = receipt;
-            _printerService = printerService;
+            _printingService = printingService;
             _logger = logger;
-            PrintReceiptCommand = new RelayCommand(PrintReceipt);
+            PrintReceiptCommand = new AsyncRelayCommand(PrintReceiptAsync);
         }
 
-        private void PrintReceipt(object? obj)
+        private async Task PrintReceiptAsync()
         {
             try
             {
-                _printerService.Print(Receipt);
+                await _printingService.PrintReceiptDirectAsync(Receipt, showDialog: true);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to print receipt preview for transaction {TransactionId}", Receipt.TransactionId);
-                System.Windows.MessageBox.Show(
+                _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", Receipt.TransactionId);
+                MessageBox.Show(
                     "Printing failed. Please check the printer and try again.",
                     "Print Error",
-                    System.Windows.MessageBoxButton.OK,
-                    System.Windows.MessageBoxImage.Error);
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }

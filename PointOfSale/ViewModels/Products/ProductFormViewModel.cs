@@ -1,6 +1,7 @@
 using BLL.Interfaces;
 using BLL.Models;
 using BLL.DTOs;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -145,6 +147,7 @@ namespace UI.ViewModels
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand TranslationsCommand { get; }
 
         public event Action? DialogClosed;
 
@@ -165,6 +168,7 @@ namespace UI.ViewModels
 
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             CancelCommand = new RelayCommand(Cancel);
+            TranslationsCommand = new RelayCommand(_ => OpenTranslations(), _ => _existingProduct != null);
 
             _ = LoadAsync();
         }
@@ -327,6 +331,23 @@ namespace UI.ViewModels
             {
                 ErrorMessage = $"Failed to save product: {ex.Message}";
             }
+        }
+
+        private void OpenTranslations()
+        {
+            if (_existingProduct == null) return;
+
+            var vm = new TranslationDialogViewModel(
+                TranslationDialogViewModel.EntityType.Product,
+                _existingProduct.Id,
+                _existingProduct.Name,
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.IProductTranslationService>(),
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ICategoryTranslationService>(),
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISizeTranslationService>());
+
+            var dialog = new Views.TranslationDialogView { DataContext = vm, Owner = Application.Current.MainWindow };
+            vm.RequestClose = () => dialog.Close();
+            dialog.ShowDialog();
         }
 
         private void Cancel(object? obj)

@@ -302,6 +302,10 @@
         വിഭാഗങ്ങൾ
     </sys:String>
 
+    <sys:String x:Key="Manager.Nav.Sizes">
+        വലുപ്പങ്ങൾ
+    </sys:String>
+
     <sys:String x:Key="Manager.Nav.ReceiptManagement">
         രസീത് മാനേജ്മെന്റ്
     </sys:String>

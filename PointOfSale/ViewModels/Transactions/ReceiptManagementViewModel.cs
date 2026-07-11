@@ -254,20 +254,44 @@ namespace UI.ViewModels
 
             try
             {
-                var request = new GetTransactionsListRequest
+                if (DateFrom is null && DateTo is null)
                 {
-                    PeriodType = "Custom",
-                    FromDate = DateFrom,
-                    ToDate = DateTo,
-                    PageNumber = 1,
-                    PageSize = 100
-                };
-
-                var result = await _transactionService.GetTransactionsListAsync(request);
-                SalesReceipts.Clear();
-                foreach (var item in result.Items.Where(MatchesFilters))
+                    // No dates selected, use default period (Today) instead of Custom
+                    var defaultRequest = new GetTransactionsListRequest
+                    {
+                        PageNumber = 1,
+                        PageSize = 100
+                    };
+                    var defaultResult = await _transactionService.GetTransactionsListAsync(defaultRequest);
+                    SalesReceipts.Clear();
+                    foreach (var item in defaultResult.Items.Where(MatchesFilters))
+                    {
+                        SalesReceipts.Add(item);
+                    }
+                }
+                else if (DateFrom is not null && DateTo is not null)
                 {
-                    SalesReceipts.Add(item);
+                    // Both dates selected, use Custom period
+                    var request = new GetTransactionsListRequest
+                    {
+                        PeriodType = "Custom",
+                        FromDate = DateFrom,
+                        ToDate = DateTo,
+                        PageNumber = 1,
+                        PageSize = 100
+                    };
+                    var result = await _transactionService.GetTransactionsListAsync(request);
+                    SalesReceipts.Clear();
+                    foreach (var item in result.Items.Where(MatchesFilters))
+                    {
+                        SalesReceipts.Add(item);
+                    }
+                }
+                else
+                {
+                    // One date is null but not both - request both dates to use Custom period
+                    StatusMessage = "Please select both From and To dates, or clear both to use default period.";
+                    SalesReceipts.Clear();
                 }
             }
             catch (Exception ex)

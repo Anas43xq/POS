@@ -14,25 +14,50 @@ namespace UI.ViewModels
 {
     public partial class HomeViewModel
     {
+        private GetTransactionKpisRequest BuildFilterRequest()
+        {
+            var request = new GetTransactionKpisRequest
+            {
+                PeriodType = CurrentFilterMode switch
+                {
+                    DashboardFilterMode.Today => "Today",
+                    DashboardFilterMode.Week => "Week",
+                    DashboardFilterMode.Month => "Month",
+                    DashboardFilterMode.Period => "Custom",
+                    _ => "Today"
+                },
+                FromDate = PeriodFromDate,
+                ToDate = PeriodToDate
+            };
+
+            if (request.PeriodType != "Custom")
+            {
+                request.FromDate = null;
+                request.ToDate = null;
+            }
+
+            return request;
+        }
+
         private void OnFilterToday()
         {
             CurrentFilterMode = DashboardFilterMode.Today;
             IsPeriodFilterVisible = false;
-            _ = LoadKpisAsync();
+            _ = LoadFilteredSectionsAsync();
         }
 
         private void OnFilterThisWeek()
         {
             CurrentFilterMode = DashboardFilterMode.Week;
             IsPeriodFilterVisible = false;
-            _ = LoadKpisAsync();
+            _ = LoadFilteredSectionsAsync();
         }
 
         private void OnFilterThisMonth()
         {
             CurrentFilterMode = DashboardFilterMode.Month;
             IsPeriodFilterVisible = false;
-            _ = LoadKpisAsync();
+            _ = LoadFilteredSectionsAsync();
         }
 
         private void OnShowPeriodFilter()
@@ -52,7 +77,7 @@ namespace UI.ViewModels
             ErrorMessage = string.Empty;
             CurrentFilterMode = DashboardFilterMode.Period;
             IsPeriodFilterVisible = true;
-            _ = LoadKpisAsync();
+            _ = LoadFilteredSectionsAsync();
         }
 
         private async Task LoadAsyncSafe()
@@ -71,20 +96,47 @@ namespace UI.ViewModels
 
         private async Task LoadAsyncCore()
         {
-            await LoadKpisAsync();
-            await LoadTopProductsAsync();
-            await LoadRecentTransactionsAsync();
-            await LoadShiftSummaryAsync();
+            _isInitialLoadBusy = true;
+            try
+            {
+                await LoadRecentTransactionsAsync();
+                await LoadShiftSummaryAsync();
+
+                var request = BuildFilterRequest();
+                await Task.WhenAll(
+                    LoadKpisAsync(request),
+                    LoadTopProductsAsync(request));
+            }
+            finally
+            {
+                _isInitialLoadBusy = false;
+            }
         }
 
-        private async Task LoadRecentTransactionsAsync()
+        private async Task LoadFilteredSectionsAsync()
         {
-            if (IsBusy)
+            if (_isInitialLoadBusy)
                 return;
 
             try
             {
-                IsBusy = true;
+                ErrorMessage = string.Empty;
+                var request = BuildFilterRequest();
+                await Task.WhenAll(
+                    LoadKpisAsync(request),
+                    LoadTopProductsAsync(request));
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to load filtered dashboard data.");
+                ErrorMessage = "Unable to load filtered data.";
+            }
+        }
+
+        private async Task LoadRecentTransactionsAsync()
+        {
+            try
+            {
                 RecentTransactions.Clear();
                 var transactions = await _recentTransactionService.GetRecentTransactionsAsync(10);
                 foreach (var transaction in transactions)
@@ -100,23 +152,14 @@ namespace UI.ViewModels
                 _logger?.LogError(ex, "Failed to load recent transactions.");
                 ErrorMessage = "Unable to load recent transactions.";
             }
-            finally
-            {
-                IsBusy = false;
-            }
         }
 
-        private async Task LoadTopProductsAsync()
+        private async Task LoadTopProductsAsync(GetTransactionKpisRequest request)
         {
-            if (IsBusy)
-                return;
-
             try
             {
-                IsBusy = true;
                 TopProducts.Clear();
-
-                var products = await GetFilteredTopProductsAsync(7);
+                var products = await _topProductService.GetTopProductsAsync(request, 7);
                 foreach (var product in products)
                 {
                     TopProducts.Add(product);
@@ -130,20 +173,12 @@ namespace UI.ViewModels
                 _logger?.LogError(ex, "Failed to load top products.");
                 ErrorMessage = "Unable to load top products.";
             }
-            finally
-            {
-                IsBusy = false;
-            }
         }
 
         private async Task LoadShiftSummaryAsync()
         {
-            if (IsBusy)
-                return;
-
             try
             {
-                IsBusy = true;
                 ShiftSummaries.Clear();
                 var shiftSummaries = await _shiftSummaryService.GetLatestShiftSummariesAsync(5);
                 foreach (var summary in shiftSummaries)
@@ -158,10 +193,6 @@ namespace UI.ViewModels
             {
                 _logger?.LogError(ex, "Failed to load shift summary.");
                 ErrorMessage = "Unable to load shift summary.";
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
 
@@ -183,34 +214,10 @@ namespace UI.ViewModels
             _receiptDisplayService.ShowReceipt(transaction.TransactionId);
         }
 
-        public async Task LoadKpisAsync(CancellationToken ct = default)
+        public async Task LoadKpisAsync(GetTransactionKpisRequest request, CancellationToken ct = default)
         {
-            if (IsBusy)
-                return;
-
             try
             {
-                IsBusy = true;
-                var request = new GetTransactionKpisRequest
-                {
-                    PeriodType = CurrentFilterMode switch
-                    {
-                        DashboardFilterMode.Today => "Today",
-                        DashboardFilterMode.Week => "Week",
-                        DashboardFilterMode.Month => "Month",
-                        DashboardFilterMode.Period => "Custom",
-                        _ => "Today"
-                    },
-                    FromDate = PeriodFromDate,
-                    ToDate = PeriodToDate
-                };
-
-                if (request.PeriodType != "Custom")
-                {
-                    request.FromDate = null;
-                    request.ToDate = null;
-                }
-
                 var dto = await _kpiService.GetKpisAsync(request, ct);
                 if (dto != null)
                 {
@@ -221,16 +228,11 @@ namespace UI.ViewModels
                     TotalOrders = dto.TotalOrders;
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                IsBusy = false;
+                _logger?.LogError(ex, "Failed to load KPIs.");
+                ErrorMessage = "Unable to load KPIs.";
             }
-        }
-
-        private async Task<List<TopProductDto>> GetFilteredTopProductsAsync(int take)
-        {
-            var products = await _topProductService.GetTopProductsAsync(take);
-            return products;
         }
     }
 }

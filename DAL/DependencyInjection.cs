@@ -51,6 +51,9 @@ public static class DependencyInjection
         services.AddScoped<IProductTranslationRepository, ProductTranslationRepository>();
         services.AddScoped<ISizeTranslationRepository, SizeTranslationRepository>();
 
+        services.AddScoped<ISizeRepository, SizeRepository>();
+        services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+
         return services;
     }
 }

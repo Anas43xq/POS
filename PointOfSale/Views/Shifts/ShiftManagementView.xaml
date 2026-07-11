@@ -73,6 +73,7 @@
         <Style x:Key="BadgeText" TargetType="TextBlock">
             <Setter Property="FontSize"   Value="10"/>
             <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
         </Style>
 
         <!-- ── List header cell ── -->
@@ -354,10 +355,10 @@
                                             <Border.Resources>
                                                 <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                                                        <DataTrigger Binding="{Binding StatusLabel}" Value="Open">
                                                             <Setter Property="Background" Value="#DCFCE7"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsOpen}" Value="False">
+                                                        <DataTrigger Binding="{Binding StatusLabel}" Value="Closed">
                                                             <Setter Property="Background" Value="#DBEAFE"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -367,10 +368,10 @@
                                                 <TextBlock.Resources>
                                                     <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                                                            <DataTrigger Binding="{Binding StatusLabel}" Value="Open">
                                                                 <Setter Property="Foreground" Value="#16A34A"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IsOpen}" Value="False">
+                                                            <DataTrigger Binding="{Binding StatusLabel}" Value="Closed">
                                                                 <Setter Property="Foreground" Value="#1A6FC4"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>

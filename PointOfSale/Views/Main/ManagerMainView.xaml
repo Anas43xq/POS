@@ -190,6 +190,10 @@
             <views:CategoryManagementView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:SizeManagementViewModel}">
+            <views:SizeManagementView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:ReceiptManagementViewModel}">
             <views:ReceiptManagementView />
         </DataTemplate>
@@ -343,31 +347,39 @@
                         <TextBlock Text="{DynamicResource Manager.Nav.Reports}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
-                     <RadioButton Style="{StaticResource NavItem}"
-                                  Command="{Binding NavigateProductManagementCommand}">
-                         <RadioButton.Tag>
-                             <TextBlock Text="📦" Style="{StaticResource NavIcon}"/>
-                         </RadioButton.Tag>
-                         <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource NavLabel}"/>
-                     </RadioButton>
+                    <RadioButton Style="{StaticResource NavItem}"
+                                 Command="{Binding NavigateProductManagementCommand}">
+                        <RadioButton.Tag>
+                            <TextBlock Text="📦" Style="{StaticResource NavIcon}"/>
+                        </RadioButton.Tag>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource NavLabel}"/>
+                    </RadioButton>
 
-                     <RadioButton Style="{StaticResource NavItem}"
-                                  Command="{Binding NavigateCategoryManagementCommand}">
-                         <RadioButton.Tag>
-                             <TextBlock Text="🏷" Style="{StaticResource NavIcon}"/>
-                         </RadioButton.Tag>
-                         <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource NavLabel}"/>
-                     </RadioButton>
+                    <RadioButton Style="{StaticResource NavItem}"
+                                 Command="{Binding NavigateCategoryManagementCommand}">
+                        <RadioButton.Tag>
+                            <TextBlock Text="🏷" Style="{StaticResource NavIcon}"/>
+                        </RadioButton.Tag>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource NavLabel}"/>
+                    </RadioButton>
 
-                     <RadioButton Style="{StaticResource NavItem}"
-                                  Command="{Binding NavigateReceiptManagementCommand}">
-                         <RadioButton.Tag>
-                             <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
-                         </RadioButton.Tag>
-                         <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource NavLabel}"/>
-                     </RadioButton>
+                    <RadioButton Style="{StaticResource NavItem}"
+                                 Command="{Binding NavigateSizeManagementCommand}">
+                        <RadioButton.Tag>
+                            <TextBlock Text="📏" Style="{StaticResource NavIcon}"/>
+                        </RadioButton.Tag>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Sizes}" Style="{StaticResource NavLabel}"/>
+                    </RadioButton>
 
-                 </StackPanel>
+                    <RadioButton Style="{StaticResource NavItem}"
+                                 Command="{Binding NavigateReceiptManagementCommand}">
+                        <RadioButton.Tag>
+                            <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
+                        </RadioButton.Tag>
+                        <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource NavLabel}"/>
+                    </RadioButton>
+
+                </StackPanel>
             </Border>
 
             <!-- ─────────────────────────────────

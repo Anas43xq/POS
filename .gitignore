@@ -14,6 +14,8 @@
 *.rsuser
 *.cache
 
+.mimocode/*
+
 # docs
 
 docs/*
@@ -192,3 +194,5 @@ mono_crash.*
 *.v11.suo
 *.ncrunch*
 zip-manager-views.ps1
+.mimocode/.cron-lock
+queries.py

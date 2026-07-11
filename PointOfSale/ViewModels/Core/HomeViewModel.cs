@@ -4,8 +4,8 @@ using Contracts.Transactions;
 using Contracts.Shifts;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -24,6 +24,7 @@ namespace UI.ViewModels
         private readonly ITransactionService _transactionService;
         private readonly IReceiptDisplayService _receiptDisplayService;
         private string _errorMessage = string.Empty;
+        private bool _isInitialLoadBusy;
         public event Action? ViewAllShiftsRequested;
         public event Action? ShowAllTransactionsRequested;
 
@@ -179,8 +180,8 @@ namespace UI.ViewModels
             }
         }
 
-        private ObservableCollection<object> _topProducts = new();
-        public ObservableCollection<object> TopProducts
+        private ObservableCollection<TopProductDto> _topProducts = new();
+        public ObservableCollection<TopProductDto> TopProducts
         {
             get => _topProducts;
             set

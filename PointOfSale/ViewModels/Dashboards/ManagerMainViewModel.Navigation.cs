@@ -45,6 +45,11 @@ namespace UI.ViewModels
             CurrentPage = _categoryManagementViewModel;
         }
 
+        private void NavigateToSizeManagement()
+        {
+            CurrentPage = _sizeManagementViewModel;
+        }
+
         private void NavigateToReceiptManagement()
         {
             CurrentPage = _receiptManagementViewModel;
@@ -86,7 +91,8 @@ namespace UI.ViewModels
         private async Task OpenSetting()
         {
             var vm = new SettingsViewModel(
-                App.ServiceProvider.GetRequiredService<ILocalizationService>());
+                App.ServiceProvider.GetRequiredService<ILocalizationService>(),
+                App.ServiceProvider.GetRequiredService<ISettingsService>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

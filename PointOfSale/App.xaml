@@ -1,4 +1,4 @@
-﻿<Application x:Class="UI.App"
+<Application x:Class="UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xml:lang="en-AE">
@@ -6,6 +6,17 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- 0. Global TextBlock fallback: guarantees Foreground is
+                        never DependencyProperty.UnsetValue, which crashes
+                        the layout pass.  Uses a literal brush so there is
+                        no dependency on later-loaded resource dictionaries.
+                        Any explicit Foreground on a TextBlock or its style
+                        takes precedence. -->
+                <ResourceDictionary>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#1F2937"/>
+                    </Style>
+                </ResourceDictionary>
                 <!-- 1. Converters (no dependencies) -->
                 <ResourceDictionary Source="Resources/Converters.xaml" />
                 <!-- 2. Dashboard chrome (brushes, KPI tiles, card styles) -->

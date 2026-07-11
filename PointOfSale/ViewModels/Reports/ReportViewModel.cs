@@ -1,4 +1,4 @@
-﻿using BLL.Interfaces;
+using BLL.Interfaces;
 using BLL.DTOs;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -85,6 +85,7 @@ namespace UI.ViewModels
             get => _fromDate;
             set
             {
+                if (_fromDate == value) return;
                 _fromDate = value;
                 OnPropertyChanged();
             }
@@ -95,6 +96,7 @@ namespace UI.ViewModels
             get => _toDate;
             set
             {
+                if (_toDate == value) return;
                 _toDate = value;
                 OnPropertyChanged();
             }
@@ -132,7 +134,9 @@ namespace UI.ViewModels
             get => _isSalesMode;
             set
             {
+                if (_isSalesMode == value) return;
                 _isSalesMode = value;
+                if (value) _isProductMode = false;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsProductMode));
                 OnPropertyChanged(nameof(SalesSummaryVisibility));
@@ -147,7 +151,9 @@ namespace UI.ViewModels
             get => _isProductMode;
             set
             {
+                if (_isProductMode == value) return;
                 _isProductMode = value;
+                if (value) _isSalesMode = false;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsSalesMode));
                 OnPropertyChanged(nameof(SalesSummaryVisibility));

@@ -1,4 +1,4 @@
-﻿
+
 namespace POS.Contracts.Receipts;
 
 public class ReceiptDetailsDto
@@ -18,6 +18,8 @@ public class ReceiptDetailsDto
     public decimal TaxTotal { get; set; }
 
     public decimal GrandTotal { get; set; }
+
+    public decimal DiscountTotal { get; set; }
 
     public string PaymentMethod { get; set; } = string.Empty;
 
