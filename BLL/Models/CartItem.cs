@@ -14,6 +14,25 @@ namespace BLL.Models
 
         public string ProductName { get; set; } = string.Empty;
 
+        private string _localizedProductName = string.Empty;
+
+        /// <summary>
+        /// Localized display name shown in the cart UI.
+        /// <see cref="ProductName"/> remains English-only for receipt snapshots.
+        /// </summary>
+        public string LocalizedProductName
+        {
+            get => _localizedProductName;
+            set
+            {
+                if (_localizedProductName == value)
+                    return;
+
+                _localizedProductName = value;
+                OnPropertyChanged();
+            }
+        }
+
         private int _quantity = 1;
 
         public int Quantity

@@ -11,5 +11,7 @@ namespace DAL.Interfaces
         Task<CategoryTranslation?> GetByNameAndLanguageCodeAsync(string name, string languageCode);
 
         Task<CategoryTranslation?> GetByIdAndLanguageCodeAsync(int categoryId, string languageCode);
+
+        Task<IEnumerable<CategoryTranslation>> GetAllByLanguageCodeAsync(string languageCode);
     }
 }

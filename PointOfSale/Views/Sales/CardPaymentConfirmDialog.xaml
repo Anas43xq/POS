@@ -32,15 +32,11 @@
             </StackPanel>
 
             <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" Padding="16" Margin="0,0,0,20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="Charge " FontSize="18" Foreground="#334155" VerticalAlignment="Center"/>
-                    <controls:CurrencyText Amount="{Binding GrandTotal, Mode=OneWay}"
-                                           FontWeight="Bold"
-                                           FontSize="28"
-                                           Foreground="#2563EB"
-                                           VerticalAlignment="Center"/>
-                    <TextBlock Text=" to the card?" FontSize="18" Foreground="#334155" VerticalAlignment="Center"/>
-                </StackPanel>
+                <TextBlock Text="{Binding ConfirmMessage}"
+                           FontSize="18" FontWeight="Bold"
+                           Foreground="#334155"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"/>
             </Border>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

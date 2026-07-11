@@ -9,6 +9,8 @@ namespace BLL.Interfaces
 
         Task<Result<List<CategoryDto>>> GetAllCategoriesWithChildrenAsync();
 
+        Task<Result<List<CategoryDto>>> GetAllCategoriesWithChildrenAsync(string languageCode);
+
         Task<Result<List<CategoryDto>>> GetChildCategoriesAsync(int parentCategoryId);
 
         Task<CategoryDto?> GetCategoryByIdAsync(int id);

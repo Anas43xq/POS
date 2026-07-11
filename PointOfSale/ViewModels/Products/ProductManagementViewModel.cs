@@ -14,6 +14,7 @@ namespace UI.ViewModels
         private readonly ICategoryService _categoryService;
         private readonly ITaxRateService _taxRateService;
         private readonly IDialogService _dialogService;
+        private readonly ILocalizationService _localization;
         private readonly List<CategoryNodeViewModel> _allCategoryNodes = new();
         private readonly List<ProductRowViewModel> _allProducts = new();
         private string _categorySearchText = string.Empty;
@@ -25,12 +26,16 @@ namespace UI.ViewModels
             IProductService productService,
             ICategoryService categoryService,
             ITaxRateService taxRateService,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            ILocalizationService localization)
         {
             _productService = productService;
             _categoryService = categoryService;
             _taxRateService = taxRateService;
             _dialogService = dialogService;
+            _localization = localization;
+
+            _localization.LanguageChanged += OnLanguageChanged;
 
             AddProductCommand = new RelayCommand(AddProduct);
             EditProductCommand = new RelayCommand(EditProduct, CanEditProduct);

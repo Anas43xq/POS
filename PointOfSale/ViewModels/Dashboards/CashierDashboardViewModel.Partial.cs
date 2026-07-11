@@ -90,16 +90,19 @@ namespace UI.ViewModels
         {
             try
             {
+                var languageCode = _localization.CurrentLanguage.FilePrefix;
+
                 Result<List<CategoryDto>> result =
-                    await _categoryService.GetAllCategoriesWithChildrenAsync();
+                    await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
 
                 Categories.Clear();
                 SubCategories.Clear();
 
+                // "All" is a UI concept — resolve from the resource dictionary.
                 Categories.Add(new CategoryDto
                 {
                     CategoryId = 0,
-                    Name = "All"
+                    Name = _localization.GetString("Cashier.AllCategories")
                 });
 
                 if (result.IsSuccess && result.Value != null)
@@ -123,8 +126,10 @@ namespace UI.ViewModels
         {
             try
             {
+                var languageCode = _localization.CurrentLanguage.FilePrefix;
+
                 Result<List<ProductDto>> result =
-                    await _productService.GetAllVariantsAsync();
+                    await _productService.GetAllVariantsAsync(languageCode);
 
                 Products.Clear();
 

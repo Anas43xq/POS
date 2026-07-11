@@ -161,6 +161,8 @@
         لم يتم العثور على منتجات.
     </sys:String>
 
+    <sys:String x:Key="Cashier.AllCategories">الكل</sys:String>
+
     <sys:String x:Key="Cashier.ClearSale">
         مسح البيع
     </sys:String>

@@ -11,5 +11,7 @@ namespace DAL.Interfaces
         Task<ProductTranslation?> GetByNameAndLanguageCodeAsync(string name, string languageCode);
 
         Task<ProductTranslation?> GetByIdAndLanguageCodeAsync(int productId, string languageCode);
+
+        Task<IEnumerable<ProductTranslation>> GetAllByLanguageCodeAsync(string languageCode);
     }
 }

@@ -32,6 +32,12 @@ namespace BLL.Services
             return entity is null ? null : MapToDto(entity);
         }
 
+        public async Task<IEnumerable<ProductTranslationDto>> GetAllByLanguageCodeAsync(string languageCode)
+        {
+            var entities = await _repo.GetAllByLanguageCodeAsync(languageCode);
+            return entities.Select(MapToDto);
+        }
+
         private static ProductTranslationDto MapToDto(ProductTranslation e) => new()
         {
             ProductTranslationId = e.ProductTranslationId,

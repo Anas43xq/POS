@@ -360,12 +360,57 @@ public partial class CashierDashboardViewModel : BaseViewModel
         HeaderErrorMessage = string.IsNullOrWhiteSpace(message) ? null : message;
     }
 
-    private void OnLocalizationLanguageChanged(object? sender, EventArgs e)
-    {
-        // The cart count badge binds to CartCountDisplay, which is a
-        // computed string from ILocalizationService.GetString(...). The
-        // underlying count (SaleItemsCount) hasn't changed, but the
-        // resource value has, so raise PropertyChanged explicitly.
-        OnPropertyChanged(nameof(CartCountDisplay));
-    }
+        private void OnLocalizationLanguageChanged(object? sender, EventArgs e)
+        {
+            // The cart count badge binds to CartCountDisplay, which is a
+            // computed string from ILocalizationService.GetString(...). The
+            // underlying count (SaleItemsCount) hasn't changed, but the
+            // resource value has, so raise PropertyChanged explicitly.
+            OnPropertyChanged(nameof(CartCountDisplay));
+
+            // Reload business data with the new language so category buttons,
+            // product buttons, and cart item names reflect the new locale.
+            _ = ReloadLocalizedDataAsync();
+        }
+
+        /// <summary>
+        /// Reloads categories and products using the current language, then
+        /// updates in-cart display names without touching the English-only
+        /// receipt snapshots stored in <see cref="CartItem.ProductName"/>.
+        /// </summary>
+        private async Task ReloadLocalizedDataAsync()
+        {
+            try
+            {
+                await LoadCategoriesAsync();
+                await LoadProductsAsync();
+
+                UpdateCartItemLocalizedNames();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to reload localized data after language change");
+            }
+        }
+
+        /// <summary>
+        /// Updates <see cref="CartItem.LocalizedProductName"/> for every item
+        /// currently in the cart using the freshly-loaded <see cref="Products"/>
+        /// collection. <see cref="CartItem.ProductName"/> (English) is never
+        /// touched so receipt snapshots remain English-only.
+        /// </summary>
+        private void UpdateCartItemLocalizedNames()
+        {
+            // Build a VariantId → localized DisplayName lookup from the
+            // reloaded products.  This is O(n) and avoids N+1 DB calls.
+            var displayNameByVariantId = Products.ToDictionary(p => p.VariantId, p => p.DisplayName);
+
+            foreach (var item in SaleItems)
+            {
+                if (displayNameByVariantId.TryGetValue(item.VariantId, out var localized))
+                    item.LocalizedProductName = localized;
+                else
+                    item.LocalizedProductName = item.ProductName; // fallback to English
+            }
+        }
 }

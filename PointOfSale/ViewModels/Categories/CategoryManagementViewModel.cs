@@ -13,14 +13,18 @@ namespace UI.ViewModels
     public class CategoryManagementViewModel : BaseViewModel
     {
         private readonly ICategoryService _categoryService;
+        private readonly ILocalizationService _localization;
         private readonly ObservableCollection<CategoryCardViewModel> _allCategories = new();
         private string _searchText = string.Empty;
         private CategoryCardViewModel? _selectedCategory;
         private SubcategoryCardViewModel? _selectedSubcategory;
 
-        public CategoryManagementViewModel(ICategoryService categoryService)
+        public CategoryManagementViewModel(ICategoryService categoryService, ILocalizationService localization)
         {
             _categoryService = categoryService;
+            _localization = localization;
+
+            _localization.LanguageChanged += OnLanguageChanged;
 
             AddCommand = new RelayCommand(OpenAddDialog);
             EditCommand = new RelayCommand(OpenEditDialog, CanEdit);
@@ -105,19 +109,15 @@ namespace UI.ViewModels
 
         public ICommand AddSubcategoryCommand { get; }
 
+        private void OnLanguageChanged(object? sender, EventArgs e)
+        {
+            _ = LoadDataAsync();
+        }
+
         private async Task LoadDataAsync()
         {
-            var result = await _categoryService.GetAllCategoriesWithChildrenAsync();
-            if (result.IsSuccess && result.Value != null)
-            {
-                _allCategories.Clear();
-                foreach (var c in result.Value)
-                {
-                    _allCategories.Add(ToCategoryCard(c));
-                }
-            }
-
-            ApplyFilters();
+            var languageCode = _localization.CurrentLanguage.FilePrefix;
+            var result = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
         }
 
         private CategoryCardViewModel ToCategoryCard(CategoryDto category)

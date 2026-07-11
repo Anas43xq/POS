@@ -8,9 +8,16 @@ namespace UI.ViewModels
 {
     public partial class ProductManagementViewModel
     {
+        private void OnLanguageChanged(object? sender, EventArgs e)
+        {
+            _ = LoadDataAsync();
+        }
+
         private async Task LoadDataAsync()
         {
-            var categoriesResult = await _categoryService.GetAllCategoriesWithChildrenAsync();
+            var languageCode = _localization.CurrentLanguage.FilePrefix;
+
+            var categoriesResult = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
             if (categoriesResult.IsSuccess && categoriesResult.Value != null)
             {
                 _allCategoryNodes.Clear();
@@ -20,7 +27,7 @@ namespace UI.ViewModels
                 }
             }
 
-            var productsResult = await _productService.GetAllProductsAsync();
+            var productsResult = await _productService.GetAllProductsAsync(languageCode);
             if (productsResult.IsSuccess && productsResult.Value != null)
             {
                 _allProducts.Clear();

@@ -42,4 +42,13 @@ public class ProductTranslationRepository
                 t.ProductId == productId &&
                 t.LanguageCode == languageCode);
     }
+
+    public async Task<IEnumerable<ProductTranslation>> GetAllByLanguageCodeAsync(string languageCode)
+    {
+        await using var context = await _contextFactory!.CreateDbContextAsync();
+        return await context.ProductTranslations
+            .Where(t => t.LanguageCode == languageCode)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

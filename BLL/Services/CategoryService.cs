@@ -10,11 +10,16 @@ namespace BLL.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryrepo;
+        private readonly ICategoryTranslationService _categoryTranslationService;
         private readonly ILogger<CategoryService> _logger;
 
-        public CategoryService(ICategoryRepository CategoryRepo, ILogger<CategoryService> logger)
+        public CategoryService(
+            ICategoryRepository CategoryRepo,
+            ICategoryTranslationService categoryTranslationService,
+            ILogger<CategoryService> logger)
         {
             _categoryrepo = CategoryRepo;
+            _categoryTranslationService = categoryTranslationService;
             _logger = logger;
         }
 
@@ -42,6 +47,30 @@ namespace BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load categories with children");
+                return Result<List<CategoryDto>>.Failure(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<CategoryDto>>> GetAllCategoriesWithChildrenAsync(string languageCode)
+        {
+            if (string.IsNullOrWhiteSpace(languageCode) || languageCode == "en")
+                return await GetAllCategoriesWithChildrenAsync();
+
+            try
+            {
+                var categories = await _categoryrepo.GetAllWithChildrenAsync();
+
+                // Batch-load all category translations for the requested language (avoids N+1).
+                var translations = (await _categoryTranslationService
+                    .GetAllByLanguageCodeAsync(languageCode))
+                    .ToDictionary(t => t.CategoryId, t => t.TranslatedName);
+
+                return Result<List<CategoryDto>>.Success(
+                    categories.Select(c => MapToDtoRecursiveLocalized(c, translations)).ToList());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load categories with children for language {Language}", languageCode);
                 return Result<List<CategoryDto>>.Failure(ex.Message);
             }
         }
@@ -93,6 +122,38 @@ namespace BLL.Services
             ProductCount = (e.Products?.Count ?? 0) + (e.ChildCategories?.Sum(c => c.Products?.Count ?? 0) ?? 0),
             ChildCategories = e.ChildCategories?.Select(MapToDto).ToList() ?? new List<CategoryDto>()
         };
+
+        private static CategoryDto MapToDtoRecursiveLocalized(Category e, Dictionary<int, string> translations)
+        {
+            var englishName = e.Name;
+            var localizedName = translations.TryGetValue(e.CategoryId, out var tName) && !string.IsNullOrWhiteSpace(tName)
+                ? tName
+                : englishName;
+
+            return new CategoryDto
+            {
+                CategoryId = e.CategoryId,
+                Name = localizedName,
+                ParentCategoryId = e.ParentCategoryId,
+                Description = e.Description,
+                ProductCount = (e.Products?.Count ?? 0) + (e.ChildCategories?.Sum(c => c.Products?.Count ?? 0) ?? 0),
+                ChildCategories = e.ChildCategories?.Select(child =>
+                {
+                    var childEnglish = child.Name;
+                    var childLocalized = translations.TryGetValue(child.CategoryId, out var ctName) && !string.IsNullOrWhiteSpace(ctName)
+                        ? ctName
+                        : childEnglish;
+                    return new CategoryDto
+                    {
+                        CategoryId = child.CategoryId,
+                        Name = childLocalized,
+                        ParentCategoryId = child.ParentCategoryId,
+                        Description = child.Description,
+                        ProductCount = child.Products?.Count ?? 0
+                    };
+                }).ToList() ?? new List<CategoryDto>()
+            };
+        }
 
         private static Category MapToEntity(CategoryDto d) => new()
         {

@@ -161,6 +161,8 @@
         No products found.
     </sys:String>
 
+    <sys:String x:Key="Cashier.AllCategories">All</sys:String>
+
     <sys:String x:Key="Cashier.ClearSale">
         Clear Sale
     </sys:String>

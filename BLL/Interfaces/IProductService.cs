@@ -7,7 +7,11 @@ namespace BLL.Interfaces
     {
         Task<Result<List<ProductSummaryDto>>> GetAllProductsAsync();
 
+        Task<Result<List<ProductSummaryDto>>> GetAllProductsAsync(string languageCode);
+
         Task<Result<List<ProductDto>>> GetAllVariantsAsync();
+
+        Task<Result<List<ProductDto>>> GetAllVariantsAsync(string languageCode);
 
         Task<ProductWriteDto?> GetProductByIdAsync(int id);
 

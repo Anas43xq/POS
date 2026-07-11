@@ -161,6 +161,8 @@
         ഉൽപ്പന്നങ്ങളൊന്നും കണ്ടെത്തിയില്ല.
     </sys:String>
 
+    <sys:String x:Key="Cashier.AllCategories">എല്ലാം</sys:String>
+
     <sys:String x:Key="Cashier.ClearSale">
         വിൽപ്പന മായ്ക്കുക
     </sys:String>

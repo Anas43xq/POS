@@ -751,7 +751,7 @@
 
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn Binding="{Binding ProductName}"
+                            <DataGridTextColumn Binding="{Binding LocalizedProductName}"
                                                 IsReadOnly="True"
                                                 Width="*"
                                                 MinWidth="100">

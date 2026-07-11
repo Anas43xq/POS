@@ -10,19 +10,21 @@ namespace UI.ViewModels
     public class AddEditCategoryViewModel : BaseViewModel
     {
         private readonly ICategoryService? _categoryService;
+        private readonly ILocalizationService? _localization;
         private string _name = string.Empty;
         private string _icon = "📦";
         private ParentCategoryOption? _selectedParent;
         private bool _hasError;
         private string _errorMessage = string.Empty;
 
-        public AddEditCategoryViewModel() : this(null)
+        public AddEditCategoryViewModel() : this(null, null)
         {
         }
 
-        public AddEditCategoryViewModel(ICategoryService? categoryService)
+        public AddEditCategoryViewModel(ICategoryService? categoryService, ILocalizationService? localization = null)
         {
             _categoryService = categoryService;
+            _localization = localization;
             SaveCommand = new RelayCommand(Save, CanSave);
             CancelCommand = new RelayCommand(Cancel);
 
@@ -41,7 +43,8 @@ namespace UI.ViewModels
         {
             if (_categoryService == null) return;
 
-            var result = await _categoryService.GetAllCategoriesAsync();
+            var languageCode = _localization?.CurrentLanguage.FilePrefix ?? "en";
+            var result = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
             if (result.IsSuccess && result.Value != null)
             {
                 foreach (var c in result.Value.Where(c => c.ParentCategoryId == null))

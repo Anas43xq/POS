@@ -30,7 +30,10 @@ namespace UI.ViewModels
                 CartItem item = new CartItem
                 {
                     VariantId = product.VariantId,
-                    ProductName = product.DisplayName,
+                    // English-only snapshot for receipts (TransactionItems.ProductName).
+                    ProductName = product.EnglishDisplayName,
+                    // Localized name for the cart UI.
+                    LocalizedProductName = product.DisplayName,
                     Quantity = 1,
                     UnitPrice = product.UnitPrice,
                     TaxRate = product.TaxRate
@@ -88,7 +91,7 @@ namespace UI.ViewModels
             if (!TryValidatePaymentPrerequisites())
                 return;
 
-            var confirmViewModel = new CardPaymentConfirmDialogViewModel(Total);
+            var confirmViewModel = new CardPaymentConfirmDialogViewModel(Total, _localization);
             bool? confirmed = _dialogService.ShowDialogWithResult<CardPaymentConfirmDialog>(confirmViewModel);
 
             if (confirmed != true)

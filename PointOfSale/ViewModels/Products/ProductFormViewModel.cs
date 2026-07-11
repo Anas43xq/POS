@@ -16,6 +16,7 @@ namespace UI.ViewModels
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
         private readonly ITaxRateService _taxRateService;
+        private readonly ILocalizationService _localization;
         private readonly ProductManagementViewModel _parentVm;
 
         private ProductRowViewModel? _existingProduct;
@@ -151,12 +152,14 @@ namespace UI.ViewModels
             IProductService productService,
             ICategoryService categoryService,
             ITaxRateService taxRateService,
+            ILocalizationService localization,
             ProductManagementViewModel parentVm,
             ProductRowViewModel? existingProduct = null)
         {
             _productService = productService;
             _categoryService = categoryService;
             _taxRateService = taxRateService;
+            _localization = localization;
             _parentVm = parentVm;
             _existingProduct = existingProduct;
 
@@ -168,8 +171,9 @@ namespace UI.ViewModels
 
         private async Task LoadAsync()
         {
-            // Load categories
-            var categoriesResult = await _categoryService.GetAllCategoriesWithChildrenAsync();
+            // Load categories (localized)
+            var languageCode = _localization.CurrentLanguage.FilePrefix;
+            var categoriesResult = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
             if (categoriesResult.IsSuccess && categoriesResult.Value != null)
             {
                 foreach (var cat in categoriesResult.Value)

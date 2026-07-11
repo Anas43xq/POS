@@ -42,4 +42,13 @@ public class SizeTranslationRepository
                 t.SizeId == sizeId &&
                 t.LanguageCode == languageCode);
     }
+
+    public async Task<IEnumerable<SizeTranslation>> GetAllByLanguageCodeAsync(string languageCode)
+    {
+        await using var context = await _contextFactory!.CreateDbContextAsync();
+        return await context.SizeTranslations
+            .Where(t => t.LanguageCode == languageCode)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

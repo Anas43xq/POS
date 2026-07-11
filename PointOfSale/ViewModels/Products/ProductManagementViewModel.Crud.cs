@@ -13,6 +13,7 @@ namespace UI.ViewModels
                 _productService,
                 _categoryService,
                 _taxRateService,
+                _localization,
                 this);
 
             _dialogService.ShowDialog<ProductFormView>(formVm);
@@ -27,6 +28,7 @@ namespace UI.ViewModels
                 _productService,
                 _categoryService,
                 _taxRateService,
+                _localization,
                 this,
                 SelectedProduct);
 
