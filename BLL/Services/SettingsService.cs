@@ -86,6 +86,65 @@ public sealed class SettingsService : ISettingsService
         return Task.CompletedTask;
     }
 
+    public Task<Dictionary<string, string>?> GetCustomShortcutBindingsAsync(string profileName)
+    {
+        try
+        {
+            var settings = LoadSettings();
+            if (settings.ShortcutBindings != null
+                && settings.ShortcutBindings.TryGetValue(profileName, out var bindings))
+            {
+                return Task.FromResult<Dictionary<string, string>?>(bindings);
+            }
+            return Task.FromResult<Dictionary<string, string>?>(null);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to read shortcut bindings for profile {Profile}.", profileName);
+            return Task.FromResult<Dictionary<string, string>?>(null);
+        }
+    }
+
+    public Task SetCustomShortcutBindingsAsync(string profileName, Dictionary<string, string> bindings)
+    {
+        try
+        {
+            var settings = LoadSettings();
+            settings.ShortcutBindings ??= new Dictionary<string, Dictionary<string, string>>();
+            settings.ShortcutBindings[profileName] = bindings;
+            SaveSettings(settings);
+
+            _logger.LogInformation("Shortcut bindings saved for profile {Profile}.", profileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to persist shortcut bindings for profile {Profile}.", profileName);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task ClearCustomShortcutBindingsAsync(string profileName)
+    {
+        try
+        {
+            var settings = LoadSettings();
+            if (settings.ShortcutBindings != null)
+            {
+                settings.ShortcutBindings.Remove(profileName);
+                SaveSettings(settings);
+            }
+
+            _logger.LogInformation("Custom shortcut bindings cleared for profile {Profile}.", profileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to clear shortcut bindings for profile {Profile}.", profileName);
+        }
+
+        return Task.CompletedTask;
+    }
+
     private static UserSettings LoadSettings()
     {
         if (!File.Exists(SettingsFilePath))
@@ -112,5 +171,6 @@ public sealed class SettingsService : ISettingsService
     {
         public LanguageCode LanguageCode { get; set; } = LanguageCode.English;
         public PrinterSettings? Printer { get; set; }
+        public Dictionary<string, Dictionary<string, string>>? ShortcutBindings { get; set; }
     }
 }

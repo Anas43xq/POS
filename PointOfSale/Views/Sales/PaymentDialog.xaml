@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:conv="clr-namespace:UI.Converters"
         xmlns:controls="clr-namespace:UI.Controls"
         mc:Ignorable="d"
         Title="Cash Payment"
@@ -13,10 +12,6 @@
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True">
-
-    <Window.Resources>
-        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-    </Window.Resources>
 
     <Border Width="520"
             Background="White"

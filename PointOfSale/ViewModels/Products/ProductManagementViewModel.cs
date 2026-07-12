@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Threading;
 using BLL.Interfaces;
+using Contracts.Enum;
 using DAL.Entities;
 using UI.Commands;
 using UI.Services;
@@ -15,27 +17,44 @@ namespace UI.ViewModels
         private readonly ITaxRateService _taxRateService;
         private readonly IDialogService _dialogService;
         private readonly ILocalizationService _localization;
+        private readonly IKeyboardShortcutService _shortcutService;
         private readonly List<CategoryNodeViewModel> _allCategoryNodes = new();
         private readonly List<ProductRowViewModel> _allProducts = new();
+        private readonly DispatcherTimer _searchDebounceTimer;
         private string _categorySearchText = string.Empty;
         private string _productSearchText = string.Empty;
         private CategoryNodeViewModel? _selectedCategory;
         private ProductRowViewModel? _selectedProduct;
+        private HashSet<int>? _cachedCategoryIds;
+
+        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
+        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
+        public string DeleteGesture => GetShortcutGesture(ShortcutAction.Delete);
+        public string SearchGesture => GetShortcutGesture(ShortcutAction.FocusSearch);
+        public string RefreshGesture => GetShortcutGesture(ShortcutAction.Refresh);
 
         public ProductManagementViewModel(
             IProductService productService,
             ICategoryService categoryService,
             ITaxRateService taxRateService,
             IDialogService dialogService,
-            ILocalizationService localization)
+            ILocalizationService localization,
+            IKeyboardShortcutService shortcutService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _taxRateService = taxRateService;
             _dialogService = dialogService;
             _localization = localization;
+            _shortcutService = shortcutService;
 
             _localization.LanguageChanged += OnLanguageChanged;
+
+            _searchDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(250)
+            };
+            _searchDebounceTimer.Tick += OnSearchDebounceTick;
 
             AddProductCommand = new RelayCommand(AddProduct);
             EditProductCommand = new RelayCommand(EditProduct, CanEditProduct);
@@ -57,7 +76,7 @@ namespace UI.ViewModels
                 {
                     _categorySearchText = value;
                     OnPropertyChanged();
-                    ApplyCategoryFilter();
+                    RestartSearchDebounce();
                 }
             }
         }
@@ -71,7 +90,7 @@ namespace UI.ViewModels
                 {
                     _productSearchText = value;
                     OnPropertyChanged();
-                    ApplyProductFilter();
+                    RestartSearchDebounce();
                 }
             }
         }
@@ -86,6 +105,7 @@ namespace UI.ViewModels
                     _selectedCategory = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(CurrentCategoryLabel));
+                    CacheCategoryIds();
                     ApplyProductFilter();
                 }
             }
@@ -103,7 +123,7 @@ namespace UI.ViewModels
                     OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(CanDelete));
                     if (EditProductCommand is RelayCommand editCmd) editCmd.RaiseCanExecuteChanged();
-                    if (DeleteProductCommand is RelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
+                    if (DeleteProductCommand is AsyncRelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -116,6 +136,13 @@ namespace UI.ViewModels
         public ICommand EditProductCommand { get; }
         public ICommand DeleteProductCommand { get; }
         public ICommand RefreshCommand { get; }
+
+        private string GetShortcutGesture(ShortcutAction action)
+        {
+            var bindings = _shortcutService.GetActiveBindings();
+            var binding = bindings.FirstOrDefault(b => b.Action == action);
+            return binding?.KeyGesture ?? string.Empty;
+        }
     }
 
     public class CategoryNodeViewModel : BaseViewModel

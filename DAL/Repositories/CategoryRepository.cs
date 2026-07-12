@@ -8,13 +8,16 @@ namespace DAL.Repositories;
 
 public class CategoryRepository : Repository<Category>, ICategoryRepository
 {
+    private readonly IDbContextFactory<PosDbContext> _asyncContextFactory;
+
     public CategoryRepository(IDbContextFactory<PosDbContext> contextFactory) : base(contextFactory)
     {
+        _asyncContextFactory = contextFactory;
     }
 
     public async Task<IEnumerable<Category>> GetAllWithChildrenAsync()
     {
-        await using var context = await _contextFactory!.CreateDbContextAsync();
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
         return await context.Categories
             .Include(c => c.Products)
             .Include(c => c.ChildCategories)
@@ -25,7 +28,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
 
     public async Task<IEnumerable<Category>> GetChildrenAsync(int parentCategoryId)
     {
-        await using var context = await _contextFactory!.CreateDbContextAsync();
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
         return await context.Categories
             .Where(c => c.ParentCategoryId == parentCategoryId)
             .AsNoTracking()

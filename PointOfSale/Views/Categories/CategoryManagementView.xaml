@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Category Management         ║
     ║   Toolbar + Category cards + Subcategory panel       ║
@@ -14,13 +14,6 @@
 
     <UserControl.Resources>
 
-        <!--
-            Converters — register these in your App.xaml or a ResourceDictionary:
-            BoolToVis              → BooleanToVisibilityConverter  (standard WPF)
-            InverseBoolToVis       → InverseBooleanToVisibilityConverter (custom)
-        -->
-        <BooleanToVisibilityConverter x:Key="BoolToVis" x:Name="BoolToVis"/>
-
         <!-- ── Palette ── -->
         <SolidColorBrush x:Key="BrandDark"    Color="#1A6FC4"/>
         <SolidColorBrush x:Key="BrandMid"     Color="#2589E0"/>
@@ -31,8 +24,6 @@
         <SolidColorBrush x:Key="TextDark"     Color="#1A3A5C"/>
         <SolidColorBrush x:Key="TextMuted"    Color="#8AB0CC"/>
         <SolidColorBrush x:Key="SuccessGreen" Color="#16A34A"/>
-        <SolidColorBrush x:Key="DangerRed"    Color="#DC2626"/>
-        <SolidColorBrush x:Key="DangerHover"  Color="#B91C1C"/>
 
         <!-- ════════════════════════════════════
              TOOLBAR BUTTON STYLES
@@ -235,9 +226,39 @@
         <!-- ══════════════════════════════════════
              PAGE HEADER
              ══════════════════════════════════════ -->
-        <TextBlock Grid.Row="0" Text="{DynamicResource Manager.Categories.Title}"
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{DynamicResource Manager.Categories.Title}"
                        FontSize="18" FontWeight="Medium"
-                       Foreground="{StaticResource TextDark}"/>
+                       Foreground="{StaticResource TextDark}"
+                       VerticalAlignment="Center"/>
+
+            <!-- Keyboard shortcut hints -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding AddGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Add" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding EditGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Edit" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding DeleteGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Delete" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
 
         <!-- ══════════════════════════════════════
              TOOLBAR
@@ -369,7 +390,7 @@
                                 CornerRadius="7"
                                 Padding="12,10"
                                 Margin="0,0,0,8"
-                                Visibility="{Binding IsEmptySearch, Converter={StaticResource BoolToVis}}">
+                                Visibility="{Binding IsEmptySearch, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="{DynamicResource Manager.Categories.EmptySearchMessage}"
                                        FontSize="12" FontWeight="Medium"
                                        Foreground="#92400E"
@@ -426,7 +447,7 @@
                                                        FontSize="10"
                                                        Foreground="{StaticResource TextMuted}"
                                                        Visibility="{Binding HasSubcategories,
-                                                                    Converter={StaticResource BoolToVis}}">
+                                                                    Converter={StaticResource BoolToVisibilityConverter}}">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Text" Value="▸"/>
@@ -482,7 +503,7 @@
                         BorderThickness="0.5"
                         CornerRadius="10"
                         Padding="16,14"
-                        Visibility="{Binding IsSubcategoriesPanelVisible, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding IsSubcategoriesPanelVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel>
 
                         <!-- Section header: icon + parent name -->
@@ -506,7 +527,7 @@
                                    FontSize="12"
                                    Foreground="{StaticResource TextMuted}"
                                    Margin="0,0,0,10"
-                                   Visibility="{Binding IsSubcategoriesEmpty, Converter={StaticResource BoolToVis}}"/>
+                                   Visibility="{Binding IsSubcategoriesEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <!-- Subcategory cards + Add card -->
                         <WrapPanel Orientation="Horizontal">

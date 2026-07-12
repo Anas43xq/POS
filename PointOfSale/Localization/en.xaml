@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -601,11 +601,86 @@
     <sys:String x:Key="Manager.Shifts.ColStatus">STATUS</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">DURATION</sys:String>
 
+    <!-- Shift filter -->
+    <sys:String x:Key="Manager.Shifts.StatusFilter">Status:</sys:String>
+    <sys:String x:Key="Manager.Shifts.Loading">Loading…</sys:String>
+    <sys:String x:Key="Manager.Shifts.PagerSuffix">shifts</sys:String>
+    <sys:String x:Key="Manager.Shifts.SeeMore">Details</sys:String>
+    <sys:String x:Key="Manager.Shifts.CardTitle">Shifts</sys:String>
+
+    <!-- Shift detail dialog -->
+    <sys:String x:Key="Manager.Shifts.DetailTitle">Shift Details</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailShiftNumber">Shift Number</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashier">Cashier</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpenTime">Open Time</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCloseTime">Close Time</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDuration">Duration</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpeningCash">Opening Cash</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClosingCash">Closing Cash</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailExpectedCash">Expected Cash</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDifference">Difference</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatus">Status</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatistics">Shift Statistics</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalTransactions">Total Transactions</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashTransactions">Cash Transactions</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardTransactions">Card Transactions</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashSales">Cash Sales</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardSales">Card Sales</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalSales">Total Sales</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailRefunds">Refunds/Voids</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTransactions">Transactions</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClose">Close</sys:String>
+
     <!-- ========================================================= -->
     <!-- Settings (Cashier + Manager) -->
     <!-- ========================================================= -->
 
     <sys:String x:Key="Settings.Title">Settings</sys:String>
     <sys:String x:Key="Settings.Language">Language</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcut.Search">Search</sys:String>
+    <sys:String x:Key="Shortcut.Add">Add</sys:String>
+    <sys:String x:Key="Shortcut.Edit">Edit</sys:String>
+    <sys:String x:Key="Shortcut.Print">Print</sys:String>
+    <sys:String x:Key="Shortcut.Generate">Generate</sys:String>
+    <sys:String x:Key="Shortcut.Export">Export</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings Dialog                                           -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Printing">Printing</sys:String>
+    <sys:String x:Key="Settings.ReceiptPrinter">Receipt Printer</sys:String>
+    <sys:String x:Key="Settings.Refresh">Refresh</sys:String>
+    <sys:String x:Key="Settings.PaperWidth">Paper Width</sys:String>
+    <sys:String x:Key="Settings.AutoPrintAfterPayment">Auto Print After Payment</sys:String>
+    <sys:String x:Key="Settings.ShowWindowsPrintDialog">Show Windows Print Dialog</sys:String>
+    <sys:String x:Key="Settings.Copies">Copies</sys:String>
+    <sys:String x:Key="Settings.PrintTestReceipt">Print Test Receipt</sys:String>
+
+    <sys:String x:Key="Settings.KeyboardShortcuts">Keyboard Shortcuts</sys:String>
+    <sys:String x:Key="Settings.KeyboardShortcutsDescription">Customize keyboard shortcuts for faster navigation and operations.</sys:String>
+    <sys:String x:Key="Settings.ConfigureKeyboardShortcuts">Configure Keyboard Shortcuts</sys:String>
+    <sys:String x:Key="Settings.BackToSettings">Back to Settings</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Keyboard Shortcuts Dialog                                 -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcuts.Cashier">Cashier</sys:String>
+    <sys:String x:Key="Shortcuts.Manager">Manager</sys:String>
+    <sys:String x:Key="Shortcuts.Edit">Edit</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreDefault">Restore Default</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreAll">Restore All</sys:String>
+    <sys:String x:Key="Shortcuts.ColAction">Action</sys:String>
+    <sys:String x:Key="Shortcuts.ColCategory">Category</sys:String>
+    <sys:String x:Key="Shortcuts.ColCurrentShortcut">Current Shortcut</sys:String>
+    <sys:String x:Key="Shortcuts.ColDescription">Description</sys:String>
+    <sys:String x:Key="Shortcuts.Cancel">Cancel</sys:String>
+    <sys:String x:Key="Shortcuts.SaveChanges">Save Changes</sys:String>
 
 </ResourceDictionary>

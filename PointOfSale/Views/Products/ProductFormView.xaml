@@ -20,8 +20,6 @@
                 <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
         <!-- ── Field label ── -->
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize"   Value="11"/>
@@ -294,7 +292,7 @@
                         BorderBrush="{StaticResource ModalErrorBorder}"
                         BorderThickness="1" CornerRadius="7"
                         Padding="11,8" Margin="16,10,16,0"
-                        Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
                         <TextBlock Text="A product with this name already exists in the selected category."
@@ -392,7 +390,7 @@
                                   IsChecked="{Binding HasAdditionalTax}"
                                   Margin="0,0,0,6"/>
                         <Border Style="{StaticResource InputBorder}"
-                                Visibility="{Binding HasAdditionalTax, Converter={StaticResource BoolToVis}}">
+                                Visibility="{Binding HasAdditionalTax, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>

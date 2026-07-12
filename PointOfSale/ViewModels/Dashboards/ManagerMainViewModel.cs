@@ -1,4 +1,4 @@
-﻿using BLL.Interfaces;
+using BLL.Interfaces;
 using Contracts.Sales;
 using Contracts.Transactions;
 using POS.Contracts.Receipts;
@@ -28,6 +28,7 @@ namespace UI.ViewModels
         private readonly ISessionService _sessionService;
         private readonly IDialogService _dialogService;
         private CancellationTokenSource? _timeCancellationTokenSource;
+        private object? _receiptFormPage;
 
         private string _managerName = string.Empty;
         private string _currentDayName = string.Empty;
@@ -164,6 +165,10 @@ namespace UI.ViewModels
             // Settings — mirrors the cashier header's gear button so the
             // manager can also change the UI language.
             ShowSetting = new AsyncRelayCommand(OpenSetting);
+
+            // Subscribe to receipt navigation events
+            _receiptManagementViewModel.NavigateToFormRequested += OnReceiptNavigateToForm;
+            _receiptManagementViewModel.NavigateToListRequested += OnReceiptNavigateToList;
 
             // Initialize manager info
             InitializeManagerInfo();

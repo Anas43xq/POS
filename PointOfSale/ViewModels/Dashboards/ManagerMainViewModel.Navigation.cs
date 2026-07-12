@@ -55,6 +55,20 @@ namespace UI.ViewModels
             CurrentPage = _receiptManagementViewModel;
         }
 
+        private void OnReceiptNavigateToForm()
+        {
+            _receiptFormPage = new Views.PurchaseReceiptFormView
+            {
+                DataContext = _receiptManagementViewModel
+            };
+            CurrentPage = _receiptFormPage;
+        }
+
+        private void OnReceiptNavigateToList()
+        {
+            CurrentPage = _receiptManagementViewModel;
+        }
+
         private void InitializeManagerInfo()
         {
             var currentUser = _sessionService.CurrentUser;
@@ -92,7 +106,9 @@ namespace UI.ViewModels
         {
             var vm = new SettingsViewModel(
                 App.ServiceProvider.GetRequiredService<ILocalizationService>(),
-                App.ServiceProvider.GetRequiredService<ISettingsService>());
+                App.ServiceProvider.GetRequiredService<ISettingsService>(),
+                App.ServiceProvider.GetRequiredService<ISessionService>(),
+                App.ServiceProvider.GetRequiredService<KeyboardShortcutsViewModel>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

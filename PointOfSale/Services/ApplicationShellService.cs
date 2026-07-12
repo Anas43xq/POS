@@ -1,3 +1,4 @@
+using Contracts.Enum;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,24 +8,20 @@ using UI.Views;
 
 namespace UI.Services
 {
-    /// <summary>
-    /// Default <see cref="IApplicationShellService"/> implementation.
-    /// Lives in the application layer alongside the other navigation
-    /// services; kept free of any UI controls so it can be unit-tested
-    /// if needed (a <c>Func<Window></c> factory seam would be
-    /// the next step if unit tests are introduced).
-    /// </summary>
     public sealed class ApplicationShellService : IApplicationShellService
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ApplicationShellService> _logger;
+        private readonly ShortcutManager _shortcutManager;
 
         public ApplicationShellService(
             IServiceProvider serviceProvider,
-            ILogger<ApplicationShellService> logger)
+            ILogger<ApplicationShellService> logger,
+            ShortcutManager shortcutManager)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
+            _shortcutManager = shortcutManager;
         }
 
         public void Start()
@@ -41,7 +38,7 @@ namespace UI.Services
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Failed to start application shell — a required service could not be resolved. Check that all ViewModels and Views are registered in App.xaml.cs DI.");
+                _logger.LogCritical(ex, "Failed to start application shell");
                 MessageBox.Show(
                     $"Application failed to start:\n\n{ex.Message}\n\nSee event log for details.",
                     "Startup Error",
@@ -55,17 +52,24 @@ namespace UI.Services
         {
             try
             {
+                // Switch keyboard shortcut profile based on user role
+                var session = _serviceProvider.GetRequiredService<BLL.Interfaces.ISessionService>();
+                var isManager = string.Equals(session.CurrentUser?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase);
+                _shortcutManager.SwitchProfile(isManager ? ShortcutProfileType.Manager : ShortcutProfileType.Cashier);
+
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 if (mainWindow.DataContext is MainViewModel mainViewModel)
                 {
                     mainViewModel.LogoutRequested += () =>
                     {
-                        // Logout: spin up a fresh Login-As window.
+                        // Reset to Cashier profile on logout
+                        _shortcutManager.SwitchProfile(ShortcutProfileType.Cashier);
+
                         var newLoginAs = _serviceProvider.GetRequiredService<LoginAsWindow>();
-                        if (newLoginAs.DataContext is LoginAsViewModel vm)
+                        if (newLoginAs.DataContext is LoginAsViewModel loginVm)
                         {
-                            vm.ManagerLoginSucceeded += () => OpenMainWindow(newLoginAs);
-                            vm.CashierLoginSucceeded += () => OpenMainWindow(newLoginAs);
+                            loginVm.ManagerLoginSucceeded += () => OpenMainWindow(newLoginAs);
+                            loginVm.CashierLoginSucceeded += () => OpenMainWindow(newLoginAs);
                         }
                         newLoginAs.Show();
                         mainWindow.Close();
@@ -77,7 +81,7 @@ namespace UI.Services
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Failed to open main window — a required service could not be resolved. Check that all ViewModels and Views are registered in App.xaml.cs DI.");
+                _logger.LogCritical(ex, "Failed to open main window");
                 MessageBox.Show(
                     $"Failed to open main window:\n\n{ex.Message}\n\nThe application will return to the login screen.",
                     "Navigation Error",

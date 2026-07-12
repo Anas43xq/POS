@@ -1,0 +1,400 @@
+<Window x:Class="UI.Views.ShiftDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:UI.Controls"
+        Title="{DynamicResource Manager.Shifts.DetailTitle}"
+        Width="560" Height="680"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="ModalBg" Color="#1A6FC4"/>
+    </Window.Resources>
+
+    <Border Style="{StaticResource ModalCardBorder}"
+            Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Style="{StaticResource ModalHeaderBorder}" Padding="16,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailTitle}"
+                               FontSize="14" FontWeight="SemiBold"
+                               Foreground="{StaticResource ModalBrandDark}"
+                               VerticalAlignment="Center"/>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ModalCloseButton}"
+                            Content="&#x2715;"
+                            FontSize="13"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CloseCommand}"/>
+                </Grid>
+            </Border>
+
+            <!-- Scrollable content -->
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="16,12">
+                <StackPanel>
+
+                    <!-- ═══ Shift Information ═══ -->
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailShiftNumber}"
+                               Style="{StaticResource ModalLabel}"
+                               Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModalInputBorder}" Padding="12,10" Margin="0,0,0,12" CornerRadius="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0: Shift Number / Cashier -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailShiftNumber}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.ShiftId}" FontSize="13" FontWeight="Medium" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashier}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.CashierName}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+
+                            <!-- Row 1: Open Time / Close Time -->
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailOpenTime}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.OpenedAt, StringFormat='yyyy-MM-dd HH:mm'}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCloseTime}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock FontSize="13" Foreground="{StaticResource ModalTextDark}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="{Binding Detail.ClosedAt, StringFormat='yyyy-MM-dd HH:mm'}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Detail.ClosedAt}" Value="{x:Null}">
+                                                    <Setter Property="Text" Value="--"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Row 2: Duration / Status -->
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailDuration}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.DurationHours, StringFormat={}{0:F1}h}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailStatus}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.StatusLabel}" FontSize="13" FontWeight="Medium">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Detail.StatusLabel}" Value="Open">
+                                                    <Setter Property="Foreground" Value="#16A34A"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Detail.StatusLabel}" Value="Closed">
+                                                    <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Row 3: Opening Cash / Closing Cash -->
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailOpeningCash}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.OpeningCash}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="3" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailClosingCash}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.ClosingCash}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+
+                            <!-- Row 4: Expected Cash / Difference -->
+                            <StackPanel Grid.Column="0" Grid.Row="4" Margin="0,0,12,0">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailExpectedCash}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.ExpectedCash}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,0,0,0">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailDifference}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.CashDifference}" FontSize="13" FontWeight="Medium">
+                                    <controls:CurrencyText.Style>
+                                        <Style TargetType="controls:CurrencyText">
+                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Detail.CashDifference}" Value="{x:Null}">
+                                                    <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </controls:CurrencyText.Style>
+                                </controls:CurrencyText>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ═══ Shift Statistics ═══ -->
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailStatistics}"
+                               Style="{StaticResource ModalLabel}"
+                               Margin="0,8,0,6"/>
+                    <Border Style="{StaticResource ModalInputBorder}" Padding="12,10" Margin="0,0,0,12" CornerRadius="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0: Total Transactions / Total Sales -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailTotalTransactions}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.TotalTransactions}" FontSize="13" FontWeight="Medium" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailTotalSales}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.TotalSales}" FontSize="13" FontWeight="Medium" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+
+                            <!-- Row 1: Cash Transactions / Cash Sales -->
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashTransactions}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.CashTransactions}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashSales}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.CashSales}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+
+                            <!-- Row 2: Card Transactions / Card Sales -->
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,12,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCardTransactions}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.CardTransactions}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,0,0,10">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCardSales}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <controls:CurrencyText Amount="{Binding Detail.CardSales}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+
+                            <!-- Row 3: Refunds -->
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,12,0">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailRefunds}" FontSize="10" Foreground="{StaticResource ModalTextMuted}" Margin="0,0,0,2"/>
+                                <TextBlock Text="{Binding Detail.RefundsCount}" FontSize="13" Foreground="{StaticResource ModalTextDark}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ═══ Transactions ═══ -->
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailTransactions}"
+                               Style="{StaticResource ModalLabel}"
+                               Margin="0,8,0,6"/>
+
+                    <!-- Transaction column headers -->
+                    <Border Background="{StaticResource ModalBrandLight}"
+                            BorderBrush="{StaticResource ModalBrandBorder}"
+                            BorderThickness="1"
+                            CornerRadius="8,8,0,0"
+                            Padding="10,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Transactions.ColReceipt}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource ModalTextMuted}"/>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Shifts.ColOpenedAt}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource ModalTextMuted}"/>
+                            <TextBlock Grid.Column="2" Text="Method" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource ModalTextMuted}"/>
+                            <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Transactions.ColAmount}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource ModalTextMuted}"/>
+                            <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Transactions.ColStatus}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource ModalTextMuted}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Transaction list -->
+                    <Border BorderBrush="{StaticResource ModalBrandBorder}"
+                            BorderThickness="1,0,1,1"
+                            CornerRadius="0,0,8,8"
+                            MaxHeight="200">
+                        <ListBox ItemsSource="{Binding Transactions}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="0"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border x:Name="RowBorder"
+                                                        Background="Transparent"
+                                                        BorderBrush="{StaticResource ModalBrandBorder}"
+                                                        BorderThickness="0,0,0,0.5"
+                                                        Padding="10,6">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="RowBorder" Property="Background" Value="{StaticResource ModalBrandLight}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="130"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Receipt button -->
+                                        <Button Grid.Column="0"
+                                                FontSize="11"
+                                                Cursor="Hand"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding DataContext.OpenReceiptCommand,
+                                                          RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="Bg" Background="#DBEEFF" CornerRadius="4" Padding="7,2">
+                                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Bg" Property="Background" Value="#C4DDF5"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <TextBlock Text="{Binding ReceiptNumber}" FontSize="11" Foreground="{StaticResource ModalBrandDark}"/>
+                                        </Button>
+
+                                        <!-- Date -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
+                                                   FontSize="11"
+                                                   Foreground="{StaticResource ModalTextDark}"
+                                                   VerticalAlignment="Center"/>
+
+                                        <!-- Payment Method -->
+                                        <Border Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                CornerRadius="10" Padding="8,2">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                                                            <Setter Property="Background" Value="#DCFCE7"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                            <Setter Property="Background" Value="#DBEAFE"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding PaymentMethod}" FontSize="11" FontWeight="Medium" VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                                                                <Setter Property="Foreground" Value="#16A34A"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                                <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!-- Amount -->
+                                        <controls:CurrencyText Grid.Column="3"
+                                                   Amount="{Binding GrandTotal}"
+                                                   FontSize="11"
+                                                   Foreground="{StaticResource ModalTextDark}"
+                                                   VerticalAlignment="Center"/>
+
+                                        <!-- Status -->
+                                        <TextBlock Grid.Column="4"
+                                                   Text="{Binding Status}"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                            <Setter Property="Foreground" Value="#1A6FC4"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Voided">
+                                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                            <Setter Property="Foreground" Value="#92400E"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Style="{StaticResource ModalFooterBorder}" Padding="16,10">
+                <Button Style="{StaticResource OutlineBtn}"
+                        Content="{DynamicResource Manager.Shifts.DetailClose}"
+                        HorizontalAlignment="Right"
+                        Command="{Binding CloseCommand}"/>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

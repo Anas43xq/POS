@@ -8,13 +8,6 @@
              Background="#F5F6FA">
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-        <SolidColorBrush x:Key="BrandDark" Color="#1A6FC4"/>
-        <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
-        <SolidColorBrush x:Key="BrandLight" Color="#F0F7FF"/>
-        <SolidColorBrush x:Key="TextDark" Color="#1A3A5C"/>
-        <SolidColorBrush x:Key="TextMuted" Color="#8AB0CC"/>
-        <SolidColorBrush x:Key="DangerRed" Color="#DC2626"/>
     </UserControl.Resources>
 
     <Grid Margin="16">
@@ -28,10 +21,39 @@
         </Grid.RowDefinitions>
 
         <!-- Page Header -->
-        <TextBlock Grid.Row="0"
-                   Text="Sizes"
-                   FontSize="18" FontWeight="Medium"
-                   Foreground="{StaticResource TextDark}"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Sizes"
+                       FontSize="18" FontWeight="Medium"
+                       Foreground="{StaticResource TextDark}"
+                       VerticalAlignment="Center"/>
+
+            <!-- Keyboard shortcut hints -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding AddGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Add" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding EditGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Edit" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource ShortcutChip}">
+                    <Border Style="{StaticResource ShortcutKeyCap}">
+                        <TextBlock Text="{Binding DeleteGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                    </Border>
+                    <TextBlock Text="Delete" Style="{StaticResource ShortcutLabelText}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
 
         <!-- Toolbar -->
         <Border Grid.Row="1"
@@ -126,7 +148,7 @@
                     BorderThickness="0.5"
                     CornerRadius="10"
                     Padding="16"
-                    Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}">
+                    Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel>
                     <TextBlock Text="Size Details"
                                FontSize="14" FontWeight="Medium"
@@ -138,7 +160,7 @@
                             BorderBrush="#FECACA"
                             BorderThickness="1" CornerRadius="7"
                             Padding="10,8" Margin="0,0,0,12"
-                            Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="{Binding ErrorMessage}"
                                    FontSize="11" Foreground="#DC2626"
                                    TextWrapping="Wrap"/>

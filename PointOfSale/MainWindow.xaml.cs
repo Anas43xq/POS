@@ -1,20 +1,20 @@
-﻿using System.Windows;
-using UI.ViewModels;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Input;
+using Contracts.Enum;
+using UI.Services;
+using UI.ViewModels;
 
 namespace UI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(MainViewModel viewModel)
+        private readonly ShortcutManager _shortcutManager;
+
+        public MainWindow(MainViewModel viewModel, ShortcutManager shortcutManager)
         {
             InitializeComponent();
             DataContext = viewModel;
+            _shortcutManager = shortcutManager;
             PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
 
@@ -23,20 +23,26 @@ namespace UI
             if (DataContext is not MainViewModel mainViewModel)
                 return;
 
+            // Let ShortcutManager try to match first
+            if (_shortcutManager.ProcessKey(e.Key, Keyboard.Modifiers))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Fallback: map matched actions to ViewModel commands
+            if (_shortcutManager.GetCurrentBindings().Count > 0)
+                return; // Service is active, skip legacy dispatch
+
+            // Legacy dispatch (only if shortcut service has no bindings)
             if (mainViewModel.CurrentViewModel is CashierDashboardViewModel cashier)
             {
-                if (TryExecute(cashier.StartDayCommand, e, Key.F2) ||
-                    TryExecute(cashier.EndDayCommand, e, Key.F3) ||
-                    TryExecute(cashier.ShowRecentSalesCommand, e, Key.F4) ||
-                    TryExecute(cashier.PayCashCommand, e, Key.F6) ||
-                    TryExecute(cashier.PayCardCommand, e, Key.F7) ||
-                    TryExecute(cashier.ClearSaleCommand, e, Key.F8) ||
-                    TryExecute(cashier.LogoutCommand, e, Key.F9))
+                if (TryExecute(cashier.PayCashCommand, e, Key.F8) ||
+                    TryExecute(cashier.PayCardCommand, e, Key.F9))
                 {
                     return;
                 }
             }
-
         }
 
         private static bool TryExecute(ICommand command, KeyEventArgs e, Key key)
@@ -53,17 +59,16 @@ namespace UI
 
         private void CashReceived_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (sender is not TextBox textBox)
+            if (sender is not System.Windows.Controls.TextBox textBox)
                 return;
 
             string newText = GetPreviewText(textBox, e.Text);
-
             e.Handled = !IsValidMoneyInput(newText);
         }
 
         private void CashReceived_Pasting(object sender, DataObjectPastingEventArgs e)
         {
-            if (sender is not TextBox textBox)
+            if (sender is not System.Windows.Controls.TextBox textBox)
                 return;
 
             if (!e.DataObject.GetDataPresent(typeof(string)))
@@ -79,10 +84,9 @@ namespace UI
                 e.CancelCommand();
         }
 
-        private static string GetPreviewText(TextBox textBox, string input)
+        private static string GetPreviewText(System.Windows.Controls.TextBox textBox, string input)
         {
             string currentText = textBox.Text;
-
             return currentText.Remove(textBox.SelectionStart, textBox.SelectionLength)
                               .Insert(textBox.SelectionStart, input);
         }
@@ -92,13 +96,7 @@ namespace UI
             if (string.IsNullOrWhiteSpace(text))
                 return true;
 
-            // Allows:
-            // 123
-            // 123.4
-            // 123.45
-            // Max 10 digits before decimal
-            return Regex.IsMatch(text, @"^\d{0,7}(\.\d{0,2})?$");
+            return System.Text.RegularExpressions.Regex.IsMatch(text, @"^\d{0,7}(\.\d{0,2})?$");
         }
-
     }
 }

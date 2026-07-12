@@ -21,6 +21,17 @@ namespace DAL.Repositories
              .ToListAsync();
         }
 
+        public async Task<IEnumerable<Product>> GetProductSummariesAsync()
+        {
+            await using var context = await _contextFactory!.CreateDbContextAsync();
+            var products = await context.Products
+                .Where(p => p.IsActive)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products;
+        }
+
         public async Task<IEnumerable<ProductVariant>> GetAllVariantsAsync()
         {
             await using var context = await _contextFactory!.CreateDbContextAsync();

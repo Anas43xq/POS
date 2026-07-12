@@ -16,10 +16,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+        </ResourceDictionary.MergedDictionaries>
 
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="11"/>
@@ -270,7 +268,7 @@
     </Window.Resources>
 
     <Grid x:Name="OverlayGrid"
-          Background="Transparent"
+          Background="#55000000"
           MouseDown="OverlayGrid_MouseDown">
 
         <Border x:Name="DialogCard"
@@ -335,7 +333,7 @@
                         BorderBrush="{StaticResource ModalErrorBorder}"
                         BorderThickness="1" CornerRadius="7"
                         Padding="11,8" Margin="16,10,16,0"
-                        Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
                         <TextBlock Text="{Binding ErrorMessage}"
@@ -356,6 +354,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0"
@@ -371,6 +370,13 @@
                         </Button>
 
                         <Button Grid.Column="2"
+                                Style="{StaticResource OutlineToolBtn}"
+                                Margin="0,0,6,0"
+                                Command="{Binding EditCommand}">
+                            <TextBlock Text="✏ Edit" FontSize="11"/>
+                        </Button>
+
+                        <Button Grid.Column="3"
                                 Style="{StaticResource DangerToolBtn}"
                                 Command="{Binding DeleteCommand}">
                             <TextBlock Text="🗑 Delete" FontSize="11"/>
@@ -406,7 +412,7 @@
                 <!-- EDIT AREA (visible when adding/editing) -->
                 <Border Grid.Row="3"
                         Margin="16,8,16,4"
-                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel>
                         <TextBlock Text="Language" Style="{StaticResource FieldLabel}"/>
                         <ComboBox Style="{StaticResource FieldComboBox}"
@@ -422,7 +428,7 @@
                         </Border>
 
                         <!-- Description (product only) -->
-                        <StackPanel Visibility="{Binding HasDescription, Converter={StaticResource BoolToVis}}">
+                        <StackPanel Visibility="{Binding HasDescription, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
                             <Border Style="{StaticResource InputBorder}" Margin="0,0,0,10">
                                 <TextBox Style="{StaticResource FieldTextBox}"
@@ -441,15 +447,15 @@
                         <Button Style="{StaticResource CancelBtn}"
                                 Content="Cancel"
                                 Margin="0,0,8,0"
-                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding CancelCommand}"/>
                         <Button Style="{StaticResource SaveBtn}"
                                 Content="Save Translation"
-                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding SaveCommand}"/>
                         <Button Style="{StaticResource CancelBtn}"
                                 Content="Close"
-                                Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVis}}"
+                                Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding CloseCommand}"/>
                     </StackPanel>
                 </Border>

@@ -8,6 +8,32 @@ namespace UI.ViewModels
 {
     public partial class ProductManagementViewModel
     {
+        private void RestartSearchDebounce()
+        {
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
+        }
+
+        private void OnSearchDebounceTick(object? sender, EventArgs e)
+        {
+            _searchDebounceTimer.Stop();
+            ApplyCategoryFilter();
+            ApplyProductFilter();
+        }
+
+        private void CacheCategoryIds()
+        {
+            if (SelectedCategory != null && SelectedCategory.Id >= 0)
+            {
+                _cachedCategoryIds = new HashSet<int> { SelectedCategory.Id };
+                AddChildCategoryIds(SelectedCategory, _cachedCategoryIds);
+            }
+            else
+            {
+                _cachedCategoryIds = null;
+            }
+        }
+
         private void OnLanguageChanged(object? sender, EventArgs e)
         {
             _ = LoadDataAsync();
@@ -150,19 +176,13 @@ namespace UI.ViewModels
             Products.Clear();
 
             var query = ProductSearchText.Trim();
-            var selectedCategoryIds = new HashSet<int>();
-            if (SelectedCategory != null && SelectedCategory.Id >= 0)
-            {
-                selectedCategoryIds.Add(SelectedCategory.Id);
-                AddChildCategoryIds(SelectedCategory, selectedCategoryIds);
-            }
 
             var filtered = _allProducts.Where(product =>
             {
                 var matchesText = string.IsNullOrWhiteSpace(query) ||
                     product.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
 
-                var matchesCategory = SelectedCategory == null || SelectedCategory.Id < 0 || selectedCategoryIds.Contains(product.CategoryId);
+                var matchesCategory = _cachedCategoryIds == null || _cachedCategoryIds.Contains(product.CategoryId);
 
                 return matchesText && matchesCategory;
             });

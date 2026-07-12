@@ -19,15 +19,17 @@
                 </ResourceDictionary>
                 <!-- 1. Converters (no dependencies) -->
                 <ResourceDictionary Source="Resources/Converters.xaml" />
-                <!-- 2. Dashboard chrome (brushes, KPI tiles, card styles) -->
+                <!-- 2. Common layer — single source of truth for brand
+                         palette, generic buttons, and reusable list/badge
+                         components.  Loaded before any module dictionary. -->
+                <ResourceDictionary Source="Resources/Common/Brushes.xaml" />
+                <ResourceDictionary Source="Resources/Common/Buttons.xaml" />
+                <ResourceDictionary Source="Resources/Common/Lists.xaml" />
+                <ResourceDictionary Source="Resources/Common/Shortcuts.xaml" />
+                <!-- 3. Dashboard chrome (brushes, KPI tiles, card styles) -->
                 <ResourceDictionary Source="Resources/DashboardChrome.xaml" />
-                <!-- 3. Dialog chrome (modal styles) -->
+                <!-- 4. Dialog chrome (modal styles) -->
                 <ResourceDictionary Source="Resources/DialogChrome.xaml" />
-                <!-- 4. Shared app chrome (button + list + badge styles,
-                        plus the destructive-action palette).  Adds
-                        keys not present in DashboardChrome / DialogChrome
-                        so there are no duplicate-key conflicts. -->
-                <ResourceDictionary Source="Resources/AppChrome.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

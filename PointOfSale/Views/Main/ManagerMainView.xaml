@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Manager Main Shell          ║
     ║   Header + Navy Sidebar + Content Frame              ║
@@ -17,16 +17,12 @@
 
     <UserControl.Resources>
 
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
         <!-- ── Palette ── -->
         <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
         <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
         <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
         <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
         <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
-        <SolidColorBrush x:Key="DangerRed"   Color="#DC2626"/>
-        <SolidColorBrush x:Key="DangerHover" Color="#B91C1C"/>
         <SolidColorBrush x:Key="SidebarTop"  Color="#0F2A4A"/>
         <SolidColorBrush x:Key="SidebarBot"  Color="#1A3F6B"/>
         <SolidColorBrush x:Key="NavIdleFg"   Color="#99FFFFFF"/>

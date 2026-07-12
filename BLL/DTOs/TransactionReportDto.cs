@@ -5,6 +5,7 @@ namespace BLL.DTOs;
 /// </summary>
 public sealed class TransactionReportDto
 {
+    public int TransactionId { get; init; }
     public string ReceiptNumber { get; init; } = string.Empty;
 
     public DateTime TransactionDate { get; init; }

@@ -62,8 +62,9 @@ public class TranslationDialogViewModel : BaseViewModel
             SupportedLanguages.All.Where(l => l.FilePrefix != "en"));
 
         AddCommand = new RelayCommand(_ => StartAdd(), _ => !IsEditing);
+        EditCommand = new RelayCommand(_ => StartEdit(), _ => !IsEditing && SelectedTranslation != null);
         SaveCommand = new AsyncRelayCommand(SaveAsync);
-        DeleteCommand = new AsyncRelayCommand(DeleteAsync, () => SelectedTranslation != null);
+        DeleteCommand = new AsyncRelayCommand(DeleteAsync, () => !IsEditing && SelectedTranslation != null);
         CancelCommand = new RelayCommand(_ => CancelEdit());
         CloseCommand = new RelayCommand(_ => RequestClose?.Invoke());
 
@@ -84,7 +85,10 @@ public class TranslationDialogViewModel : BaseViewModel
             {
                 _selectedTranslation = value;
                 OnPropertyChanged();
-                if (DeleteCommand is RelayCommand cmd) cmd.RaiseCanExecuteChanged();
+                if (AddCommand is RelayCommand addCmd) addCmd.RaiseCanExecuteChanged();
+                if (EditCommand is RelayCommand editCmd) editCmd.RaiseCanExecuteChanged();
+                if (DeleteCommand is AsyncRelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
+                CommandManager.InvalidateRequerySuggested();
             }
         }
     }
@@ -112,7 +116,10 @@ public class TranslationDialogViewModel : BaseViewModel
                 _isEditing = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsNotEditing));
-                if (AddCommand is RelayCommand cmd) cmd.RaiseCanExecuteChanged();
+                if (AddCommand is RelayCommand addCmd) addCmd.RaiseCanExecuteChanged();
+                if (EditCommand is RelayCommand editCmd) editCmd.RaiseCanExecuteChanged();
+                if (DeleteCommand is AsyncRelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
+                CommandManager.InvalidateRequerySuggested();
             }
         }
     }
@@ -124,6 +131,7 @@ public class TranslationDialogViewModel : BaseViewModel
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
     public ICommand AddCommand { get; }
+    public ICommand EditCommand { get; }
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
     public ICommand CancelCommand { get; }
@@ -185,6 +193,24 @@ public class TranslationDialogViewModel : BaseViewModel
         {
             EntityId = _entityId,
             SelectedLanguage = Languages.FirstOrDefault()
+        };
+        IsEditing = true;
+    }
+
+    private void StartEdit()
+    {
+        if (SelectedTranslation == null) return;
+
+        ErrorMessage = null;
+        EditItem = new TranslationItemViewModel
+        {
+            TranslationId = SelectedTranslation.TranslationId,
+            EntityId = _entityId,
+            LanguageCode = SelectedTranslation.LanguageCode,
+            LanguageName = SelectedTranslation.LanguageName,
+            TranslatedName = SelectedTranslation.TranslatedName,
+            TranslatedDescription = SelectedTranslation.TranslatedDescription,
+            SelectedLanguage = Languages.FirstOrDefault(l => l.FilePrefix == SelectedTranslation.LanguageCode)
         };
         IsEditing = true;
     }

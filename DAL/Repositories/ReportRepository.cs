@@ -50,6 +50,7 @@ namespace DAL.Repositories
 
                 items.Add(new TransactionReportEntity
                 {
+                    TransactionId = reader.GetInt32(reader.GetOrdinal("TransactionId")),
                     ReceiptNumber = Helpers.GetStringSafe(reader, "ReceiptNumber"),
                     TransactionDate = reader.GetDateTime(reader.GetOrdinal("TransactionDate")),
                     PaymentMethod = Helpers.GetStringSafe(reader, "PaymentMethod"),

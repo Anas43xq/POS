@@ -25,6 +25,7 @@ namespace BLL.Services
             var entities = await _reportRepository.GetTransactionsReportAsync(periodType, fromDate, toDate);
             return entities.Select(e => new TransactionReportDto
             {
+                TransactionId = e.TransactionId,
                 ReceiptNumber = e.ReceiptNumber,
                 TransactionDate = e.TransactionDate,
                 PaymentMethod = e.PaymentMethod,

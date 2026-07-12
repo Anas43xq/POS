@@ -14,11 +14,9 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/AppChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
         <!-- ── Small action chip (e.g. "View all") ── -->
         <Style x:Key="CardActionBtn" TargetType="Button">
@@ -103,6 +101,16 @@
                                  Command="{Binding ShowPeriodFilterCommand}"/>
 
                     <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="6,0"/>
+
+                    <!-- Keyboard shortcut hints -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
+                        <StackPanel Style="{StaticResource ShortcutChip}">
+                            <Border Style="{StaticResource ShortcutKeyCap}">
+                                <TextBlock Text="{Binding RefreshGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                            </Border>
+                            <TextBlock Text="Refresh" Style="{StaticResource ShortcutLabelText}"/>
+                        </StackPanel>
+                    </StackPanel>
 
                     <TextBlock Text="{DynamicResource Common.From}" FontSize="11" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Margin="0,0,6,0"/>

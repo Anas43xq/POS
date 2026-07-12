@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BLL.DTOs;
 using ClosedXML.Excel;
-using DAL.Entities;
 using POS.Contracts.Receipts;
 
 namespace UI.Services
@@ -56,8 +56,16 @@ namespace UI.Services
             ws.Cell(2, 1).Style.Font.FontColor = summaryLabelColor;
 
             // ================================================================
-            // ROW 3: BLANK
+            // ROW 3: PRODUCT NAME (if product mode)
             // ================================================================
+            if (request.ReportType == ReportType.ProductReport && !string.IsNullOrEmpty(request.ProductName))
+            {
+                ws.Cell(3, 1).Value = $"Product: {request.ProductName}";
+                ws.Range(3, 1, 3, 6).Merge();
+                ws.Cell(3, 1).Style.Font.FontSize = 12;
+                ws.Cell(3, 1).Style.Font.Bold = true;
+                ws.Cell(3, 1).Style.Font.FontColor = summaryLabelColor;
+            }
             int currentRow = 4;
 
             // ================================================================
@@ -75,8 +83,16 @@ namespace UI.Services
                     WriteSummaryRow(ws, currentRow, "", "", summaryLabelColor, summaryValueColor);
                     WriteSummaryRow(ws, currentRow, "", "", summaryLabelColor, summaryValueColor, col: 3);
                     WriteSummaryRow(ws, currentRow, "Card Total", summary.CardTotal, summaryLabelColor, summaryValueColor, col: 5);
+                    currentRow += 2;
                 }
-                currentRow += 2;
+                else if (request.ReportType == ReportType.ProductReport)
+                {
+                    var summary = (ProductReportSummary)request.Summary;
+                    WriteSummaryRow(ws, currentRow, "Total Quantity Sold", summary.TotalQuantitySold, summaryLabelColor, summaryValueColor);
+                    WriteSummaryRow(ws, currentRow, "Total Revenue", summary.TotalRevenue, summaryLabelColor, summaryValueColor, col: 3);
+                    WriteSummaryRow(ws, currentRow, "Average Price", summary.AveragePrice, summaryLabelColor, summaryValueColor, col: 5);
+                    currentRow += 2;
+                }
             }
 
             // ================================================================
@@ -159,6 +175,15 @@ private static readonly string[] PurchaseHeaders =
     "Note"
 };
 
+private static readonly string[] ProductReportHeaders =
+{
+    "Receipt Number",
+    "Transaction Date",
+    "Payment Method",
+    "Quantity",
+    "Line Total"
+};
+
 private static string[] BuildHeader(ReportType reportType)
 {
     return reportType switch
@@ -174,6 +199,7 @@ private static string[] BuildHeader(ReportType reportType)
 
         ReportType.VatPurchaseRegister => PurchaseHeaders,
         ReportType.NonVatPurchaseRegister => PurchaseHeaders,
+        ReportType.ProductReport => ProductReportHeaders,
 
         _ => throw new ArgumentOutOfRangeException(nameof(reportType), reportType, null)
     };
@@ -187,7 +213,7 @@ private static string[] BuildHeader(ReportType reportType)
         {
             int row = startRow;
 
-            if (reportType == ReportType.Transactions && data is List<TransactionReportEntity> transactions)
+            if (reportType == ReportType.Transactions && data is IEnumerable<TransactionReportDto> transactions)
             {
                 foreach (var item in transactions)
                 {
@@ -196,54 +222,29 @@ private static string[] BuildHeader(ReportType reportType)
                     ws.Cell(row, 3).Value = item.PaymentMethod;
                     ws.Cell(row, 4).Value = item.GrandTotal;
                     ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 5).Value = item.Note;
+
+                    ApplyRowBorder(ws, row, 5, borderColor: XLColor.FromArgb(229, 231, 235));
+                    row++;
+                }
+            }
+            else if ((reportType == ReportType.VatPurchaseRegister || reportType == ReportType.NonVatPurchaseRegister)
+                     && data is IEnumerable<PurchaseReceiptDto> receipts)
+            {
+                var list = receipts.ToList();
+                bool isVat = reportType == ReportType.VatPurchaseRegister;
+
+                foreach (var item in list)
+                {
+                    // 1:1 with PurchaseHeaders: Invoice No, Supplier, Invoice Date, Amount, VAT, Total, Note
+                    ws.Cell(row, 1).Value = item.InvoiceNumber;
+                    ws.Cell(row, 2).Value = item.SupplierName;
+                    ws.Cell(row, 3).Value = item.InvoiceDate.ToString("dd/MM/yyyy");
+                    ws.Cell(row, 4).Value = item.Subtotal;
+                    ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0.00";
+                    ws.Cell(row, 5).Value = item.VatAmount;
                     ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
-                    ws.Cell(row, 6).Value = item.Note;
-
-                    ApplyRowBorder(ws, row, 6, borderColor: XLColor.FromArgb(229, 231, 235));
-                    row++;
-                }
-            }
-            else if (reportType == ReportType.VatPurchaseRegister && data is IEnumerable<PurchaseReceiptDto> vatReceipts)
-            {
-                var receipts = vatReceipts.ToList();
-                foreach (var item in receipts)
-                {
-                    ws.Cell(row, 1).Value = item.InvoiceDate.ToString("dd/MM/yyyy");
-                    ws.Cell(row, 2).Value = item.InvoiceNumber;
-                    ws.Cell(row, 3).Value = item.SupplierName;
-                    ws.Cell(row, 4).Value = string.Empty;
-                    ws.Cell(row, 5).Value = item.Category;
-                    ws.Cell(row, 6).Value = item.Description;
-                    ws.Cell(row, 7).Value = item.Subtotal;
-                    ws.Cell(row, 7).Style.NumberFormat.Format = "#,##0.00";
-                    ws.Cell(row, 8).Value = item.VatRate;
-                    ws.Cell(row, 8).Style.NumberFormat.Format = "0.00";
-                    ws.Cell(row, 9).Value = item.VatAmount;
-                    ws.Cell(row, 9).Style.NumberFormat.Format = "#,##0.00";
-                    ws.Cell(row, 10).Value = item.GrandTotal;
-                    ws.Cell(row, 10).Style.NumberFormat.Format = "#,##0.00";
-                    ws.Cell(row, 11).Value = item.Notes;
-
-                    ApplyRowBorder(ws, row, 11, borderColor: XLColor.FromArgb(229, 231, 235));
-                    row++;
-                }
-
-                var totalTaxable = receipts.Sum(r => r.Subtotal);
-                var totalVat = receipts.Sum(r => r.VatAmount);
-                var totalGrand = receipts.Sum(r => r.GrandTotal);
-                WritePurchaseTotals(ws, row, totalTaxable, totalVat, totalGrand, headerColor: XLColor.FromArgb(21, 101, 192));
-            }
-            else if (reportType == ReportType.NonVatPurchaseRegister && data is IEnumerable<PurchaseReceiptDto> nonVatReceipts)
-            {
-                var receipts = nonVatReceipts.ToList();
-                foreach (var item in receipts)
-                {
-                    ws.Cell(row, 1).Value = item.InvoiceDate.ToString("dd/MM/yyyy");
-                    ws.Cell(row, 2).Value = item.InvoiceNumber;
-                    ws.Cell(row, 3).Value = item.SupplierName;
-                    ws.Cell(row, 4).Value = item.Category;
-                    ws.Cell(row, 5).Value = item.Description;
-                    ws.Cell(row, 6).Value = item.Subtotal;
+                    ws.Cell(row, 6).Value = item.GrandTotal;
                     ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
                     ws.Cell(row, 7).Value = item.Notes;
 
@@ -251,8 +252,36 @@ private static string[] BuildHeader(ReportType reportType)
                     row++;
                 }
 
-                var totalExpenses = receipts.Sum(r => r.Subtotal);
-                WriteNonVatTotals(ws, row, totalExpenses, headerColor: XLColor.FromArgb(21, 101, 192));
+                var totalAmount = list.Sum(r => r.Subtotal);
+                var totalVat = list.Sum(r => r.VatAmount);
+                var totalGrand = list.Sum(r => r.GrandTotal);
+
+                if (isVat)
+                    WritePurchaseTotals(ws, row, totalAmount, totalVat, totalGrand, XLColor.FromArgb(21, 101, 192));
+                else
+                    WriteNonVatTotals(ws, row, totalAmount, XLColor.FromArgb(21, 101, 192));
+            }
+            else if (reportType == ReportType.ProductReport && data is IEnumerable<ProductReportDto> products)
+            {
+                var list = products.ToList();
+                foreach (var item in list)
+                {
+                    // 1:1 with ProductReportHeaders: Receipt Number, Transaction Date, Payment Method, Quantity, Line Total
+                    ws.Cell(row, 1).Value = item.ReceiptNumber;
+                    ws.Cell(row, 2).Value = item.TransactionDate.ToString("g");
+                    ws.Cell(row, 3).Value = item.PaymentMethod;
+                    ws.Cell(row, 4).Value = item.Quantity;
+                    ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0";
+                    ws.Cell(row, 5).Value = item.LineTotal;
+                    ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
+
+                    ApplyRowBorder(ws, row, 5, borderColor: XLColor.FromArgb(229, 231, 235));
+                    row++;
+                }
+
+                var totalQty = list.Sum(p => p.Quantity);
+                var totalLine = list.Sum(p => p.LineTotal);
+                WriteProductTotals(ws, row, totalQty, totalLine, XLColor.FromArgb(21, 101, 192));
             }
         }
 
@@ -270,15 +299,15 @@ private static string[] BuildHeader(ReportType reportType)
             ws.Cell(row, 1).Value = "Totals";
             ws.Cell(row, 1).Style.Font.Bold = true;
             ws.Cell(row, 1).Style.Font.FontColor = headerColor;
-            ws.Cell(row, 6).Value = taxableAmount;
+            ws.Cell(row, 4).Value = taxableAmount;
+            ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 4).Style.Font.Bold = true;
+            ws.Cell(row, 5).Value = vatAmount;
+            ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 5).Style.Font.Bold = true;
+            ws.Cell(row, 6).Value = grandTotal;
             ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, 6).Style.Font.Bold = true;
-            ws.Cell(row, 9).Value = vatAmount;
-            ws.Cell(row, 9).Style.NumberFormat.Format = "#,##0.00";
-            ws.Cell(row, 9).Style.Font.Bold = true;
-            ws.Cell(row, 10).Value = grandTotal;
-            ws.Cell(row, 10).Style.NumberFormat.Format = "#,##0.00";
-            ws.Cell(row, 10).Style.Font.Bold = true;
         }
 
         private static void WriteNonVatTotals(IXLWorksheet ws, int row, decimal totalExpenses, XLColor headerColor)
@@ -286,9 +315,25 @@ private static string[] BuildHeader(ReportType reportType)
             ws.Cell(row, 1).Value = "Total Expenses";
             ws.Cell(row, 1).Style.Font.Bold = true;
             ws.Cell(row, 1).Style.Font.FontColor = headerColor;
+            ws.Cell(row, 4).Value = totalExpenses;
+            ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 4).Style.Font.Bold = true;
             ws.Cell(row, 6).Value = totalExpenses;
             ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, 6).Style.Font.Bold = true;
+        }
+
+        private static void WriteProductTotals(IXLWorksheet ws, int row, int totalQuantity, decimal totalLineTotal, XLColor headerColor)
+        {
+            ws.Cell(row, 1).Value = "Totals";
+            ws.Cell(row, 1).Style.Font.Bold = true;
+            ws.Cell(row, 1).Style.Font.FontColor = headerColor;
+            ws.Cell(row, 4).Value = totalQuantity;
+            ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0";
+            ws.Cell(row, 4).Style.Font.Bold = true;
+            ws.Cell(row, 5).Value = totalLineTotal;
+            ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 5).Style.Font.Bold = true;
         }
     }
 

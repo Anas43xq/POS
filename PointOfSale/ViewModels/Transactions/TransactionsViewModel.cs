@@ -19,6 +19,7 @@ namespace UI.ViewModels
     {
         private readonly ITransactionService _transactionService;
         private readonly IReceiptDisplayService _receiptDisplayService;
+        private readonly IKeyboardShortcutService _shortcutService;
 
         private readonly ObservableCollection<TransactionListItemDto> _transactions = new();
         private ICollectionView? _transactionsView;
@@ -28,12 +29,16 @@ namespace UI.ViewModels
         private int _totalCount;
         private bool _isLoaded;
 
+        public string SearchGesture => GetShortcutGesture(ShortcutAction.FocusSearch);
+
         public TransactionsViewModel(
             ITransactionService transactionService,
-            IReceiptDisplayService receiptDisplayService)
+            IReceiptDisplayService receiptDisplayService,
+            IKeyboardShortcutService shortcutService)
         {
             _transactionService = transactionService;
             _receiptDisplayService = receiptDisplayService;
+            _shortcutService = shortcutService;
 
             LoadDayCommand = new RelayCommand(_ => LoadDay());
             LoadWeekCommand = new RelayCommand(_ => LoadWeek());
@@ -271,6 +276,12 @@ namespace UI.ViewModels
         public bool CanGoPreviousPage => CurrentPage > 1;
         public bool CanGoNextPage => CurrentPage < TotalPages;
 
+        private string GetShortcutGesture(ShortcutAction action)
+        {
+            var bindings = _shortcutService.GetActiveBindings();
+            var binding = bindings.FirstOrDefault(b => b.Action == action);
+            return binding?.KeyGesture ?? string.Empty;
+        }
     }
 
     /// <summary>

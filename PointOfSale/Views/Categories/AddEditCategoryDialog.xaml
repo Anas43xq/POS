@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Add / Edit Category Dialog  ║
     ║   Modal popup with overlay dismiss                   ║
@@ -24,8 +24,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
         <!-- ── Field label ── -->
         <Style x:Key="FieldLabel" TargetType="TextBlock">
@@ -81,8 +79,11 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
-                                                  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding SelectedItem.DisplayName,
+                                            RelativeSource={RelativeSource TemplatedParent}}"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextDark}"/>
                                 <TextBlock Grid.Column="1"
                                            Text="▾"
                                            FontSize="10"
@@ -132,7 +133,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBoxItem">
                         <Border x:Name="Bg" Background="Transparent" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter/>
+                            <TextBlock Text="{Binding DisplayName}" FontSize="13" Foreground="{StaticResource TextDark}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
@@ -243,13 +244,15 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Header  -->
+                    <!-- Header          -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Error   -->
+                    <!-- Error           -->
                     <RowDefinition Height="*"/>
-                    <!-- Fields  -->
+                    <!-- Fields          -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Footer  -->
+                    <!-- Action buttons  -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Footer          -->
                 </Grid.RowDefinitions>
 
                 <!-- ── Header ── -->
@@ -284,7 +287,7 @@
                         CornerRadius="7"
                         Padding="12,8"
                         Margin="18,12,18,0"
-                        Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
                         <TextBlock Text="{Binding ErrorMessage}"
@@ -340,8 +343,17 @@
 
                 </StackPanel>
 
+                <!-- ── ACTION BUTTONS (Translations) ── -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal"
+                            HorizontalAlignment="Center" Margin="16,6,16,2">
+                    <Button Style="{StaticResource CancelBtn}"
+                            Content="🌐 Translations..."
+                            Command="{Binding TranslationsCommand}"
+                            Padding="14,0"/>
+                </StackPanel>
+
                 <!-- ── Footer ── -->
-                <Border Grid.Row="3"
+                <Border Grid.Row="4"
                         Background="{StaticResource BrandLight}"
                         BorderBrush="{StaticResource BrandBorder}"
                         BorderThickness="0,0.5,0,0"

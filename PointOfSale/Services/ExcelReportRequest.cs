@@ -11,5 +11,6 @@ namespace UI.Services
 
         public object? Summary { get; set; }
         public object Data { get; set; } = null!;
+        public string? ProductName { get; set; }
     }
 }

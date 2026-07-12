@@ -87,6 +87,53 @@ namespace BLL.Services
             }
         }
 
+        public async Task<Result<List<ProductSummaryDto>>> GetProductSummariesAsync(string? languageCode = null)
+        {
+            try
+            {
+                var products = await _productrepo.GetProductSummariesAsync();
+
+                if (string.IsNullOrWhiteSpace(languageCode) || languageCode == "en")
+                {
+                    var mapped = products.Select(p => new ProductSummaryDto
+                    {
+                        ProductId = p.ProductId,
+                        Name = p.Name,
+                        IsActive = p.IsActive
+                    }).ToList();
+
+
+                    return Result<List<ProductSummaryDto>>.Success(mapped);
+                }
+
+                var translations = (await _productTranslationService
+                    .GetAllByLanguageCodeAsync(languageCode))
+                    .ToDictionary(t => t.ProductId, t => t.TranslatedName);
+
+                var mappedLocalized = products.Select(p =>
+                    {
+                        var localizedName = translations.TryGetValue(p.ProductId, out var tName)
+                            && !string.IsNullOrWhiteSpace(tName)
+                            ? tName
+                            : p.Name;
+
+                        return new ProductSummaryDto
+                        {
+                            ProductId = p.ProductId,
+                            Name = localizedName,
+                            IsActive = p.IsActive
+                        };
+                    }).ToList();
+
+
+                return Result<List<ProductSummaryDto>>.Success(mappedLocalized);
+            }
+            catch (Exception ex)
+            {
+                return Result<List<ProductSummaryDto>>.Failure(ex.Message);
+            }
+        }
+
         public async Task<Result<List<ProductDto>>> GetAllVariantsAsync()
         {
             try

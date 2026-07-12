@@ -1,0 +1,33 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Common semantic brand palette — single source of truth for the
+        application-wide colors. Every module (Manager, Cashier, Dialogs)
+        resolves these via the visual-tree / App-level lookup. Module-local
+        overrides (e.g. Cashier's TextMuted tint) remain in their owning
+        views and intentionally shadow these keys.
+    -->
+
+    <!-- Core brand palette -->
+    <SolidColorBrush x:Key="BrandDark"   Color="#1A6FC4"/>
+    <SolidColorBrush x:Key="BrandMid"    Color="#2589E0"/>
+    <SolidColorBrush x:Key="BrandLight"  Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="TextDark"    Color="#1A3A5C"/>
+    <SolidColorBrush x:Key="TextMuted"   Color="#8AB0CC"/>
+
+    <!-- Destructive-action palette (red) -->
+    <SolidColorBrush x:Key="DangerDark"   Color="#B91C1C"/>
+    <SolidColorBrush x:Key="DangerMid"    Color="#DC2626"/>
+    <SolidColorBrush x:Key="DangerRed"    Color="#DC2626"/>
+    <SolidColorBrush x:Key="DangerHover"  Color="#B91C1C"/>
+    <SolidColorBrush x:Key="DangerLight"  Color="#FEE2E2"/>
+    <SolidColorBrush x:Key="DangerBorder" Color="#FECACA"/>
+
+    <!-- Shared list / card surfaces -->
+    <SolidColorBrush x:Key="RowSelectedBg" Color="#EFF6FF"/>
+    <SolidColorBrush x:Key="CardHdrBg"     Color="#F0F7FF"/>
+
+    <!-- Success / positive emphasis -->
+    <SolidColorBrush x:Key="SuccessGreen" Color="#16A34A"/>
+</ResourceDictionary>

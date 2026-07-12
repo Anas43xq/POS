@@ -9,6 +9,8 @@ namespace BLL.Interfaces
 
         Task<Result<List<ProductSummaryDto>>> GetAllProductsAsync(string languageCode);
 
+        Task<Result<List<ProductSummaryDto>>> GetProductSummariesAsync(string? languageCode = null);
+
         Task<Result<List<ProductDto>>> GetAllVariantsAsync();
 
         Task<Result<List<ProductDto>>> GetAllVariantsAsync(string languageCode);

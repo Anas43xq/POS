@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -601,11 +601,86 @@
     <sys:String x:Key="Manager.Shifts.ColStatus">നില</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">ദൈർഘ്യം</sys:String>
 
+    <!-- Shift filter -->
+    <sys:String x:Key="Manager.Shifts.StatusFilter">നില:</sys:String>
+    <sys:String x:Key="Manager.Shifts.Loading">ലോഡ് ചെയ്യുന്നു…</sys:String>
+    <sys:String x:Key="Manager.Shifts.PagerSuffix">ഷിഫ്റ്റുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.SeeMore">വിശദാംശങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.CardTitle">ഷിഫ്റ്റുകൾ</sys:String>
+
+    <!-- Shift detail dialog -->
+    <sys:String x:Key="Manager.Shifts.DetailTitle">ഷിഫ്റ്റ് വിശദാംശങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailShiftNumber">ഷിഫ്റ്റ് നമ്പർ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashier">ക്യാഷിയർ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpenTime">തുറന്ന സമയം</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCloseTime">അടച്ച സമയം</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDuration">ദൈർഘ്യം</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpeningCash">തുറക്കുമ്പോഴത്തെ ക്യാഷ്</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClosingCash">അടയ്ക്കുമ്പോഴത്തെ ക്യാഷ്</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailExpectedCash">പ്രതീക്ഷിച്ച ക്യാഷ്</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDifference">വ്യത്യാസം</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatus">നില</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatistics">ഷിഫ്റ്റ് സ്ഥിതിവിവരങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalTransactions">ആകെ ഇടപാടുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashTransactions">ക്യാഷ് ഇടപാടുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardTransactions">കാർഡ് ഇടപാടുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashSales">ക്യാഷ് വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardSales">കാർഡ് വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalSales">ആകെ വിൽപ്പന</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailRefunds">റീഫണ്ടുകൾ/ഒഴിവാക്കലുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTransactions">ഇടപാടുകൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClose">അടയ്ക്കുക</sys:String>
+
     <!-- ========================================================= -->
     <!-- Settings (Cashier + Manager) -->
     <!-- ========================================================= -->
 
     <sys:String x:Key="Settings.Title">ക്രമീകരണങ്ങൾ</sys:String>
     <sys:String x:Key="Settings.Language">ഭാഷ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcut.Search">തിരയുക</sys:String>
+    <sys:String x:Key="Shortcut.Add">ചേർക്കുക</sys:String>
+    <sys:String x:Key="Shortcut.Edit">എഡിറ്റ് ചെയ്യുക</sys:String>
+    <sys:String x:Key="Shortcut.Print">പ്രിന്റ്</sys:String>
+    <sys:String x:Key="Shortcut.Generate">സൃഷ്ടിക്കുക</sys:String>
+    <sys:String x:Key="Shortcut.Export">എക്സ്പോർട്ട്</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings Dialog                                           -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Printing">പ്രിന്റിംഗ്</sys:String>
+    <sys:String x:Key="Settings.ReceiptPrinter">രസീത് പ്രിന്റർ</sys:String>
+    <sys:String x:Key="Settings.Refresh">പുതുക്കുക</sys:String>
+    <sys:String x:Key="Settings.PaperWidth">പേപ്പർ വീതി</sys:String>
+    <sys:String x:Key="Settings.AutoPrintAfterPayment">പേയ്മെന്റിന് ശേഷം ഓട്ടോ പ്രിന്റ്</sys:String>
+    <sys:String x:Key="Settings.ShowWindowsPrintDialog">Windows പ്രിന്റ് ഡയലോഗ് കാണിക്കുക</sys:String>
+    <sys:String x:Key="Settings.Copies">പകർപ്പുകൾ</sys:String>
+    <sys:String x:Key="Settings.PrintTestReceipt">ടെസ്റ്റ് രസീത് പ്രിന്റ് ചെയ്യുക</sys:String>
+
+    <sys:String x:Key="Settings.KeyboardShortcuts">കീബോർഡ് ഷോർട്ട്കട്ടുകൾ</sys:String>
+    <sys:String x:Key="Settings.KeyboardShortcutsDescription">വേഗതയേറിയ നാവിഗേഷനും പ്രവർത്തനങ്ങൾക്കും കീബോർഡ് ഷോർട്ട്കട്ടുകൾ ഇഷ്ടാനുസൃതമാക്കുക.</sys:String>
+    <sys:String x:Key="Settings.ConfigureKeyboardShortcuts">കീബോർഡ് ഷോർട്ട്കട്ടുകൾ കോൺഫിഗർ ചെയ്യുക</sys:String>
+    <sys:String x:Key="Settings.BackToSettings">ക്രമീകരണങ്ങളിലേക്ക് മടങ്ങുക</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Keyboard Shortcuts Dialog                                 -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcuts.Cashier">കാഷ്യർ</sys:String>
+    <sys:String x:Key="Shortcuts.Manager">മാനേജർ</sys:String>
+    <sys:String x:Key="Shortcuts.Edit">എഡിറ്റ്</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreDefault">ഡീഫോൾട്ട് പുനഃസ്ഥാപിക്കുക</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreAll">എല്ലാം പുനഃസ്ഥാപിക്കുക</sys:String>
+    <sys:String x:Key="Shortcuts.ColAction">പ്രവർത്തനം</sys:String>
+    <sys:String x:Key="Shortcuts.ColCategory">വിഭാഗം</sys:String>
+    <sys:String x:Key="Shortcuts.ColCurrentShortcut">നിലവിലെ ഷോർട്ട്കട്ട്</sys:String>
+    <sys:String x:Key="Shortcuts.ColDescription">വിവരണം</sys:String>
+    <sys:String x:Key="Shortcuts.Cancel">റദ്ദാക്കുക</sys:String>
+    <sys:String x:Key="Shortcuts.SaveChanges">മാറ്റങ്ങൾ സംരക്ഷിക്കുക</sys:String>
 
 </ResourceDictionary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Printing;
 using System.Windows.Input;
 using UI.Commands;
+using UI.Services;
 
 namespace UI.ViewModels;
 
@@ -13,6 +14,8 @@ public class SettingsViewModel : BaseViewModel
 {
     private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
+    private readonly ISessionService _sessionService;
+    private readonly KeyboardShortcutsViewModel _keyboardShortcutsViewModel;
 
     public ObservableCollection<LanguageDto> SupportedLanguages { get; }
 
@@ -111,11 +114,31 @@ public class SettingsViewModel : BaseViewModel
 
     public ICommand CloseCommand { get; }
     public ICommand RefreshPrintersCommand { get; }
+    public ICommand OpenKeyboardShortcutsCommand { get; }
 
-    public SettingsViewModel(ILocalizationService localizationService, ISettingsService settingsService)
+    public KeyboardShortcutsViewModel KeyboardShortcuts => _keyboardShortcutsViewModel;
+
+    private bool _isKeyboardShortcutsVisible;
+    public bool IsKeyboardShortcutsVisible
+    {
+        get => _isKeyboardShortcutsVisible;
+        set { _isKeyboardShortcutsVisible = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotKeyboardShortcutsVisible)); }
+    }
+
+    public bool IsNotKeyboardShortcutsVisible => !IsKeyboardShortcutsVisible;
+
+    public bool IsManager => string.Equals(_sessionService.CurrentUser?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase);
+
+    public SettingsViewModel(
+        ILocalizationService localizationService,
+        ISettingsService settingsService,
+        ISessionService sessionService,
+        KeyboardShortcutsViewModel keyboardShortcutsViewModel)
     {
         _localizationService = localizationService;
         _settingsService = settingsService;
+        _sessionService = sessionService;
+        _keyboardShortcutsViewModel = keyboardShortcutsViewModel;
 
         SupportedLanguages = new ObservableCollection<LanguageDto>(
             _localizationService.GetSupportedLanguages());
@@ -125,6 +148,7 @@ public class SettingsViewModel : BaseViewModel
 
         CloseCommand = new RelayCommand(_ => CloseRequested?.Invoke());
         RefreshPrintersCommand = new RelayCommand(_ => LoadPrinters());
+        OpenKeyboardShortcutsCommand = new RelayCommand(_ => IsKeyboardShortcutsVisible = true, _ => IsManager);
 
         LoadPrinters();
         _ = LoadPrinterSettingsAsync();

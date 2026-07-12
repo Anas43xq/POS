@@ -16,8 +16,61 @@
 
     <UserControl.Resources>
 
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <converters:StatusToVoidVisConverter x:Key="StatusToVoidVis"/>
+
+        <!-- Payment badge border (shared by every row) -->
+        <Style x:Key="PaymentBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                    <Setter Property="Background" Value="#DCFCE7"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                    <Setter Property="Background" Value="#DBEAFE"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Payment badge text (shared by every row) -->
+        <Style x:Key="PaymentBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
+                    <Setter Property="Foreground" Value="#16A34A"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                    <Setter Property="Foreground" Value="#1A6FC4"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Status badge border (shared by every row) -->
+        <Style x:Key="StatusBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                    <Setter Property="Background" Value="#DBEAFE"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Voided">
+                    <Setter Property="Background" Value="{StaticResource DangerLight}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Pending">
+                    <Setter Property="Background" Value="#FEF3C7"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Status badge text (shared by every row) -->
+        <Style x:Key="StatusBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                    <Setter Property="Foreground" Value="#1A6FC4"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Voided">
+                    <Setter Property="Foreground" Value="{StaticResource DangerDark}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Pending">
+                    <Setter Property="Foreground" Value="#92400E"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
     </UserControl.Resources>
 
@@ -50,7 +103,7 @@
                     <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
                                  Command="{Binding LoadPeriodCommand}"/>
 
-                    <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVis}}"
+                    <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                                 FromDate="{Binding FromDate, Mode=TwoWay}"
                                                 ToDate="{Binding ToDate, Mode=TwoWay}"
                                                 ApplyCommand="{Binding ApplyPeriodCommand}"
@@ -74,6 +127,16 @@
                               ItemsSource="{Binding StatusOptions}"
                               SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
                               DisplayMemberPath="Label"/>
+
+                    <!-- Keyboard shortcut hints -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <StackPanel Style="{StaticResource ShortcutChip}">
+                            <Border Style="{StaticResource ShortcutKeyCap}">
+                                <TextBlock Text="{Binding SearchGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Shortcut.Search}" Style="{StaticResource ShortcutLabelText}"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
 
                 <!-- Void + Refresh grouped together -->
@@ -121,7 +184,7 @@
                                    FontSize="11"
                                    Foreground="{StaticResource TextMuted}"
                                    VerticalAlignment="Center"
-                                   Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"/>
+                                   Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     </Grid>
                 </Border>
 
@@ -245,33 +308,10 @@
                                                VerticalAlignment="Center"/>
 
                                     <!-- Payment badge -->
-                                    <Border Grid.Column="2" HorizontalAlignment="Left">
-                                        <Border.Style>
-                                            <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
-                                                        <Setter Property="Background" Value="#DCFCE7"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
-                                                        <Setter Property="Background" Value="#DBEAFE"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock Text="{Binding PaymentMethod}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
-                                                            <Setter Property="Foreground" Value="#16A34A"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
-                                                            <Setter Property="Foreground" Value="#1A6FC4"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                    <Border Grid.Column="2" HorizontalAlignment="Left"
+                                            Style="{StaticResource PaymentBadgeBorderStyle}">
+                                        <TextBlock Text="{Binding PaymentMethod}"
+                                                   Style="{StaticResource PaymentBadgeTextStyle}"/>
                                     </Border>
 
                                     <!-- Notes -->
@@ -284,39 +324,10 @@
 
                                     <!-- Status badge — color by status so a
                                          voided row is visually unmistakable. -->
-                                    <Border Grid.Column="4">
-                                        <Border.Style>
-                                            <Style TargetType="Border" BasedOn="{StaticResource BadgeBase}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
-                                                        <Setter Property="Background" Value="#DBEAFE"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Voided">
-                                                        <Setter Property="Background" Value="{StaticResource DangerLight}"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Pending">
-                                                        <Setter Property="Background" Value="#FEF3C7"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock Text="{Binding Status}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
-                                                            <Setter Property="Foreground" Value="#1A6FC4"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="Voided">
-                                                            <Setter Property="Foreground" Value="{StaticResource DangerDark}"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="Pending">
-                                                            <Setter Property="Foreground" Value="#92400E"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                    <Border Grid.Column="4"
+                                            Style="{StaticResource StatusBadgeBorderStyle}">
+                                        <TextBlock Text="{Binding Status}"
+                                                   Style="{StaticResource StatusBadgeTextStyle}"/>
                                     </Border>
 
                                     <!-- Date & time -->
@@ -358,7 +369,7 @@
                                        FontSize="11" Foreground="#A32D2D"
                                        Margin="0,4,0,0"
                                        TextWrapping="Wrap"
-                                       Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}"/>
+                                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">

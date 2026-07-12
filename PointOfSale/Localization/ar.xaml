@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -601,11 +601,86 @@
     <sys:String x:Key="Manager.Shifts.ColStatus">الحالة</sys:String>
     <sys:String x:Key="Manager.Shifts.ColDuration">المدة</sys:String>
 
+    <!-- Shift filter -->
+    <sys:String x:Key="Manager.Shifts.StatusFilter">الحالة:</sys:String>
+    <sys:String x:Key="Manager.Shifts.Loading">جاري التحميل…</sys:String>
+    <sys:String x:Key="Manager.Shifts.PagerSuffix">ورديات</sys:String>
+    <sys:String x:Key="Manager.Shifts.SeeMore">التفاصيل</sys:String>
+    <sys:String x:Key="Manager.Shifts.CardTitle">الورديات</sys:String>
+
+    <!-- Shift detail dialog -->
+    <sys:String x:Key="Manager.Shifts.DetailTitle">تفاصيل الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailShiftNumber">رقم الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashier">الكاشير</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpenTime">وقت الفتح</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCloseTime">وقت الإغلاق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDuration">المدة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpeningCash">النقد عند الفتح</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClosingCash">النقد عند الإغلاق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailExpectedCash">النقد المتوقع</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDifference">الفرق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatus">الحالة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatistics">إحصائيات الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalTransactions">إجمالي المعاملات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashTransactions">معاملات نقدية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardTransactions">معاملات بطاقة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashSales">مبيعات نقدية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardSales">مبيعات بطاقة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalSales">إجمالي المبيعات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailRefunds">مرتجعات/إلغاءات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTransactions">المعاملات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClose">إغلاق</sys:String>
+
     <!-- ========================================================= -->
     <!-- Settings (Cashier + Manager) -->
     <!-- ========================================================= -->
 
     <sys:String x:Key="Settings.Title">الإعدادات</sys:String>
     <sys:String x:Key="Settings.Language">اللغة</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcut.Search">بحث</sys:String>
+    <sys:String x:Key="Shortcut.Add">إضافة</sys:String>
+    <sys:String x:Key="Shortcut.Edit">تعديل</sys:String>
+    <sys:String x:Key="Shortcut.Print">طباعة</sys:String>
+    <sys:String x:Key="Shortcut.Generate">إنشاء</sys:String>
+    <sys:String x:Key="Shortcut.Export">تصدير</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings Dialog                                           -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Printing">الطباعة</sys:String>
+    <sys:String x:Key="Settings.ReceiptPrinter">طابعة الإيصالات</sys:String>
+    <sys:String x:Key="Settings.Refresh">تحديث</sys:String>
+    <sys:String x:Key="Settings.PaperWidth">عرض الورق</sys:String>
+    <sys:String x:Key="Settings.AutoPrintAfterPayment">الطباعة التلقائية بعد الدفع</sys:String>
+    <sys:String x:Key="Settings.ShowWindowsPrintDialog">إظهار مربع حوار طباعة Windows</sys:String>
+    <sys:String x:Key="Settings.Copies">النسخ</sys:String>
+    <sys:String x:Key="Settings.PrintTestReceipt">طباعة إيصال تجريبي</sys:String>
+
+    <sys:String x:Key="Settings.KeyboardShortcuts">اختصارات لوحة المفاتيح</sys:String>
+    <sys:String x:Key="Settings.KeyboardShortcutsDescription">تخصيص اختصارات لوحة المفاتيح للتنقل والعمليات الأسرع.</sys:String>
+    <sys:String x:Key="Settings.ConfigureKeyboardShortcuts">تخصيص اختصارات لوحة المفاتيح</sys:String>
+    <sys:String x:Key="Settings.BackToSettings">العودة إلى الإعدادات</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Keyboard Shortcuts Dialog                                 -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcuts.Cashier">الكاشير</sys:String>
+    <sys:String x:Key="Shortcuts.Manager">المدير</sys:String>
+    <sys:String x:Key="Shortcuts.Edit">تعديل</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreDefault">استعادة الافتراضي</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreAll">استعادة الكل</sys:String>
+    <sys:String x:Key="Shortcuts.ColAction">الإجراء</sys:String>
+    <sys:String x:Key="Shortcuts.ColCategory">الفئة</sys:String>
+    <sys:String x:Key="Shortcuts.ColCurrentShortcut">الاختصار الحالي</sys:String>
+    <sys:String x:Key="Shortcuts.ColDescription">الوصف</sys:String>
+    <sys:String x:Key="Shortcuts.Cancel">إلغاء</sys:String>
+    <sys:String x:Key="Shortcuts.SaveChanges">حفظ التغييرات</sys:String>
 
 </ResourceDictionary>

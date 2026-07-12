@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Input;
 using BLL.DTOs;
 using BLL.Interfaces;
+using Contracts.Enum;
 using UI.Commands;
+using UI.Services;
 using UI.Views;
 
 namespace UI.ViewModels
@@ -14,15 +16,24 @@ namespace UI.ViewModels
     {
         private readonly ICategoryService _categoryService;
         private readonly ILocalizationService _localization;
+        private readonly IKeyboardShortcutService _shortcutService;
         private readonly ObservableCollection<CategoryCardViewModel> _allCategories = new();
         private string _searchText = string.Empty;
         private CategoryCardViewModel? _selectedCategory;
         private SubcategoryCardViewModel? _selectedSubcategory;
 
-        public CategoryManagementViewModel(ICategoryService categoryService, ILocalizationService localization)
+        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
+        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
+        public string DeleteGesture => GetShortcutGesture(ShortcutAction.Delete);
+
+        public CategoryManagementViewModel(
+            ICategoryService categoryService,
+            ILocalizationService localization,
+            IKeyboardShortcutService shortcutService)
         {
             _categoryService = categoryService;
             _localization = localization;
+            _shortcutService = shortcutService;
 
             _localization.LanguageChanged += OnLanguageChanged;
 
@@ -118,6 +129,18 @@ namespace UI.ViewModels
         {
             var languageCode = _localization.CurrentLanguage.FilePrefix;
             var result = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
+
+            _allCategories.Clear();
+
+            if (result.IsSuccess && result.Value != null)
+            {
+                foreach (var category in result.Value)
+                {
+                    _allCategories.Add(ToCategoryCard(category));
+                }
+            }
+
+            ApplyFilters();
         }
 
         private CategoryCardViewModel ToCategoryCard(CategoryDto category)
@@ -245,7 +268,7 @@ namespace UI.ViewModels
 
         private void OpenAddDialog()
         {
-            var viewModel = new AddEditCategoryViewModel(_categoryService) { DialogTitle = "Add Category" };
+            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization) { DialogTitle = "Add Category" };
             var dialog = new AddEditCategoryDialog { DataContext = viewModel, Owner = Application.Current.MainWindow };
             viewModel.RequestClose = () => dialog.Close();
             dialog.ShowDialog();
@@ -259,8 +282,9 @@ namespace UI.ViewModels
                 return;
             }
 
-            var viewModel = new AddEditCategoryViewModel(_categoryService)
+            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization)
             {
+                CategoryId = SelectedCategory.Id,
                 DialogTitle = "Edit Category",
                 Name = SelectedCategory.Name,
                 Icon = SelectedCategory.Icon,
@@ -275,14 +299,16 @@ namespace UI.ViewModels
 
         private void OpenAddSubcategoryDialog()
         {
-            var viewModel = new AddEditCategoryViewModel(_categoryService)
+            var parentOption = new AddEditCategoryViewModel.ParentCategoryOption
+            {
+                CategoryId = SelectedCategory?.Id,
+                DisplayName = SelectedCategory?.Name ?? "— None —"
+            };
+
+            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization)
             {
                 DialogTitle = "Add Subcategory",
-                SelectedParent = new AddEditCategoryViewModel.ParentCategoryOption
-                {
-                    CategoryId = SelectedCategory?.Id,
-                    DisplayName = SelectedCategory?.Name ?? "— None —"
-                }
+                SelectedParent = parentOption
             };
 
             var dialog = new AddEditCategoryDialog { DataContext = viewModel, Owner = Application.Current.MainWindow };
@@ -333,5 +359,12 @@ namespace UI.ViewModels
         private bool CanEdit() => SelectedCategory != null;
 
         private bool CanDelete() => SelectedCategory != null;
+
+        private string GetShortcutGesture(ShortcutAction action)
+        {
+            var bindings = _shortcutService.GetActiveBindings();
+            var binding = bindings.FirstOrDefault(b => b.Action == action);
+            return binding?.KeyGesture ?? string.Empty;
+        }
     }
 }

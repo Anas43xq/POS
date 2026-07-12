@@ -1,4 +1,5 @@
 using BLL.Interfaces;
+using Contracts.Enum;
 using Contracts.Transactions;
 using POS.Contracts.Receipts;
 using System;
@@ -22,6 +23,7 @@ namespace UI.ViewModels
         private readonly IPurchaseReceiptService _purchaseReceiptService;
         private readonly ISupplierService _supplierService;
         private readonly ExcelReportExporter _excelExporter;
+        private readonly IKeyboardShortcutService _shortcutService;
 
         private string _searchText = string.Empty;
         private DateTime? _dateFrom;
@@ -30,8 +32,6 @@ namespace UI.ViewModels
         private SupplierDto? _selectedSupplier;
         private string _selectedReceiptTypeFilter = "All";
         private string _statusMessage = string.Empty;
-        private bool _isFormVisible;
-        private bool _isFormEditable = true;
         private string _formTitle = "Add Purchase Receipt";
 
         private string _invoiceNumber = string.Empty;
@@ -47,18 +47,24 @@ namespace UI.ViewModels
         private int? _editingReceiptId;
         private byte _activeReceiptTypeId = 1;
 
+        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
+        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
+        public string PrintGesture => "Ctrl+P";
+
         public ReceiptManagementViewModel(
             ITransactionService transactionService,
             IReceiptDisplayService receiptDisplayService,
             IPurchaseReceiptService purchaseReceiptService,
             ISupplierService supplierService,
-            ExcelReportExporter excelExporter)
+            ExcelReportExporter excelExporter,
+            IKeyboardShortcutService shortcutService)
         {
             _transactionService = transactionService;
             _receiptDisplayService = receiptDisplayService;
             _purchaseReceiptService = purchaseReceiptService;
             _supplierService = supplierService;
             _excelExporter = excelExporter;
+            _shortcutService = shortcutService;
 
             SalesReceipts = new ObservableCollection<TransactionListItemDto>();
             VatReceipts = new ObservableCollection<PurchaseReceiptDto>();
@@ -69,21 +75,24 @@ namespace UI.ViewModels
             ApplyFiltersCommand = new RelayCommand(_ => { _ = LoadAllAsync(); });
             ResetFiltersCommand = new RelayCommand(_ => ResetFilters());
             OpenSalesReceiptCommand = new RelayCommand(_ => OpenSelectedSalesReceipt());
-            AddVatReceiptCommand = new RelayCommand(_ => ShowReceiptForm(1, false));
-            EditVatReceiptCommand = new RelayCommand(_ => EditSelectedReceipt(1));
+            AddVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, false));
+            EditVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, true));
             DeleteVatReceiptCommand = new RelayCommand(_ => { _ = DeleteSelectedReceipt(1); });
             ViewVatReceiptCommand = new RelayCommand(_ => ViewSelectedReceipt(1));
-            AddNonVatReceiptCommand = new RelayCommand(_ => ShowReceiptForm(2, false));
-            EditNonVatReceiptCommand = new RelayCommand(_ => EditSelectedReceipt(2));
+            AddNonVatReceiptCommand = new RelayCommand(_ => NavigateToForm(2, false));
+            EditNonVatReceiptCommand = new RelayCommand(_ => NavigateToForm(2, true));
             DeleteNonVatReceiptCommand = new RelayCommand(_ => { _ = DeleteSelectedReceipt(2); });
             ViewNonVatReceiptCommand = new RelayCommand(_ => ViewSelectedReceipt(2));
             SaveReceiptCommand = new RelayCommand(_ => { _ = SaveReceiptAsync(); });
-            CancelReceiptCommand = new RelayCommand(_ => CancelReceiptForm());
+            CancelReceiptCommand = new RelayCommand(_ => NavigateToList());
             ExportVatPurchasesCommand = new RelayCommand(_ => { _ = ExportVatPurchasesAsync(); });
             ExportNonVatPurchasesCommand = new RelayCommand(_ => { _ = ExportNonVatPurchasesAsync(); });
 
             _ = LoadAllAsync();
         }
+
+        public event Action? NavigateToFormRequested;
+        public event Action? NavigateToListRequested;
 
         public ObservableCollection<TransactionListItemDto> SalesReceipts { get; }
         public ObservableCollection<PurchaseReceiptDto> VatReceipts { get; }
@@ -155,23 +164,13 @@ namespace UI.ViewModels
             set { _statusMessage = value ?? string.Empty; OnPropertyChanged(); }
         }
 
-        public bool IsFormVisible
-        {
-            get => _isFormVisible;
-            private set { _isFormVisible = value; OnPropertyChanged(); }
-        }
-
-        public bool IsFormEditable
-        {
-            get => _isFormEditable;
-            private set { _isFormEditable = value; OnPropertyChanged(); }
-        }
-
         public string FormTitle
         {
             get => _formTitle;
             private set { _formTitle = value; OnPropertyChanged(); }
         }
+
+        public bool IsFormEditable { get; private set; } = true;
 
         public bool IsVatReceiptMode => _activeReceiptTypeId == 1;
         public bool IsNonVatReceiptMode => _activeReceiptTypeId == 2;
@@ -395,13 +394,13 @@ namespace UI.ViewModels
             _receiptDisplayService.ShowReceipt(SelectedSalesReceipt.TransactionId);
         }
 
-        private void ShowReceiptForm(byte receiptTypeId, bool isEditing)
+        private void NavigateToForm(byte receiptTypeId, bool isEditing)
         {
             _activeReceiptTypeId = receiptTypeId;
             OnPropertyChanged(nameof(IsVatReceiptMode));
             OnPropertyChanged(nameof(IsNonVatReceiptMode));
-            IsFormVisible = true;
             IsFormEditable = true;
+            OnPropertyChanged(nameof(IsFormEditable));
             FormTitle = isEditing ? $"Edit {(receiptTypeId == 1 ? "VAT" : "Non-VAT")} Purchase Receipt" : $"Add {(receiptTypeId == 1 ? "VAT" : "Non-VAT")} Purchase Receipt";
             StatusMessage = string.Empty;
             _editingReceiptId = null;
@@ -410,6 +409,7 @@ namespace UI.ViewModels
             {
                 PopulateForm(null, receiptTypeId);
                 RecalculateTotals();
+                NavigateToFormRequested?.Invoke();
                 return;
             }
 
@@ -417,18 +417,13 @@ namespace UI.ViewModels
             if (selectedReceipt is null)
             {
                 StatusMessage = "Select a receipt to edit.";
-                IsFormVisible = false;
                 return;
             }
 
             PopulateForm(selectedReceipt, receiptTypeId);
             _editingReceiptId = selectedReceipt.ReceiptId;
             RecalculateTotals();
-        }
-
-        private void EditSelectedReceipt(byte receiptTypeId)
-        {
-            ShowReceiptForm(receiptTypeId, true);
+            NavigateToFormRequested?.Invoke();
         }
 
         private void ViewSelectedReceipt(byte receiptTypeId)
@@ -442,11 +437,22 @@ namespace UI.ViewModels
             }
 
             PopulateForm(selectedReceipt, receiptTypeId);
-            IsFormVisible = true;
             IsFormEditable = false;
+            OnPropertyChanged(nameof(IsFormEditable));
             FormTitle = $"View {(receiptTypeId == 1 ? "VAT" : "Non-VAT")} Purchase Receipt";
             StatusMessage = string.Empty;
             RecalculateTotals();
+            NavigateToFormRequested?.Invoke();
+        }
+
+        private void NavigateToList()
+        {
+            FormTitle = "Add Purchase Receipt";
+            StatusMessage = string.Empty;
+            _editingReceiptId = null;
+            OnPropertyChanged(nameof(IsVatReceiptMode));
+            OnPropertyChanged(nameof(IsNonVatReceiptMode));
+            NavigateToListRequested?.Invoke();
         }
 
         private void PopulateForm(PurchaseReceiptDto? receipt, byte receiptTypeId)
@@ -545,7 +551,7 @@ namespace UI.ViewModels
                 }
 
                 StatusMessage = string.Empty;
-                CancelReceiptForm();
+                NavigateToList();
                 await LoadPurchaseReceiptsAsync();
             }
             catch (Exception ex)
@@ -621,17 +627,6 @@ namespace UI.ViewModels
             }
         }
 
-        private void CancelReceiptForm()
-        {
-            IsFormVisible = false;
-            IsFormEditable = true;
-            FormTitle = "Add Purchase Receipt";
-            StatusMessage = string.Empty;
-            _editingReceiptId = null;
-            OnPropertyChanged(nameof(IsVatReceiptMode));
-            OnPropertyChanged(nameof(IsNonVatReceiptMode));
-        }
-
         private void RecalculateTotals()
         {
             VatAmount = IsVatReceiptMode ? Subtotal * VatRate / 100m : 0m;
@@ -655,18 +650,26 @@ namespace UI.ViewModels
             if (saveDialog.ShowDialog() != true)
                 return;
 
-            var request = new ExcelReportRequest
+            try
             {
-                ReportType = ReportType.VatPurchaseRegister,
-                Title = "UAE PURCHASE VAT REGISTER",
-                FromDate = DateFrom ?? DateTime.Today,
-                ToDate = DateTo ?? DateTime.Today,
-                Data = VatReceipts.ToList()
-            };
+                var request = new ExcelReportRequest
+                {
+                    ReportType = ReportType.VatPurchaseRegister,
+                    Title = "UAE PURCHASE VAT REGISTER",
+                    FromDate = DateFrom ?? DateTime.Today,
+                    ToDate = DateTo ?? DateTime.Today,
+                    Data = VatReceipts.ToList()
+                };
 
-            var bytes = _excelExporter.Export(request);
-            await File.WriteAllBytesAsync(saveDialog.FileName, bytes);
-            StatusMessage = string.Empty;
+                var bytes = _excelExporter.Export(request);
+                await File.WriteAllBytesAsync(saveDialog.FileName, bytes);
+                StatusMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                // Never fail silently: surface the error to the UI.
+                StatusMessage = $"VAT register export failed: {ex.Message}";
+            }
         }
 
         private async Task ExportNonVatPurchasesAsync()
@@ -686,18 +689,26 @@ namespace UI.ViewModels
             if (saveDialog.ShowDialog() != true)
                 return;
 
-            var request = new ExcelReportRequest
+            try
             {
-                ReportType = ReportType.NonVatPurchaseRegister,
-                Title = "BUSINESS EXPENSE REGISTER",
-                FromDate = DateFrom ?? DateTime.Today,
-                ToDate = DateTo ?? DateTime.Today,
-                Data = NonVatReceipts.ToList()
-            };
+                var request = new ExcelReportRequest
+                {
+                    ReportType = ReportType.NonVatPurchaseRegister,
+                    Title = "BUSINESS EXPENSE REGISTER",
+                    FromDate = DateFrom ?? DateTime.Today,
+                    ToDate = DateTo ?? DateTime.Today,
+                    Data = NonVatReceipts.ToList()
+                };
 
-            var bytes = _excelExporter.Export(request);
-            await File.WriteAllBytesAsync(saveDialog.FileName, bytes);
-            StatusMessage = string.Empty;
+                var bytes = _excelExporter.Export(request);
+                await File.WriteAllBytesAsync(saveDialog.FileName, bytes);
+                StatusMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                // Never fail silently: surface the error to the UI.
+                StatusMessage = $"Non-VAT register export failed: {ex.Message}";
+            }
         }
 
         private bool ShouldShowReceiptType(string receiptType)
@@ -778,6 +789,13 @@ namespace UI.ViewModels
             }
 
             return true;
+        }
+
+        private string GetShortcutGesture(ShortcutAction action)
+        {
+            var bindings = _shortcutService.GetActiveBindings();
+            var binding = bindings.FirstOrDefault(b => b.Action == action);
+            return binding?.KeyGesture ?? string.Empty;
         }
     }
 }

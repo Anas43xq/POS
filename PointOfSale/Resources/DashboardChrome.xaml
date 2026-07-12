@@ -10,14 +10,6 @@
     <SolidColorBrush x:Key="DashboardTextDark" Color="#1A3A5C"/>
     <SolidColorBrush x:Key="DashboardTextMuted" Color="#8AB0CC"/>
 
-    <SolidColorBrush x:Key="BrandDark" Color="#1A6FC4"/>
-    <SolidColorBrush x:Key="BrandMid" Color="#2589E0"/>
-    <SolidColorBrush x:Key="BrandLight" Color="#F0F7FF"/>
-    <SolidColorBrush x:Key="BrandBorder" Color="#B8D8F5"/>
-    <SolidColorBrush x:Key="TextDark" Color="#1A3A5C"/>
-    <SolidColorBrush x:Key="TextMuted" Color="#8AB0CC"/>
-    <SolidColorBrush x:Key="SuccessGreen" Color="#2E9D5A"/>
-
     <Style x:Key="DashboardCardBorder" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource DashboardCardBg}"/>
         <Setter Property="BorderBrush" Value="{StaticResource DashboardBrandBorder}"/>

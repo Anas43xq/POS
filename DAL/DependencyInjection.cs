@@ -1,4 +1,4 @@
-﻿using DAL.Entities.Data;
+using DAL.Entities.Data;
 using DAL.Repositories;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +14,19 @@ public static class DependencyInjection
         string connectionString)
     {
         services.AddDbContext<PosDbContext>(options =>
-            options.UseSqlServer(connectionString)
+            options.UseSqlServer(connectionString,
+                sql => sql.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null))
         );
 
         services.AddDbContextFactory<PosDbContext>(options =>
-            options.UseSqlServer(connectionString)
+            options.UseSqlServer(connectionString,
+                sql => sql.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null))
         );
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BLL.DTOs;
 using UI.Services;
 using UI.Commands;
 
@@ -12,18 +13,20 @@ namespace UI.ViewModels
     {
         private async Task LoadProductsAsync()
         {
-            var result = await _productService.GetAllProductsAsync();
+            var languageCode = _localization.CurrentLanguage.FilePrefix;
+            var result = await _productService.GetProductSummariesAsync(languageCode);
             if (result.IsSuccess && result.Value != null)
             {
                 Products.Clear();
                 foreach (var p in result.Value)
-                {
+                
                     Products.Add(new { p.ProductId, p.Name });
-                }
+
             }
         }
 
         public ICommand ReportCommand { get; }
+        public ICommand OpenReceiptCommand { get; }
 
         private async void OnReportAction(string? action)
         {
@@ -103,29 +106,62 @@ namespace UI.ViewModels
             DateTime from = _fromDate ?? DateTime.Today;
             DateTime to = _toDate ?? DateTime.Today;
 
-            if (IsSalesMode)
+            try
             {
-                var request = new ExcelReportRequest
+                if (IsSalesMode)
                 {
-                    ReportType = ReportType.Transactions,
-                    Title = "SALES SUMMARY REPORT",
-                    FromDate = from,
-                    ToDate = to,
-                    Summary = new TransactionsReportSummary
+                    var request = new ExcelReportRequest
                     {
-                        TotalOrders = _totalOrders,
-                        TotalSales = _totalSales,
-                        CashTotal = _cashTotal,
-                        CardTotal = _cardTotal
-                    },
-                    Data = TransactionReports.ToList()
-                };
+                        ReportType = ReportType.Transactions,
+                        Title = "SALES SUMMARY REPORT",
+                        FromDate = from,
+                        ToDate = to,
+                        Summary = new TransactionsReportSummary
+                        {
+                            TotalOrders = _totalOrders,
+                            TotalSales = _totalSales,
+                            CashTotal = _cashTotal,
+                            CardTotal = _cardTotal
+                        },
+                        Data = TransactionReports.ToList()
+                    };
 
-                byte[] bytes = _excelExporter.Export(request);
-                File.WriteAllBytes(saveDialog.FileName, bytes);
+                    byte[] bytes = _excelExporter.Export(request);
+                    File.WriteAllBytes(saveDialog.FileName, bytes);
+                    StatusMessage = string.Empty;
+                }
+                else
+                {
+                    if (ProductReports.Count == 0)
+                    {
+                        StatusMessage = "No product report data to export for the selected period.";
+                        return;
+                    }
+
+                    var request = new ExcelReportRequest
+                    {
+                        ReportType = ReportType.ProductReport,
+                        Title = "PRODUCT SALES REPORT",
+                        FromDate = from,
+                        ToDate = to,
+                        Summary = new ProductReportSummary
+                        {
+                            TotalQuantitySold = TotalQuantitySold,
+                            TotalRevenue = TotalRevenue,
+                            AveragePrice = AveragePrice
+                        },
+                        Data = ProductReports.ToList()
+                    };
+
+                    byte[] bytes = _excelExporter.Export(request);
+                    File.WriteAllBytes(saveDialog.FileName, bytes);
+                    StatusMessage = string.Empty;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                // Never fail silently: surface the error to the UI.
+                StatusMessage = $"Export failed: {ex.Message}";
             }
         }
 
@@ -138,6 +174,14 @@ namespace UI.ViewModels
                 OnPropertyChanged();
                 ((RelayCommand<string>)ReportCommand).RaiseCanExecuteChanged();
             }
+        }
+
+        private void OpenReceipt(TransactionReportDto? transaction)
+        {
+            if (transaction == null)
+                return;
+
+            _receiptDisplayService.ShowReceipt(transaction.TransactionId);
         }
     }
 }

@@ -4,6 +4,7 @@ namespace UI.Services
     {
         Transactions,
         VatPurchaseRegister,
-        NonVatPurchaseRegister
+        NonVatPurchaseRegister,
+        ProductReport
     }
 }
