@@ -1,4 +1,5 @@
 using BLL.Interfaces;
+using Contracts.Enum;
 using Contracts.Sales;
 using Contracts.Transactions;
 using POS.Contracts.Receipts;
@@ -176,6 +177,5 @@ namespace UI.ViewModels
             // Initialize with HomeViewModel (LOCAL property, not global service)
             CurrentPage = _homeViewModel;
         }
-
     }
 }

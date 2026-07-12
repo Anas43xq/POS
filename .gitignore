@@ -138,7 +138,7 @@ $tf/
 *.ldf
 *.ndf
 
-DAL/db/*
+
 DAL/Pos_dbtemp.sql
 seed.sql
 

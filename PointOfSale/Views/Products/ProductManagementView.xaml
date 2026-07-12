@@ -40,40 +40,6 @@
                                Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Keyboard shortcut hints -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding AddGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="Add" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding EditGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="Edit" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding DeleteGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="Delete" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding SearchGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="Search" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding RefreshGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="Refresh" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                </StackPanel>
-
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="＋ Add"
                             Width="96"

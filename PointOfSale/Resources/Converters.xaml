@@ -5,6 +5,4 @@
     <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
     <conv:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-    <conv:EnumToBooleanConverter x:Key="ProfileTypeConverter" />
-    <conv:ShortcutGestureConverter x:Key="ShortcutGestureConverter" />
 </ResourceDictionary>

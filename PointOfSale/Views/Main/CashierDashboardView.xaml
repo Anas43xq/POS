@@ -466,72 +466,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Keyboard shortcut strip -->
-                <ScrollViewer Grid.Column="1"
-                              VerticalAlignment="Center"
-                              HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Disabled">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F2" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.StartDay}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F3" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.EndDay}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F4" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.RecentSales}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F6" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.CashButton}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F7" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.CardButton}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="F8" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Common.Clear}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="+/-" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.Quantity}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="Del" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Cashier.Remove}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-
-                    </StackPanel>
-                </ScrollViewer>
-
                 <!-- Shift buttons -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
@@ -702,7 +636,7 @@
                     </Border>
 
                     <!-- Cart DataGrid -->
-                    <DataGrid Grid.Row="1"
+                    <DataGrid x:Name="CartDataGrid" Grid.Row="1"
                               ItemsSource="{Binding SaleItems}"
                               SelectedItem="{Binding SelectedCartItem}"
                               AutoGenerateColumns="False"
@@ -906,7 +840,7 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Foreground="{StaticResource BrandIcon}"/>
-                                    <TextBox Grid.Column="1"
+                                    <TextBox x:Name="SearchTextBox" Grid.Column="1"
                                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                              Background="Transparent"
                                              BorderThickness="0"
@@ -1011,7 +945,7 @@
                             wires its IScrollInfo to that inner ScrollViewer at runtime.
                             Without this, the panel never realizes any containers.
                         -->
-                        <ItemsControl ItemsSource="{Binding ProductsView}"
+                        <ItemsControl x:Name="ProductsItemsControl" ItemsSource="{Binding ProductsView}"
                                       ScrollViewer.CanContentScroll="True"
                                       VirtualizingPanel.IsVirtualizing="True"
                                       VirtualizingPanel.VirtualizationMode="Recycling"

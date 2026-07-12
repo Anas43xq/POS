@@ -72,8 +72,6 @@ namespace UI
             services.AddTransient<ExcelReportExporter>();
             services.AddSingleton<IRegistryService, RegistryService>();
             services.AddSingleton<IApplicationShellService, ApplicationShellService>();
-            services.AddSingleton<IKeyboardShortcutService, KeyboardShortcutService>();
-            services.AddSingleton<ShortcutManager>();
 
             services.AddSingleton<BLL.Interfaces.ILocalizationService, UI.Services.LocalizationService>();
 
@@ -97,7 +95,6 @@ namespace UI
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<LoginAsViewModel>();
             services.AddTransient<ManagerLoginViewModel>();
-            services.AddTransient<KeyboardShortcutsViewModel>();
 
             // Views / Windows
             services.AddTransient<LoginView>();
@@ -118,7 +115,6 @@ namespace UI
             services.AddTransient<ReceiptWindow>();
             services.AddTransient<SettingsView>();
             services.AddTransient<SettingsWindow>();
-            services.AddTransient<EditShortcutDialogWindow>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -137,15 +133,6 @@ namespace UI
             // view is shown, so the first window's resources resolve.
             _serviceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>()
                 .Initialize();
-
-            // Initialize shortcut gesture converter for dynamic binding.
-            UI.Converters.ShortcutGestureConverter.Initialize(
-                _serviceProvider.GetRequiredService<IKeyboardShortcutService>());
-
-            // Load any user-customized shortcut bindings.
-            var shortcutService = _serviceProvider.GetRequiredService<IKeyboardShortcutService>();
-            _ = shortcutService.LoadCustomBindingsAsync(Contracts.Enum.ShortcutProfileType.Cashier);
-            _ = shortcutService.LoadCustomBindingsAsync(Contracts.Enum.ShortcutProfileType.Manager);
 
             // Hand off to the shell service. Everything else — showing
             // Login-As, swapping to MainWindow, handling logout —
@@ -322,4 +309,4 @@ namespace UI
 #endif
         }
     }
-} 
+}

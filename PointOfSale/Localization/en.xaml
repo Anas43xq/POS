@@ -639,17 +639,6 @@
     <sys:String x:Key="Settings.Language">Language</sys:String>
 
     <!-- ========================================================= -->
-    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
-    <!-- ========================================================= -->
-
-    <sys:String x:Key="Shortcut.Search">Search</sys:String>
-    <sys:String x:Key="Shortcut.Add">Add</sys:String>
-    <sys:String x:Key="Shortcut.Edit">Edit</sys:String>
-    <sys:String x:Key="Shortcut.Print">Print</sys:String>
-    <sys:String x:Key="Shortcut.Generate">Generate</sys:String>
-    <sys:String x:Key="Shortcut.Export">Export</sys:String>
-
-    <!-- ========================================================= -->
     <!-- Settings Dialog                                           -->
     <!-- ========================================================= -->
 

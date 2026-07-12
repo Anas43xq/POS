@@ -8,42 +8,13 @@ namespace UI
 {
     public partial class MainWindow : Window
     {
-        private readonly ShortcutManager _shortcutManager;
 
-        public MainWindow(MainViewModel viewModel, ShortcutManager shortcutManager)
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
-            _shortcutManager = shortcutManager;
-            PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
 
-        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (DataContext is not MainViewModel mainViewModel)
-                return;
-
-            // Let ShortcutManager try to match first
-            if (_shortcutManager.ProcessKey(e.Key, Keyboard.Modifiers))
-            {
-                e.Handled = true;
-                return;
-            }
-
-            // Fallback: map matched actions to ViewModel commands
-            if (_shortcutManager.GetCurrentBindings().Count > 0)
-                return; // Service is active, skip legacy dispatch
-
-            // Legacy dispatch (only if shortcut service has no bindings)
-            if (mainViewModel.CurrentViewModel is CashierDashboardViewModel cashier)
-            {
-                if (TryExecute(cashier.PayCashCommand, e, Key.F8) ||
-                    TryExecute(cashier.PayCardCommand, e, Key.F9))
-                {
-                    return;
-                }
-            }
-        }
 
         private static bool TryExecute(ICommand command, KeyEventArgs e, Key key)
         {

@@ -107,10 +107,8 @@ namespace UI.ViewModels
             var vm = new SettingsViewModel(
                 App.ServiceProvider.GetRequiredService<ILocalizationService>(),
                 App.ServiceProvider.GetRequiredService<ISettingsService>(),
-                App.ServiceProvider.GetRequiredService<ISessionService>(),
-                App.ServiceProvider.GetRequiredService<KeyboardShortcutsViewModel>());
+                App.ServiceProvider.GetRequiredService<ISessionService>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }
-    }
 }

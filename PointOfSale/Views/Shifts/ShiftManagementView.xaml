@@ -69,15 +69,6 @@
                               SelectedItem="{Binding SelectedShiftStatusFilter, Mode=TwoWay}"
                               DisplayMemberPath="Label"/>
 
-                    <!-- Keyboard shortcut hints -->
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="{Binding RefreshGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="Refresh" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-                    </StackPanel>
                 </StackPanel>
 
                 <!-- Refresh -->

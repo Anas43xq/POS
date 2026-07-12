@@ -26,7 +26,6 @@ namespace UI.ViewModels
         private readonly ILocalizationService _localization;
         private readonly ExcelReportExporter _excelExporter;
         private readonly IReceiptDisplayService _receiptDisplayService;
-        private readonly IKeyboardShortcutService _shortcutService;
 
         private ReportFilterMode _selectedPeriodType = ReportFilterMode.Today;
         private DateTime? _fromDate;
@@ -44,18 +43,13 @@ namespace UI.ViewModels
         private string _totalRevenue = "AED 0.00";
         private string _averagePrice = "AED 0.00";
 
-        public string GenerateGesture => GetShortcutGesture(ShortcutAction.Refresh);
-        public string ExportGesture => GetShortcutGesture(ShortcutAction.Export);
-        public string PrintGesture => "Ctrl+P";
-
-        public ReportViewModel(IReportService reportService, IProductService productService, ILocalizationService localization, ExcelReportExporter excelExporter, IReceiptDisplayService receiptDisplayService, IKeyboardShortcutService shortcutService)
+        public ReportViewModel(IReportService reportService, IProductService productService, ILocalizationService localization, ExcelReportExporter excelExporter, IReceiptDisplayService receiptDisplayService)
         {
             _reportService = reportService;
             _productService = productService;
             _localization = localization;
             _excelExporter = excelExporter;
             _receiptDisplayService = receiptDisplayService;
-            _shortcutService = shortcutService;
 
             ReportCommand = new RelayCommand<string>(OnReportAction, _ => !_isLoading);
             OpenReceiptCommand = new RelayCommand<TransactionReportDto?>(OpenReceipt);
@@ -255,12 +249,5 @@ namespace UI.ViewModels
         public ObservableCollection<TransactionReportDto> TransactionReports { get; }
         public ObservableCollection<ProductReportDto> ProductReports { get; }
         public ObservableCollection<object> Products { get; }
-
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
-        }
     }
 }

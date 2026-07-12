@@ -24,13 +24,10 @@ namespace UI.ViewModels
         private readonly ITopProductService _topProductService;
         private readonly ITransactionService _transactionService;
         private readonly IReceiptDisplayService _receiptDisplayService;
-        private readonly IKeyboardShortcutService _shortcutService;
         private string _errorMessage = string.Empty;
         private bool _isInitialLoadBusy;
         public event Action? ViewAllShiftsRequested;
         public event Action? ShowAllTransactionsRequested;
-
-        public string RefreshGesture => GetShortcutGesture(ShortcutAction.Refresh);
 
         public HomeViewModel(
             IKpiService kpiService,
@@ -39,7 +36,6 @@ namespace UI.ViewModels
             ITopProductService topProductService,
             ITransactionService transactionService,
             IReceiptDisplayService receiptDisplayService,
-            IKeyboardShortcutService shortcutService,
             ILogger<HomeViewModel>? logger)
         {
             _logger = logger;
@@ -49,7 +45,6 @@ namespace UI.ViewModels
             _topProductService = topProductService;
             _transactionService = transactionService;
             _receiptDisplayService = receiptDisplayService;
-            _shortcutService = shortcutService;
 
             FilterTodayCommand = new RelayCommand(_ => OnFilterToday());
             FilterThisWeekCommand = new RelayCommand(_ => OnFilterThisWeek());
@@ -265,13 +260,6 @@ namespace UI.ViewModels
                 _logger?.LogError(ex, "Failed to refresh dashboard data.");
                 ErrorMessage = "Unable to refresh dashboard data.";
             }
-        }
-
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
         }
     }
 

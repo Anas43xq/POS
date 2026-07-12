@@ -20,7 +20,6 @@ namespace UI.ViewModels
     {
         private readonly IShiftManagementService _shiftManagementService;
         private readonly IReceiptDisplayService _receiptDisplayService;
-        private readonly IKeyboardShortcutService _shortcutService;
 
         private readonly ObservableCollection<ShiftListItemDto> _shifts = new();
         private ICollectionView? _shiftsView;
@@ -30,16 +29,12 @@ namespace UI.ViewModels
         private int _totalCount;
         private bool _isLoaded;
 
-        public string RefreshGesture => GetShortcutGesture(ShortcutAction.Refresh);
-
         public ShiftManagementViewModel(
             IShiftManagementService shiftManagementService,
-            IReceiptDisplayService receiptDisplayService,
-            IKeyboardShortcutService shortcutService)
+            IReceiptDisplayService receiptDisplayService)
         {
             _shiftManagementService = shiftManagementService;
             _receiptDisplayService = receiptDisplayService;
-            _shortcutService = shortcutService;
 
             LoadDayCommand = new RelayCommand(_ => LoadDay());
             LoadWeekCommand = new RelayCommand(_ => LoadWeek());
@@ -267,13 +262,6 @@ namespace UI.ViewModels
                 return;
 
             ShiftsView.Refresh();
-        }
-
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
         }
     }
 

@@ -19,7 +19,6 @@ public class SizeManagementViewModel : BaseViewModel
     private readonly ICategoryTranslationService _categoryTranslationService;
     private readonly ISizeTranslationService _sizeTranslationService;
     private readonly IDialogService _dialogService;
-    private readonly IKeyboardShortcutService _shortcutService;
 
     private SizeRowViewModel? _selectedSize;
     private string _errorMessage = string.Empty;
@@ -29,24 +28,18 @@ public class SizeManagementViewModel : BaseViewModel
     private bool _editIsActive = true;
     private SizeRowViewModel? _editingSize;
 
-    public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
-    public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
-    public string DeleteGesture => GetShortcutGesture(ShortcutAction.Delete);
-
     public SizeManagementViewModel(
         ISizeService sizeService,
         IProductTranslationService productTranslationService,
         ICategoryTranslationService categoryTranslationService,
         ISizeTranslationService sizeTranslationService,
-        IDialogService dialogService,
-        IKeyboardShortcutService shortcutService)
+        IDialogService dialogService)
     {
         _sizeService = sizeService;
         _productTranslationService = productTranslationService;
         _categoryTranslationService = categoryTranslationService;
         _sizeTranslationService = sizeTranslationService;
         _dialogService = dialogService;
-        _shortcutService = shortcutService;
 
         AddCommand = new RelayCommand(StartAdd);
         EditCommand = new RelayCommand(StartEdit, () => SelectedSize != null);
@@ -226,13 +219,6 @@ public class SizeManagementViewModel : BaseViewModel
         var dialog = new Views.TranslationDialogView { DataContext = vm, Owner = Application.Current.MainWindow };
         vm.RequestClose = () => dialog.Close();
         dialog.ShowDialog();
-    }
-
-    private string GetShortcutGesture(ShortcutAction action)
-    {
-        var bindings = _shortcutService.GetActiveBindings();
-        var binding = bindings.FirstOrDefault(b => b.Action == action);
-        return binding?.KeyGesture ?? string.Empty;
     }
 }
 

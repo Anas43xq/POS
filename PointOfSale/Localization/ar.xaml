@@ -639,17 +639,6 @@
     <sys:String x:Key="Settings.Language">اللغة</sys:String>
 
     <!-- ========================================================= -->
-    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
-    <!-- ========================================================= -->
-
-    <sys:String x:Key="Shortcut.Search">بحث</sys:String>
-    <sys:String x:Key="Shortcut.Add">إضافة</sys:String>
-    <sys:String x:Key="Shortcut.Edit">تعديل</sys:String>
-    <sys:String x:Key="Shortcut.Print">طباعة</sys:String>
-    <sys:String x:Key="Shortcut.Generate">إنشاء</sys:String>
-    <sys:String x:Key="Shortcut.Export">تصدير</sys:String>
-
-    <!-- ========================================================= -->
     <!-- Settings Dialog                                           -->
     <!-- ========================================================= -->
 

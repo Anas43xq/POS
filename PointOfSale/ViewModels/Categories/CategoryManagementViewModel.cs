@@ -16,24 +16,18 @@ namespace UI.ViewModels
     {
         private readonly ICategoryService _categoryService;
         private readonly ILocalizationService _localization;
-        private readonly IKeyboardShortcutService _shortcutService;
         private readonly ObservableCollection<CategoryCardViewModel> _allCategories = new();
         private string _searchText = string.Empty;
         private CategoryCardViewModel? _selectedCategory;
         private SubcategoryCardViewModel? _selectedSubcategory;
 
-        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
-        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
-        public string DeleteGesture => GetShortcutGesture(ShortcutAction.Delete);
 
         public CategoryManagementViewModel(
             ICategoryService categoryService,
-            ILocalizationService localization,
-            IKeyboardShortcutService shortcutService)
+            ILocalizationService localization)
         {
             _categoryService = categoryService;
             _localization = localization;
-            _shortcutService = shortcutService;
 
             _localization.LanguageChanged += OnLanguageChanged;
 
@@ -360,11 +354,5 @@ namespace UI.ViewModels
 
         private bool CanDelete() => SelectedCategory != null;
 
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
-        }
     }
 }

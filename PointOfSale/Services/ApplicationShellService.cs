@@ -12,16 +12,13 @@ namespace UI.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ApplicationShellService> _logger;
-        private readonly ShortcutManager _shortcutManager;
 
         public ApplicationShellService(
             IServiceProvider serviceProvider,
-            ILogger<ApplicationShellService> logger,
-            ShortcutManager shortcutManager)
+            ILogger<ApplicationShellService> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
-            _shortcutManager = shortcutManager;
         }
 
         public void Start()
@@ -55,7 +52,6 @@ namespace UI.Services
                 // Switch keyboard shortcut profile based on user role
                 var session = _serviceProvider.GetRequiredService<BLL.Interfaces.ISessionService>();
                 var isManager = string.Equals(session.CurrentUser?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase);
-                _shortcutManager.SwitchProfile(isManager ? ShortcutProfileType.Manager : ShortcutProfileType.Cashier);
 
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 if (mainWindow.DataContext is MainViewModel mainViewModel)
@@ -63,7 +59,6 @@ namespace UI.Services
                     mainViewModel.LogoutRequested += () =>
                     {
                         // Reset to Cashier profile on logout
-                        _shortcutManager.SwitchProfile(ShortcutProfileType.Cashier);
 
                         var newLoginAs = _serviceProvider.GetRequiredService<LoginAsWindow>();
                         if (newLoginAs.DataContext is LoginAsViewModel loginVm)

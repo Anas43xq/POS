@@ -17,7 +17,6 @@ namespace UI.ViewModels
         private readonly ITaxRateService _taxRateService;
         private readonly IDialogService _dialogService;
         private readonly ILocalizationService _localization;
-        private readonly IKeyboardShortcutService _shortcutService;
         private readonly List<CategoryNodeViewModel> _allCategoryNodes = new();
         private readonly List<ProductRowViewModel> _allProducts = new();
         private readonly DispatcherTimer _searchDebounceTimer;
@@ -27,26 +26,19 @@ namespace UI.ViewModels
         private ProductRowViewModel? _selectedProduct;
         private HashSet<int>? _cachedCategoryIds;
 
-        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
-        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
-        public string DeleteGesture => GetShortcutGesture(ShortcutAction.Delete);
-        public string SearchGesture => GetShortcutGesture(ShortcutAction.FocusSearch);
-        public string RefreshGesture => GetShortcutGesture(ShortcutAction.Refresh);
 
         public ProductManagementViewModel(
             IProductService productService,
             ICategoryService categoryService,
             ITaxRateService taxRateService,
             IDialogService dialogService,
-            ILocalizationService localization,
-            IKeyboardShortcutService shortcutService)
+            ILocalizationService localization)
         {
             _productService = productService;
             _categoryService = categoryService;
             _taxRateService = taxRateService;
             _dialogService = dialogService;
             _localization = localization;
-            _shortcutService = shortcutService;
 
             _localization.LanguageChanged += OnLanguageChanged;
 
@@ -137,12 +129,6 @@ namespace UI.ViewModels
         public ICommand DeleteProductCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
-        }
     }
 
     public class CategoryNodeViewModel : BaseViewModel

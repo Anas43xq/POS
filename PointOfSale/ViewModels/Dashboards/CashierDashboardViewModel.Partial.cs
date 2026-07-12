@@ -186,8 +186,7 @@ namespace UI.ViewModels
             var vm = new SettingsViewModel(
                 App.ServiceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>(),
                 App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISettingsService>(),
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISessionService>(),
-                App.ServiceProvider.GetRequiredService<KeyboardShortcutsViewModel>());
+                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISessionService>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

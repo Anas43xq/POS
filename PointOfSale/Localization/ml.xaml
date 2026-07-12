@@ -7,20 +7,9 @@
     <!-- Reusable, generic UI vocabulary shared across the app.   -->
     <!-- ========================================================= -->
 
-    <sys:String x:Key="Common.Add">ചേർക്കുക</sys:String>
-    <sys:String x:Key="Common.Edit">എഡിറ്റ് ചെയ്യുക</sys:String>
-    <sys:String x:Key="Common.Delete">ഇല്ലാതാക്കുക</sys:String>
-    <sys:String x:Key="Common.Save">സംരക്ഷിക്കുക</sys:String>
-    <sys:String x:Key="Common.Cancel">റദ്ദാക്കുക</sys:String>
-    <sys:String x:Key="Common.Close">അടയ്ക്കുക</sys:String>
-    <sys:String x:Key="Common.Open">തുറക്കുക</sys:String>
-    <sys:String x:Key="Common.View">കാണുക</sys:String>
-    <sys:String x:Key="Common.Export">എക്സ്പോർട്ട്</sys:String>
-    <sys:String x:Key="Common.Refresh">പുതുക്കുക</sys:String>
-    <sys:String x:Key="Common.Print">പ്രിന്റ്</sys:String>
-    <sys:String x:Key="Common.Void">റദ്ദാക്കുക</sys:String>
-
-    <sys:String x:Key="Common.Search">തിരയുക</sys:String>
+    <!-- ========================================================= -->
+    <!-- Settings Dialog                                           -->
+    <!-- ========================================================= -->
 
     <sys:String x:Key="Common.Apply">പ്രയോഗിക്കുക</sys:String>
     <sys:String x:Key="Common.Reset">പുനഃസജ്ജമാക്കുക</sys:String>
@@ -638,16 +627,6 @@
     <sys:String x:Key="Settings.Title">ക്രമീകരണങ്ങൾ</sys:String>
     <sys:String x:Key="Settings.Language">ഭാഷ</sys:String>
 
-    <!-- ========================================================= -->
-    <!-- Shortcut hint labels (keyboard shortcut chips)            -->
-    <!-- ========================================================= -->
-
-    <sys:String x:Key="Shortcut.Search">തിരയുക</sys:String>
-    <sys:String x:Key="Shortcut.Add">ചേർക്കുക</sys:String>
-    <sys:String x:Key="Shortcut.Edit">എഡിറ്റ് ചെയ്യുക</sys:String>
-    <sys:String x:Key="Shortcut.Print">പ്രിന്റ്</sys:String>
-    <sys:String x:Key="Shortcut.Generate">സൃഷ്ടിക്കുക</sys:String>
-    <sys:String x:Key="Shortcut.Export">എക്സ്പോർട്ട്</sys:String>
 
     <!-- ========================================================= -->
     <!-- Settings Dialog                                           -->
@@ -662,25 +641,5 @@
     <sys:String x:Key="Settings.Copies">പകർപ്പുകൾ</sys:String>
     <sys:String x:Key="Settings.PrintTestReceipt">ടെസ്റ്റ് രസീത് പ്രിന്റ് ചെയ്യുക</sys:String>
 
-    <sys:String x:Key="Settings.KeyboardShortcuts">കീബോർഡ് ഷോർട്ട്കട്ടുകൾ</sys:String>
-    <sys:String x:Key="Settings.KeyboardShortcutsDescription">വേഗതയേറിയ നാവിഗേഷനും പ്രവർത്തനങ്ങൾക്കും കീബോർഡ് ഷോർട്ട്കട്ടുകൾ ഇഷ്ടാനുസൃതമാക്കുക.</sys:String>
-    <sys:String x:Key="Settings.ConfigureKeyboardShortcuts">കീബോർഡ് ഷോർട്ട്കട്ടുകൾ കോൺഫിഗർ ചെയ്യുക</sys:String>
-    <sys:String x:Key="Settings.BackToSettings">ക്രമീകരണങ്ങളിലേക്ക് മടങ്ങുക</sys:String>
-
-    <!-- ========================================================= -->
-    <!-- Keyboard Shortcuts Dialog                                 -->
-    <!-- ========================================================= -->
-
-    <sys:String x:Key="Shortcuts.Cashier">കാഷ്യർ</sys:String>
-    <sys:String x:Key="Shortcuts.Manager">മാനേജർ</sys:String>
-    <sys:String x:Key="Shortcuts.Edit">എഡിറ്റ്</sys:String>
-    <sys:String x:Key="Shortcuts.RestoreDefault">ഡീഫോൾട്ട് പുനഃസ്ഥാപിക്കുക</sys:String>
-    <sys:String x:Key="Shortcuts.RestoreAll">എല്ലാം പുനഃസ്ഥാപിക്കുക</sys:String>
-    <sys:String x:Key="Shortcuts.ColAction">പ്രവർത്തനം</sys:String>
-    <sys:String x:Key="Shortcuts.ColCategory">വിഭാഗം</sys:String>
-    <sys:String x:Key="Shortcuts.ColCurrentShortcut">നിലവിലെ ഷോർട്ട്കട്ട്</sys:String>
-    <sys:String x:Key="Shortcuts.ColDescription">വിവരണം</sys:String>
-    <sys:String x:Key="Shortcuts.Cancel">റദ്ദാക്കുക</sys:String>
-    <sys:String x:Key="Shortcuts.SaveChanges">മാറ്റങ്ങൾ സംരക്ഷിക്കുക</sys:String>
 
 </ResourceDictionary>

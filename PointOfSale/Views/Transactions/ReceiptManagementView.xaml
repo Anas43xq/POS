@@ -146,28 +146,6 @@
                                Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Keyboard shortcut hints -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding AddGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="{DynamicResource Shortcut.Add}" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding EditGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="{DynamicResource Shortcut.Edit}" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource ShortcutChip}">
-                        <Border Style="{StaticResource ShortcutKeyCap}">
-                            <TextBlock Text="{Binding PrintGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                        </Border>
-                        <TextBlock Text="{DynamicResource Shortcut.Print}" Style="{StaticResource ShortcutLabelText}"/>
-                    </StackPanel>
-                </StackPanel>
-
                 <Button Grid.Column="2"
                         Style="{StaticResource OutlineBtn}"
                         Content="{DynamicResource Common.Refresh}"

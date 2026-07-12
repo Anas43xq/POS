@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Models;
 using Contracts.Sales;
@@ -96,7 +96,6 @@ public partial class CashierDashboardViewModel : BaseViewModel
     public bool HasHeaderError => !string.IsNullOrEmpty(_headerErrorMessage);
 
     public event Action? LogoutRequested;
-
     private string _searchText = string.Empty;
     public string SearchText
     {
@@ -285,6 +284,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _receiptDisplayService = receiptDisplayService;
         _localization = localization;
         _logger = logger;
+
 
         // Cart count badge uses a localized format string ("{0} items"),
         // so it must re-evaluate when the language changes \u2014 not just

@@ -51,28 +51,6 @@
                                Foreground="#333333"
                                VerticalAlignment="Center"/>
 
-                    <!-- Keyboard shortcut hints -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="{Binding GenerateGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Shortcut.Generate}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="{Binding ExportGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Shortcut.Export}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-                        <StackPanel Style="{StaticResource ShortcutChip}">
-                            <Border Style="{StaticResource ShortcutKeyCap}">
-                                <TextBlock Text="{Binding PrintGesture, Mode=OneWay}" Style="{StaticResource ShortcutKeyText}"/>
-                            </Border>
-                            <TextBlock Text="{DynamicResource Shortcut.Print}" Style="{StaticResource ShortcutLabelText}"/>
-                        </StackPanel>
-                    </StackPanel>
-
                     <!-- Report Mode Toggle + Action Buttons -->
                     <StackPanel Grid.Column="2"
                                 Orientation="Horizontal"

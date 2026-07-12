@@ -23,7 +23,6 @@ namespace UI.ViewModels
         private readonly IPurchaseReceiptService _purchaseReceiptService;
         private readonly ISupplierService _supplierService;
         private readonly ExcelReportExporter _excelExporter;
-        private readonly IKeyboardShortcutService _shortcutService;
 
         private string _searchText = string.Empty;
         private DateTime? _dateFrom;
@@ -47,24 +46,19 @@ namespace UI.ViewModels
         private int? _editingReceiptId;
         private byte _activeReceiptTypeId = 1;
 
-        public string AddGesture => GetShortcutGesture(ShortcutAction.Add);
-        public string EditGesture => GetShortcutGesture(ShortcutAction.Edit);
-        public string PrintGesture => "Ctrl+P";
 
         public ReceiptManagementViewModel(
             ITransactionService transactionService,
             IReceiptDisplayService receiptDisplayService,
             IPurchaseReceiptService purchaseReceiptService,
             ISupplierService supplierService,
-            ExcelReportExporter excelExporter,
-            IKeyboardShortcutService shortcutService)
+            ExcelReportExporter excelExporter)
         {
             _transactionService = transactionService;
             _receiptDisplayService = receiptDisplayService;
             _purchaseReceiptService = purchaseReceiptService;
             _supplierService = supplierService;
             _excelExporter = excelExporter;
-            _shortcutService = shortcutService;
 
             SalesReceipts = new ObservableCollection<TransactionListItemDto>();
             VatReceipts = new ObservableCollection<PurchaseReceiptDto>();
@@ -789,13 +783,6 @@ namespace UI.ViewModels
             }
 
             return true;
-        }
-
-        private string GetShortcutGesture(ShortcutAction action)
-        {
-            var bindings = _shortcutService.GetActiveBindings();
-            var binding = bindings.FirstOrDefault(b => b.Action == action);
-            return binding?.KeyGesture ?? string.Empty;
         }
     }
 }
