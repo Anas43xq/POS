@@ -78,6 +78,31 @@ GO
 
 :r .\DAL\db\Tables\dbo.AuditLogs.Table.sql
 GO
+
+/* -------------------------------------------------
+   1b. MODIFIER TABLES (must be after Products/Categories/TransactionItems)
+   ------------------------------------------------- */
+:r .\DAL\db\Tables\dbo.ModifierGroups.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.ModifierOptions.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.ModifierGroupTranslations.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.ModifierOptionTranslations.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.CategoryModifierGroups.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.ProductModifierGroups.Table.sql
+GO
+
+:r .\DAL\db\Tables\dbo.TransactionItemModifiers.Table.sql
+GO
+
 /* -------------------------------------------------
    2. USER-DEFINED TYPES
    ------------------------------------------------- */
@@ -148,6 +173,12 @@ GO
    6. SEED DATA
    ------------------------------------------------- */
 :r .\DAL\db\seed.sql
+GO
+
+/* -------------------------------------------------
+   7. MODIFIER SEED DATA (MVP)
+   ------------------------------------------------- */
+:r .\DAL\db\Seeds\dbo.Modifiers.Seed.sql
 GO
 
 PRINT 'POS_DB deployment completed successfully.';

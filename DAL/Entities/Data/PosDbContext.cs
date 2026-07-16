@@ -44,6 +44,14 @@ namespace DAL.Entities.Data
 
         public DbSet<AuditLog> AuditLogs { get; set; }
 
+        public DbSet<ModifierGroup> ModifierGroups { get; set; }
+        public DbSet<ModifierOption> ModifierOptions { get; set; }
+        public DbSet<ModifierGroupTranslation> ModifierGroupTranslations { get; set; }
+        public DbSet<ModifierOptionTranslation> ModifierOptionTranslations { get; set; }
+        public DbSet<CategoryModifierGroup> CategoryModifierGroups { get; set; }
+        public DbSet<ProductModifierGroup> ProductModifierGroups { get; set; }
+        public DbSet<TransactionItemModifier> TransactionItemModifiers { get; set; }
+
         public DbSet<RecentTransactionView> vw_RecentTransactions { get; set; }
         public DbSet<ShiftSummaryView> VwShiftSummaries { get; set; }
         public DbSet<ShiftManagementView> VwShiftManagement { get; set; }

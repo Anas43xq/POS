@@ -1,0 +1,267 @@
+<UserControl x:Class="UI.Views.Cashier.ProductsPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+             xmlns:behaviors="clr-namespace:UI.Behaviors"
+             mc:Ignorable="d"
+             d:DesignWidth="700" d:DesignHeight="900">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CashierPalette.xaml"/>
+                <ResourceDictionary Source="CashierControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardBorder}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <!-- Categories sidebar (wider for touch) -->
+                <ColumnDefinition Width="*"/>
+                <!-- Products area (flex)                -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ===================== CATEGORIES SIDEBAR ===================== -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource CardHdrBg}"
+                    BorderBrush="{StaticResource BrandBorder}"
+                    BorderThickness="0,0,0.5,0"
+                    Padding="6,8">
+                <ScrollViewer x:Name="CategoriesScrollViewer"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Categories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!--
+                                    Each category is a full-width vertical button.
+                                    Style toggles between normal and active based on
+                                    IsSelected via a DataTrigger (preserves existing binding).
+                                -->
+                                <Button Content="{Binding Name}"
+                                        Foreground="{StaticResource TextMuted}"
+                                        Command="{Binding DataContext.SelectCategoryCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource CategoryBtnVertical}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+                                                    <Setter Property="BorderBrush" Value="{StaticResource BrandDark}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+            <!-- ===================== PRODUCTS AREA ===================== -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Search bar       -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Sub-categories   -->
+                    <RowDefinition Height="*"/>
+                    <!-- Product grid     -->
+                </Grid.RowDefinitions>
+
+                <!-- Search bar (matching HTML: padding 10,10,8 bg surface-alt) -->
+                <Border Grid.Row="0"
+                        Background="{StaticResource CardHdrBg}"
+                        BorderBrush="{StaticResource BrandBorder}"
+                        BorderThickness="0,0,0,0.5"
+                        Padding="10,8">
+                    <Border Style="{StaticResource SearchBoxBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="34"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="&#xE721;"
+                                       FontSize="13"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource BrandIcon}"/>
+                            <TextBox x:Name="SearchTextBox" Grid.Column="1"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="12.5"
+                                     Foreground="{StaticResource TextDark}"
+                                     VerticalContentAlignment="Center"
+                                     Padding="0,0,8,0"
+                                     FocusVisualStyle="{x:Null}"/>
+                        </Grid>
+                    </Border>
+                </Border>
+
+                <!-- Sub-categories (conditional, preserved from original) -->
+                <Border Grid.Row="1"
+                        Background="{StaticResource CardHdrBg}"
+                        BorderBrush="{StaticResource BrandBorder}"
+                        BorderThickness="0,0,0,0.5"
+                        Padding="10,6"
+                        Visibility="{Binding HasSubCategories, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Breadcrumb -->
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                            <TextBlock Text="{Binding SelectedCategory.Name}"
+                                       FontSize="10" FontWeight="Medium"
+                                       Foreground="{StaticResource BrandDark}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text=" &#8250;"
+                                       FontSize="10"
+                                       Foreground="{StaticResource TextMuted}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Sub-category buttons -->
+                        <ScrollViewer Grid.Column="1"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding VisibleSubCategories}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{Binding Name}"
+                                                Style="{StaticResource SubCategoryBtn}"
+                                                Foreground="{StaticResource TextMuted}"
+                                                Command="{Binding DataContext.SelectSubCategoryCommand,
+                                                          RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <!-- Product grid (virtualizing) -->
+                <Grid Grid.Row="2">
+                    <ItemsControl x:Name="ProductsItemsControl" ItemsSource="{Binding ProductsView}"
+                                  ScrollViewer.CanContentScroll="True"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling"
+                                  VirtualizingPanel.ScrollUnit="Pixel">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <!--
+                                    ItemSize: 128×88 (matching HTML minmax(122px,1fr) gap 8px,
+                                    product height 82px + margin).
+                                -->
+                                <vwp:VirtualizingWrapPanel Orientation="Horizontal"
+                                                           ItemSize="128,88"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                              VerticalScrollBarVisibility="Auto"
+                                              Padding="10"
+                                              CanContentScroll="True">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource ProductBtn}"
+                                        Command="{Binding DataContext.AddProductCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}">
+                                    <!--
+                                        HTML product layout: name at top, price at bottom,
+                                        badge at top-right (space-between via Grid rows).
+                                    -->
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Name (top area) -->
+                                        <TextBlock Grid.Row="0"
+                                                   Text="{Binding DisplayName}"
+                                                   FontSize="12" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextDark}"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8,4,8,2"/>
+
+                                        <!-- Price (bottom area) -->
+                                        <controls:CurrencyText Grid.Row="1"
+                                                   Amount="{Binding UnitPrice}"
+                                                   Style="{StaticResource CurrencyTextStyleProduct}"
+                                                   Margin="8,0,8,6"/>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- No products found — centered, distinct background -->
+                    <Border Background="{StaticResource NoticeBg}"
+                            BorderBrush="{StaticResource NoticeBorder}"
+                            BorderThickness="1"
+                            CornerRadius="9"
+                            Padding="20,22"
+                            MaxWidth="280"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding ShowNoProductsMessage, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="&#xE721;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       FontSize="26"
+                                       Foreground="{StaticResource NoticeText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource Cashier.NoProductsTitle}"
+                                       FontSize="13" FontWeight="Bold"
+                                       Foreground="{StaticResource NoticeText}"
+                                       TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Cashier.NoProductsSub}"
+                                       FontSize="11.5"
+                                       Foreground="{StaticResource NoticeText}"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

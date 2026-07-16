@@ -212,7 +212,10 @@ namespace UI.ViewModels
                 App.ServiceProvider.GetRequiredService<ICategoryTranslationService>(),
                 App.ServiceProvider.GetRequiredService<ISizeTranslationService>());
 
-            var dialog = new TranslationDialogView { DataContext = vm, Owner = Application.Current.MainWindow };
+            var dialog = new TranslationDialogView { DataContext = vm };
+            var owner = Application.Current?.MainWindow;
+            if (owner != null && !ReferenceEquals(owner, dialog))
+                dialog.Owner = owner;
             vm.RequestClose = () => dialog.Close();
             dialog.ShowDialog();
         }

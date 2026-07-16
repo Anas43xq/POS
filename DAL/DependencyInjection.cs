@@ -62,6 +62,11 @@ public static class DependencyInjection
         services.AddScoped<ISizeRepository, SizeRepository>();
         services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
 
+        services.AddScoped<IModifierGroupRepository, ModifierGroupRepository>();
+        services.AddScoped<IModifierOptionRepository, ModifierOptionRepository>();
+        services.AddScoped<ICategoryModifierGroupRepository, CategoryModifierGroupRepository>();
+        services.AddScoped<IProductModifierGroupRepository, ProductModifierGroupRepository>();
+
         return services;
     }
 }

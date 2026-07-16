@@ -631,6 +631,22 @@
     <sys:String x:Key="Manager.Shifts.DetailTransactions">Transactions</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailClose">Close</sys:String>
 
+    <sys:String x:Key="Cashier.CurrentOrder">Current Order</sys:String>
+    <sys:String x:Key="Cashier.SearchPlaceholder">Search products…</sys:String>
+    <sys:String x:Key="Cashier.NoProductsTitle">No products found</sys:String>
+    <sys:String x:Key="Cashier.NoProductsSub">Try a different search term or category.</sys:String>
+    <sys:String x:Key="Cashier.CustomBadge">CUSTOM</sys:String>
+
+    <sys:String x:Key="Cashier.Required">REQUIRED</sys:String>
+    <sys:String x:Key="Cashier.Base">Base</sys:String>
+    <sys:String x:Key="Cashier.SelectRequired">Select required options to continue</sys:String>
+    <sys:String x:Key="Cashier.AddToCart">Add to Cart</sys:String>
+    <sys:String x:Key="Cashier.UpdateCart">Update Cart</sys:String>
+    <sys:String x:Key="Cashier.CartEmptyTitle">Cart is empty</sys:String>
+    <sys:String x:Key="Cashier.CartEmptySub">Tap a product to start</sys:String>
+
+    <sys:String x:Key="Cashier.Settings">Settings</sys:String>
+
     <!-- ========================================================= -->
     <!-- Settings (Cashier + Manager) -->
     <!-- ========================================================= -->

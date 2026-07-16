@@ -1,0 +1,57 @@
+<UserControl x:Class="UI.Views.Cashier.ErrorBannerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="1600" d:DesignHeight="34">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CashierPalette.xaml"/>
+                <ResourceDictionary Source="CashierControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <!--
+        Visibility is bound to a new VM property (HasError) — not present yet.
+        Row 0 in the shell is Height="Auto", so this collapses to 0 height
+        automatically when Visibility="Collapsed".
+    -->
+    <!-- HTML: .error-banner padding 7px 14px, bg #F5E4DF, border-bottom #E3C4B7 -->
+    <Border Background="#F5E4DF"
+            BorderBrush="#E3C4B7"
+            BorderThickness="0,0,0,1"
+            Padding="14,7"
+            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Text="&#xE783;"
+                       FontFamily="Segoe MDL2 Assets"
+                       FontSize="13"
+                       Foreground="{StaticResource DangerRed}"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0"/>
+
+            <TextBlock Grid.Column="1"
+                       Text="{Binding ErrorMessage}"
+                       FontSize="12" FontWeight="Medium"
+                       Foreground="{StaticResource DangerRed}"
+                       VerticalAlignment="Center"/>
+
+            <Button Grid.Column="2"
+                    Style="{StaticResource ModCloseBtn}"
+                    Command="{Binding DismissErrorCommand}"
+                    Content="&#xE711;"
+                    FontFamily="Segoe MDL2 Assets"/>
+        </Grid>
+    </Border>
+</UserControl>

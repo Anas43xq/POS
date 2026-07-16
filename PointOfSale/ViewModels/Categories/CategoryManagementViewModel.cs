@@ -263,7 +263,10 @@ namespace UI.ViewModels
         private void OpenAddDialog()
         {
             var viewModel = new AddEditCategoryViewModel(_categoryService, _localization) { DialogTitle = "Add Category" };
-            var dialog = new AddEditCategoryDialog { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            var dialog = new AddEditCategoryDialog { DataContext = viewModel };
+            var owner = Application.Current?.MainWindow;
+            if (owner != null && !ReferenceEquals(owner, dialog))
+                dialog.Owner = owner;
             viewModel.RequestClose = () => dialog.Close();
             dialog.ShowDialog();
             _ = RefreshAsync();
@@ -285,7 +288,10 @@ namespace UI.ViewModels
                 SelectedParent = new AddEditCategoryViewModel.ParentCategoryOption { DisplayName = "— None —" }
             };
 
-            var dialog = new AddEditCategoryDialog { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            var dialog = new AddEditCategoryDialog { DataContext = viewModel };
+            var owner = Application.Current?.MainWindow;
+            if (owner != null && !ReferenceEquals(owner, dialog))
+                dialog.Owner = owner;
             viewModel.RequestClose = () => dialog.Close();
             dialog.ShowDialog();
             _ = RefreshAsync();
@@ -305,7 +311,10 @@ namespace UI.ViewModels
                 SelectedParent = parentOption
             };
 
-            var dialog = new AddEditCategoryDialog { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            var dialog = new AddEditCategoryDialog { DataContext = viewModel };
+            var owner = Application.Current?.MainWindow;
+            if (owner != null && !ReferenceEquals(owner, dialog))
+                dialog.Owner = owner;
             viewModel.RequestClose = () => dialog.Close();
             dialog.ShowDialog();
             _ = RefreshAsync();

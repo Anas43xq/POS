@@ -16,6 +16,7 @@ using System.Windows.Markup;
 using UI.Services;
 using UI.ViewModels;
 using UI.Views;
+using UI.Views.Cashier;
 
 namespace UI
 {
@@ -72,6 +73,9 @@ namespace UI
             services.AddTransient<ExcelReportExporter>();
             services.AddSingleton<IRegistryService, RegistryService>();
             services.AddSingleton<IApplicationShellService, ApplicationShellService>();
+
+            // Shortcut configuration
+            services.AddSingleton(new UI.Configuration.ShortcutSettings(configuration));
 
             services.AddSingleton<BLL.Interfaces.ILocalizationService, UI.Services.LocalizationService>();
 

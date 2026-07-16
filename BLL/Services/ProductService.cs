@@ -12,15 +12,21 @@ namespace BLL.Services
         private readonly IProductRepository _productrepo;
         private readonly IProductTranslationService _productTranslationService;
         private readonly ISizeTranslationService _sizeTranslationService;
+        private readonly IProductModifierGroupRepository _productModifierGroupRepo;
+        private readonly ICategoryModifierGroupRepository _categoryModifierGroupRepo;
 
         public ProductService(
             IProductRepository ProductRepo,
             IProductTranslationService productTranslationService,
-            ISizeTranslationService sizeTranslationService)
+            ISizeTranslationService sizeTranslationService,
+            IProductModifierGroupRepository productModifierGroupRepo,
+            ICategoryModifierGroupRepository categoryModifierGroupRepo)
         {
             _productrepo = ProductRepo;
             _productTranslationService = productTranslationService;
             _sizeTranslationService = sizeTranslationService;
+            _productModifierGroupRepo = productModifierGroupRepo;
+            _categoryModifierGroupRepo = categoryModifierGroupRepo;
         }
 
         public async Task<Result<List<ProductSummaryDto>>> GetAllProductsAsync()
@@ -55,7 +61,6 @@ namespace BLL.Services
             {
                 var products = await _productrepo.GetAllProductsWithTaxRateAsync();
 
-                // Batch-load all product translations for the requested language (avoids N+1).
                 var translations = (await _productTranslationService
                     .GetAllByLanguageCodeAsync(languageCode))
                     .ToDictionary(t => t.ProductId, t => t.TranslatedName);
@@ -102,7 +107,6 @@ namespace BLL.Services
                         IsActive = p.IsActive
                     }).ToList();
 
-
                     return Result<List<ProductSummaryDto>>.Success(mapped);
                 }
 
@@ -125,7 +129,6 @@ namespace BLL.Services
                         };
                     }).ToList();
 
-
                 return Result<List<ProductSummaryDto>>.Success(mappedLocalized);
             }
             catch (Exception ex)
@@ -143,6 +146,8 @@ namespace BLL.Services
                 if (variants is null || !variants.Any())
                     return Result<List<ProductDto>>.Success([]);
 
+                var modifierProductIds = await BuildModifierProductIdSetAsync();
+
                 var result = variants.Select(v =>
                 {
                     var productName = v.Product?.Name ?? string.Empty;
@@ -159,7 +164,8 @@ namespace BLL.Services
                         UnitPrice = v.UnitPrice,
                         TaxRate = v.Product?.TaxRate?.Rate ?? 0,
                         CategoryId = v.Product?.CategoryId ?? 0,
-                        IsActive = v.IsActive
+                        IsActive = v.IsActive,
+                        HasModifiers = modifierProductIds.Contains(v.ProductId)
                     };
                 }).ToList();
 
@@ -183,7 +189,6 @@ namespace BLL.Services
                 if (variants is null || !variants.Any())
                     return Result<List<ProductDto>>.Success([]);
 
-                // Batch-load all translations for the requested language (avoids N+1).
                 var productTranslations = (await _productTranslationService
                     .GetAllByLanguageCodeAsync(languageCode))
                     .ToDictionary(t => t.ProductId, t => t.TranslatedName);
@@ -192,18 +197,18 @@ namespace BLL.Services
                     .GetAllByLanguageCodeAsync(languageCode))
                     .ToDictionary(t => t.SizeId, t => t.TranslatedName);
 
+                var modifierProductIds = await BuildModifierProductIdSetAsync();
+
                 var result = variants.Select(v =>
                 {
                     var englishProductName = v.Product?.Name ?? string.Empty;
                     var englishSizeName = v.Size?.Name;
                     var englishDisplayName = ProductNameFormatter.Format(englishProductName, englishSizeName);
 
-                    // Localized product name: translation or fallback to English.
                     var localizedProductName = productTranslations.TryGetValue(v.ProductId, out var ptName)
                         ? ptName
                         : englishProductName;
 
-                    // Localized size name: translation or fallback to English.
                     var localizedSizeName = (englishSizeName is not null &&
                         sizeTranslations.TryGetValue(v.SizeId, out var stName))
                         ? stName
@@ -226,7 +231,8 @@ namespace BLL.Services
                         UnitPrice = v.UnitPrice,
                         TaxRate = v.Product?.TaxRate?.Rate ?? 0,
                         CategoryId = v.Product?.CategoryId ?? 0,
-                        IsActive = v.IsActive
+                        IsActive = v.IsActive,
+                        HasModifiers = modifierProductIds.Contains(v.ProductId)
                     };
                 }).ToList();
 
@@ -261,6 +267,28 @@ namespace BLL.Services
 
         public async Task DeleteProductAsync(int id) =>
             await _productrepo.DeleteAsync(id);
+
+        private async Task<HashSet<int>> BuildModifierProductIdSetAsync()
+        {
+            var productIds = new HashSet<int>();
+
+            var productAssignments = await _productModifierGroupRepo.GetAllAsync();
+            foreach (var a in productAssignments)
+                productIds.Add(a.ProductId);
+
+            var categoryAssignments = await _categoryModifierGroupRepo.GetAllAsync();
+            var categoryIds = categoryAssignments.Select(a => a.CategoryId).ToHashSet();
+
+            // For category-level modifiers, resolve which products belong to those categories
+            if (categoryIds.Count > 0)
+            {
+                var allProducts = await _productrepo.GetAllProductsWithTaxRateAsync();
+                foreach (var p in allProducts.Where(p => categoryIds.Contains(p.CategoryId)))
+                    productIds.Add(p.ProductId);
+            }
+
+            return productIds;
+        }
 
         private static Product MapToEntity(ProductWriteDto d) => new()
         {

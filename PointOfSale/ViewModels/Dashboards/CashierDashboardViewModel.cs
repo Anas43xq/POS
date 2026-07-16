@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using UI.Commands;
 using UI.Services;
 using UI.Views;
+using UI.ViewModels.Modifiers;
 using System.Diagnostics;
 
 namespace UI.ViewModels;
@@ -33,7 +34,15 @@ public partial class CashierDashboardViewModel : BaseViewModel
     private readonly IReceiptDisplayService _receiptDisplayService;
     private readonly ILocalizationService _localization;
 
+    private readonly IModifierService _modifierService;
+    private readonly ICartModifierService _cartModifierService;
+
     private readonly ILogger<CashierDashboardViewModel> _logger;
+
+    // ─── Modifier Panel (single reusable instance) ──────
+
+    private readonly ModifierPanelViewModel _modifierPanel;
+    public ModifierPanelViewModel ModifierPanel => _modifierPanel;
 
     private string _cashierName = string.Empty;
     public string CashierName
@@ -262,6 +271,20 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     public ICommand ShowSetting { get; }
 
+    public RelayCommand CompleteSaleCommand { get; }
+
+    public RelayCommand NewSaleCommand { get; }
+
+    public RelayCommand ToggleShiftCommand { get; }
+
+    public AsyncRelayCommand ReprintLastReceiptCommand { get; }
+
+    /// <summary>
+    /// Opens the modifier panel for an existing cart line item.
+    /// Bound to the cart line hit-test button in CartPanelView.
+    /// </summary>
+    public AsyncRelayCommand<CartItem> EditCartLineCommand { get; }
+
     public CashierDashboardViewModel(
         ISessionService session,
         IShiftService shiftService,
@@ -272,6 +295,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ITransactionService transactionService,
         IReceiptDisplayService receiptDisplayService,
         ILocalizationService localization,
+        IModifierService modifierService,
+        ICartModifierService cartModifierService,
         ILogger<CashierDashboardViewModel> logger)
     {
         _session = session;
@@ -283,11 +308,15 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _transactionService = transactionService;
         _receiptDisplayService = receiptDisplayService;
         _localization = localization;
+        _modifierService = modifierService;
+        _cartModifierService = cartModifierService;
         _logger = logger;
 
+        _modifierPanel = new ModifierPanelViewModel(
+            _modifierService, _cartModifierService, _localization);
 
         // Cart count badge uses a localized format string ("{0} items"),
-        // so it must re-evaluate when the language changes \u2014 not just
+        // so it must re-evaluate when the language changes — not just
         // when the count changes.
         _localization.LanguageChanged += OnLocalizationLanguageChanged;
 
@@ -298,6 +327,10 @@ public partial class CashierDashboardViewModel : BaseViewModel
             product => product != null && product.IsActive && IsShiftOpen);
 
         RemoveSaleItemCommand = new AsyncRelayCommand<CartItem>(RemoveSaleItemAsync);
+
+        EditCartLineCommand = new AsyncRelayCommand<CartItem>(
+            EditCartLineAsync,
+            item => item != null);
 
         IncreaseSelectedQuantityCommand = new RelayCommand(
             IncreaseSelectedQuantity,
@@ -342,6 +375,26 @@ public partial class CashierDashboardViewModel : BaseViewModel
         EndDayCommand = new RelayCommand(
             ShowEndDayDialog,
             () => CanEndDay);
+
+        CompleteSaleCommand = new RelayCommand(
+            () => SaleItems.Clear(),
+            () => SaleItems.Any());
+
+        NewSaleCommand = new RelayCommand(
+            () => SaleItems.Clear());
+
+        ToggleShiftCommand = new RelayCommand(
+            () =>
+            {
+                if (IsShiftOpen)
+                    ((ICommand)EndDayCommand).Execute(null);
+                else
+                    ((ICommand)StartDayCommand).Execute(null);
+            });
+
+        ReprintLastReceiptCommand = new AsyncRelayCommand(
+            ReprintLastReceiptAsync,
+            () => RecentSales.Any());
 
         ProductsView = CollectionViewSource.GetDefaultView(Products);
         ProductsView.Filter = FilterProduct;

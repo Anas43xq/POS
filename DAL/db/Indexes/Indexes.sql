@@ -43,3 +43,14 @@ CREATE INDEX IX_SizeTranslations_LanguageCode ON dbo.SizeTranslations(LanguageCo
 CREATE INDEX IX_TransactionItems_VariantId  ON dbo.TransactionItems(VariantId)
     INCLUDE (TransactionId, Quantity, UnitPrice, LineTotal);
 GO
+
+/* ============================================================
+   Modifier tables
+   ============================================================ */
+CREATE INDEX IX_ModifierOptions_ModifierGroupId ON dbo.ModifierOptions(ModifierGroupId)
+    INCLUDE (Name, PriceAdd, IsActive, SortOrder);
+CREATE INDEX IX_ModifierGroupTranslations_LanguageCode ON dbo.ModifierGroupTranslations(LanguageCode);
+CREATE INDEX IX_ModifierOptionTranslations_LanguageCode ON dbo.ModifierOptionTranslations(LanguageCode);
+CREATE INDEX IX_TransactionItemModifiers_TransactionItemId ON dbo.TransactionItemModifiers(TransactionItemId);
+CREATE INDEX IX_TransactionItemModifiers_ModifierOptionId ON dbo.TransactionItemModifiers(ModifierOptionId);
+GO

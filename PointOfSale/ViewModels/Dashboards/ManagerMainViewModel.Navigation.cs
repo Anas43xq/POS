@@ -111,4 +111,5 @@ namespace UI.ViewModels
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }
+    }
 }

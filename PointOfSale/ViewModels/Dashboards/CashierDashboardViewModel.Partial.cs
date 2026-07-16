@@ -115,6 +115,8 @@ namespace UI.ViewModels
                 }
 
                 SelectedCategory = Categories.FirstOrDefault();
+                if (SelectedCategory != null)
+                    SelectedCategory.IsSelected = true;
             }
             catch (Exception ex)
             {
@@ -206,6 +208,13 @@ namespace UI.ViewModels
             if (category == null)
                 return;
 
+            // Toggle IsSelected on old/new categories so the
+            // DataTrigger in ProductsPanelView can highlight the
+            // active sidebar / sub-category button.
+            if (SelectedCategory != null)
+                SelectedCategory.IsSelected = false;
+
+            category.IsSelected = true;
             SelectedCategory = category;
             ProductsView.Refresh();
             UpdateNoProductsMessage();

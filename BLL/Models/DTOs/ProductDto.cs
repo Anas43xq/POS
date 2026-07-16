@@ -29,4 +29,11 @@ public sealed class ProductDto
     public int CategoryId { get; init; }
 
     public bool IsActive { get; init; }
+
+    /// <summary>
+    /// Whether this product has modifier groups assigned
+    /// (via ProductModifierGroups or CategoryModifierGroups join tables).
+    /// Computed during product loading — never persisted standalone.
+    /// </summary>
+    public bool HasModifiers { get; init; }
 }

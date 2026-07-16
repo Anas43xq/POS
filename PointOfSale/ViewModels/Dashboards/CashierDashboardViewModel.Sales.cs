@@ -17,6 +17,7 @@ namespace UI.ViewModels
             if (product == null)
                 return;
 
+            // Direct add-to-cart — modifier panel opens only when editing from cart
             CartItem? existingItem = SaleItems
                 .FirstOrDefault(item => item.VariantId == product.VariantId
                                     && item.UnitPrice == product.UnitPrice);
@@ -41,6 +42,28 @@ namespace UI.ViewModels
                 SaleItems.Add(item);
             }
 
+            RefreshTotals();
+
+            await Task.CompletedTask;
+        }
+
+        private async Task EditCartLineAsync(CartItem? cartItem)
+        {
+            if (cartItem == null) return;
+
+            var product = Products.FirstOrDefault(p => p.VariantId == cartItem.VariantId);
+            if (product == null) return;
+
+            _modifierPanel.Open(product, existingItem: cartItem, onCompleted: result =>
+            {
+                if (result != null)
+                {
+                    SaleItems.Remove(cartItem);
+                    SaleItems.Add(result);
+                    RefreshTotals();
+                }
+            });
+
             await Task.CompletedTask;
         }
 
@@ -48,6 +71,13 @@ namespace UI.ViewModels
         {
             if (item == null)
                 return;
+
+            // If the modifier panel is currently open editing this item, close it
+            if (_modifierPanel.IsModifierPanelOpen
+                && _modifierPanel.EditingOriginalItem == item)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
 
             SaleItems.Remove(item);
 
@@ -67,6 +97,12 @@ namespace UI.ViewModels
 
             if (result != MessageBoxResult.Yes)
                 return;
+
+            // Close the modifier panel if it's open (clearing removes all items)
+            if (_modifierPanel.IsModifierPanelOpen)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
 
             SaleItems.Clear();
         }
@@ -245,8 +281,24 @@ namespace UI.ViewModels
             if (SelectedCartItem == null)
                 return;
 
+            // If the modifier panel is currently open editing this item, close it
+            if (_modifierPanel.IsModifierPanelOpen
+                && _modifierPanel.EditingOriginalItem == SelectedCartItem)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
+
             SaleItems.Remove(SelectedCartItem);
             SelectedCartItem = SaleItems.LastOrDefault();
+        }
+
+        private async Task ReprintLastReceiptAsync()
+        {
+            var last = RecentSales.FirstOrDefault();
+            if (last == null)
+                return;
+
+            _ = _receiptDisplayService.PrintReceiptAsync(last.TransactionId);
         }
     }
 }

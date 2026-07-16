@@ -183,9 +183,12 @@ namespace UI.ViewModels
                 var viewModel = new ShiftDetailViewModel(result.Value!, _receiptDisplayService);
                 var dialog = new ShiftDetailView
                 {
-                    DataContext = viewModel,
-                    Owner = System.Windows.Application.Current.MainWindow
+                    DataContext = viewModel
                 };
+
+                var owner = System.Windows.Application.Current?.MainWindow;
+                if (owner != null && !ReferenceEquals(owner, dialog))
+                    dialog.Owner = owner;
 
                 dialog.ShowDialog();
             }

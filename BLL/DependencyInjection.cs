@@ -40,6 +40,8 @@ public static class DependencyInjection
         services.AddScoped<IProductTranslationService, ProductTranslationService>();
         services.AddScoped<ISizeTranslationService, SizeTranslationService>();
         services.AddScoped<ISizeService, SizeService>();
+        services.AddScoped<IModifierService, ModifierService>();
+        services.AddScoped<ICartModifierService, CartModifierService>();
 
         services.AddSingleton<ISettingsService, UI.Services.SettingsService>();
         services.AddSingleton<IPrintingService, PrintingService>();

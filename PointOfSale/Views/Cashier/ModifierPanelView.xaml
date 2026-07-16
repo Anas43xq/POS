@@ -1,0 +1,220 @@
+<UserControl x:Class="UI.Views.Cashier.ModifierPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:vm="clr-namespace:UI.ViewModels.Modifiers"
+             mc:Ignorable="d"
+             d:DesignWidth="380" d:DesignHeight="900">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CashierPalette.xaml"/>
+                <ResourceDictionary Source="CashierControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Implicit per-type templates: WPF picks the right one automatically
+                 based on each ModifierGroups item's runtime type — no selector class. -->
+
+            <DataTemplate DataType="{x:Type vm:SingleSelectGroupViewModel}">
+                <StackPanel Margin="0,0,0,16">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
+                        <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="Bold"
+                                   Foreground="{StaticResource TextDark}" Margin="0,0,6,0"/>
+                        <Border Style="{StaticResource RequiredPill}"
+                                Visibility="{Binding IsRequired, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{DynamicResource Cashier.Required}" FontSize="9" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Options}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton Style="{StaticResource ModChip}"
+                                              IsChecked="{Binding IsSelected, Mode=OneWay}"
+                                              Command="{Binding SelectCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                                   Foreground="{Binding IsSelected,
+                                                                Converter={StaticResource BoolToChipForegroundConverter}}"/>
+                                        <TextBlock Text="{Binding PriceAddDisplay}" FontSize="10.5" Margin="5,0,0,0"
+                                                   Foreground="{Binding IsSelected,
+                                                                Converter={StaticResource BoolToChipForegroundConverter}}"
+                                                   Visibility="{Binding HasPriceAdd,
+                                                                Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    </StackPanel>
+                                </ToggleButton>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:MultiSelectGroupViewModel}">
+                <StackPanel Margin="0,0,0,16">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
+                        <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="Bold"
+                                   Foreground="{StaticResource TextDark}" Margin="0,0,6,0"/>
+                        <Border Style="{StaticResource RequiredPill}"
+                                Visibility="{Binding IsRequired, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{DynamicResource Cashier.Required}" FontSize="9" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                        <TextBlock Text="{Binding SelectionHint}" FontSize="10.5"
+                                   Foreground="{StaticResource TextMuted}" Margin="6,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Options}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton Style="{StaticResource ModChip}"
+                                              IsChecked="{Binding IsSelected, Mode=OneWay}"
+                                              Command="{Binding SelectCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                                   Foreground="{Binding IsSelected,
+                                                                Converter={StaticResource BoolToChipForegroundConverter}}"/>
+                                        <TextBlock Text="{Binding PriceAddDisplay}" FontSize="10.5" Margin="5,0,0,0"
+                                                   Foreground="{Binding IsSelected,
+                                                                Converter={StaticResource BoolToChipForegroundConverter}}"
+                                                   Visibility="{Binding HasPriceAdd,
+                                                                Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    </StackPanel>
+                                </ToggleButton>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:QuantityGroupViewModel}">
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="Bold"
+                               Foreground="{StaticResource TextDark}" Margin="0,0,0,7"/>
+                    <ItemsControl ItemsSource="{Binding Options}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource BrandBorder}" BorderThickness="1"
+                                        CornerRadius="6" Padding="10,7" Margin="0,0,0,6">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                                       Foreground="{StaticResource TextDark}"/>
+                                            <TextBlock Text="{Binding UnitPriceDisplay}" FontSize="10.5"
+                                                       Foreground="{StaticResource TextMuted}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Style="{StaticResource QtyStepBtn}" Content="&#8722;"
+                                                    Command="{Binding DecrementCommand}"/>
+                                            <TextBlock Text="{Binding Quantity}" FontSize="12.5" FontWeight="Bold"
+                                                       Width="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <Button Style="{StaticResource QtyStepBtn}" Content="+"
+                                                    Command="{Binding IncrementCommand}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Visibility="{Binding IsModifierPanelOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+
+        <!-- Dimming overlay — covers this column only, never the cart (see shell for isolation) -->
+        <Border Background="{StaticResource OverlayScrim}">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding CloseModifierPanelCommand}"/>
+            </Border.InputBindings>
+        </Border>
+
+        <!-- Panel -->
+        <Border HorizontalAlignment="Right"
+                Width="380"
+                Background="{StaticResource CardBg}"
+                BorderBrush="{StaticResource BrandBorder}"
+                BorderThickness="1,0,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- head -->
+                    <RowDefinition Height="*"/>
+                    <!-- groups -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- confirm -->
+                </Grid.RowDefinitions>
+
+                <!-- Head -->
+                <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}" Padding="14,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding SelectedProductForModifier.DisplayName}"
+                                       FontSize="14" FontWeight="Bold"
+                                       Foreground="{StaticResource TextDark}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock FontSize="11" Foreground="{StaticResource TextMuted}">
+                                    <Run Text="{DynamicResource Cashier.Base}"/><Run Text=" "/>
+                                </TextBlock>
+                                <controls:CurrencyText Amount="{Binding SelectedProductForModifier.UnitPrice}"
+                                                        FontSize="11" Foreground="{StaticResource TextMuted}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1" Style="{StaticResource ModCloseBtn}"
+                                Content="&#xE711;" FontFamily="Segoe MDL2 Assets"
+                                Command="{Binding CloseModifierPanelCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Groups (HTML: .mod-body padding 10px 14px) -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="14,10">
+                    <ItemsControl ItemsSource="{Binding ModifierGroups}"/>
+                </ScrollViewer>
+
+                <!-- Confirm (HTML: .mod-foot padding 12px 14px) -->
+                <StackPanel Grid.Row="2" Margin="14,10,14,12">
+                    <Button Style="{StaticResource ModConfirmBtn}"
+                            IsEnabled="{Binding AllRequiredGroupsSatisfied}"
+                            Command="{Binding ConfirmModifierCommand}">
+                        <Grid Width="340">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding ModifierConfirmLabel}"
+                                       VerticalAlignment="Center"/>
+                            <controls:CurrencyText Grid.Column="1"
+                                       Amount="{Binding ModifierRunningTotal}"
+                                       Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Button>
+                    <TextBlock Text="{DynamicResource Cashier.SelectRequired}"
+                               FontSize="10.5" Foreground="{StaticResource DangerRed}"
+                               TextAlignment="Center" Margin="0,6,0,0"
+                               Visibility="{Binding AllRequiredGroupsSatisfied,
+                                            Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

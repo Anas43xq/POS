@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:UI.ViewModels"
         xmlns:views="clr-namespace:UI.Views"
+        xmlns:cashier="clr-namespace:UI.Views.Cashier"
         xmlns:conv="clr-namespace:UI.Converters"
         mc:Ignorable="d"
         Title="Point of Sale"
@@ -16,7 +17,7 @@
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
         <DataTemplate DataType="{x:Type vm:CashierDashboardViewModel}">
-            <views:CashierDashboardView />
+            <cashier:CashierDashboardView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">

@@ -5,4 +5,5 @@
     <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
     <conv:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+    <conv:BoolToChipForegroundConverter x:Key="BoolToChipForegroundConverter" />
 </ResourceDictionary>

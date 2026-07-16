@@ -1,0 +1,211 @@
+<UserControl x:Class="UI.Views.Cashier.CartPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="900">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CashierPalette.xaml"/>
+                <ResourceDictionary Source="CashierControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- header -->
+                <RowDefinition Height="*"/>
+                <!-- lines  -->
+                <RowDefinition Height="Auto"/>
+                <!-- totals -->
+            </Grid.RowDefinitions>
+
+            <!-- Panel header (HTML: .cart-head padding 9px 12px) -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource CardHdrBg}"
+                    BorderBrush="{StaticResource BrandBorder}"
+                    BorderThickness="0,0,0,0.5"
+                    Padding="12,9">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource Cashier.CurrentOrder}"
+                               FontSize="12.5" FontWeight="Bold"
+                               Foreground="{StaticResource TextDark}"
+                               VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource CountBadge}"
+                            Visibility="{Binding SaleItemsCount, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}">
+                        <TextBlock FontSize="10.5" FontWeight="Bold"
+                                   Foreground="{StaticResource BrandDark}"
+                                   Text="{Binding CartCountDisplay, Mode=OneWay}"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Cart lines (HTML: .cart-items padding 6px 8px) -->
+            <Grid Grid.Row="1">
+                <!-- Empty cart message -->
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Margin="8,30,8,30" TextAlignment="Center"
+                           Foreground="{StaticResource TextMuted}" FontSize="12"
+                           Visibility="Collapsed">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SaleItemsCount}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                    <Run Text="{DynamicResource Cashier.CartEmptyTitle}"/><LineBreak/>
+                    <Run Text="{DynamicResource Cashier.CartEmptySub}"/>
+                </TextBlock>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              Visibility="Visible">
+                    <ScrollViewer.Style>
+                        <Style TargetType="ScrollViewer">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SaleItemsCount}" Value="0">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ScrollViewer.Style>
+                <ItemsControl ItemsSource="{Binding SaleItems}" Margin="8,6">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <!--
+                                Layered pattern: a full-size hit-test button behind
+                                (tap anywhere on the line -> edit), remove button on
+                                top of it with its own hit area, content on top,
+                                non-hit-testable so clicks pass through to the button.
+                                HTML: .cart-line padding 8px 8px, margin-bottom 5px
+                            -->
+                            <Grid Margin="0,0,0,5" MinHeight="44">
+
+                                <Button Style="{StaticResource CartLineHitBtn}"
+                                        Command="{Binding DataContext.EditCartLineCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+
+                                <Grid Margin="8,8,36,8" IsHitTestVisible="False">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Row 1: name + line total -->
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding LocalizedProductName}"
+                                                   FontSize="12" FontWeight="Medium"
+                                                   Foreground="{StaticResource TextDark}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <controls:CurrencyText Grid.Column="1"
+                                                   Amount="{Binding LineTotal}"
+                                                   Style="{StaticResource CurrencyTextStyle}"/>
+                                    </Grid>
+
+                                    <!-- Row 2: modifier summary — new; needs HasModifiers/ModifierSummary -->
+                                    <TextBlock Grid.Row="1"
+                                               Text="{Binding ModifierSummary}"
+                                               FontSize="10.5"
+                                               Foreground="{StaticResource TextMuted}"
+                                               TextWrapping="Wrap"
+                                               Margin="0,2,0,0"
+                                               Visibility="{Binding HasModifiers,
+                                                            Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                    <!-- Row 3: qty + unit price -->
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,3,0,0">
+                                        <TextBlock Text="{Binding Quantity, StringFormat='x{0}'}"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource TextMuted}"/>
+                                        <TextBlock Text=" · "
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource TextMuted}"/>
+                                        <controls:CurrencyText Amount="{Binding UnitPrice}"
+                                                   FontSize="10.5"
+                                                   Foreground="{StaticResource TextMuted}"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Remove -->
+                                <Button Style="{StaticResource CartRemoveBtn}"
+                                        Content="&#xE711;" FontFamily="Segoe MDL2 Assets"
+                                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                                        Margin="0,6,6,0"
+                                        ToolTip="Remove item"
+                                        Command="{Binding DataContext.RemoveSaleItemCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            </Grid>
+
+            <!-- Totals block (HTML: .cart-summary padding 10px 12px) -->
+            <Border Grid.Row="2"
+                    Background="{StaticResource CardBg}"
+                    BorderBrush="{StaticResource BrandBorder}"
+                    BorderThickness="0,0.5,0,0"
+                    Padding="12,10">
+                <StackPanel>
+
+                    <!-- Subtotal (HTML: .sum-row 11.5px, margin-bottom 4px) -->
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Subtotal}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Subtotal, StringFormat={}{0:N2}}"
+                                   FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                    </Grid>
+
+                    <!-- Tax (HTML: .sum-row 11.5px, margin-bottom 4px) -->
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Tax}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Tax, StringFormat={}{0:N2}}"
+                                   FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                    </Grid>
+
+                    <!-- Total (HTML: .sum-row.total 15px bold, margin-top 6px) -->
+                    <Grid Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Total}" FontSize="15" FontWeight="Bold"
+                                   Foreground="{StaticResource TextDark}" VerticalAlignment="Center"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                   Amount="{Binding Total}"
+                                   Style="{StaticResource CurrencyTextStyleLarge}"/>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Border>
+</UserControl>
