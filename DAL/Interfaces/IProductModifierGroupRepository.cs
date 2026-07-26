@@ -7,5 +7,6 @@ namespace DAL.Interfaces
     public interface IProductModifierGroupRepository : IRepository<ProductModifierGroup>
     {
         Task<IEnumerable<ProductModifierGroup>> GetByProductIdAsync(int productId);
+        Task DeleteByCompositeKeyAsync(int productId, int modifierGroupId);
     }
 }

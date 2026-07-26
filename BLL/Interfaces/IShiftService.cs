@@ -22,5 +22,7 @@ namespace BLL.Interfaces
         Task<Result<ShiftDto>> CloseShiftAsync(int shiftId, decimal closingCash);
 
         Task<IEnumerable<ShiftDto>> GetLastShiftsAsync(int count);
+
+        Task<decimal> GetShiftTotalSalesAsync(int shiftId);
     }
 }

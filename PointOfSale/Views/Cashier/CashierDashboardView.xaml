@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:UI.Controls"
              xmlns:cashier="clr-namespace:UI.Views.Cashier"
+             xmlns:b="clr-namespace:UI.Behaviors"
              mc:Ignorable="d"
-             d:DesignWidth="1600" d:DesignHeight="900">
+             d:DesignWidth="1600" d:DesignHeight="900"
+             b:ShortcutBindingsBehavior.Role="Cashier">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -91,8 +93,8 @@
                     <!-- Clear     -->
                 </Grid.ColumnDefinitions>
 
-                <!-- CASH (HTML: .pay-btn.pay-cash, height 42px, padding 0 18px) -->
-                <Button Height="42"
+                <!-- CASH (HTML: .pay-btn.pay-cash, height 50px, padding 0 24px) -->
+                <Button Height="50"
                         Margin="0,0,10,0"
                         BorderThickness="0"
                         Cursor="Hand"
@@ -104,7 +106,7 @@
                                     BorderBrush="Transparent"
                                     BorderThickness="0"
                                     CornerRadius="9"
-                                    Padding="18,0">
+                                    Padding="24,0">
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
@@ -139,8 +141,8 @@
                     </Button.Template>
                 </Button>
 
-                <!-- CARD (HTML: .pay-btn.pay-card, height 42px, padding 0 18px) -->
-                <Button Grid.Column="1" Height="42"
+                <!-- CARD (HTML: .pay-btn.pay-card, height 50px, padding 0 24px) -->
+                <Button Grid.Column="1" Height="50"
                         Margin="0,0,10,0"
                         BorderThickness="0"
                         Cursor="Hand"
@@ -152,7 +154,7 @@
                                     BorderBrush="Transparent"
                                     BorderThickness="0"
                                     CornerRadius="9"
-                                    Padding="18,0">
+                                    Padding="24,0">
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
@@ -187,22 +189,52 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Clear Sale (HTML: .pay-clear, margin-left:auto → Grid.Column=3 with * spacer) -->
-                <Button Grid.Column="3" Style="{StaticResource FooterGhostBtn}"
+                <!-- Clear Sale — red background, black text, large touch target -->
+                <Button Grid.Column="3" Height="50"
                         Margin="0"
+                        BorderThickness="0"
+                        Cursor="Hand"
                         Command="{Binding ClearSaleCommand}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="&#xE74D;"
-                                   FontSize="11"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   Foreground="{StaticResource TextMuted}"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,6,0"/>
-                        <TextBlock Text="{DynamicResource Cashier.ClearSale}"
-                                   FontSize="11.5" FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextMuted}"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bg"
+                                    Background="{StaticResource DangerRed}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    CornerRadius="9"
+                                    Padding="24,0">
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="&#xE74D;"
+                                               FontSize="13"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               Foreground="Black"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource Cashier.ClearSale}"
+                                               FontSize="14" FontWeight="Bold"
+                                               Foreground="Black"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="{StaticResource DangerHover}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Bg" Property="Opacity" Value="0.88"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Bg" Property="Opacity" Value="0.45"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="Bg" Property="BorderBrush" Value="White"/>
+                                    <Setter TargetName="Bg" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
             </Grid>
         </Border>

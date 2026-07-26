@@ -12,10 +12,15 @@ public class CreateTransactionItemRequest
 
     public decimal TaxRate { get; set; }
 
-
     public decimal LineSubtotal { get; set; }
 
     public decimal LineTax { get; set; }
 
     public decimal LineTotal { get; set; }
+
+    /// <summary>
+    /// Modifier selections applied to this cart line.
+    /// Saved to TransactionItemModifiers after the SP creates the transaction.
+    /// </summary>
+    public List<CreateTransactionItemModifierRequest> Modifiers { get; set; } = new();
 }

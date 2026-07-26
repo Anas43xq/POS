@@ -20,6 +20,8 @@ namespace DAL.Entities
 
         public decimal LineTotal { get; set; }
 
+        public bool IsDefault { get; set; }
+
         public TransactionItem? TransactionItem { get; set; }
 
         public ModifierOption? ModifierOption { get; set; }

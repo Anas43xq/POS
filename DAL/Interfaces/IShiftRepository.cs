@@ -1,4 +1,3 @@
-
 using DAL.Entities;
 
 namespace DAL.Interfaces
@@ -7,5 +6,6 @@ namespace DAL.Interfaces
     {
         Task<Shift?> GetOpenShiftAsync(int userId);
         Task<IEnumerable<Shift>> GetLastShiftsAsync(int count);
+        Task<decimal> GetShiftTotalSalesAsync(int shiftId, CancellationToken ct = default);
     }
 }

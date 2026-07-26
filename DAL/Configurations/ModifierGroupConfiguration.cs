@@ -30,6 +30,9 @@ public sealed class ModifierGroupConfiguration : IEntityTypeConfiguration<Modifi
         builder.Property(x => x.SortOrder)
             .HasDefaultValue(0);
 
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true);
+
         builder.Property(x => x.CreatedAt)
             .HasPrecision(0);
 

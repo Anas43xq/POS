@@ -54,6 +54,9 @@ namespace UI
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                // Shortcuts live in their own file so they can be edited
+                // or replaced without touching appsettings.json.
+                .AddJsonFile("shortcuts.json", optional: true, reloadOnChange: false)
                 .Build();
 
             services.AddLogging();
@@ -70,6 +73,7 @@ namespace UI
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddTransient<IReceiptDisplayService, ReceiptDisplayService>();
             services.AddSingleton<IReceiptPrinter, ReceiptPrinter>();
+            services.AddSingleton<IReceiptFileWriter, ReceiptPdfWriter>();
             services.AddTransient<ExcelReportExporter>();
             services.AddSingleton<IRegistryService, RegistryService>();
             services.AddSingleton<IApplicationShellService, ApplicationShellService>();
@@ -91,6 +95,7 @@ namespace UI
             services.AddTransient<CategoryManagementViewModel>();
             services.AddTransient<SizeManagementViewModel>();
             services.AddTransient<ReceiptManagementViewModel>();
+            services.AddTransient<ModifierGroupManagementViewModel>();
             services.AddTransient<ManagerMainViewModel>();
             services.AddTransient<StartDayDialogViewModel>();
             services.AddTransient<EndDayDialogViewModel>();

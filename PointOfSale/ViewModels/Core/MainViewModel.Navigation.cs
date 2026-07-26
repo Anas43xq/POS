@@ -8,6 +8,7 @@ namespace UI.ViewModels
     {
         private ManagerMainViewModel? _currentManagerMainViewModel;
         private HomeViewModel? _currentManagerHomeViewModel;
+        private CashierDashboardViewModel? _currentCashierDashboardViewModel;
 
         private void OnCurrentViewModelChanged()
         {
@@ -38,16 +39,16 @@ namespace UI.ViewModels
             var user = _sessionService.CurrentUser;
             if (string.Equals(user?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase))
             {
+                // Navigation triggers OnCurrentViewModelChanged, which is the
+                // single source of truth for (un)subscribing the logout bridge.
+                // Re-subscribing here would cause EveLogoutRequested to be
+                // wired to ManagerMainViewModel.LogoutRequested twice — and
+                // therefore the logout MessageBox would show twice on click.
                 _navigationService.NavigateTo<ManagerMainViewModel>();
-                if (_navigationService.CurrentViewModel is ManagerMainViewModel managerViewModel)
-                {
-                    SubscribeManagerLogout(managerViewModel);
-                }
             }
             else
             {
                 _navigationService.NavigateTo<CashierDashboardViewModel>();
-                SubscribeCashierEvents();
             }
         }
 
@@ -81,20 +82,28 @@ namespace UI.ViewModels
 
         private void SubscribeCashierEvents()
         {
-            UnsubscribeCashierEvents();
+            if (_navigationService.CurrentViewModel is not CashierDashboardViewModel cashierVm)
+                return;
 
-            if (_navigationService.CurrentViewModel is CashierDashboardViewModel cashierVm)
-            {
-                cashierVm.LogoutRequested += EveLogoutRequested;
-            }
+            // Same idempotent pattern as SubscribeManagerLogout: cache the
+            // current instance so a future UnsubscribeCashierEvents() can
+            // detach from the *exact* VM it attached to, even if the
+            // navigation service has already moved on to a different view.
+            if (_currentCashierDashboardViewModel == cashierVm)
+                return;
+
+            UnsubscribeCashierEvents();
+            _currentCashierDashboardViewModel = cashierVm;
+            _currentCashierDashboardViewModel.LogoutRequested += EveLogoutRequested;
         }
 
         private void UnsubscribeCashierEvents()
         {
-            if (_navigationService.CurrentViewModel is CashierDashboardViewModel cashierVm)
-            {
-                cashierVm.LogoutRequested -= EveLogoutRequested;
-            }
+            if (_currentCashierDashboardViewModel == null)
+                return;
+
+            _currentCashierDashboardViewModel.LogoutRequested -= EveLogoutRequested;
+            _currentCashierDashboardViewModel = null;
         }
 
         private void UnsubscribeManagerHomeEvents()

@@ -54,6 +54,16 @@
                                    TextWrapping="Wrap"
                                    FontWeight="SemiBold"/>
 
+                        <!-- Non-default modifier lines -->
+                        <ItemsControl ItemsSource="{Binding Modifiers}" Margin="12,2,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="11" Foreground="#555555"
+                                               Text="{Binding Converter={StaticResource ModifierLineConverter}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
                         <Grid Margin="0,2,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

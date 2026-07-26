@@ -154,6 +154,11 @@ namespace BLL.Services
             return entities.Select(MapToDto);
         }
 
+        public async Task<decimal> GetShiftTotalSalesAsync(int shiftId)
+        {
+            return await _shiftrepo.GetShiftTotalSalesAsync(shiftId);
+        }
+
         private static ShiftDto MapToDto(Shift e) => new()
         {
             ShiftId = e.ShiftId,

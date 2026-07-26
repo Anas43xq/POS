@@ -31,6 +31,19 @@ namespace UI.Controls
             set => SetValue(AmountProperty, value);
         }
 
+        public static readonly DependencyProperty AmountForegroundProperty =
+            DependencyProperty.Register(
+                nameof(AmountForeground),
+                typeof(Brush),
+                typeof(CurrencyText),
+                new PropertyMetadata(System.Windows.Media.Brushes.Black));
+
+        public Brush AmountForeground
+        {
+            get => (Brush)GetValue(AmountForegroundProperty);
+            set => SetValue(AmountForegroundProperty, value);
+        }
+
         public static readonly DependencyProperty IconSizeProperty =
           DependencyProperty.Register(
               nameof(IconSize),

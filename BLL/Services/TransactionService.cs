@@ -79,7 +79,15 @@ namespace BLL.Services
         {
             ValidateCreateTransactionRequest(request);
             await ValidateShiftIsOpenAsync(request.ShiftId);
-            return await _transactionCommandRepository.CreateTransactionAsync(request);
+            int transactionId = await _transactionCommandRepository.CreateTransactionAsync(request);
+
+            // Save modifier selections (SP doesn't handle modifiers)
+            if (request.Items.Any(i => i.Modifiers?.Count > 0))
+            {
+                await _transactionCommandRepository.SaveTransactionItemModifiersAsync(transactionId, request.Items);
+            }
+
+            return transactionId;
         }
 
         private static void ValidateCreateTransactionRequest(CreateTransactionRequest request)

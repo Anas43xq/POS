@@ -23,7 +23,7 @@
                            Foreground="#333333" Margin="0,0,0,8"/>
                 <TextBox x:Name="OpeningCashBox"
                          Text="{Binding OpeningCash, UpdateSourceTrigger=PropertyChanged}"
-                         Height="40" Padding="12" FontSize="14"
+                         Height="50" Padding="12" FontSize="14"
                          Background="White" Foreground="#333333"
                          BorderBrush="#CCCCCC" BorderThickness="1"
                          Loaded="OpeningCashBox_Loaded"

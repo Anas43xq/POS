@@ -58,7 +58,13 @@ namespace UI.Services
                 {
                     mainViewModel.LogoutRequested += () =>
                     {
-                        // Reset to Cashier profile on logout
+                        // Detach this MainViewModel from the singleton
+                        // NavigationService BEFORE the next MainViewModel
+                        // is constructed; otherwise the old subscription
+                        // stays alive, resubscribes to the next manager
+                        // VM's LogoutRequested, and the confirmation
+                        // MessageBox ends up being shown N+1 times.
+                        mainViewModel.UnloadFromNavigation();
 
                         var newLoginAs = _serviceProvider.GetRequiredService<LoginAsWindow>();
                         if (newLoginAs.DataContext is LoginAsViewModel loginVm)

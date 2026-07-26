@@ -47,5 +47,23 @@ public partial class MainViewModel : BaseViewModel
         // Navigate to dashboard based on user role
         NavigateToDashboardByRole();
     }
+
+    /// <summary>
+    /// Detaches this view-model from the singleton
+    /// <see cref="INavigationService"/>. MUST be called when the
+    /// owning <c>MainWindow</c> is being torn down (e.g. on logout),
+    /// otherwise <see cref="NavigationService.CurrentViewModelChanged"/>
+    /// keeps a strong reference to this instance and to every
+    /// <c>ManagerMainViewModel.LogoutRequested</c> it has wired up,
+    /// which on the next login would cause the logout
+    /// confirmation <c>MessageBox</c> to be shown N+1 times.
+    /// </summary>
+    public void UnloadFromNavigation()
+    {
+        _navigationService.CurrentViewModelChanged -= OnCurrentViewModelChanged;
+        UnsubscribeManagerLogout();
+        UnsubscribeCashierEvents();
+        UnsubscribeManagerHomeEvents();
+    }
 }
 

@@ -26,6 +26,7 @@ namespace UI.ViewModels
         private readonly CategoryManagementViewModel _categoryManagementViewModel;
         private readonly SizeManagementViewModel _sizeManagementViewModel;
         private readonly ReceiptManagementViewModel _receiptManagementViewModel;
+        private readonly ModifierGroupManagementViewModel _modifierGroupManagementViewModel;
         private readonly ISessionService _sessionService;
         private readonly IDialogService _dialogService;
         private CancellationTokenSource? _timeCancellationTokenSource;
@@ -47,6 +48,7 @@ namespace UI.ViewModels
         public ICommand NavigateCategoryManagementCommand { get; set; } = null!;
         public ICommand NavigateSizeManagementCommand { get; set; } = null!;
         public ICommand NavigateReceiptManagementCommand { get; set; } = null!;
+        public ICommand NavigateModifierGroupManagementCommand { get; set; } = null!;
         public ICommand LogoutCommand { get; set; } = null!;
 
         /// <summary>
@@ -132,6 +134,7 @@ namespace UI.ViewModels
             CategoryManagementViewModel categoryManagementViewModel,
             SizeManagementViewModel sizeManagementViewModel,
             ReceiptManagementViewModel receiptManagementViewModel,
+            ModifierGroupManagementViewModel modifierGroupManagementViewModel,
             ISessionService sessionService,
             IDialogService dialogService)
         {
@@ -143,6 +146,7 @@ namespace UI.ViewModels
             _categoryManagementViewModel = categoryManagementViewModel;
             _sizeManagementViewModel = sizeManagementViewModel;
             _receiptManagementViewModel = receiptManagementViewModel;
+            _modifierGroupManagementViewModel = modifierGroupManagementViewModel;
             _sessionService = sessionService;
             _dialogService = dialogService;
 
@@ -161,6 +165,7 @@ namespace UI.ViewModels
             NavigateCategoryManagementCommand = new RelayCommand(NavigateToCategoryManagement);
             NavigateSizeManagementCommand = new RelayCommand(NavigateToSizeManagement);
             NavigateReceiptManagementCommand = new RelayCommand(NavigateToReceiptManagement);
+            NavigateModifierGroupManagementCommand = new RelayCommand(NavigateToModifierGroupManagement);
             LogoutCommand = new RelayCommand(_ => LogoutRequested?.Invoke());
 
             // Settings — mirrors the cashier header's gear button so the

@@ -10,4 +10,10 @@ public class ReceiptItemDto
     public decimal UnitPrice { get; set; }
 
     public decimal LineTotal { get; set; }
+
+    /// <summary>
+    /// Non-default modifier selections for this item.
+    /// Default options (e.g. "Regular Dough") are excluded.
+    /// </summary>
+    public List<ReceiptModifierDto> Modifiers { get; set; } = new();
 }

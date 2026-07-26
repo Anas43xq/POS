@@ -172,10 +172,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{DynamicResource Common.Subtotal}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{DynamicResource Common.Subtotal}" FontSize="13.5" Foreground="{StaticResource TextMuted}"/>
                         <TextBlock Grid.Column="1"
                                    Text="{Binding Subtotal, StringFormat={}{0:N2}}"
-                                   FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                                   FontSize="13.5" Foreground="{StaticResource TextMuted}"/>
                     </Grid>
 
                     <!-- Tax (HTML: .sum-row 11.5px, margin-bottom 4px) -->
@@ -184,10 +184,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{DynamicResource Common.Tax}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{DynamicResource Common.Tax}" FontSize="13.5" Foreground="{StaticResource TextMuted}"/>
                         <TextBlock Grid.Column="1"
                                    Text="{Binding Tax, StringFormat={}{0:N2}}"
-                                   FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                                   FontSize="13.5" Foreground="{StaticResource TextMuted}"/>
                     </Grid>
 
                     <!-- Total (HTML: .sum-row.total 15px bold, margin-top 6px) -->

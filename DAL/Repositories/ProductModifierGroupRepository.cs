@@ -24,4 +24,16 @@ public class ProductModifierGroupRepository : Repository<ProductModifierGroup>, 
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task DeleteByCompositeKeyAsync(int productId, int modifierGroupId)
+    {
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
+        var entity = await context.ProductModifierGroups
+            .FirstOrDefaultAsync(pmg => pmg.ProductId == productId && pmg.ModifierGroupId == modifierGroupId);
+        if (entity is not null)
+        {
+            context.ProductModifierGroups.Remove(entity);
+            await context.SaveChangesAsync();
+        }
+    }
 }

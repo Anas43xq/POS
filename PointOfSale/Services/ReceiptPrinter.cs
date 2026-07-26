@@ -58,7 +58,14 @@ public sealed class ReceiptPrinter : IReceiptPrinter
         bool? printed = showDialog ? printDialog.ShowDialog() : true;
         if (printed == true)
         {
-            printDialog.PrintVisual(view, "Receipt");
+            // The second argument to PrintVisual is the print-job name. It is
+            // what the user sees in the Windows print queue (and the spool
+            // document name). Use the receipt number so the queue entry is
+            // recognisable; fall back to "Receipt" if it's empty.
+            var jobName = string.IsNullOrWhiteSpace(receipt.ReceiptNumber)
+                ? "Receipt"
+                : receipt.ReceiptNumber;
+            printDialog.PrintVisual(view, jobName);
         }
 
         return Task.CompletedTask;

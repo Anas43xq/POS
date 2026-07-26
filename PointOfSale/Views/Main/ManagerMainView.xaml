@@ -11,9 +11,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:UI.ViewModels"
              xmlns:views="clr-namespace:UI.Views"
+             xmlns:modifiers="clr-namespace:UI.Views.Modifiers"
+             xmlns:b="clr-namespace:UI.Behaviors"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1600"
-             Background="#EAF4FF">
+             Background="#EAF4FF"
+             b:ShortcutBindingsBehavior.Role="Manager">
 
     <UserControl.Resources>
 
@@ -192,6 +195,10 @@
 
         <DataTemplate DataType="{x:Type vm:ReceiptManagementViewModel}">
             <views:ReceiptManagementView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ModifierGroupManagementViewModel}">
+            <modifiers:ModifierGroupManagementView />
         </DataTemplate>
 
     </UserControl.Resources>
@@ -373,6 +380,14 @@
                             <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource NavLabel}"/>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource NavItem}"
+                                 Command="{Binding NavigateModifierGroupManagementCommand}">
+                        <RadioButton.Tag>
+                            <TextBlock Text="⚡" Style="{StaticResource NavIcon}"/>
+                        </RadioButton.Tag>
+                        <TextBlock Text="{DynamicResource Manager.Nav.ModifierGroups}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
 
                 </StackPanel>

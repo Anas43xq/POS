@@ -24,4 +24,16 @@ public class CategoryModifierGroupRepository : Repository<CategoryModifierGroup>
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task DeleteByCompositeKeyAsync(int categoryId, int modifierGroupId)
+    {
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
+        var entity = await context.CategoryModifierGroups
+            .FirstOrDefaultAsync(cmg => cmg.CategoryId == categoryId && cmg.ModifierGroupId == modifierGroupId);
+        if (entity is not null)
+        {
+            context.CategoryModifierGroups.Remove(entity);
+            await context.SaveChangesAsync();
+        }
+    }
 }

@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<ISizeTranslationService, SizeTranslationService>();
         services.AddScoped<ISizeService, SizeService>();
         services.AddScoped<IModifierService, ModifierService>();
+        services.AddScoped<IModifierManagementService, ModifierManagementService>();
         services.AddScoped<ICartModifierService, CartModifierService>();
 
         services.AddSingleton<ISettingsService, UI.Services.SettingsService>();

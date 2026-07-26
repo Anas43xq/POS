@@ -15,17 +15,35 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <!--
-        Visibility is bound to a new VM property (HasError) — not present yet.
-        Row 0 in the shell is Height="Auto", so this collapses to 0 height
-        automatically when Visibility="Collapsed".
-    -->
-    <!-- HTML: .error-banner padding 7px 14px, bg #F5E4DF, border-bottom #E3C4B7 -->
-    <Border Background="#F5E4DF"
-            BorderBrush="#E3C4B7"
-            BorderThickness="0,0,0,1"
-            Padding="14,7"
-            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+     <!--
+         Row 0 in the shell is Height="Auto", so this collapses to 0 height
+         automatically when Visibility="Collapsed".
+         Fade-in animation plays when the error banner first becomes visible.
+     -->
+     <!-- HTML: .error-banner padding 7px 14px, bg #F5E4DF, border-bottom #E3C4B7 -->
+     <Border x:Name="RootBorder"
+             Background="#F5E4DF"
+             BorderBrush="#E3C4B7"
+             BorderThickness="0,0,0,1"
+             Padding="14,7"
+             Opacity="0"
+             Visibility="{Binding HasHeaderError, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="Border.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="RootBorder"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0" To="1"
+                                         Duration="0:0:0.25">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -41,8 +59,8 @@
                        VerticalAlignment="Center"
                        Margin="0,0,8,0"/>
 
-            <TextBlock Grid.Column="1"
-                       Text="{Binding ErrorMessage}"
+             <TextBlock Grid.Column="1"
+                        Text="{Binding HeaderErrorMessage}"
                        FontSize="12" FontWeight="Medium"
                        Foreground="{StaticResource DangerRed}"
                        VerticalAlignment="Center"/>

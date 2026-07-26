@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Contracts.Printing;
 using UI.Commands;
 using UI.ViewModels;
 using UI.Views;
@@ -121,6 +122,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load categories for cashier dashboard");
+                ShowHeaderError("Failed to load categories. Please try again.");
             }
         }
 
@@ -149,6 +151,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load products for cashier dashboard");
+                ShowHeaderError("Failed to load products. Please try again.");
             }
         }
 
@@ -177,6 +180,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load recent sales for cashier dashboard");
+                ShowHeaderError("Failed to load recent sales.");
             }
         }
 
@@ -185,10 +189,14 @@ namespace UI.ViewModels
 
         public async Task OpenSetting()
         {
+            var sp = App.ServiceProvider;
             var vm = new SettingsViewModel(
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ILocalizationService>(),
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISettingsService>(),
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISessionService>());
+                sp.GetRequiredService<BLL.Interfaces.ILocalizationService>(),
+                sp.GetRequiredService<BLL.Interfaces.ISettingsService>(),
+                sp.GetRequiredService<BLL.Interfaces.ISessionService>(),
+                sp.GetRequiredService<IPrintingService>(),
+                sp.GetRequiredService<IReceiptFileWriter>(),
+                sp.GetRequiredService<ILogger<SettingsViewModel>>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }
@@ -228,23 +236,6 @@ namespace UI.ViewModels
             if (item is not ProductDto product)
                 return false;
 
-            if (!IsProductInSelectedCategory(product))
-                return false;
-
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                string search = SearchText.Trim();
-                if (!product.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool IsProductInSelectedCategory(ProductDto product)
-        {
             if (SelectedCategory == null || SelectedCategory.CategoryId == 0)
                 return true;
 

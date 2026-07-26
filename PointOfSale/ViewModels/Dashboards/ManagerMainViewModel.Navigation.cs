@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using POS.Contracts.Printing;
 using UI.Views;
 
 namespace UI.ViewModels
@@ -55,6 +57,11 @@ namespace UI.ViewModels
             CurrentPage = _receiptManagementViewModel;
         }
 
+        private void NavigateToModifierGroupManagement()
+        {
+            CurrentPage = _modifierGroupManagementViewModel;
+        }
+
         private void OnReceiptNavigateToForm()
         {
             _receiptFormPage = new Views.PurchaseReceiptFormView
@@ -104,10 +111,14 @@ namespace UI.ViewModels
         /// </summary>
         private async Task OpenSetting()
         {
+            var sp = App.ServiceProvider;
             var vm = new SettingsViewModel(
-                App.ServiceProvider.GetRequiredService<ILocalizationService>(),
-                App.ServiceProvider.GetRequiredService<ISettingsService>(),
-                App.ServiceProvider.GetRequiredService<ISessionService>());
+                sp.GetRequiredService<ILocalizationService>(),
+                sp.GetRequiredService<ISettingsService>(),
+                sp.GetRequiredService<ISessionService>(),
+                sp.GetRequiredService<IPrintingService>(),
+                sp.GetRequiredService<IReceiptFileWriter>(),
+                sp.GetRequiredService<ILogger<SettingsViewModel>>());
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

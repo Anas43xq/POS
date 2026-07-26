@@ -29,6 +29,7 @@
 
         <TextBlock Grid.Column="1"
                    Text="{Binding Amount, ElementName=root, StringFormat={}{0:N2}}"
+                   Foreground="{Binding AmountForeground, ElementName=root}"
                    TextWrapping="NoWrap"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Center"

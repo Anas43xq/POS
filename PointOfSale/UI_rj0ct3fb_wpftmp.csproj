@@ -25,6 +25,8 @@
     <PackageReference Include="VirtualizingWrapPanel" Version="2.5.2" />
   </ItemGroup>
   <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -296,14 +298,19 @@
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Auth\LoginAsWindow.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Auth\loginView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Auth\ManagerLoginDialog.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\CartPanelView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\CashierDashboardView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\CashierHeaderView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\ErrorBannerView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\ModifierPanelView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\ProductsPanelView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Cashier\QuickActionsPanelView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Categories\AddEditCategoryDialog.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Categories\CategoryManagementView.g.cs" />
-    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Dialogs\EditShortcutDialogWindow.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Dialogs\TranslationDialogView.g.cs" />
-    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\KeyboardShortcutsView.g.cs" />
-    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Main\CashierDashboardView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Main\HomeView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Main\ManagerMainView.g.cs" />
+    <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Modifiers\ModifierGroupManagementView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Products\ProductFormView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Products\ProductManagementView.g.cs" />
     <Compile Include="D:\Projects\PointOfSale\PointOfSale\obj\Debug\net10.0-windows\Views\Reports\ReportView.g.cs" />

@@ -23,6 +23,7 @@ namespace DAL.Repositories
                 .AsNoTracking()
                 .Include(t => t.Cashier)
                 .Include(t => t.TransactionItems)
+                    .ThenInclude(ti => ti.ModifierItems)
                 .Include(t => t.Payments)
                 .FirstOrDefaultAsync(t => t.TransactionId == transactionId);
 
@@ -68,7 +69,18 @@ namespace DAL.Repositories
                     ProductName = item.ProductName,
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice,
-                    LineTotal = item.LineTotal
+                    LineTotal = item.LineTotal,
+                    Modifiers = item.ModifierItems
+                        .Where(m => !m.IsDefault)
+                        .OrderBy(m => m.ModifierGroupId)
+                        .ThenBy(m => m.OptionName)
+                        .Select(m => new ReceiptModifierDto
+                        {
+                            OptionName = m.OptionName,
+                            Quantity = m.Quantity,
+                            PriceAdd = m.PriceAdd
+                        })
+                        .ToList()
                 })
                 .ToList();
         }

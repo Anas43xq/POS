@@ -21,5 +21,12 @@ namespace BLL.Models
         public decimal LineTotal => Math.Round(PriceAdd * Quantity, 2, MidpointRounding.AwayFromZero);
 
         public int GroupType { get; set; }
+
+        /// <summary>
+        /// Whether this option is the default selection for its group
+        /// (e.g. "Regular Dough" for "Dough Thickness").
+        /// Default options are excluded from receipt display.
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
 }

@@ -231,11 +231,11 @@
     </sys:String>
 
     <sys:String x:Key="Shift.End.Title">
-        Close Shift
+        End Day
     </sys:String>
 
-    <sys:String x:Key="Shift.WarningMessage">
-        After closing, no transactions will be allowed. Make sure all sales are finalized before proceeding.
+    <sys:String x:Key="Shift.End.Button">
+        End Day
     </sys:String>
 
     <sys:String x:Key="Shift.TotalSales">
@@ -254,8 +254,8 @@
         Cash Difference
     </sys:String>
 
-    <sys:String x:Key="Shift.End.Button">
-        Close Shift
+    <sys:String x:Key="Shift.WarningMessage">
+        Once closed, no further transactions will be allowed. Make sure all sales are completed before proceeding.
     </sys:String>
 
     <!-- ========================================================= -->
@@ -308,6 +308,10 @@
 
     <sys:String x:Key="Manager.Nav.ReceiptManagement">
         Receipt Management
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ModifierGroups">
+        Modifier Groups
     </sys:String>
 
     <!-- ========================================================= -->
@@ -666,6 +670,7 @@
     <sys:String x:Key="Settings.ShowWindowsPrintDialog">Show Windows Print Dialog</sys:String>
     <sys:String x:Key="Settings.Copies">Copies</sys:String>
     <sys:String x:Key="Settings.PrintTestReceipt">Print Test Receipt</sys:String>
+    <sys:String x:Key="Settings.TestPrintAction">Test Print Action</sys:String>
 
     <sys:String x:Key="Settings.KeyboardShortcuts">Keyboard Shortcuts</sys:String>
     <sys:String x:Key="Settings.KeyboardShortcutsDescription">Customize keyboard shortcuts for faster navigation and operations.</sys:String>

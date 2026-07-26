@@ -1,6 +1,8 @@
+using System.Data;
 using DAL.Entities;
 using DAL.Entities.Data;
 using DAL.Interfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -28,6 +30,24 @@ namespace DAL.Repositories
                 .OrderByDescending(s => s.OpenedAt)
                 .Take(count)
                 .ToListAsync();
+        }
+
+        public async Task<decimal> GetShiftTotalSalesAsync(int shiftId, CancellationToken ct = default)
+        {
+            await using var context = await _contextFactory!.CreateDbContextAsync(ct);
+            string connectionString = context.Database.GetConnectionString()
+                ?? throw new InvalidOperationException("Connection string not found.");
+
+            await using var connection = new SqlConnection(connectionString);
+            await connection.OpenAsync(ct);
+
+            const string sql = "SELECT dbo.FN_GetShiftTotalSales(@ShiftId)";
+
+            await using var command = new SqlCommand(sql, connection);
+            command.Parameters.Add("@ShiftId", SqlDbType.Int).Value = shiftId;
+
+            var result = await command.ExecuteScalarAsync(ct);
+            return result is DBNull ? 0m : Convert.ToDecimal(result);
         }
     }
 }

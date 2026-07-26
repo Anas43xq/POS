@@ -1,5 +1,6 @@
 using System.Data;
 using Contracts.Transactions;
+using DAL.Entities;
 using DAL.Entities.Data;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +105,49 @@ namespace DAL.Repositories
             }
 
             return table;
+        }
+
+        public async Task SaveTransactionItemModifiersAsync(int transactionId, IEnumerable<CreateTransactionItemRequest> items)
+        {
+            // Use EF Core to insert modifiers after SP creates the transaction.
+            // The SP does not handle modifiers — we append them here.
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            // Load the TransactionItems that were just created by the SP
+            var transactionItems = await context.TransactionItems
+                .Where(ti => ti.TransactionId == transactionId)
+                .AsTracking()
+                .ToListAsync();
+
+            foreach (var item in items)
+            {
+                if (item.Modifiers.Count == 0)
+                    continue;
+
+                var txItem = transactionItems.FirstOrDefault(ti => ti.VariantId == item.VariantId);
+                if (txItem is null)
+                    continue;
+
+                foreach (var modifier in item.Modifiers)
+                {
+                    var entity = new TransactionItemModifier
+                    {
+                        TransactionItemId = txItem.TransactionItemId,
+                        ModifierOptionId = modifier.ModifierOptionId,
+                        ModifierGroupId = modifier.ModifierGroupId,
+                        GroupName = modifier.GroupName,
+                        OptionName = modifier.OptionName,
+                        Quantity = modifier.Quantity,
+                        PriceAdd = modifier.PriceAdd,
+                        LineTotal = modifier.PriceAdd * modifier.Quantity,
+                        IsDefault = modifier.IsDefault
+                    };
+
+                    context.TransactionItemModifiers.Add(entity);
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
 
         private static void AddDecimalParameter(SqlCommand command, string parameterName, decimal value, byte precision, byte scale)

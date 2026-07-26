@@ -31,8 +31,11 @@ public sealed class TransactionItemModifierConfiguration : IEntityTypeConfigurat
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0);
 
+        builder.Property(x => x.IsDefault)
+            .HasDefaultValue(false);
+
         builder.HasOne(x => x.TransactionItem)
-            .WithMany()
+            .WithMany(t => t.ModifierItems)
             .HasForeignKey(x => x.TransactionItemId)
             .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,10 +1,12 @@
 using BLL.DTOs;
 using BLL.Models;
 using Contracts.Transactions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 using UI.ViewModels;
 using UI.Views;
 
@@ -39,6 +41,10 @@ namespace UI.ViewModels
                     UnitPrice = product.UnitPrice,
                     TaxRate = product.TaxRate
                 };
+
+                // Auto-select default modifiers for this product
+                await PopulateDefaultModifiersAsync(item, product);
+
                 SaleItems.Add(item);
             }
 
@@ -158,17 +164,25 @@ namespace UI.ViewModels
 
         private async Task CreateCardPaymentAsync()
         {
-            int transactionId = await _transactionService.CreateTransactionAsync(
-                BuildCreatePaymentRequest(
-                    paymentMethod: "Card",
-                    amountTendered: Total,
-                    changeGiven: 0m,
-                    referenceNumber: null));
+            try
+            {
+                int transactionId = await _transactionService.CreateTransactionAsync(
+                    BuildCreatePaymentRequest(
+                        paymentMethod: "Card",
+                        amountTendered: Total,
+                        changeGiven: 0m,
+                        referenceNumber: null));
 
-            ClearCurrentSale();
-            await LoadRecentSalesAsync();
-            _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
-            _receiptDisplayService.ShowReceipt(transactionId);
+                ClearCurrentSale();
+                await LoadRecentSalesAsync();
+                _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
+                _receiptDisplayService.ShowReceipt(transactionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Card payment creation failed for cashier {CashierId}", _session.CurrentUser?.UserId);
+                ShowHeaderError("Card payment failed. Please try again.");
+            }
         }
 
         private bool TryValidatePaymentPrerequisites()
@@ -185,13 +199,9 @@ namespace UI.ViewModels
             return true;
         }
 
-        private static bool ShowPrerequisiteError(string message, string title)
+        private bool ShowPrerequisiteError(string message, string title)
         {
-            MessageBox.Show(
-                message,
-                title,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            ShowHeaderError(message);
             return false;
         }
 
@@ -228,7 +238,17 @@ namespace UI.ViewModels
                     TaxRate = item.TaxRate,
                     LineSubtotal = item.LineSubtotal,
                     LineTax = item.LineTax,
-                    LineTotal = item.LineTotal
+                    LineTotal = item.LineTotal,
+                    Modifiers = item.Modifiers?.Select(m => new CreateTransactionItemModifierRequest
+                    {
+                        ModifierOptionId = m.ModifierOptionId,
+                        ModifierGroupId = m.ModifierGroupId,
+                        GroupName = m.GroupName,
+                        OptionName = m.OptionName,
+                        Quantity = m.Quantity,
+                        PriceAdd = m.PriceAdd,
+                        IsDefault = m.IsDefault
+                    }).ToList() ?? new()
                 })
                 .ToList();
         }
@@ -290,6 +310,44 @@ namespace UI.ViewModels
 
             SaleItems.Remove(SelectedCartItem);
             SelectedCartItem = SaleItems.LastOrDefault();
+        }
+
+        private async Task PopulateDefaultModifiersAsync(CartItem item, ProductDto product)
+        {
+            try
+            {
+                var result = await _modifierService.GetModifierGroupsForProductAsync(
+                    product.ProductId, product.CategoryId);
+
+                if (!result.IsSuccess || result.Value == null)
+                    return;
+
+                var groups = result.Value
+                    .Where(g => g.Options.Any(o => o.IsDefault))
+                    .ToList();
+
+                foreach (var group in groups)
+                {
+                    var defaultOption = group.Options.FirstOrDefault(o => o.IsDefault);
+                    if (defaultOption == null)
+                        continue;
+
+                    // For single-select groups: auto-select the default option
+                    // For multi-select/quantity: don't auto-select defaults
+                    if (group.GroupType == 1) // SingleSelect
+                    {
+                        _cartModifierService.ApplyModifier(group, defaultOption, 1, item.Modifiers);
+                    }
+                }
+
+                item.ModifierSummary = _cartModifierService.BuildModifierSummary(item.Modifiers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load default modifiers for product {ProductId}", product.ProductId);
+                ShowHeaderError("Unable to load product modifiers.");
+                // Best-effort — if modifier loading fails, add product without modifiers
+            }
         }
 
         private async Task ReprintLastReceiptAsync()

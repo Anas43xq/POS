@@ -13,6 +13,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Extensions.Logging;
 using UI.Commands;
 using UI.Services;
@@ -103,6 +104,19 @@ public partial class CashierDashboardViewModel : BaseViewModel
     }
 
     public bool HasHeaderError => !string.IsNullOrEmpty(_headerErrorMessage);
+
+    /// <summary>
+    /// Timer that auto-clears the error banner after 10 seconds so stale
+    /// errors don't linger indefinitely. The timer is reset each time a
+    /// new error is shown.
+    /// </summary>
+    private readonly DispatcherTimer _errorTimer;
+
+    /// <summary>
+    /// Dismisses the current error banner. Bound to the close button in
+    /// ErrorBannerView.
+    /// </summary>
+    public ICommand DismissErrorCommand { get; }
 
     public event Action? LogoutRequested;
     private string _searchText = string.Empty;
@@ -396,6 +410,20 @@ public partial class CashierDashboardViewModel : BaseViewModel
             ReprintLastReceiptAsync,
             () => RecentSales.Any());
 
+        // Auto-dismiss timer: clears the error banner after 10 seconds
+        // so stale errors don't linger indefinitely.
+        _errorTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(10)
+        };
+        _errorTimer.Tick += (_, _) =>
+        {
+            _errorTimer.Stop();
+            ShowHeaderError(null);
+        };
+
+        DismissErrorCommand = new RelayCommand(() => ShowHeaderError(null));
+
         ProductsView = CollectionViewSource.GetDefaultView(Products);
         ProductsView.Filter = FilterProduct;
 
@@ -407,10 +435,21 @@ public partial class CashierDashboardViewModel : BaseViewModel
     /// <summary>
     /// Sets the top-of-window error banner message. Pass
     /// <c>null</c> or empty to clear the banner.
+    /// When a new error is shown the auto-dismiss timer is reset;
+    /// when cleared the timer is stopped.
     /// </summary>
     public void ShowHeaderError(string? message)
     {
-        HeaderErrorMessage = string.IsNullOrWhiteSpace(message) ? null : message;
+        _errorTimer.Stop();
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            HeaderErrorMessage = null;
+            return;
+        }
+
+        HeaderErrorMessage = message;
+        _errorTimer.Start();
     }
 
         private void OnLocalizationLanguageChanged(object? sender, EventArgs e)
@@ -443,6 +482,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to reload localized data after language change");
+                ShowHeaderError("Failed to refresh display language.");
             }
         }
 

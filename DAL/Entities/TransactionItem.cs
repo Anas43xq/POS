@@ -32,5 +32,7 @@ namespace DAL.Entities
         public Transaction? Transaction { get; set; }
 
         public ProductVariant ProductVariant { get; set; } = null!;
+
+        public ICollection<TransactionItemModifier> ModifierItems { get; set; } = new List<TransactionItemModifier>();
     }
 }

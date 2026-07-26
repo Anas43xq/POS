@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[TransactionItemModifiers](
     [Quantity]                  [int] NOT NULL,
     [PriceAdd]                  [decimal](18, 2) NOT NULL,
     [LineTotal]                 [decimal](18, 2) NOT NULL,
+    [IsDefault]                 [bit] NOT NULL,
  CONSTRAINT [PK_TransactionItemModifiers] PRIMARY KEY CLUSTERED
 (
     [TransactionItemModifierId] ASC
@@ -36,6 +37,8 @@ GO
 ALTER TABLE [dbo].[TransactionItemModifiers] ADD CONSTRAINT [DF_TransactionItemModifiers_PriceAdd] DEFAULT ((0)) FOR [PriceAdd]
 GO
 ALTER TABLE [dbo].[TransactionItemModifiers] ADD CONSTRAINT [DF_TransactionItemModifiers_LineTotal] DEFAULT ((0)) FOR [LineTotal]
+GO
+ALTER TABLE [dbo].[TransactionItemModifiers] ADD CONSTRAINT [DF_TransactionItemModifiers_IsDefault] DEFAULT ((0)) FOR [IsDefault]
 GO
 ALTER TABLE [dbo].[TransactionItemModifiers] WITH CHECK ADD CONSTRAINT [FK_TransactionItemModifiers_TransactionItems] FOREIGN KEY([TransactionItemId])
 REFERENCES [dbo].[TransactionItems] ([TransactionItemId])

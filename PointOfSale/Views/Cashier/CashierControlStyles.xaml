@@ -336,30 +336,30 @@
 
     <!-- - Currency text styles -->
     <Style x:Key="CurrencyTextStyle" TargetType="controls:CurrencyText">
-        <Setter Property="FontSize"   Value="11.5"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="FontSize"   Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="AmountForeground" Value="{StaticResource TextMuted}"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
 
     <Style x:Key="CurrencyTextStyleProduct" TargetType="controls:CurrencyText">
-        <Setter Property="FontSize"   Value="11.5"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="FontSize"   Value="13"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="AmountForeground" Value="{StaticResource TextMuted}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
 
     <Style x:Key="CurrencyTextStyleLarge" TargetType="controls:CurrencyText">
-        <Setter Property="FontSize"   Value="15"/>
+        <Setter Property="FontSize"   Value="18"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+        <Setter Property="AmountForeground" Value="{StaticResource SuccessGreen}"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
 
     <Style x:Key="CurrencyTextStyleWhite" TargetType="controls:CurrencyText">
-        <Setter Property="FontSize"   Value="15"/>
+        <Setter Property="FontSize"   Value="17"/>
         <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="AmountForeground" Value="White"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
@@ -485,7 +485,7 @@
     <Style x:Key="CurrencyTextStyleCartLine" TargetType="controls:CurrencyText">
         <Setter Property="FontSize"   Value="12"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+        <Setter Property="AmountForeground" Value="{StaticResource TextDark}"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
 

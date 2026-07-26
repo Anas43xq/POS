@@ -134,8 +134,8 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="&#xE768;"
-                                   FontSize="11"
+                        <TextBlock Text="&#xE102;"
+                                   FontSize="12"
                                    FontFamily="Segoe MDL2 Assets"
                                    Foreground="White"
                                    VerticalAlignment="Center"
@@ -171,8 +171,8 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="&#xE71A;"
-                                   FontSize="11"
+                        <TextBlock Text="&#xE894;"
+                                   FontSize="12"
                                    FontFamily="Segoe MDL2 Assets"
                                    Foreground="White"
                                    VerticalAlignment="Center"

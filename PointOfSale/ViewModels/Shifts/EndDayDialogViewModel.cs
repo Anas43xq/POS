@@ -18,6 +18,7 @@ namespace UI.ViewModels
         private readonly ISessionService _sessionService;
 
         private ShiftDto? _currentShift;
+        private decimal _totalSales;
 
         private string _closingCash;
         public string ClosingCash
@@ -28,6 +29,7 @@ namespace UI.ViewModels
                 _closingCash = value ?? "0.00";
                 OnPropertyChanged();
                 UpdateCashDifference();
+                ((AsyncRelayCommand)EndDayCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -56,8 +58,13 @@ namespace UI.ViewModels
         }
 
         public string OpeningCashDisplay => _currentShift?.OpeningCash.ToString("C2") ?? "N/A";
-        public string TotalSalesDisplay => "0.00"; // Will be calculated from transactions
-        public string ExpectedCashDisplay => (_currentShift?.OpeningCash ?? 0).ToString("C2");
+
+        public string TotalSalesDisplay
+        {
+            get => _totalSales.ToString("C2");
+        }
+
+        public string ExpectedCashDisplay => ((_currentShift?.OpeningCash ?? 0) + _totalSales).ToString("C2");
 
         private decimal _cashDifference = 0;
         public string CashDifferenceDisplay
@@ -83,6 +90,18 @@ namespace UI.ViewModels
 
             EndDayCommand = new AsyncRelayCommand(EndDayAsync, CanEndDay);
             CancelCommand = new RelayCommand(CloseDialog);
+
+            _ = LoadShiftDataAsync();
+        }
+
+        private async Task LoadShiftDataAsync()
+        {
+            if (_currentShift == null || _currentShift.ShiftId <= 0)
+                return;
+
+            _totalSales = await _shiftService.GetShiftTotalSalesAsync(_currentShift.ShiftId);
+            OnPropertyChanged(nameof(TotalSalesDisplay));
+            OnPropertyChanged(nameof(ExpectedCashDisplay));
         }
 
         private bool CanEndDay()
@@ -105,7 +124,7 @@ namespace UI.ViewModels
         {
             if (decimal.TryParse(ClosingCash, out decimal closingCash))
             {
-                _cashDifference = closingCash - (_currentShift?.OpeningCash ?? 0);
+                _cashDifference = closingCash - ((_currentShift?.OpeningCash ?? 0) + _totalSales);
                 ShowCashDifference = true;
                 OnPropertyChanged(nameof(CashDifferenceDisplay));
             }

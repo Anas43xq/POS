@@ -92,7 +92,8 @@ namespace BLL.Services
                 OptionName = option.Name,
                 Quantity = quantity,
                 PriceAdd = option.PriceAdd,
-                GroupType = group.GroupType
+                GroupType = group.GroupType,
+                IsDefault = option.IsDefault
             });
         }
 
@@ -111,11 +112,13 @@ namespace BLL.Services
 
         public string BuildModifierSummary(List<CartItemModifier> modifiers)
         {
-            if (modifiers.Count == 0)
+            // Skip default options — only show actual customer customizations
+            var nonDefaults = modifiers.Where(m => !m.IsDefault).ToList();
+            if (nonDefaults.Count == 0)
                 return string.Empty;
 
             var sb = new StringBuilder();
-            foreach (var modifier in modifiers)
+            foreach (var modifier in nonDefaults)
             {
                 if (sb.Length > 0)
                     sb.Append(", ");

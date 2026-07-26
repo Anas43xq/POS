@@ -137,32 +137,51 @@
                               VerticalContentAlignment="Center"
                               Margin="0,0,0,12"/>
 
-                    <!-- Auto Print -->
-                    <CheckBox Content="{DynamicResource Settings.AutoPrintAfterPayment}"
-                              IsChecked="{Binding AutoPrint}"
-                              FontSize="14"
-                              Margin="0,0,0,8"/>
+                    <!-- Manager-only print behavior options -->
+                    <StackPanel Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <!-- Auto Print -->
+                        <CheckBox Content="{DynamicResource Settings.AutoPrintAfterPayment}"
+                                  IsChecked="{Binding AutoPrint}"
+                                  FontSize="14"
+                                  Margin="0,0,0,8"/>
 
-                    <!-- Show Print Dialog -->
-                    <CheckBox Content="{DynamicResource Settings.ShowWindowsPrintDialog}"
-                              IsChecked="{Binding ShowPrintDialog}"
-                              FontSize="14"
-                              Margin="0,0,0,8"/>
+                        <!-- Show Print Dialog -->
+                        <CheckBox Content="{DynamicResource Settings.ShowWindowsPrintDialog}"
+                                  IsChecked="{Binding ShowPrintDialog}"
+                                  FontSize="14"
+                                  Margin="0,0,0,8"/>
 
-                    <!-- Copies -->
-                    <TextBlock Text="{DynamicResource Settings.Copies}"
+                        <!-- Copies -->
+                        <TextBlock Text="{DynamicResource Settings.Copies}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#334155"
+                                   Margin="0,0,0,6"/>
+
+                        <TextBox Text="{Binding Copies, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="14"
+                                 Width="60" Height="32"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,0,0,12"/>
+                    </StackPanel>
+
+                    <!-- Test Print Action: Print to printer OR Save to PDF file -->
+                    <TextBlock Text="{DynamicResource Settings.TestPrintAction}"
                                FontSize="14" FontWeight="SemiBold"
                                Foreground="#334155"
-                               Margin="0,0,0,6"/>
-
-                    <TextBox Text="{Binding Copies, UpdateSourceTrigger=PropertyChanged}"
-                             FontSize="14"
-                             Width="60" Height="32"
-                             VerticalContentAlignment="Center"
-                             Margin="0,0,0,12"/>
+                               Margin="0,12,0,6"/>
+                    <ComboBox ItemsSource="{Binding TestPrintActionOptions}"
+                              SelectedValue="{Binding TestPrintAction, Mode=TwoWay}"
+                              SelectedValuePath="Value"
+                              DisplayMemberPath="Label"
+                              FontSize="14"
+                              Height="32"
+                              VerticalContentAlignment="Center"
+                              Margin="0,0,0,8"
+                              HorizontalAlignment="Stretch"/>
 
                     <!-- Test Print -->
                     <Button Content="{DynamicResource Settings.PrintTestReceipt}"
+                            Command="{Binding PrintTestReceiptCommand}"
                             Width="160" Height="36"
                             Background="#3B82F6" Foreground="White"
                             FontSize="12"

@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[ModifierGroups](
     [MinSelections]   [int] NOT NULL,
     [MaxSelections]   [int] NOT NULL,
     [SortOrder]       [int] NOT NULL,
+    [IsActive]        [bit] NOT NULL,
     [CreatedAt]       [datetime2](0) NOT NULL,
     [UpdatedAt]       [datetime2](0) NOT NULL,
  CONSTRAINT [PK_ModifierGroups] PRIMARY KEY CLUSTERED
@@ -37,6 +38,8 @@ GO
 ALTER TABLE [dbo].[ModifierGroups] ADD CONSTRAINT [DF_ModifierGroups_MaxSelections] DEFAULT ((1)) FOR [MaxSelections]
 GO
 ALTER TABLE [dbo].[ModifierGroups] ADD CONSTRAINT [DF_ModifierGroups_SortOrder] DEFAULT ((0)) FOR [SortOrder]
+GO
+ALTER TABLE [dbo].[ModifierGroups] ADD CONSTRAINT [DF_ModifierGroups_IsActive] DEFAULT ((1)) FOR [IsActive]
 GO
 ALTER TABLE [dbo].[ModifierGroups] ADD CONSTRAINT [DF_ModifierGroups_CreatedAt] DEFAULT (sysutcdatetime()) FOR [CreatedAt]
 GO

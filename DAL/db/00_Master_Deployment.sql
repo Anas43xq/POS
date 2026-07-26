@@ -134,8 +134,14 @@ GO
 GO
 
 /* -------------------------------------------------
-   5. STORED PROCEDURES
-   ------------------------------------------------- */
+    4b. USER-DEFINED FUNCTIONS
+    ------------------------------------------------- */
+:r .\DAL\db\Functions\dbo.FN_GetShiftTotalSales.Function.sql
+GO
+
+/* -------------------------------------------------
+    5. STORED PROCEDURES
+    ------------------------------------------------- */
 :r .\DAL\db\StoredProcedures\dbo.SP_GetPeriodDateRange.StoredProcedure.sql
 GO
 
