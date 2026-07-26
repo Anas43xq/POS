@@ -1,135 +1,162 @@
 <Window x:Class="UI.Views.EndDayDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="End Day" Height="540" Width="450"
+        Title="End Day" Height="600" Width="470"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
-        Background="#F5F5F5">
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
-            <!-- Title -->
-            <TextBlock Text="{DynamicResource Shift.End.Title}" FontSize="18" FontWeight="Bold" 
-                       Foreground="#333333" Margin="0,0,0,10" TextAlignment="Center"/>
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True">
 
-            <!-- Warning Message -->
-            <Border Background="#FFF3CD" BorderBrush="#FFC107" BorderThickness="1" 
-                    Padding="12" CornerRadius="4" Margin="0,0,0,20">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Common.Warning}" FontSize="12" FontWeight="SemiBold" 
-                               Foreground="#856404" Margin="0,0,0,5"/>
-                    <TextBlock Text="{DynamicResource Shift.WarningMessage}" 
-                               FontSize="11" Foreground="#856404" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-            <!-- Shift Summary -->
-            <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" 
-                    Padding="12" CornerRadius="4" Margin="0,0,0,20">
-                <StackPanel>
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{DynamicResource Shift.OpeningCash}" Foreground="#666666"/>
-                        <TextBlock Text="{Binding OpeningCashDisplay}" Grid.Column="1" 
-                                   FontWeight="SemiBold" Foreground="#333333"/>
-                    </Grid>
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{DynamicResource Shift.TotalSales}" Foreground="#666666"/>
-                        <TextBlock Text="{Binding TotalSalesDisplay}" Grid.Column="1" 
-                                   FontWeight="SemiBold" Foreground="#333333"/>
-                    </Grid>
-                    <Grid Margin="0,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{DynamicResource Shift.ExpectedCash}" Foreground="#666666"/>
-                        <TextBlock Text="{Binding ExpectedCashDisplay}" Grid.Column="1" 
-                                   FontWeight="SemiBold" Foreground="#333333"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
+    <Border Style="{StaticResource ModalCardBorder}" Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- Header  -->
+                <RowDefinition Height="*"/>     <!-- Body    -->
+                <RowDefinition Height="Auto"/>  <!-- Footer  -->
+            </Grid.RowDefinitions>
 
-            <!-- Closing Cash Input -->
-            <StackPanel Margin="0,0,0,20">
-                <TextBlock Text="{DynamicResource Shift.ActualClosingCash}" FontSize="12" FontWeight="SemiBold" 
-                           Foreground="#333333" Margin="0,0,0,8"/>
-                <TextBox x:Name="ClosingCashBox"
-                 Text="{Binding ClosingCash, UpdateSourceTrigger=PropertyChanged}"
-                 Height="40"
-                 Padding="9"
-                 FontSize="14"
-                 PreviewTextInput="DecimalTextBox_PreviewTextInput"
-                 DataObject.Pasting="DecimalTextBox_Pasting"
-                 LostFocus="DecimalTextBox_LostFocus"
-                 Loaded="ClosingCashBox_Loaded"
-                 KeyDown="ClosingCashBox_KeyDown"/>
-            </StackPanel>
-
-            <!-- Cash Difference Display -->
-            <Border Background="#E8F5E9" BorderBrush="#4CAF50" BorderThickness="1" 
-                    Padding="12" CornerRadius="4" Margin="0,0,0,20"
-                    Visibility="{Binding ShowCashDifference, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Header -->
+            <Border Grid.Row="0" Style="{StaticResource ModalHeaderBorder}" Padding="16,12">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{DynamicResource Shift.CashDifference}" FontWeight="SemiBold" Foreground="#2E7D32"/>
-                    <TextBlock Text="{Binding CashDifferenceDisplay}" Grid.Column="1" 
-                               FontWeight="SemiBold" Foreground="#2E7D32"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="7"
+                                Background="{StaticResource ModalBrandDark}"
+                                Margin="0,0,9,0">
+                            <TextBlock Text="☾" FontSize="14"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Shift.End.Title}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{StaticResource ModalTextDark}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ModalCloseButton}"
+                            Content="&#x2715;"
+                            FontSize="13"
+                            Command="{Binding CancelCommand}"/>
                 </Grid>
             </Border>
 
-            <!-- Error Message -->
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="#D32F2F" 
-                       FontSize="11" TextWrapping="Wrap" Margin="0,0,0,15"
-                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <!-- Body -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,14,18,8">
+                <StackPanel>
+                    <!-- Warning banner -->
+                    <Border Background="#FFF3CD" BorderBrush="#FFC107" BorderThickness="1"
+                            CornerRadius="7" Padding="12,8" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Common.Warning}"
+                                       FontSize="12" FontWeight="SemiBold"
+                                       Foreground="#856404" Margin="0,0,0,4"/>
+                            <TextBlock Text="{DynamicResource Shift.WarningMessage}"
+                                       FontSize="11" Foreground="#856404" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="{DynamicResource Common.Cancel}" Width="100" Height="36" 
-                        Background="#EEEEEE" Foreground="#333333"
-                        BorderBrush="#CCCCCC" BorderThickness="1"
-                        Command="{Binding CancelCommand}"
-                        FontSize="12" Margin="0,0,10,0"/>
-                <Button Content="{DynamicResource Shift.End.Button}" Width="130" Height="42"
-                        Background="#EA580C" Foreground="White"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        Command="{Binding EndDayCommand}"
-                        Click="EndDayButton_Click"
-                        FontSize="13" FontWeight="Bold">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Bg" CornerRadius="6" Background="#EA580C">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Margin="16,0"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Bg" Property="Background" Value="#C2410C"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="Bg" Property="Background" Value="#9A3412"/>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="Bg" Property="Opacity" Value="0.45"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+                    <!-- Shift summary card -->
+                    <Border Style="{StaticResource ModalInputBorder}" Padding="14,10"
+                            CornerRadius="8" Margin="0,0,0,14">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.OpeningCash}"
+                                           Foreground="{StaticResource ModalTextMuted}"/>
+                                <TextBlock Text="{Binding OpeningCashDisplay}" Grid.Column="1"
+                                           FontWeight="SemiBold" Foreground="{StaticResource ModalTextDark}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.TotalSales}"
+                                           Foreground="{StaticResource ModalTextMuted}"/>
+                                <TextBlock Text="{Binding TotalSalesDisplay}" Grid.Column="1"
+                                           FontWeight="SemiBold" Foreground="{StaticResource ModalTextDark}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.ExpectedCash}"
+                                           Foreground="{StaticResource ModalTextMuted}"/>
+                                <TextBlock Text="{Binding ExpectedCashDisplay}" Grid.Column="1"
+                                           FontWeight="SemiBold" Foreground="{StaticResource ModalTextDark}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Closing cash input -->
+                    <TextBlock Text="{DynamicResource Shift.ActualClosingCash}"
+                               Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModalInputBorder}" Height="42" CornerRadius="7">
+                        <TextBox x:Name="ClosingCashBox"
+                                 Text="{Binding ClosingCash, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent" BorderThickness="0"
+                                 Padding="10,0" FontSize="14"
+                                 Foreground="{StaticResource ModalTextDark}"
+                                 VerticalContentAlignment="Center"
+                                 PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                                 DataObject.Pasting="DecimalTextBox_Pasting"
+                                 LostFocus="DecimalTextBox_LostFocus"
+                                 Loaded="ClosingCashBox_Loaded"
+                                 KeyDown="ClosingCashBox_KeyDown"/>
+                    </Border>
+
+                    <!-- Cash difference -->
+                    <Border Background="#E8F5E9" BorderBrush="#4CAF50" BorderThickness="1"
+                            CornerRadius="7" Padding="12,8" Margin="0,14,0,0"
+                            Visibility="{Binding ShowCashDifference, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{DynamicResource Shift.CashDifference}"
+                                       FontWeight="SemiBold" Foreground="#2E7D32"/>
+                            <TextBlock Text="{Binding CashDifferenceDisplay}" Grid.Column="1"
+                                       FontWeight="SemiBold" Foreground="#2E7D32"/>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ModalErrorFg}"
+                               FontSize="11" TextWrapping="Wrap" Margin="0,10,0,0"
+                               Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Style="{StaticResource ModalFooterBorder}" Padding="16,10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource OutlineBtn}"
+                            Content="{DynamicResource Common.Cancel}"
+                            Margin="0,0,8,0"
+                            Command="{Binding CancelCommand}"/>
+                    <Button Style="{StaticResource DangerBtn}"
+                            Content="{DynamicResource Shift.End.Button}"
+                            Command="{Binding EndDayCommand}"
+                            Click="EndDayButton_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
 </Window>

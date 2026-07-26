@@ -32,79 +32,6 @@
         <SolidColorBrush x:Key="NavHoverBg"  Color="#12FFFFFF"/>
         <SolidColorBrush x:Key="NavActiveBg" Color="#402589E0"/>
 
-        <!-- ── Header neutral button (e.g. Settings) ── -->
-        <Style x:Key="HdrBtn" TargetType="Button">
-            <Setter Property="Height"   Value="30"/>
-            <Setter Property="Padding"  Value="10,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                CornerRadius="7"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.88"/>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
-                                <Setter TargetName="Bg" Property="BorderThickness" Value="2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- ── Header icon/danger button ── -->
-        <Style x:Key="HdrDangerBtn" TargetType="Button">
-            <Setter Property="Height"   Value="30"/>
-            <Setter Property="Padding"  Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7" Background="{StaticResource DangerRed}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource DangerHover}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.88"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!-- ── Sidebar section label ── -->
         <Style x:Key="SidebarSectionLabel" TargetType="TextBlock">
             <Setter Property="FontSize"   Value="9"/>
@@ -270,7 +197,7 @@
 
                 <!-- Settings (gear icon) — mirrors the cashier header -->
                 <Button Grid.Column="3"
-                        Style="{StaticResource HdrBtn}"
+                        Style="{StaticResource OutlineBtn}"
                         Margin="0,0,6,0"
                         Command="{Binding ShowSetting}"
                         ToolTip="{DynamicResource Settings.Title}">
@@ -283,7 +210,7 @@
 
                 <!-- Logout -->
                 <Button Grid.Column="4"
-                        Style="{StaticResource HdrDangerBtn}"
+                        Style="{StaticResource DangerBtn}"
                         Command="{Binding LogoutCommand}">
                     <TextBlock>
                         <Run Text="⎋  "/>

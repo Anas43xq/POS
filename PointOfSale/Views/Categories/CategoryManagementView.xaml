@@ -29,113 +29,6 @@
              TOOLBAR BUTTON STYLES
              ════════════════════════════════════ -->
 
-        <!-- Primary (Add) -->
-        <Style x:Key="PrimaryToolBtn" TargetType="Button">
-            <Setter Property="Height"   Value="32"/>
-            <Setter Property="Padding"  Value="14,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Outline (Edit / Refresh) -->
-        <Style x:Key="OutlineToolBtn" TargetType="Button">
-            <Setter Property="Height"   Value="32"/>
-            <Setter Property="Padding"  Value="14,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                CornerRadius="7"
-                                Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Danger (Delete) -->
-        <Style x:Key="DangerToolBtn" TargetType="Button">
-            <Setter Property="Height"   Value="32"/>
-            <Setter Property="Padding"  Value="14,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource DangerRed}"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                CornerRadius="7"
-                                Background="#FEE2E2"
-                                BorderBrush="#FECACA"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#FECACA"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!-- ════════════════════════════════════
              CATEGORY CARD STYLE
              ════════════════════════════════════ -->
@@ -259,7 +152,7 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
 
                     <!-- Add -->
-                    <Button Style="{StaticResource PrimaryToolBtn}"
+                    <Button Style="{StaticResource PrimaryGradientBtn}"
                             Margin="0,0,6,0"
                             Command="{Binding AddCommand}">
                         <StackPanel Orientation="Horizontal">
@@ -269,7 +162,7 @@
                     </Button>
 
                     <!-- Edit -->
-                    <Button Style="{StaticResource OutlineToolBtn}"
+                    <Button Style="{StaticResource OutlineBtn}"
                             Margin="0,0,6,0"
                             IsEnabled="{Binding HasSelection}"
                             Command="{Binding EditCommand}">
@@ -280,7 +173,7 @@
                     </Button>
 
                     <!-- Delete -->
-                    <Button Style="{StaticResource DangerToolBtn}"
+                    <Button Style="{StaticResource DangerBtn}"
                             Margin="0,0,6,0"
                             IsEnabled="{Binding HasSelection}"
                             Command="{Binding DeleteCommand}">
@@ -291,7 +184,7 @@
                     </Button>
 
                     <!-- Refresh -->
-                    <Button Style="{StaticResource OutlineToolBtn}"
+                    <Button Style="{StaticResource OutlineBtn}"
                             Command="{Binding RefreshCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🔄  " FontSize="12"/>

@@ -18,7 +18,7 @@
 
         <converters:StatusToVoidVisConverter x:Key="StatusToVoidVis"/>
 
-        <!-- Payment badge border (shared by every row) -->
+        <!-- Payment badge border (used inside DataGrid cell template) -->
         <Style x:Key="PaymentBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
@@ -30,7 +30,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Payment badge text (shared by every row) -->
+        <!-- Payment badge text -->
         <Style x:Key="PaymentBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding PaymentMethod}" Value="Cash">
@@ -42,7 +42,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Status badge border (shared by every row) -->
+        <!-- Status badge border -->
         <Style x:Key="StatusBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Status}" Value="Completed">
@@ -57,7 +57,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Status badge text (shared by every row) -->
+        <!-- Status badge text -->
         <Style x:Key="StatusBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Status}" Value="Completed">
@@ -179,159 +179,83 @@
                     </Grid>
                 </Border>
 
-                <!-- Transactions list (column header + scrollable rows) -->
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <!-- column headings -->
-                        <RowDefinition Height="*"/>
-                        <!-- scrollable rows -->
-                    </Grid.RowDefinitions>
-
-                    <!-- Column headings -->
-                    <Border Grid.Row="0"
-                            Background="{StaticResource CardHdrBg}"
-                            BorderBrush="{StaticResource BrandBorder}"
-                            BorderThickness="0,0,0,0.5">
-                        <Grid Margin="14,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="*" MinWidth="80"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Transactions.ColReceipt}"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Transactions.ColAmount}"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Transactions.ColPayment}"     Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Transactions.ColNotes}"       Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Transactions.ColStatus}"      Style="{StaticResource ListHeaderCell}"/>
-                            <TextBlock Grid.Column="5" Text="{DynamicResource Manager.Transactions.ColDateTime}" Style="{StaticResource ListHeaderCell}"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Scrollable rows.  ListBox gives us built-in
-                         selection; SelectedItem is two-way bound to
-                         the VM so a click on a row sets SelectedTransaction
-                         and enables the Void action. -->
-                    <ListBox Grid.Row="1"
-                             x:Name="TransactionsList"
-                             ItemsSource="{Binding TransactionsView}"
-                             SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             HorizontalContentAlignment="Stretch"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             Padding="0,0,4,0">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="Margin" Value="0"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListBoxItem">
-                                            <Border x:Name="RowBorder"
-                                                    MinHeight="40"
-                                                    Background="White"
-                                                    BorderBrush="#EFF6FF"
-                                                    BorderThickness="0,0,0,0.5">
-                                                <ContentPresenter/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter TargetName="RowBorder"
-                                                            Property="Background"
-                                                            Value="{StaticResource RowSelectedBg}"/>
-                                                </Trigger>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="RowBorder"
-                                                            Property="Background"
-                                                            Value="#F8FBFF"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="14,8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="110"/>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="*" MinWidth="80"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="150"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Receipt button -->
-                                    <Button Grid.Column="0"
-                                            Content="{Binding ReceiptNumber}"
+                <!-- Transactions DataGrid -->
+                <DataGrid x:Name="TransactionsGrid"
+                          Grid.Row="1"
+                          Style="{StaticResource ManagerDataGrid}"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          ItemsSource="{Binding TransactionsView}"
+                          SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColReceipt}" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding ReceiptNumber}"
                                             FontSize="11"
                                             Cursor="Hand"
                                             HorizontalAlignment="Left"
+                                            Background="#DBEEFF"
+                                            Foreground="{StaticResource BrandDark}"
+                                            BorderThickness="0"
+                                            Padding="8,2"
                                             Command="{Binding DataContext.OpenReceiptCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border Background="#DBEEFF" CornerRadius="4" Padding="7,2">
-                                                    <ContentPresenter HorizontalAlignment="Center"
-                                                                      TextElement.Foreground="{StaticResource BrandDark}"/>
+                                                <Border x:Name="Bg" Background="#DBEEFF" CornerRadius="4" Padding="8,2">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bg" Property="Background" Value="#C4DDF5"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
-
-                                    <!-- Amount -->
-                                    <controls:CurrencyText Grid.Column="1"
-                                               Amount="{Binding GrandTotal}"
-                                               Foreground="{StaticResource TextDark}"
-                                               VerticalAlignment="Center"/>
-
-                                    <!-- Payment badge -->
-                                    <Border Grid.Column="2" HorizontalAlignment="Left"
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColAmount}" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:CurrencyText Amount="{Binding GrandTotal}"
+                                                           Foreground="{StaticResource TextDark}"
+                                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColPayment}" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center"
                                             Style="{StaticResource PaymentBadgeBorderStyle}">
                                         <TextBlock Text="{Binding PaymentMethod}"
                                                    Style="{StaticResource PaymentBadgeTextStyle}"/>
                                     </Border>
-
-                                    <!-- Notes -->
-                                    <TextBlock Grid.Column="3"
-                                               Text="{Binding Notes}"
-                                               FontSize="13"
-                                               Foreground="{StaticResource TextDark}"
-                                               VerticalAlignment="Center"
-                                               TextTrimming="CharacterEllipsis"/>
-
-                                    <!-- Status badge — color by status so a
-                                         voided row is visually unmistakable. -->
-                                    <Border Grid.Column="4"
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Transactions.ColNotes}"
+                                            Binding="{Binding Notes}" Width="*"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColStatus}" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center"
                                             Style="{StaticResource StatusBadgeBorderStyle}">
                                         <TextBlock Text="{Binding Status}"
                                                    Style="{StaticResource StatusBadgeTextStyle}"/>
                                     </Border>
-
-                                    <!-- Date & time -->
-                                    <TextBlock Grid.Column="5"
-                                               Text="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
-                                               FontSize="13"
-                                               Foreground="{StaticResource TextDark}"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Transactions.ColDateTime}"
+                                            Binding="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
+                                            Width="160"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
                 <!-- Pagination footer -->
                 <Border Grid.Row="2"

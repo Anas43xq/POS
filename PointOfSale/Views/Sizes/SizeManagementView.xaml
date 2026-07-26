@@ -42,14 +42,14 @@
                 Padding="12,9"
                 Margin="0,0,0,10">
             <StackPanel Orientation="Horizontal">
-                <Button Margin="0,0,6,0" Command="{Binding AddCommand}">
+                <Button Style="{StaticResource PrimaryGradientBtn}" Margin="0,0,6,0" Command="{Binding AddCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
                         <TextBlock Text="Add" FontSize="12" FontWeight="Medium" Foreground="White"/>
                     </StackPanel>
                 </Button>
 
-                <Button Margin="0,0,6,0"
+                <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0"
                         IsEnabled="{Binding HasSelection}"
                         Command="{Binding EditCommand}">
                     <StackPanel Orientation="Horizontal">
@@ -58,7 +58,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Margin="0,0,6,0"
+                <Button Style="{StaticResource DangerBtn}" Margin="0,0,6,0"
                         IsEnabled="{Binding HasSelection}"
                         Command="{Binding DeleteCommand}">
                     <StackPanel Orientation="Horizontal">
@@ -67,7 +67,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Margin="0,0,6,0"
+                <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0"
                         IsEnabled="{Binding HasSelection}"
                         Command="{Binding TranslationsCommand}">
                     <StackPanel Orientation="Horizontal">
@@ -76,7 +76,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Command="{Binding RefreshCommand}">
+                <Button Style="{StaticResource OutlineBtn}" Command="{Binding RefreshCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="🔄  " FontSize="12"/>
                         <TextBlock Text="Refresh" FontSize="12"/>
@@ -100,17 +100,11 @@
                     BorderThickness="0.5"
                     CornerRadius="10"
                     Padding="12">
-                <DataGrid AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserResizeRows="False"
-                          IsReadOnly="True"
+                <DataGrid Style="{StaticResource ManagerDataGrid}"
                           SelectionMode="Single"
                           SelectionUnit="FullRow"
                           ItemsSource="{Binding Sizes}"
-                          SelectedItem="{Binding SelectedSize, Mode=TwoWay}"
-                          HeadersVisibility="Column"
-                          AlternatingRowBackground="#F9FBFF"
-                          GridLinesVisibility="Horizontal">
+                          SelectedItem="{Binding SelectedSize, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>
                         <DataGridTextColumn Header="Display Order" Binding="{Binding DisplayOrder}" Width="1*"/>
@@ -183,19 +177,11 @@
 
                     <!-- Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Cancel" Margin="0,0,8,0"
+                        <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Margin="0,0,8,0"
                                 Command="{Binding CancelEditCommand}"/>
-                        <Button Content="Save" Command="{Binding SaveCommand}">
-                            <Button.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Button.Background>
-                            <Button.Foreground>
-                                <SolidColorBrush Color="White"/>
-                            </Button.Foreground>
-                        </Button>
+                        <Button Style="{StaticResource PrimaryGradientBtn}"
+                                Content="Save"
+                                Command="{Binding SaveCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>

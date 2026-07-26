@@ -4,25 +4,6 @@
              xmlns:controls="clr-namespace:UI.Controls"
              Background="#F5F6FA">
 
-    <UserControl.Resources>
-        <!-- Shared DataGrid column header style (applied to both report grids) -->
-        <Style x:Key="ReportColumnHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#F3F4F6"/>
-            <Setter Property="Foreground" Value="#374151"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#E5E7EB"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        </Style>
-
-        <!-- Shared DataGrid cell style (applied to both report grids) -->
-        <Style x:Key="ReportCellStyle" TargetType="DataGridCell">
-            <Setter Property="Padding" Value="10,6"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-    </UserControl.Resources>
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -69,15 +50,10 @@
                                      Foreground="#555555"/>
 
                         <Button Content="{DynamicResource Manager.Reports.GenerateExport}"
+                                Style="{StaticResource PrimaryGradientBtn}"
                                 Command="{Binding ReportCommand}"
                                 CommandParameter="GenerateAndExport"
-                                Padding="14,6"
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Background="#1565C0"
-                                Foreground="White"
-                                BorderThickness="0"
-                                Cursor="Hand"/>
+                                Padding="14,6"/>
                     </StackPanel>
                 </Grid>
 
@@ -90,45 +66,25 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Button Content="{DynamicResource Common.Today}"
+                                    Style="{StaticResource OutlineBtn}"
                                     Command="{Binding FilterTodayCommand}"
                                     Padding="14,6"
-                                    Margin="0,0,8,0"
-                                    FontSize="12"
-                                    FontWeight="SemiBold"
-                                    Background="#EEF0F2"
-                                    Foreground="#1F2328"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
+                                    Margin="0,0,8,0"/>
                             <Button Content="{DynamicResource Common.ThisWeek}"
+                                    Style="{StaticResource OutlineBtn}"
                                     Command="{Binding FilterThisWeekCommand}"
                                     Padding="14,6"
-                                    Margin="0,0,8,0"
-                                    FontSize="12"
-                                    FontWeight="SemiBold"
-                                    Background="#EEF0F2"
-                                    Foreground="#1F2328"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
+                                    Margin="0,0,8,0"/>
                             <Button Content="{DynamicResource Common.ThisMonth}"
+                                    Style="{StaticResource OutlineBtn}"
                                     Command="{Binding FilterMonthCommand}"
                                     Padding="14,6"
-                                    Margin="0,0,8,0"
-                                    FontSize="12"
-                                    FontWeight="SemiBold"
-                                    Background="#EEF0F2"
-                                    Foreground="#1F2328"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
+                                    Margin="0,0,8,0"/>
                             <Button Content="{DynamicResource Common.Period}"
+                                    Style="{StaticResource PrimaryGradientBtn}"
                                     Command="{Binding ShowPeriodFilterCommand}"
                                     Padding="14,6"
-                                    Margin="0,0,0,0"
-                                    FontSize="12"
-                                    FontWeight="SemiBold"
-                                    Background="#1565C0"
-                                    Foreground="White"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
+                                    Margin="0,0,0,0"/>
 
                             <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                                         FromDate="{Binding FromDate, Mode=TwoWay}"
@@ -342,17 +298,12 @@
                 <!-- DATA GRID - SALES MODE                                       -->
                 <!-- ============================================================ -->
                 <DataGrid Grid.Row="1"
+                          Style="{StaticResource ManagerDataGrid}"
                           ItemsSource="{Binding TransactionReports}"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          AlternatingRowBackground="#F9F9F9"
-                          GridLinesVisibility="Horizontal"
                           BorderBrush="#E0E0E0"
                           BorderThickness="1"
                           RowHeaderWidth="0"
                           FontSize="13"
-                          ColumnHeaderStyle="{StaticResource ReportColumnHeaderStyle}"
-                          CellStyle="{StaticResource ReportCellStyle}"
                           Visibility="{Binding SalesGridVisibility}">
 
                     <DataGrid.Columns>
@@ -401,17 +352,12 @@
                 <!-- DATA GRID - PRODUCT MODE                                     -->
                 <!-- ============================================================ -->
                 <DataGrid Grid.Row="1"
+                          Style="{StaticResource ManagerDataGrid}"
                           ItemsSource="{Binding ProductReports}"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          AlternatingRowBackground="#F9F9F9"
-                          GridLinesVisibility="Horizontal"
                           BorderBrush="#E0E0E0"
                           BorderThickness="1"
                           RowHeaderWidth="0"
                           FontSize="13"
-                          ColumnHeaderStyle="{StaticResource ReportColumnHeaderStyle}"
-                          CellStyle="{StaticResource ReportCellStyle}"
                           Visibility="{Binding ProductGridVisibility}">
 
                     <DataGrid.Columns>

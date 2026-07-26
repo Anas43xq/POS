@@ -11,10 +11,6 @@
         WindowStyle="None"
         AllowsTransparency="True">
 
-    <Window.Resources>
-        <SolidColorBrush x:Key="ModalBg" Color="#1A6FC4"/>
-    </Window.Resources>
-
     <Border Style="{StaticResource ModalCardBorder}"
             Margin="10">
         <Grid>

@@ -39,58 +39,6 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <Style x:Key="PrimaryBtn" TargetType="Button">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="6">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.92"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="OutlineBtn" TargetType="Button">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="6" Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}" BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="TabItemStyle" TargetType="TabItem">
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
             <Setter Property="Padding" Value="16,8"/>
@@ -196,7 +144,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Apply}" Margin="0,0,8,0" Command="{Binding ApplyFiltersCommand}"/>
+                    <Button Style="{StaticResource PrimaryGradientBtn}" Content="{DynamicResource Common.Apply}" Margin="0,0,8,0" Command="{Binding ApplyFiltersCommand}"/>
                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Reset}" Command="{Binding ResetFiltersCommand}"/>
                 </StackPanel>
             </Grid>
@@ -231,17 +179,12 @@
                         </Border>
 
                         <DataGrid Grid.Row="1"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
+                                  Style="{StaticResource ManagerDataGrid}"
                                   CanUserDeleteRows="False"
-                                  IsReadOnly="True"
                                   SelectionMode="Single"
                                   SelectionUnit="FullRow"
                                   ItemsSource="{Binding SalesReceipts}"
                                   SelectedItem="{Binding SelectedSalesReceipt, Mode=TwoWay}"
-                                  HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F9FBFF"
-                                  GridLinesVisibility="Horizontal"
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>
@@ -275,9 +218,9 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Receipt.VatPurchaseReceiptsTitle}" Style="{StaticResource SectionTitle}"/>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource PrimaryGradientBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Edit}" Margin="0,0,8,0" Command="{Binding EditVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource DangerBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.View}" Margin="0,0,8,0" Command="{Binding ViewVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Export}" Command="{Binding ExportVatPurchasesCommand}"/>
                                 </StackPanel>
@@ -285,17 +228,12 @@
                         </Border>
 
                         <DataGrid Grid.Row="1"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
+                                  Style="{StaticResource ManagerDataGrid}"
                                   CanUserDeleteRows="False"
-                                  IsReadOnly="True"
                                   SelectionMode="Single"
                                   SelectionUnit="FullRow"
                                   ItemsSource="{Binding VatReceipts}"
                                   SelectedItem="{Binding SelectedVatReceipt, Mode=TwoWay}"
-                                  HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F9FBFF"
-                                  GridLinesVisibility="Horizontal"
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>
@@ -330,9 +268,9 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Receipt.NonVatPurchaseReceiptsTitle}" Style="{StaticResource SectionTitle}"/>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource PrimaryGradientBtn}" Content="{DynamicResource Common.Add}" Margin="0,0,8,0" Command="{Binding AddNonVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Edit}" Margin="0,0,8,0" Command="{Binding EditNonVatReceiptCommand}"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteNonVatReceiptCommand}"/>
+                                    <Button Style="{StaticResource DangerBtn}" Content="{DynamicResource Common.Delete}" Margin="0,0,8,0" Command="{Binding DeleteNonVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.View}" Margin="0,0,8,0" Command="{Binding ViewNonVatReceiptCommand}"/>
                                     <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Export}" Command="{Binding ExportNonVatPurchasesCommand}"/>
                                 </StackPanel>
@@ -340,17 +278,12 @@
                         </Border>
 
                         <DataGrid Grid.Row="1"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
+                                  Style="{StaticResource ManagerDataGrid}"
                                   CanUserDeleteRows="False"
-                                  IsReadOnly="True"
                                   SelectionMode="Single"
                                   SelectionUnit="FullRow"
                                   ItemsSource="{Binding NonVatReceipts}"
                                   SelectedItem="{Binding SelectedNonVatReceipt, Mode=TwoWay}"
-                                  HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F9FBFF"
-                                  GridLinesVisibility="Horizontal"
                                   BorderThickness="0"
                                   Background="White">
                             <DataGrid.Columns>

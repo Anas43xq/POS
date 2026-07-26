@@ -149,74 +149,10 @@
         </Style>
 
         <!-- ── Save (primary) button ── -->
-        <Style x:Key="SaveBtn" TargetType="Button">
-            <Setter Property="Height"   Value="36"/>
-            <Setter Property="Padding"  Value="22,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.5"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        
 
         <!-- ── Cancel button ── -->
-        <Style x:Key="CancelBtn" TargetType="Button">
-            <Setter Property="Height"   Value="36"/>
-            <Setter Property="Padding"  Value="22,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-            <Setter Property="Cursor"   Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                CornerRadius="7"
-                                Background="White"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1.5">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#F0F7FF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        
 
         </ResourceDictionary>
     </Window.Resources>
@@ -346,7 +282,7 @@
                 <!-- ── ACTION BUTTONS (Translations) ── -->
                 <StackPanel Grid.Row="3" Orientation="Horizontal"
                             HorizontalAlignment="Center" Margin="16,6,16,2">
-                    <Button Style="{StaticResource CancelBtn}"
+                    <Button Style="{StaticResource OutlineBtn}"
                             Content="🌐 Translations..."
                             Command="{Binding TranslationsCommand}"
                             Padding="14,0"/>
@@ -360,11 +296,11 @@
                         CornerRadius="0,0,14,14"
                         Padding="18,12">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource CancelBtn}"
+                        <Button Style="{StaticResource OutlineBtn}"
                                 Content="{DynamicResource Common.Cancel}"
                                 Margin="0,0,10,0"
                                 Command="{Binding CancelCommand}"/>
-                        <Button Style="{StaticResource SaveBtn}"
+                        <Button Style="{StaticResource PrimaryGradientBtn}"
                                 Content="{DynamicResource Common.Save}"
                                 Command="{Binding SaveCommand}"/>
                     </StackPanel>

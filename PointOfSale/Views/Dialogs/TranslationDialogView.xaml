@@ -132,138 +132,6 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SaveBtn" TargetType="Button">
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="Padding" Value="20,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#1A6FC4" Offset="0"/>
-                                    <GradientStop Color="#2589E0" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.5"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CancelBtn" TargetType="Button">
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="Padding" Value="20,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7" Background="White"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1.5">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#F0F7FF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Outline tool button -->
-        <Style x:Key="OutlineToolBtn" TargetType="Button">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7"
-                                Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#DBEEFF"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Danger tool button -->
-        <Style x:Key="DangerToolBtn" TargetType="Button">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource DangerRed}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7"
-                                Background="#FEE2E2"
-                                BorderBrush="#FECACA"
-                                BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#FECACA"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bg" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         </ResourceDictionary>
     </Window.Resources>
 
@@ -363,21 +231,21 @@
                                    VerticalAlignment="Center"/>
 
                         <Button Grid.Column="1"
-                                Style="{StaticResource OutlineToolBtn}"
+                                Style="{StaticResource OutlineBtn}"
                                 Margin="0,0,6,0"
                                 Command="{Binding AddCommand}">
                             <TextBlock Text="＋ Add" FontSize="11"/>
                         </Button>
 
                         <Button Grid.Column="2"
-                                Style="{StaticResource OutlineToolBtn}"
+                                Style="{StaticResource OutlineBtn}"
                                 Margin="0,0,6,0"
                                 Command="{Binding EditCommand}">
                             <TextBlock Text="✏ Edit" FontSize="11"/>
                         </Button>
 
                         <Button Grid.Column="3"
-                                Style="{StaticResource DangerToolBtn}"
+                                Style="{StaticResource DangerBtn}"
                                 Command="{Binding DeleteCommand}">
                             <TextBlock Text="🗑 Delete" FontSize="11"/>
                         </Button>
@@ -389,17 +257,11 @@
                             BorderThickness="1"
                             CornerRadius="7"
                             MinHeight="100">
-                        <DataGrid AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
-                                  CanUserResizeRows="False"
-                                  IsReadOnly="True"
+                        <DataGrid Style="{StaticResource ManagerDataGrid}"
                                   SelectionMode="Single"
                                   SelectionUnit="FullRow"
                                   ItemsSource="{Binding Translations}"
                                   SelectedItem="{Binding SelectedTranslation, Mode=TwoWay}"
-                                  HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F9FBFF"
-                                  GridLinesVisibility="Horizontal"
                                   BorderThickness="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Language" Binding="{Binding LanguageName}" Width="1*"/>
@@ -444,16 +306,16 @@
                         CornerRadius="0,0,14,14"
                         Padding="16,10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource CancelBtn}"
+                        <Button Style="{StaticResource OutlineBtn}"
                                 Content="Cancel"
                                 Margin="0,0,8,0"
                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding CancelCommand}"/>
-                        <Button Style="{StaticResource SaveBtn}"
+                        <Button Style="{StaticResource PrimaryGradientBtn}"
                                 Content="Save Translation"
                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding SaveCommand}"/>
-                        <Button Style="{StaticResource CancelBtn}"
+                        <Button Style="{StaticResource OutlineBtn}"
                                 Content="Close"
                                 Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding CloseCommand}"/>
