@@ -97,24 +97,25 @@
 
                 <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="0,0,10,0"/>
 
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Day}"
-                             IsChecked="True"
-                             Command="{Binding LoadDayCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Week}"
-                             Command="{Binding LoadWeekCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Month}"
-                             Command="{Binding LoadMonthCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
-                             Command="{Binding LoadPeriodCommand}"/>
-
-                <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                            FromDate="{Binding FromDate, Mode=TwoWay}"
-                                            ToDate="{Binding ToDate, Mode=TwoWay}"
-                                            ApplyCommand="{Binding ApplyPeriodCommand}"
-                                            FromLabel="{DynamicResource Common.From}"
-                                            ToLabel="{DynamicResource Common.To}"
-                                            ApplyButtonText="{DynamicResource Common.Apply}"
-                                            Margin="6,0,0,0"/>
+                <!-- ── Shared date-range mechanism (Day / Week / Month / Period
+                     chips + From / To / Apply). Identical surface to the
+                     one ShiftFilterPanelControl uses. -->
+                <controls:DateRangeFilterControl
+                    DayCommand="{Binding LoadDayCommand}"
+                    WeekCommand="{Binding LoadWeekCommand}"
+                    MonthCommand="{Binding LoadMonthCommand}"
+                    PeriodCommand="{Binding LoadPeriodCommand}"
+                    ApplyCommand="{Binding ApplyPeriodCommand}"
+                    IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                    FromDate="{Binding FromDate, Mode=TwoWay}"
+                    ToDate="{Binding ToDate, Mode=TwoWay}"
+                    DayLabel="{DynamicResource Common.Day}"
+                    WeekLabel="{DynamicResource Common.Week}"
+                    MonthLabel="{DynamicResource Common.Month}"
+                    PeriodLabel="{DynamicResource Common.Period}"
+                    FromLabel="{DynamicResource Common.From}"
+                    ToLabel="{DynamicResource Common.To}"
+                    ApplyButtonText="{DynamicResource Common.Apply}"/>
 
                 <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="12,0,10,0"/>
 

@@ -614,6 +614,8 @@
 
     <!-- Shift detail dialog -->
     <sys:String x:Key="Manager.Shifts.DetailTitle">Shift Details</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashReconciliation">Cash Reconciliation</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailSchedule">Schedule</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailShiftNumber">Shift Number</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailCashier">Cashier</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailOpenTime">Open Time</sys:String>

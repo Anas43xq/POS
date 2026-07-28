@@ -603,6 +603,8 @@
 
     <!-- Shift detail dialog -->
     <sys:String x:Key="Manager.Shifts.DetailTitle">ഷിഫ്റ്റ് വിശദാംശങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashReconciliation">ക്യാഷ് റെക്കോൺസിലിയേഷൻ</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailSchedule">ഷെഡ്യൂൾ</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailShiftNumber">ഷിഫ്റ്റ് നമ്പർ</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailCashier">ക്യാഷിയർ</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailOpenTime">തുറന്ന സമയം</sys:String>

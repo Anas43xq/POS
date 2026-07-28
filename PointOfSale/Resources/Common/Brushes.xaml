@@ -30,4 +30,7 @@
 
     <!-- Success / positive emphasis -->
     <SolidColorBrush x:Key="SuccessGreen" Color="#16A34A"/>
+    <SolidColorBrush x:Key="SuccessDark"  Color="#15803D"/>
+    <SolidColorBrush x:Key="SuccessLight" Color="#DCFCE7"/>
+    <SolidColorBrush x:Key="SuccessBorder" Color="#BBF7D0"/>
 </ResourceDictionary>

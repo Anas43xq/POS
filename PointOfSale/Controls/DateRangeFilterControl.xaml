@@ -1,0 +1,65 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   DateRangeFilterControl                              ║
+    ║   Shared date-range filter: Day / Week / Month /      ║
+    ║   Period chips + From / To / Apply.                   ║
+    ║   Generic, technology-agnostic — owns no DataContext, ║
+    ║   inherits from the host page's ViewModel.            ║
+    ║                                                       ║
+    ║   Consumers: HomeView, Transactions, Shifts.          ║
+    ║   This component owns only the date-range mechanism.  ║
+    ║   Status / search / void / refresh live in each       ║
+    ║   page's own filter panel.                            ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Controls.DateRangeFilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="28" d:DesignWidth="800">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <RadioButton Style="{StaticResource FilterChip}"
+                     Content="{Binding DayLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     IsChecked="True"
+                     Command="{Binding DayCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <RadioButton Style="{StaticResource FilterChip}"
+                     Content="{Binding WeekLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     Command="{Binding WeekCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <RadioButton Style="{StaticResource FilterChip}"
+                     Content="{Binding MonthLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     Command="{Binding MonthCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <RadioButton Style="{StaticResource FilterChip}"
+                     Content="{Binding PeriodLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     Command="{Binding PeriodCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+        <!-- Period group: From / To / Apply. Hidden until the consumer
+             flips IsPeriodFilterVisible. -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="6,0,0,0"
+                    Visibility="{Binding IsPeriodFilterVisible,
+                                 RelativeSource={RelativeSource AncestorType=UserControl},
+                                 Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="{Binding FromLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       VerticalAlignment="Center"
+                       FontSize="11"
+                       Foreground="{StaticResource TextMuted}"
+                       Margin="0,0,6,0"/>
+            <DatePicker Style="{StaticResource DateInput}"
+                        SelectedDate="{Binding FromDate, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+                        Margin="0,0,12,0"/>
+            <TextBlock Text="{Binding ToLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       VerticalAlignment="Center"
+                       FontSize="11"
+                       Foreground="{StaticResource TextMuted}"
+                       Margin="0,0,6,0"/>
+            <DatePicker Style="{StaticResource DateInput}"
+                        SelectedDate="{Binding ToDate, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+                        Margin="0,0,12,0"/>
+            <Button Style="{StaticResource ApplyBtn}"
+                    Content="{Binding ApplyButtonText, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Command="{Binding ApplyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

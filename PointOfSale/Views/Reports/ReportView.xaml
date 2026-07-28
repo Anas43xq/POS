@@ -65,32 +65,25 @@
                         Margin="0,10,0,0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="{DynamicResource Common.Today}"
-                                    Style="{StaticResource OutlineBtn}"
-                                    Command="{Binding FilterTodayCommand}"
-                                    Padding="14,6"
-                                    Margin="0,0,8,0"/>
-                            <Button Content="{DynamicResource Common.ThisWeek}"
-                                    Style="{StaticResource OutlineBtn}"
-                                    Command="{Binding FilterThisWeekCommand}"
-                                    Padding="14,6"
-                                    Margin="0,0,8,0"/>
-                            <Button Content="{DynamicResource Common.ThisMonth}"
-                                    Style="{StaticResource OutlineBtn}"
-                                    Command="{Binding FilterMonthCommand}"
-                                    Padding="14,6"
-                                    Margin="0,0,8,0"/>
-                            <Button Content="{DynamicResource Common.Period}"
-                                    Style="{StaticResource PrimaryGradientBtn}"
-                                    Command="{Binding ShowPeriodFilterCommand}"
-                                    Padding="14,6"
-                                    Margin="0,0,0,0"/>
-
-                            <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                        FromDate="{Binding FromDate, Mode=TwoWay}"
-                                                        ToDate="{Binding ToDate, Mode=TwoWay}"
-                                                        ApplyCommand="{Binding ApplyPeriodFilterCommand}"
-                                                        Margin="12,0,0,0"/>
+                            <!-- Shared date-range mechanism: Today / This Week /
+                                 This Month / Period chips + From / To / Apply. -->
+                            <controls:DateRangeFilterControl
+                                DayCommand="{Binding FilterTodayCommand}"
+                                WeekCommand="{Binding FilterThisWeekCommand}"
+                                MonthCommand="{Binding FilterMonthCommand}"
+                                PeriodCommand="{Binding ShowPeriodFilterCommand}"
+                                ApplyCommand="{Binding ApplyPeriodFilterCommand}"
+                                IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                                FromDate="{Binding FromDate, Mode=TwoWay}"
+                                ToDate="{Binding ToDate, Mode=TwoWay}"
+                                DayLabel="{DynamicResource Common.Today}"
+                                WeekLabel="{DynamicResource Common.ThisWeek}"
+                                MonthLabel="{DynamicResource Common.ThisMonth}"
+                                PeriodLabel="{DynamicResource Common.Period}"
+                                FromLabel="{DynamicResource Common.From}"
+                                ToLabel="{DynamicResource Common.To}"
+                                ApplyButtonText="{DynamicResource Common.Apply}"
+                                Margin="0,0,0,0"/>
 
                             <!-- Product ComboBox (only visible in Product Mode) -->
                             <StackPanel Orientation="Horizontal"

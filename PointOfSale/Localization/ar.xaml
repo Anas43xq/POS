@@ -614,6 +614,8 @@
 
     <!-- Shift detail dialog -->
     <sys:String x:Key="Manager.Shifts.DetailTitle">تفاصيل الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashReconciliation">مطابقة النقد</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailSchedule">الجدول الزمني</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailShiftNumber">رقم الوردية</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailCashier">الكاشير</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailOpenTime">وقت الفتح</sys:String>

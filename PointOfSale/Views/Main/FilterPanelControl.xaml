@@ -1,8 +1,10 @@
 <!--
     ╔══════════════════════════════════════════════════════╗
-    ║   Reusable Manager filter bar: quick-range chips +    ║
-    ║   custom period + refresh. No DataContext of its own  ║
-    ║   — inherits whatever VM the host view is using.      ║
+    ║   HomeView filter bar. Composes the shared          ║
+    ║   <controls:DateRangeFilterControl/> + Refresh, so  ║
+    ║   the date-range mechanism is identical to the       ║
+    ║   Shift and Transactions filter panels.              ║
+    ║   No DataContext of its own — inherits the host VM.  ║
     ╚══════════════════════════════════════════════════════╝
 -->
 <UserControl x:Class="UI.Views.FilterPanelControl"
@@ -10,6 +12,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
              mc:Ignorable="d" d:DesignHeight="46" d:DesignWidth="1225">
 
     <UserControl.Resources>
@@ -31,40 +34,30 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Today}" IsChecked="True"
-                             Command="{Binding FilterTodayCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.ThisWeek}"
-                             Command="{Binding FilterThisWeekCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.ThisMonth}"
-                             Command="{Binding FilterMonthCommand}"/>
-                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
-                             Command="{Binding ShowPeriodFilterCommand}"/>
-
-                <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="6,0"/>
-
-                <TextBlock Text="{DynamicResource Common.From}" FontSize="11" Foreground="{StaticResource TextMuted}"
-                           VerticalAlignment="Center" Margin="0,0,6,0"/>
-                <DatePicker Style="{StaticResource DateInput}"
-                            SelectedDate="{Binding PeriodFromDate}"
-                            Margin="0,0,12,0"/>
-
-                <TextBlock Text="{DynamicResource Common.To}" FontSize="11" Foreground="{StaticResource TextMuted}"
-                           VerticalAlignment="Center" Margin="0,0,6,0"/>
-                <DatePicker Style="{StaticResource DateInput}"
-                            SelectedDate="{Binding PeriodToDate}"
-                            Margin="0,0,12,0"/>
-
-                <Button Style="{StaticResource ApplyBtn}"
-                        Content="{DynamicResource Common.Apply}"
-                        Command="{Binding ApplyPeriodFilterCommand}"/>
-            </StackPanel>
+            <!-- ── Shared date-range mechanism (Today / This Week /
+                 This Month / Period chips + From / To / Apply). ── -->
+            <controls:DateRangeFilterControl
+                DayCommand="{Binding FilterTodayCommand}"
+                WeekCommand="{Binding FilterThisWeekCommand}"
+                MonthCommand="{Binding FilterMonthCommand}"
+                PeriodCommand="{Binding ShowPeriodFilterCommand}"
+                ApplyCommand="{Binding ApplyPeriodFilterCommand}"
+                IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                FromDate="{Binding PeriodFromDate, Mode=TwoWay}"
+                ToDate="{Binding PeriodToDate, Mode=TwoWay}"
+                DayLabel="{DynamicResource Common.Today}"
+                WeekLabel="{DynamicResource Common.ThisWeek}"
+                MonthLabel="{DynamicResource Common.ThisMonth}"
+                PeriodLabel="{DynamicResource Common.Period}"
+                FromLabel="{DynamicResource Common.From}"
+                ToLabel="{DynamicResource Common.To}"
+                ApplyButtonText="{DynamicResource Common.Apply}"/>
 
             <Button Grid.Column="1"
                     Style="{StaticResource OutlineBtn}"
                     Command="{Binding RefreshCommand}"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
                 <TextBlock>
                     <Run Text="🔄 "/>
                     <Run Text="{DynamicResource Common.Refresh}"/>
