@@ -13,29 +13,53 @@
         <Setter Property="CornerRadius" Value="14"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource ModalBrandBorder}"/>
-        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#0F2A4A" Opacity="0.16" BlurRadius="24" ShadowDepth="6" Direction="270"/>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="ModalHeaderBorder" TargetType="Border">
         <Setter Property="CornerRadius" Value="14,14,0,0"/>
         <Setter Property="Background" Value="{StaticResource ModalBrandLight}"/>
         <Setter Property="BorderBrush" Value="#E8F3FF"/>
-        <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
     </Style>
 
     <Style x:Key="ModalFooterBorder" TargetType="Border">
+        <Setter Property="CornerRadius" Value="0,0,14,14"/>
         <Setter Property="Background" Value="{StaticResource ModalBrandLight}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ModalBrandBorder}"/>
-        <Setter Property="BorderThickness" Value="0,0.5,0,0"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
     </Style>
 
+    <!-- Circular hover target for the dialog close (x) button -->
     <Style x:Key="ModalCloseButton" TargetType="Button">
+        <Setter Property="Width" Value="26"/>
+        <Setter Property="Height" Value="26"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="{StaticResource ModalTextMuted}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg" CornerRadius="13" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="#E1EEFC"/>
+                            <Setter Property="Foreground" Value="{StaticResource ModalBrandDark}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="ModalLabel" TargetType="TextBlock">
@@ -48,5 +72,6 @@
         <Setter Property="Background" Value="{StaticResource ModalBrandLight}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ModalBrandBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
     </Style>
 </ResourceDictionary>

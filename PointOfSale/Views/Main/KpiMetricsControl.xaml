@@ -1,0 +1,74 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Key Metrics — full-width strip, 5 equal tiles.      ║
+    ║   Priority #1 in the dashboard hierarchy: large       ║
+    ║   numbers, compact cards, readable at a glance.        ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.KpiMetricsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" d:DesignHeight="110" d:DesignWidth="1225">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/AppChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="KpiTile" TargetType="Border" BasedOn="{StaticResource DashboardKpiTile}"/>
+            <Style x:Key="KpiLabel" TargetType="TextBlock" BasedOn="{StaticResource DashboardKpiLabel}"/>
+            <Style x:Key="KpiValueCurrency" TargetType="controls:CurrencyText" BasedOn="{StaticResource DashboardKpiValueCurrency}"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardBorder}">
+        <StackPanel>
+            <Border Style="{StaticResource CardHeaderBorder}">
+                <TextBlock Style="{StaticResource CardTitle}">
+                    <Run Text="📈  "/>
+                    <Run Text="{DynamicResource Manager.Home.KeyMetrics}"/>
+                </TextBlock>
+            </Border>
+
+            <UniformGrid Columns="5" Margin="12,10,12,12">
+                <Border Style="{StaticResource KpiTile}" Margin="0,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Home.KpiTotalSales}" Style="{StaticResource KpiLabel}"/>
+                        <controls:CurrencyText Amount="{Binding TotalSales}" Style="{StaticResource KpiValueCurrency}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource KpiTile}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Home.KpiAverageSale}" Style="{StaticResource KpiLabel}"/>
+                        <controls:CurrencyText Amount="{Binding AverageSales}" Style="{StaticResource KpiValueCurrency}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource KpiTile}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Home.KpiTotalCash}" Style="{StaticResource KpiLabel}"/>
+                        <controls:CurrencyText Amount="{Binding TotalCash}" Style="{StaticResource KpiValueCurrency}"
+                                                Foreground="{StaticResource SuccessGreen}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource KpiTile}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Home.KpiTotalCard}" Style="{StaticResource KpiLabel}"/>
+                        <controls:CurrencyText Amount="{Binding TotalCard}" Style="{StaticResource KpiValueCurrency}"
+                                                Foreground="{StaticResource BrandDark}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource KpiTile}" Margin="6,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Home.KpiTotalOrders}" Style="{StaticResource KpiLabel}"/>
+                        <TextBlock Text="{Binding TotalOrders}" FontSize="20" FontWeight="Medium"
+                                   Foreground="{StaticResource SuccessGreen}"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+        </StackPanel>
+    </Border>
+</UserControl>

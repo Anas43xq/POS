@@ -1,51 +1,147 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
-        Generic application-wide buttons. These are not module-specific:
-        OutlineBtn is used by Manager list views, DangerBtn by destructive
-        actions across modules, and PrimaryGradientBtn by primary
-        actions. Module-specific buttons (Manager HdrBtn, Cashier
-        ProductBtn, Dialog SaveBtn) remain in their owning layers.
+        Generic application-wide buttons. Same x:Keys as before
+        (OutlineBtn, DangerBtn, PrimaryGradientBtn) so no other file
+        needs to change — only the visuals underneath are redesigned:
+        each style now owns a real ControlTemplate with rounded
+        corners and Hover / Pressed / Disabled states, instead of
+        relying on the default WPF button chrome.
     -->
 
-    <!-- Outline button (Refresh / Previous / Delete etc.) -->
+    <SolidColorBrush x:Key="BrandHover"   Color="#155A9E"/>
+    <SolidColorBrush x:Key="BrandPressed" Color="#0F4A85"/>
+    <SolidColorBrush x:Key="DisabledBg"   Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="DisabledFg"   Color="#94A3B8"/>
+
+    <!-- Primary filled button (Save / Add / Confirm) -->
+    <Style x:Key="PrimaryGradientBtn" TargetType="Button">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource BrandDark}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource BrandHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource BrandPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledFg}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Outline button (Cancel / Refresh / Previous etc.) -->
     <Style x:Key="OutlineBtn" TargetType="Button">
-        <Setter Property="Height" Value="28"/>
-        <Setter Property="Padding" Value="14,0"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource BrandLight}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource BrandDark}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="#E1EEFC"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource DisabledBg}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledFg}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Danger button (Void / Delete / Remove — destructive actions) -->
     <Style x:Key="DangerBtn" TargetType="Button">
-        <Setter Property="Height" Value="28"/>
-        <Setter Property="Padding" Value="14,0"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="{StaticResource DangerMid}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource DangerDark}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-    </Style>
-
-    <!-- Primary gradient button (Next / apply actions) -->
-    <Style x:Key="PrimaryGradientBtn" TargetType="Button">
-        <Setter Property="Height" Value="28"/>
-        <Setter Property="Padding" Value="18,0"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Background" Value="{StaticResource BrandMid}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DangerDark}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="#8F1616"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledFg}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

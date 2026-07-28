@@ -10,13 +10,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:UI.Controls"
-             xmlns:converters="clr-namespace:UI.Converters"
+             xmlns:views="clr-namespace:UI.Views"
              mc:Ignorable="d"
              d:DesignWidth="1420" d:DesignHeight="820">
 
     <UserControl.Resources>
-
-        <converters:StatusToVoidVisConverter x:Key="StatusToVoidVis"/>
 
         <!-- Payment badge border (used inside DataGrid cell template) -->
         <Style x:Key="PaymentBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
@@ -85,68 +83,7 @@
         <!-- ══════════════════════════════════════
              FILTER BAR
              ══════════════════════════════════════ -->
-        <Border Grid.Row="0" Style="{StaticResource FilterPanel}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Day}"
-                                 IsChecked="True"
-                                 Command="{Binding LoadDayCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Week}"
-                                 Command="{Binding LoadWeekCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Month}"
-                                 Command="{Binding LoadMonthCommand}"/>
-                    <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
-                                 Command="{Binding LoadPeriodCommand}"/>
-
-                    <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                FromDate="{Binding FromDate, Mode=TwoWay}"
-                                                ToDate="{Binding ToDate, Mode=TwoWay}"
-                                                ApplyCommand="{Binding ApplyPeriodCommand}"
-                                                FromLabel="{DynamicResource Common.From}"
-                                                ToLabel="{DynamicResource Common.To}"
-                                                ApplyButtonText="{DynamicResource Common.Apply}"
-                                                Margin="6,0,0,0"/>
-
-                    <!-- Status filter (Completed / Voided / Pending / All).
-                         Combines with the date filter — picking "Voided"
-                         + "Week" shows this week's voided transactions. -->
-                    <TextBlock Text="{DynamicResource Manager.Transactions.StatusFilter}"
-                               VerticalAlignment="Center"
-                               Margin="12,0,4,0"
-                               FontSize="11"
-                               Foreground="{StaticResource TextMuted}"/>
-                    <ComboBox Width="110"
-                              Height="26"
-                              FontSize="11"
-                              VerticalContentAlignment="Center"
-                              ItemsSource="{Binding StatusOptions}"
-                              SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
-                              DisplayMemberPath="Label"/>
-
-                </StackPanel>
-
-                <!-- Void + Refresh grouped together -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <!-- Destructive: red DangerBtn, only visible when the
-                         selected row is in Completed state. -->
-                    <Button Style="{StaticResource DangerBtn}"
-                            Content="{DynamicResource Manager.Transactions.VoidButton}"
-                            Margin="0,0,6,0"
-                            Command="{Binding VoidTransactionCommand}"
-                            CommandParameter="{Binding SelectedTransaction}"
-                            Visibility="{Binding SelectedTransaction.Status, Converter={StaticResource StatusToVoidVis}}"/>
-
-                    <Button Style="{StaticResource OutlineBtn}"
-                            Content="{DynamicResource Common.Refresh}"
-                            Command="{Binding RefreshCommand}"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+        <views:TransactionsFilterPanelControl Grid.Row="0"/>
 
         <!-- ══════════════════════════════════════
              TRANSACTIONS TABLE CARD
@@ -219,10 +156,16 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColAmount}" Width="120">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource ManagerDataGridColumnHeader}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <controls:CurrencyText Amount="{Binding GrandTotal}"
                                                            Foreground="{StaticResource TextDark}"
+                                                           HorizontalAlignment="Right"
                                                            VerticalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

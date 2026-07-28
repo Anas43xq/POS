@@ -1,0 +1,149 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Transactions filter bar. Deliberately its own       ║
+    ║   UserControl (not HomeView's FilterPanelControl) —    ║
+    ║   the date-range mechanism and chip set genuinely      ║
+    ║   differ per page. Visual consistency instead comes    ║
+    ║   from reusing the same shared styles HomeView uses.   ║
+    ║   No DataContext of its own — inherits the host VM.    ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.TransactionsFilterPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:converters="clr-namespace:UI.Converters"
+             mc:Ignorable="d" d:DesignHeight="46" d:DesignWidth="1420">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/AppChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Declared locally so this control doesn't depend on its
+                 host page happening to provide it. -->
+            <converters:StatusToVoidVisConverter x:Key="StatusToVoidVis"/>
+
+            <!-- Same visual language as DateInput (height/border/radius),
+                 just for ComboBox — the status filter previously had no
+                 shared style at all. -->
+            <Style x:Key="FilterCombo" TargetType="ComboBox">
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
+            <!-- Same visual language again, for the search box. -->
+            <Style x:Key="FilterSearchBox" TargetType="TextBox">
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="Padding" Value="8,0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource FilterPanel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- ── SEARCH BOX — STUB ──────────────────────────────
+                     Not wired to the ViewModel yet: TransactionsViewModel
+                     has no SearchText property or filter command today.
+                     Placeholder text is pure XAML (ElementName binding to
+                     itself, no converter/VM dependency), so this compiles
+                     and renders correctly as an inert control.
+                     TODO(next): add SearchText (string) + SearchCommand
+                     (or live-filter on PropertyChanged) to
+                     TransactionsViewModel, then bind:
+                       Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     ──────────────────────────────────────────────── -->
+                <Grid VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox x:Name="SearchBox" Style="{StaticResource FilterSearchBox}" IsEnabled="False"/>
+                    <TextBlock Text="Search receipts, notes..."
+                               FontSize="11"
+                               Foreground="{StaticResource TextMuted}"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+
+                <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="0,0,10,0"/>
+
+                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Day}"
+                             IsChecked="True"
+                             Command="{Binding LoadDayCommand}"/>
+                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Week}"
+                             Command="{Binding LoadWeekCommand}"/>
+                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Month}"
+                             Command="{Binding LoadMonthCommand}"/>
+                <RadioButton Style="{StaticResource FilterChip}" Content="{DynamicResource Common.Period}"
+                             Command="{Binding LoadPeriodCommand}"/>
+
+                <controls:PeriodFilterPanel FilterVisibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                            FromDate="{Binding FromDate, Mode=TwoWay}"
+                                            ToDate="{Binding ToDate, Mode=TwoWay}"
+                                            ApplyCommand="{Binding ApplyPeriodCommand}"
+                                            FromLabel="{DynamicResource Common.From}"
+                                            ToLabel="{DynamicResource Common.To}"
+                                            ApplyButtonText="{DynamicResource Common.Apply}"
+                                            Margin="6,0,0,0"/>
+
+                <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="12,0,10,0"/>
+
+                <TextBlock Text="{DynamicResource Manager.Transactions.StatusFilter}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,6,0"
+                           FontSize="11"
+                           Foreground="{StaticResource TextMuted}"/>
+                <ComboBox Style="{StaticResource FilterCombo}"
+                          ItemsSource="{Binding StatusOptions}"
+                          SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
+                          DisplayMemberPath="Label"/>
+            </StackPanel>
+
+            <!-- Void + Refresh grouped together -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Destructive: red DangerBtn, only visible when the
+                     selected row is in Completed state. -->
+                <Button Style="{StaticResource DangerBtn}"
+                        Content="{DynamicResource Manager.Transactions.VoidButton}"
+                        Margin="0,0,6,0"
+                        Command="{Binding VoidTransactionCommand}"
+                        CommandParameter="{Binding SelectedTransaction}"
+                        Visibility="{Binding SelectedTransaction.Status, Converter={StaticResource StatusToVoidVis}}"/>
+
+                <Button Style="{StaticResource OutlineBtn}"
+                        Content="{DynamicResource Common.Refresh}"
+                        Command="{Binding RefreshCommand}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

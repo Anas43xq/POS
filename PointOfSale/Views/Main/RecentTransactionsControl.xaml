@@ -1,0 +1,153 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Recent Transactions list. Receipt/Payment/Date are   ║
+    ║   left-aligned like every other column in the app;     ║
+    ║   only Amount (currency) keeps the right-align         ║
+    ║   exception. Previously Date was right-aligned with    ║
+    ║   nothing else matching it — that's fixed here.        ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.RecentTransactionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="360" d:DesignWidth="460">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/AppChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ColLabel" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="9"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            </Style>
+            <Style x:Key="ListRow" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{StaticResource BrandLight}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+                <Setter Property="Padding" Value="0,6"/>
+            </Style>
+            <Style x:Key="CardActionBtn" TargetType="Button">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bg" Background="#DBEEFF" CornerRadius="5" Padding="8,3">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="#C5E2FA"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource CardTitle}">
+                        <Run Text="📃  "/>
+                        <Run Text="{DynamicResource Manager.Home.RecentTransactions}"/>
+                    </TextBlock>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource CardActionBtn}"
+                            Content="{DynamicResource Manager.Home.ShowAll}"
+                            Command="{Binding ShowAllTransactionsCommand}"/>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="12,6,12,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="108"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{DynamicResource Manager.Home.ColReceipt}" Style="{StaticResource ColLabel}"/>
+                <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColAmount}" Style="{StaticResource ColLabel}"
+                           TextAlignment="Right"/>
+                <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Home.ColPayment}" Style="{StaticResource ColLabel}"/>
+                <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Home.ColDate}" Style="{StaticResource ColLabel}"/>
+            </Grid>
+            <Border Grid.Row="1" BorderBrush="#E8F3FF" BorderThickness="0,0,0,0.5"
+                    Margin="12,26,12,0" VerticalAlignment="Top"/>
+
+            <ScrollViewer Grid.Row="2" Padding="12,4,12,8" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding RecentTransactions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ListRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="108"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Content="{Binding ReceiptNumber}"
+                                            FontSize="9"
+                                            Foreground="{StaticResource BrandDark}"
+                                            Cursor="Hand"
+                                            Command="{Binding DataContext.OpenReceiptCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            HorizontalAlignment="Left">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="#DBEEFF" CornerRadius="4" Padding="6,2">
+                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding GrandTotal, StringFormat={}{0:C}}"
+                                               FontSize="11" FontWeight="Medium"
+                                               Foreground="{StaticResource BrandDark}"
+                                               TextAlignment="Right"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding PaymentMethod}"
+                                               FontSize="10"
+                                               Foreground="{StaticResource TextMuted}"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding TransactionDate, StringFormat='dd/MM HH:mm'}"
+                                               FontSize="10"
+                                               Foreground="{StaticResource TextMuted}"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>
