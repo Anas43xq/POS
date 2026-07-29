@@ -1,0 +1,95 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   CrudActionButtons                                   ║
+    ║   Shared Add / Edit / Delete / Refresh button group.  ║
+    ║   Generic, technology-agnostic — owns no DataContext, ║
+    ║   inherits from the host page's ViewModel via DPs.    ║
+    ║                                                       ║
+    ║   Consumers: ProductManagementView,                   ║
+    ║   CategoryManagementView, SizeManagementView,         ║
+    ║   ModifierGroupManagementView.                        ║
+    ║                                                       ║
+    ║   Uses the app-wide PrimaryGradientBtn / OutlineBtn /  ║
+    ║   DangerBtn styles (globally merged via App.xaml) so   ║
+    ║   it renders identically to the buttons it replaces.   ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Controls.CrudActionButtons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="28" d:DesignWidth="360">
+
+    <!--
+        Border wrapper (transparent) gives the UC a definite hit-test
+        surface so clicks reach the buttons even when the parent layout
+        cell has zero padding.  Inner StackPanel lays out the buttons.
+    -->
+    <Border Background="Transparent">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+        <!-- Add — IsEnabled is driven entirely by AddCommand.CanExecute.
+             WPF polls the ICommand automatically; no separate
+             IsEnabled binding needed (and adding one would suppress
+             the polling and race with it). -->
+        <Button Style="{StaticResource PrimaryGradientBtn}"
+                Margin="0,0,6,0"
+                Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
+                <TextBlock Text="{Binding AddLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                           FontSize="12" FontWeight="Medium" Foreground="White"/>
+            </StackPanel>
+        </Button>
+
+        <!-- Edit — same: IsEnabled driven by EditCommand.CanExecute. -->
+        <Button Style="{StaticResource CrudEditBtn}"
+                Margin="0,0,6,0"
+                Command="{Binding EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="✏  " FontSize="12"/>
+                <TextBlock Text="{Binding EditLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- Delete — same: IsEnabled driven by DeleteCommand.CanExecute. -->
+        <Button Style="{StaticResource CrudDeleteBtn}"
+                Margin="0,0,6,0"
+                Command="{Binding DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="🗑  " FontSize="12"/>
+                <TextBlock Text="{Binding DeleteLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- Translations (opt-in via ShowTranslations). The button is
+             always present in the tree; when ShowTranslations is False
+             it is collapsed via Visibility. IsEnabled still driven by
+             the ICommand's CanExecute. -->
+        <Button Style="{StaticResource OutlineBtn}"
+                Margin="0,0,6,0"
+                Visibility="{Binding ShowTranslations, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisibilityConverter}}"
+                Command="{Binding TranslationsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="🌐  " FontSize="12"/>
+                <TextBlock Text="{Binding TranslationsLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- Divider + Refresh (toggled by ShowRefresh, default visible) -->
+        <StackPanel Orientation="Horizontal"
+                    Visibility="{Binding ShowRefresh, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Width="1" Height="18" Background="{StaticResource BrandBorder}" Margin="4,0,10,0"/>
+            <Button Style="{StaticResource OutlineBtn}"
+                    Command="{Binding RefreshCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🔄  " FontSize="12"/>
+                    <TextBlock Text="{Binding RefreshLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+    </StackPanel>
+    </Border>
+</UserControl>

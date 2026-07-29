@@ -1,0 +1,57 @@
+<!--
+    Modifier Group Edit Form — inline UserControl
+    Shown/hidden via IsEditingGroup visibility toggle on the parent.
+    DataContext: ModifierGroupManagementViewModel
+-->
+<UserControl x:Class="UI.Views.Modifiers.ModifierGroupEditFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="400">
+
+    <Border Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
+            BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,12">
+        <StackPanel>
+            <TextBlock Text="Group Details" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+
+            <!-- Name -->
+            <TextBlock Text="Name" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding EditGroupName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Padding="8,6" Margin="0,0,0,10"/>
+
+            <!-- Group Type -->
+            <TextBlock Text="Selection Type" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+            <ComboBox SelectedValue="{Binding EditGroupType}" SelectedValuePath="Value"
+                      DisplayMemberPath="Value" ItemsSource="{Binding GroupTypeOptions}" Margin="0,0,0,10"/>
+
+            <!-- Required + Active -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <CheckBox Content="Required" IsChecked="{Binding EditIsRequired}" Margin="0,0,16,0" FontSize="12"/>
+                <CheckBox Content="Active" IsChecked="{Binding EditIsActive}" FontSize="12"/>
+            </StackPanel>
+
+            <!-- Min / Max / Order -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <StackPanel Margin="0,0,12,0">
+                    <TextBlock Text="Min Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding EditMinSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,12,0">
+                    <TextBlock Text="Max Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding EditMaxSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Display Order" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding EditSortOrder, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Save / Cancel -->
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource PrimaryGradientBtn}" Content="Save" Command="{Binding SaveGroupCommand}" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelGroupEditCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

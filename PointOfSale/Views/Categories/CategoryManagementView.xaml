@@ -9,6 +9,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
              mc:Ignorable="d"
              d:DesignWidth="1200" d:DesignHeight="820">
 
@@ -149,49 +150,17 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Action buttons -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-
-                    <!-- Add -->
-                    <Button Style="{StaticResource PrimaryGradientBtn}"
-                            Margin="0,0,6,0"
-                            Command="{Binding AddCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
-                            <TextBlock Text="{DynamicResource Common.Add}" FontSize="12" FontWeight="Medium" Foreground="White"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Edit -->
-                    <Button Style="{StaticResource OutlineBtn}"
-                            Margin="0,0,6,0"
-                            IsEnabled="{Binding HasSelection}"
-                            Command="{Binding EditCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="✏  " FontSize="12"/>
-                            <TextBlock Text="{DynamicResource Common.Edit}" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Delete -->
-                    <Button Style="{StaticResource DangerBtn}"
-                            Margin="0,0,6,0"
-                            IsEnabled="{Binding HasSelection}"
-                            Command="{Binding DeleteCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗑  " FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                            <TextBlock Text="{DynamicResource Common.Delete}" FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Refresh -->
-                    <Button Style="{StaticResource OutlineBtn}"
-                            Command="{Binding RefreshCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🔄  " FontSize="12"/>
-                            <TextBlock Text="{DynamicResource Common.Refresh}" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                <controls:CrudActionButtons Grid.Column="0"
+                                             AddCommand="{Binding AddCommand}"
+                                             AddLabel="{DynamicResource Common.Add}"
+                                             EditCommand="{Binding EditCommand}"
+                                             EditEnabled="{Binding HasSelection}"
+                                             EditLabel="{DynamicResource Common.Edit}"
+                                             DeleteCommand="{Binding DeleteCommand}"
+                                             DeleteEnabled="{Binding HasSelection}"
+                                             DeleteLabel="{DynamicResource Common.Delete}"
+                                             RefreshCommand="{Binding RefreshCommand}"
+                                             RefreshLabel="{DynamicResource Common.Refresh}"/>
 
                 <!-- Search box -->
                 <Border Grid.Column="2"

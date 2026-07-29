@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
              mc:Ignorable="d"
              d:DesignWidth="1420" d:DesignHeight="820"
              Background="#F5F6FA">
@@ -35,30 +36,13 @@
                            Foreground="{StaticResource TextDark}"
                            VerticalAlignment="Center"/>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="＋ Add"
-                            Style="{StaticResource PrimaryGradientBtn}"
-                            Padding="14,0"
-                            Margin="0,0,6,0"
-                            Command="{Binding AddProductCommand}"/>
-                    <Button Content="✏ Edit"
-                            Style="{StaticResource OutlineBtn}"
-                            Padding="14,0"
-                            Margin="0,0,6,0"
-                            Command="{Binding EditProductCommand}"
-                            IsEnabled="{Binding CanEdit}"/>
-                    <Button Content="🗑 Delete"
-                            Style="{StaticResource DangerBtn}"
-                            Padding="14,0"
-                            Margin="0,0,6,0"
-                            Command="{Binding DeleteProductCommand}"
-                            IsEnabled="{Binding CanDelete}"/>
-                    <Border Width="1" Height="18" Background="{StaticResource BrandBorder}" Margin="4,0,10,0"/>
-                    <Button Content="🔄 Refresh"
-                            Style="{StaticResource OutlineBtn}"
-                            Padding="14,0"
-                            Command="{Binding RefreshCommand}"/>
-                </StackPanel>
+                <controls:CrudActionButtons Grid.Column="1" VerticalAlignment="Center"
+                                             AddCommand="{Binding AddProductCommand}"
+                                             EditCommand="{Binding EditProductCommand}"
+                                             EditEnabled="{Binding CanEdit}"
+                                             DeleteCommand="{Binding DeleteProductCommand}"
+                                             DeleteEnabled="{Binding CanDelete}"
+                                             RefreshCommand="{Binding RefreshCommand}"/>
             </Grid>
         </Border>
 

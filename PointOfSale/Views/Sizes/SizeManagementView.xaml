@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
              mc:Ignorable="d"
              d:DesignWidth="1200" d:DesignHeight="820"
              Background="#F5F6FA">
@@ -41,48 +42,16 @@
                 CornerRadius="10"
                 Padding="12,9"
                 Margin="0,0,0,10">
-            <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource PrimaryGradientBtn}" Margin="0,0,6,0" Command="{Binding AddCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
-                        <TextBlock Text="Add" FontSize="12" FontWeight="Medium" Foreground="White"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0"
-                        IsEnabled="{Binding HasSelection}"
-                        Command="{Binding EditCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="✏  " FontSize="12"/>
-                        <TextBlock Text="Edit" FontSize="12"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Style="{StaticResource DangerBtn}" Margin="0,0,6,0"
-                        IsEnabled="{Binding HasSelection}"
-                        Command="{Binding DeleteCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🗑  " FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                        <TextBlock Text="Delete" FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0"
-                        IsEnabled="{Binding HasSelection}"
-                        Command="{Binding TranslationsCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🌐  " FontSize="12"/>
-                        <TextBlock Text="Translations" FontSize="12"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Style="{StaticResource OutlineBtn}" Command="{Binding RefreshCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🔄  " FontSize="12"/>
-                        <TextBlock Text="Refresh" FontSize="12"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+            <controls:CrudActionButtons
+                AddCommand="{Binding AddCommand}"
+                EditCommand="{Binding EditCommand}"
+                EditEnabled="{Binding HasSelection}"
+                DeleteCommand="{Binding DeleteCommand}"
+                DeleteEnabled="{Binding HasSelection}"
+                ShowTranslations="True"
+                TranslationsCommand="{Binding TranslationsCommand}"
+                TranslationsEnabled="{Binding HasSelection}"
+                RefreshCommand="{Binding RefreshCommand}"/>
         </Border>
 
         <!-- Content -->

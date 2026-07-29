@@ -11,7 +11,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
         Title="{DynamicResource Common.Category}"
-        Width="440" Height="400"
+        Width="440" Height="500"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
@@ -25,43 +25,26 @@
                 <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-        <!-- ── Field label ── -->
-        <Style x:Key="FieldLabel" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Margin"     Value="0,0,0,5"/>
-        </Style>
-
-        <!-- ── Input field border ── -->
-        <Style x:Key="InputBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius"    Value="8"/>
-            <Setter Property="Height"          Value="36"/>
-        </Style>
-
-        <!-- ── TextBox inside input ── -->
+        <!-- ── Field TextBox (no central equivalent — DialogChrome only styles the border) ── -->
         <Style x:Key="FieldTextBox" TargetType="TextBox">
             <Setter Property="Background"               Value="Transparent"/>
             <Setter Property="BorderThickness"          Value="0"/>
-            <Setter Property="FontSize"                 Value="13"/>
-            <Setter Property="Foreground"               Value="{StaticResource TextDark}"/>
-            <Setter Property="CaretBrush"               Value="{StaticResource BrandDark}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding"                  Value="10,0"/>
-            <Setter Property="FocusVisualStyle"         Value="{x:Null}"/>
+            <Setter Property="FontSize"                 Value="12.5"/>
+            <Setter Property="Foreground"               Value="{StaticResource ModalTextDark}"/>
+            <Setter Property="CaretBrush"                Value="{StaticResource ModalBrandDark}"/>
+            <Setter Property="VerticalContentAlignment"  Value="Center"/>
+            <Setter Property="Padding"                   Value="10,0"/>
+            <Setter Property="FocusVisualStyle"          Value="{x:Null}"/>
         </Style>
 
-        <!-- ── ComboBox ── -->
+        <!-- ── ComboBox (local — identical metrics to ProductFormView's version) ── -->
         <Style x:Key="FieldComboBox" TargetType="ComboBox">
-            <Setter Property="Background"               Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush"              Value="{StaticResource BrandBorder}"/>
+            <Setter Property="Background"               Value="{StaticResource ModalBrandLight}"/>
+            <Setter Property="BorderBrush"              Value="{StaticResource ModalBrandBorder}"/>
             <Setter Property="BorderThickness"          Value="1"/>
-            <Setter Property="FontSize"                 Value="13"/>
-            <Setter Property="Foreground"               Value="{StaticResource TextDark}"/>
-            <Setter Property="Height"                   Value="36"/>
+            <Setter Property="FontSize"                 Value="12.5"/>
+            <Setter Property="Foreground"               Value="{StaticResource ModalTextDark}"/>
+            <Setter Property="Height"                   Value="40"/>
             <Setter Property="Padding"                  Value="10,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FocusVisualStyle"         Value="{x:Null}"/>
@@ -82,12 +65,12 @@
                                 <TextBlock Text="{Binding SelectedItem.DisplayName,
                                             RelativeSource={RelativeSource TemplatedParent}}"
                                            VerticalAlignment="Center"
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextDark}"/>
+                                           FontSize="12.5"
+                                           Foreground="{StaticResource ModalTextDark}"/>
                                 <TextBlock Grid.Column="1"
                                            Text="▾"
                                            FontSize="10"
-                                           Foreground="{StaticResource BrandDark}"
+                                           Foreground="{StaticResource ModalBrandDark}"
                                            VerticalAlignment="Center"/>
                             </Grid>
                             <ToggleButton IsChecked="{Binding IsDropDownOpen,
@@ -103,7 +86,7 @@
                                    Placement="Bottom"
                                    AllowsTransparency="True">
                                 <Border Background="White"
-                                        BorderBrush="{StaticResource BrandBorder}"
+                                        BorderBrush="{StaticResource ModalBrandBorder}"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Margin="0,4,0,0"
@@ -117,7 +100,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bg" Property="BorderBrush"
-                                        Value="{StaticResource BrandDark}"/>
+                                        Value="{StaticResource ModalBrandDark}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -127,13 +110,13 @@
 
         <Style TargetType="ComboBoxItem">
             <Setter Property="Padding"  Value="10,8"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBoxItem">
                         <Border x:Name="Bg" Background="Transparent" Padding="{TemplateBinding Padding}">
-                            <TextBlock Text="{Binding DisplayName}" FontSize="13" Foreground="{StaticResource TextDark}"/>
+                            <TextBlock Text="{Binding DisplayName}" FontSize="12.5" Foreground="{StaticResource ModalTextDark}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
@@ -147,12 +130,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- ── Save (primary) button ── -->
-        
-
-        <!-- ── Cancel button ── -->
-        
 
         </ResourceDictionary>
     </Window.Resources>
@@ -172,10 +149,6 @@
                 HorizontalAlignment="Center"
                 Style="{StaticResource ModalCardBorder}"
                 MouseDown="DialogCard_MouseDown">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="24" ShadowDepth="6"
-                                  Direction="270" Opacity="0.14" Color="#1A3A5C"/>
-            </Border.Effect>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -185,8 +158,6 @@
                     <!-- Error           -->
                     <RowDefinition Height="*"/>
                     <!-- Fields          -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Action buttons  -->
                     <RowDefinition Height="Auto"/>
                     <!-- Footer          -->
                 </Grid.RowDefinitions>
@@ -201,10 +172,19 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding DialogTitle, FallbackValue='Add Category'}"
-                                   FontSize="14" FontWeight="Medium"
-                                   Foreground="{StaticResource ModalTextDark}"
-                                   VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="28" Height="28" CornerRadius="7"
+                                    Background="{StaticResource ModalBrandDark}"
+                                    Margin="0,0,10,0">
+                                <TextBlock Text="🏷" FontSize="13"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{Binding DialogTitle, FallbackValue='Add Category'}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{StaticResource ModalTextDark}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
 
                         <!-- ✕ close -->
                         <Button Grid.Column="1"
@@ -220,14 +200,14 @@
                         Background="{StaticResource ModalErrorBg}"
                         BorderBrush="{StaticResource ModalErrorBorder}"
                         BorderThickness="1"
-                        CornerRadius="7"
-                        Padding="12,8"
+                        CornerRadius="8"
+                        Padding="12,9"
                         Margin="18,12,18,0"
                         Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
                         <TextBlock Text="{Binding ErrorMessage}"
-                                   FontSize="12"
+                                   FontSize="11.5"
                                    Foreground="{StaticResource ModalErrorFg}"
                                    TextWrapping="Wrap"
                                    VerticalAlignment="Center"/>
@@ -238,8 +218,8 @@
                 <StackPanel Grid.Row="2" Margin="18,16,18,8">
 
                     <!-- Name -->
-                        <TextBlock Text="{DynamicResource Common.Name}" Style="{StaticResource ModalLabel}"/>
-                    <Border Style="{StaticResource ModalInputBorder}" Margin="0,0,0,14">
+                    <TextBlock Text="{DynamicResource Common.Name}" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,16">
                         <TextBox x:Name="NameBox"
                                  Style="{StaticResource FieldTextBox}"
                                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
@@ -251,59 +231,79 @@
                     </Border>
 
                     <!-- Parent Category -->
-                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryLabel}" Style="{StaticResource ModalLabel}"/>
+                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryLabel}" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
                     <ComboBox Style="{StaticResource FieldComboBox}"
                               ItemsSource="{Binding ParentCategoryOptions}"
                               SelectedItem="{Binding SelectedParent}"
                               DisplayMemberPath="DisplayName"
-                              Margin="0,0,0,4"/>
+                              Margin="0,0,0,5"/>
                     <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryHint}"
-                               FontSize="10"
-                               Foreground="{StaticResource TextMuted}"
-                               Margin="0,0,0,14"/>
+                               FontSize="10.5"
+                               Foreground="{StaticResource ModalTextMuted}"
+                               Margin="0,0,0,18"/>
 
                     <!-- Icon -->
-                    <TextBlock Text="{DynamicResource Common.Icon}" Style="{StaticResource ModalLabel}"/>
-                    <Border Style="{StaticResource ModalInputBorder}" Width="80" HorizontalAlignment="Left">
-                        <TextBox Style="{StaticResource FieldTextBox}"
-                                 Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"
-                                 MaxLength="2"
-                                 TextAlignment="Center"
-                                 FontSize="18">
-                            <TextBox.Resources>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                                 Color="#B8D8F5"/>
-                            </TextBox.Resources>
-                        </TextBox>
-                    </Border>
+                    <TextBlock Text="{DynamicResource Common.Icon}" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                </StackPanel>
+                        <Border Grid.Column="0"
+                                Style="{StaticResource ModalInputBorder}"
+                                Width="56" Height="56">
+                            <TextBox Style="{StaticResource FieldTextBox}"
+                                     Text="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"
+                                     MaxLength="2"
+                                     TextAlignment="Center"
+                                     Padding="0"
+                                     FontSize="22">
+                                <TextBox.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                                     Color="#B8D8F5"/>
+                                </TextBox.Resources>
+                            </TextBox>
+                        </Border>
 
-                <!-- ── ACTION BUTTONS (Translations) ── -->
-                <StackPanel Grid.Row="3" Orientation="Horizontal"
-                            HorizontalAlignment="Center" Margin="16,6,16,2">
-                    <Button Style="{StaticResource OutlineBtn}"
-                            Content="🌐 Translations..."
-                            Command="{Binding TranslationsCommand}"
-                            Padding="14,0"/>
+                        <TextBlock Grid.Column="2"
+                                   Text="A short emoji or symbol used to identify this category at a glance."
+                                   FontSize="10.5"
+                                   Foreground="{StaticResource ModalTextMuted}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+
                 </StackPanel>
 
                 <!-- ── Footer ── -->
-                <Border Grid.Row="4"
-                        Background="{StaticResource BrandLight}"
-                        BorderBrush="{StaticResource BrandBorder}"
-                        BorderThickness="0,0.5,0,0"
-                        CornerRadius="0,0,14,14"
+                <Border Grid.Row="3"
+                        Style="{StaticResource ModalFooterBorder}"
                         Padding="18,12">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource OutlineBtn}"
-                                Content="{DynamicResource Common.Cancel}"
-                                Margin="0,0,10,0"
-                                Command="{Binding CancelCommand}"/>
-                        <Button Style="{StaticResource PrimaryGradientBtn}"
-                                Content="{DynamicResource Common.Save}"
-                                Command="{Binding SaveCommand}"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource OutlineBtn}"
+                                Content="🌐 Translations…"
+                                Command="{Binding TranslationsCommand}"
+                                HorizontalAlignment="Left"
+                                Padding="14,0"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource OutlineBtn}"
+                                    Content="{DynamicResource Common.Cancel}"
+                                    Margin="0,0,10,0"
+                                    Command="{Binding CancelCommand}"/>
+                            <Button Style="{StaticResource PrimaryGradientBtn}"
+                                    Content="{DynamicResource Common.Save}"
+                                    Command="{Binding SaveCommand}"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
 
             </Grid>

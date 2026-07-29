@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
         Title="Product"
-        Width="520" Height="520"
+        Width="560" Height="660"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
@@ -20,53 +20,50 @@
                 <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-        <!-- ── Field label ── -->
-        <Style x:Key="FieldLabel" TargetType="TextBlock">
-            <Setter Property="FontSize"   Value="11"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
-            <Setter Property="Margin"     Value="0,0,0,4"/>
+        <!-- ── Section caption — small-caps group header used to chunk the form ── -->
+        <Style x:Key="SectionCaption" TargetType="TextBlock">
+            <Setter Property="FontSize"     Value="10"/>
+            <Setter Property="FontWeight"   Value="SemiBold"/>
+            <Setter Property="Foreground"   Value="{StaticResource ModalTextMuted}"/>
         </Style>
 
-        <!-- ── Input border ── -->
-        <Style x:Key="InputBorder" TargetType="Border">
-            <Setter Property="Background"      Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush"     Value="{StaticResource BrandBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius"    Value="7"/>
-            <Setter Property="Height"          Value="34"/>
-        </Style>
-
-        <!-- ── TextBox ── -->
+        <!-- ── Field TextBox (no central equivalent — DialogChrome only styles the border) ── -->
         <Style x:Key="FieldTextBox" TargetType="TextBox">
             <Setter Property="Background"               Value="Transparent"/>
             <Setter Property="BorderThickness"          Value="0"/>
-            <Setter Property="FontSize"                 Value="12"/>
-            <Setter Property="Foreground"               Value="{StaticResource TextDark}"/>
-            <Setter Property="CaretBrush"               Value="{StaticResource BrandDark}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding"                  Value="9,0"/>
-            <Setter Property="FocusVisualStyle"         Value="{x:Null}"/>
+            <Setter Property="FontSize"                 Value="12.5"/>
+            <Setter Property="Foreground"               Value="{StaticResource ModalTextDark}"/>
+            <Setter Property="CaretBrush"                Value="{StaticResource ModalBrandDark}"/>
+            <Setter Property="VerticalContentAlignment"  Value="Center"/>
+            <Setter Property="Padding"                   Value="10,0"/>
+            <Setter Property="FocusVisualStyle"          Value="{x:Null}"/>
         </Style>
 
-        <!-- ── Multiline TextBox ── -->
-        <Style x:Key="FieldTextBoxMulti" TargetType="TextBox"
-               BasedOn="{StaticResource FieldTextBox}">
+        <Style x:Key="FieldTextBoxMulti" TargetType="TextBox" BasedOn="{StaticResource FieldTextBox}">
             <Setter Property="AcceptsReturn"            Value="True"/>
             <Setter Property="TextWrapping"             Value="Wrap"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
-            <Setter Property="Padding"                  Value="9,7"/>
+            <Setter Property="Padding"                  Value="10,8"/>
         </Style>
 
-        <!-- ── ComboBox ── -->
+        <!-- ── CheckBox (no central equivalent) ── -->
+        <Style x:Key="FieldCheckBox" TargetType="CheckBox">
+            <Setter Property="FontSize"                 Value="12.5"/>
+            <Setter Property="Foreground"               Value="{StaticResource ModalTextDark}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor"                   Value="Hand"/>
+        </Style>
+
+        <!-- ── ComboBox (local — DialogChrome has no ComboBox style; kept identical
+                 in shape/metrics to AddEditCategoryDialog's version for consistency) ── -->
         <Style x:Key="FieldComboBox" TargetType="ComboBox">
-            <Setter Property="Background"               Value="{StaticResource BrandLight}"/>
-            <Setter Property="BorderBrush"              Value="{StaticResource BrandBorder}"/>
+            <Setter Property="Background"               Value="{StaticResource ModalBrandLight}"/>
+            <Setter Property="BorderBrush"              Value="{StaticResource ModalBrandBorder}"/>
             <Setter Property="BorderThickness"          Value="1"/>
-            <Setter Property="FontSize"                 Value="12"/>
-            <Setter Property="Foreground"               Value="{StaticResource TextDark}"/>
-            <Setter Property="Height"                   Value="34"/>
-            <Setter Property="Padding"                  Value="9,0"/>
+            <Setter Property="FontSize"                 Value="12.5"/>
+            <Setter Property="Foreground"               Value="{StaticResource ModalTextDark}"/>
+            <Setter Property="Height"                   Value="40"/>
+            <Setter Property="Padding"                  Value="10,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FocusVisualStyle"         Value="{x:Null}"/>
             <Setter Property="Template">
@@ -77,7 +74,7 @@
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="7"/>
+                                    CornerRadius="8"/>
                             <Grid Margin="{TemplateBinding Padding}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -86,7 +83,7 @@
                                 <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
                                                   VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="▾" FontSize="10"
-                                           Foreground="{StaticResource BrandDark}"
+                                           Foreground="{StaticResource ModalBrandDark}"
                                            VerticalAlignment="Center"/>
                             </Grid>
                             <ToggleButton IsChecked="{Binding IsDropDownOpen,
@@ -101,9 +98,9 @@
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
                                    Placement="Bottom" AllowsTransparency="True">
                                 <Border Background="White"
-                                        BorderBrush="{StaticResource BrandBorder}"
-                                        BorderThickness="1" CornerRadius="7"
-                                        Margin="0,3,0,0"
+                                        BorderBrush="{StaticResource ModalBrandBorder}"
+                                        BorderThickness="1" CornerRadius="8"
+                                        Margin="0,4,0,0"
                                         MinWidth="{TemplateBinding ActualWidth}">
                                     <ScrollViewer MaxHeight="200">
                                         <ItemsPresenter/>
@@ -114,7 +111,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bg" Property="BorderBrush"
-                                        Value="{StaticResource BrandDark}"/>
+                                        Value="{StaticResource ModalBrandDark}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -123,9 +120,9 @@
         </Style>
 
         <Style TargetType="ComboBoxItem">
-            <Setter Property="Padding"    Value="9,7"/>
-            <Setter Property="FontSize"   Value="12"/>
-            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="Padding"    Value="10,8"/>
+            <Setter Property="FontSize"   Value="12.5"/>
+            <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBoxItem">
@@ -146,51 +143,47 @@
             </Setter>
         </Style>
 
-        <!-- ── CheckBox ── -->
-        <Style x:Key="FieldCheckBox" TargetType="CheckBox">
-            <Setter Property="FontSize"                Value="12"/>
-            <Setter Property="Foreground"              Value="{StaticResource TextDark}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <!-- ── Inline validation / info banner ── -->
+        <Style x:Key="WarningBanner" TargetType="Border">
+            <Setter Property="Background"      Value="{StaticResource ModalErrorBg}"/>
+            <Setter Property="BorderBrush"     Value="{StaticResource ModalErrorBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius"    Value="8"/>
+            <Setter Property="Padding"         Value="12,9"/>
         </Style>
 
         </ResourceDictionary>
     </Window.Resources>
 
-    <!-- Transparent background — click outside closes dialog -->
+    <!-- Transparent-tinted overlay — click outside the card closes the dialog -->
     <Grid x:Name="OverlayGrid"
-          Background="Transparent"
+          Background="#4D0F2A4A"
           MouseDown="OverlayGrid_MouseDown">
 
         <!-- Dialog card -->
         <Border x:Name="DialogCard"
-                Width="480"
+                Width="560"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Style="{StaticResource ModalCardBorder}"
                 MouseDown="DialogCard_MouseDown">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="28" ShadowDepth="6"
-                                  Direction="270" Opacity="0.13" Color="#1A3A5C"/>
-            </Border.Effect>
 
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Header         -->
+                    <!-- Header          -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Exists warning -->
+                    <!-- Warning banners -->
                     <RowDefinition Height="*"/>
-                    <!-- Form body      -->
+                    <!-- Form body       -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Action buttons -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Footer         -->
+                    <!-- Footer          -->
                 </Grid.RowDefinitions>
 
                 <!-- ── HEADER ── -->
                 <Border Grid.Row="0"
                         Style="{StaticResource ModalHeaderBorder}"
-                        Padding="16,12">
+                        Padding="18,14">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -200,13 +193,13 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Width="28" Height="28" CornerRadius="7"
                                     Background="{StaticResource ModalBrandDark}"
-                                    Margin="0,0,9,0">
+                                    Margin="0,0,10,0">
                                 <TextBlock Text="📦" FontSize="14"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Text="{Binding FormTitle, FallbackValue='Add Product'}"
-                                       FontSize="13" FontWeight="Medium"
+                                       FontSize="14" FontWeight="SemiBold"
                                        Foreground="{StaticResource ModalTextDark}"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
@@ -218,110 +211,111 @@
                     </Grid>
                 </Border>
 
-                <!-- ── DUPLICATE WARNING ── -->
-                <Border Grid.Row="1"
-                        Background="{StaticResource ModalErrorBg}"
-                        BorderBrush="{StaticResource ModalErrorBorder}"
-                        BorderThickness="1" CornerRadius="7"
-                        Padding="11,8" Margin="16,10,16,0"
-                        Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
-                        <TextBlock Text="A product with this name already exists in the selected category."
-                                   FontSize="11" Foreground="{StaticResource ModalErrorFg}"
-                                   TextWrapping="Wrap" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                <!-- ── WARNING / ERROR BANNERS ── -->
+                <StackPanel Grid.Row="1" Margin="18,12,18,0">
 
-                <!-- ── FORM BODY ── -->
-                <Grid Grid.Row="2" Margin="16,14,16,4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="14"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Name | Category  -->
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Price | Tax       -->
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Is Active | Addl  -->
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Description       -->
-                    </Grid.RowDefinitions>
-
-                    <!-- ROW 0 · Product Name | Category -->
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <TextBlock Text="Product Name" Style="{StaticResource FieldLabel}"/>
-                        <Border Style="{StaticResource InputBorder}">
-                            <TextBox Style="{StaticResource FieldTextBox}"
-                                     Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Resources>
-                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                                     Color="#B8D8F5"/>
-                                </TextBox.Resources>
-                            </TextBox>
-                        </Border>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="0" Grid.Column="2">
-                        <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
-                        <ComboBox Style="{StaticResource FieldComboBox}"
-                                  ItemsSource="{Binding CategoryOptions}"
-                                  SelectedItem="{Binding SelectedCategory}"
-                                  DisplayMemberPath="Name"/>
-                    </StackPanel>
-
-                    <!-- ROW 2 · Price | Tax -->
-                    <StackPanel Grid.Row="2" Grid.Column="0">
-                        <TextBlock Text="Price (AED)" Style="{StaticResource FieldLabel}"/>
-                        <Border Style="{StaticResource InputBorder}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="AED"
-                                           FontSize="10" Foreground="{StaticResource TextMuted}"
-                                           VerticalAlignment="Center" Margin="9,0,0,0"/>
-                                <TextBox Grid.Column="1"
-                                         Style="{StaticResource FieldTextBox}"
-                                         Text="{Binding Price, UpdateSourceTrigger=PropertyChanged,
-                                                StringFormat=N2}"/>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="2" Grid.Column="2">
-                        <TextBlock Text="Tax" Style="{StaticResource FieldLabel}"/>
-                        <ComboBox Style="{StaticResource FieldComboBox}"
-                                  ItemsSource="{Binding TaxOptions}"
-                                  SelectedItem="{Binding SelectedTax}"
-                                  DisplayMemberPath="Name"/>
-                    </StackPanel>
-
-                    <!-- ROW 4 · Is Active | Additional Tax -->
-                    <Border Grid.Row="4" Grid.Column="0"
-                            Background="{StaticResource BrandLight}"
-                            BorderBrush="{StaticResource BrandBorder}"
-                            BorderThickness="1" CornerRadius="7"
-                            Height="34" Padding="9,0">
-                        <CheckBox Style="{StaticResource FieldCheckBox}"
-                                  Content="Is active (visible to cashiers)"
-                                  IsChecked="{Binding IsActive}"
-                                  VerticalAlignment="Center"/>
+                    <!-- General validation error (required fields, negative price, etc.) -->
+                    <Border Style="{StaticResource WarningBanner}"
+                            Margin="0,0,0,8"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       FontSize="11.5" Foreground="{StaticResource ModalErrorFg}"
+                                       TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Border>
 
-                    <StackPanel Grid.Row="4" Grid.Column="2">
-                        <CheckBox Style="{StaticResource FieldCheckBox}"
+                    <!-- Duplicate product name warning -->
+                    <Border Style="{StaticResource WarningBanner}"
+                            Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠ " FontSize="13" Foreground="{StaticResource ModalErrorFg}"/>
+                            <TextBlock Text="A product with this name already exists in the selected category."
+                                       FontSize="11.5" Foreground="{StaticResource ModalErrorFg}"
+                                       TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ── FORM BODY ── -->
+                <StackPanel Grid.Row="2" Margin="18,16,18,6">
+
+                    <!-- ═══ Basic Information ═══ -->
+                    <TextBlock Text="BASIC INFORMATION" Style="{StaticResource SectionCaption}" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Product Name" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                    <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,12">
+                        <TextBox Style="{StaticResource FieldTextBox}"
+                                 Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                                 Color="#B8D8F5"/>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </Border>
+
+                    <TextBlock Text="Category" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                    <ComboBox Style="{StaticResource FieldComboBox}"
+                              ItemsSource="{Binding CategoryOptions}"
+                              SelectedItem="{Binding SelectedCategory}"
+                              DisplayMemberPath="Name"
+                              Margin="0,0,0,18"/>
+
+                    <!-- ═══ Pricing &amp; Tax ═══ -->
+                    <TextBlock Text="PRICING &amp; TAX" Style="{StaticResource SectionCaption}" Margin="0,0,0,10"/>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Price (AED)" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                            <Border Style="{StaticResource ModalInputBorder}" Height="40">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="AED"
+                                               FontSize="10" Foreground="{StaticResource ModalTextMuted}"
+                                               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    <TextBox Grid.Column="1"
+                                             Style="{StaticResource FieldTextBox}"
+                                             Text="{Binding Price, UpdateSourceTrigger=PropertyChanged,
+                                                    StringFormat=N2}"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Tax" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                            <ComboBox Style="{StaticResource FieldComboBox}"
+                                      ItemsSource="{Binding TaxOptions}"
+                                      SelectedItem="{Binding SelectedTax}"
+                                      DisplayMemberPath="Name"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Additional tax — checkbox + conditional amount, grouped with Pricing -->
+                    <Grid Margin="0,0,0,18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Column="0"
+                                  Style="{StaticResource FieldCheckBox}"
                                   Content="Additional tax"
                                   IsChecked="{Binding HasAdditionalTax}"
-                                  Margin="0,0,0,6"/>
-                        <Border Style="{StaticResource InputBorder}"
+                                  VerticalAlignment="Center"/>
+
+                        <Border Grid.Column="2"
+                                Style="{StaticResource ModalInputBorder}" Height="36"
                                 Visibility="{Binding HasAdditionalTax, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -329,56 +323,68 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="AED"
-                                           FontSize="10" Foreground="{StaticResource TextMuted}"
-                                           VerticalAlignment="Center" Margin="9,0,0,0"/>
+                                           FontSize="10" Foreground="{StaticResource ModalTextMuted}"
+                                           VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <TextBox Grid.Column="1"
                                          Style="{StaticResource FieldTextBox}"
                                          Text="{Binding AdditionalTaxAmount,
                                                 UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </Border>
-                    </StackPanel>
+                    </Grid>
 
-                    <!-- ROW 6 · Description (full width, optional) -->
-                    <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
-                        <TextBlock Style="{StaticResource FieldLabel}">
-                            <Run Text="Description"/>
-                            <Run Text=" (optional)"
-                                 Foreground="{StaticResource TextMuted}"
-                                 FontWeight="Normal"/>
-                        </TextBlock>
-                        <Border Background="{StaticResource BrandLight}"
-                                BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1" CornerRadius="7" Height="58">
-                            <TextBox Style="{StaticResource FieldTextBoxMulti}"
-                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Border>
-                    </StackPanel>
+                    <!-- ═══ Visibility &amp; Notes ═══ -->
+                    <TextBlock Text="VISIBILITY &amp; NOTES" Style="{StaticResource SectionCaption}" Margin="0,0,0,10"/>
 
-                </Grid>
+                    <Border Background="{StaticResource ModalBrandLight}"
+                            BorderBrush="{StaticResource ModalBrandBorder}"
+                            BorderThickness="1" CornerRadius="8"
+                            Padding="12,11" Margin="0,0,0,14">
+                        <CheckBox Style="{StaticResource FieldCheckBox}"
+                                  Content="Is active (visible to cashiers)"
+                                  IsChecked="{Binding IsActive}"
+                                  FontWeight="Medium"/>
+                    </Border>
 
-                <!-- ── ACTION BUTTONS (Translations) ── -->
-                <StackPanel Grid.Row="3" Orientation="Horizontal"
-                            HorizontalAlignment="Center" Margin="16,6,16,2">
-                    <Button Style="{StaticResource OutlineBtn}"
-                            Content="🌐 Translations..."
-                            Command="{Binding TranslationsCommand}"
-                            Padding="14,0"/>
+                    <TextBlock Style="{StaticResource ModalLabel}" Margin="0,0,0,6">
+                        <Run Text="Description"/>
+                        <Run Text=" · optional"
+                             Foreground="{StaticResource ModalTextMuted}"
+                             FontWeight="Normal"/>
+                    </TextBlock>
+                    <Border Style="{StaticResource ModalInputBorder}" Height="66">
+                        <TextBox Style="{StaticResource FieldTextBoxMulti}"
+                                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+
                 </StackPanel>
 
                 <!-- ── FOOTER ── -->
-                <Border Grid.Row="4"
+                <Border Grid.Row="3"
                         Style="{StaticResource ModalFooterBorder}"
-                        CornerRadius="0,0,14,14"
-                        Padding="16,10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource OutlineBtn}"
-                                Content="Cancel" Margin="0,0,8,0"
-                                Command="{Binding CancelCommand}"/>
-                        <Button Style="{StaticResource PrimaryGradientBtn}"
-                                Content="{Binding SaveButtonLabel, FallbackValue='Save Product'}"
-                                Command="{Binding SaveCommand}"/>
-                    </StackPanel>
+                        Padding="18,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource OutlineBtn}"
+                                Content="🌐 Translations…"
+                                Command="{Binding TranslationsCommand}"
+                                HorizontalAlignment="Left"
+                                Padding="14,0"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource OutlineBtn}"
+                                    Content="Cancel" Margin="0,0,8,0"
+                                    Command="{Binding CancelCommand}"/>
+                            <Button Style="{StaticResource PrimaryGradientBtn}"
+                                    Content="{Binding SaveButtonLabel, FallbackValue='Save Product'}"
+                                    Command="{Binding SaveCommand}"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
 
             </Grid>

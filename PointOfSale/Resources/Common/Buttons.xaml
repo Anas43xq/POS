@@ -14,6 +14,17 @@
     <SolidColorBrush x:Key="DisabledBg"   Color="#E2E8F0"/>
     <SolidColorBrush x:Key="DisabledFg"   Color="#94A3B8"/>
 
+    <!--
+        Light-gray surfaces used by the CRUD toolbar's secondary actions
+        (Edit / Delete). Both styles share a neutral gray fill so the
+        toolbar reads as one row, while the icon + label color carries
+        the semantic meaning (green = edit, red = destructive).
+    -->
+    <SolidColorBrush x:Key="CrudNeutralBg"     Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="CrudNeutralBorder" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="CrudNeutralHover"  Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="CrudNeutralPress"  Color="#B8C2CF"/>
+
     <!-- Primary filled button (Save / Add / Confirm) -->
     <Style x:Key="PrimaryGradientBtn" TargetType="Button">
         <Setter Property="Height" Value="32"/>
@@ -90,6 +101,115 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Bg" Property="Background" Value="#E1EEFC"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource DisabledBg}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledFg}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+        CRUD Edit button — light gray surface with a green
+        pencil icon and matching green label. The neutral gray
+        fill keeps the toolbar visually balanced while the
+        green accent signals a positive/non-destructive action.
+        Used by the CrudActionButtons UserControl for the Edit
+        slot across Product, Category, Size and Modifier Group
+        management.
+    -->
+    <Style x:Key="CrudEditBtn" TargetType="Button">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource SuccessGreen}"/>
+        <Setter Property="Background" Value="{StaticResource CrudNeutralBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrudNeutralBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource CrudNeutralHover}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource SuccessDark}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource CrudNeutralPress}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource DisabledBg}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledFg}"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+        CRUD Delete button — light gray surface with a red
+        trash icon and matching red label. The red color carries
+        the destructive meaning while the gray fill keeps the
+        toolbar visually balanced (does not shout like a solid
+        red button). Used by the CrudActionButtons UserControl
+        for the Delete slot.
+    -->
+    <Style x:Key="CrudDeleteBtn" TargetType="Button">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource DangerMid}"/>
+        <Setter Property="Background" Value="{StaticResource CrudNeutralBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrudNeutralBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bg"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource CrudNeutralHover}"/>
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource DangerMid}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource CrudNeutralPress}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>

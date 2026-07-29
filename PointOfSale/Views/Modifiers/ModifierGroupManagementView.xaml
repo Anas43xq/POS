@@ -7,6 +7,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:modifiers="clr-namespace:UI.Views.Modifiers"
              mc:Ignorable="d"
              d:DesignWidth="1200" d:DesignHeight="820">
 
@@ -48,32 +50,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Button Style="{StaticResource PrimaryGradientBtn}" Margin="0,0,6,0" Command="{Binding AddGroupCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
-                            <TextBlock Text="Add Group" FontSize="12" FontWeight="Medium" Foreground="White"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0" IsEnabled="{Binding HasSelection}" Command="{Binding EditGroupCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="✏  " FontSize="12"/>
-                            <TextBlock Text="Edit" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource DangerBtn}" Margin="0,0,6,0" IsEnabled="{Binding HasSelection}" Command="{Binding DeleteGroupCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗑  " FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                            <TextBlock Text="Delete" FontSize="12" Foreground="{StaticResource DangerRed}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource OutlineBtn}" Command="{Binding RefreshCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🔄  " FontSize="12"/>
-                            <TextBlock Text="Refresh" FontSize="12"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                <controls:CrudActionButtons Grid.Column="0"
+                                             AddCommand="{Binding AddGroupCommand}"
+                                             AddLabel="Add Group"
+                                             EditCommand="{Binding EditGroupCommand}"
+                                             EditEnabled="{Binding HasSelection}"
+                                             DeleteCommand="{Binding DeleteGroupCommand}"
+                                             DeleteEnabled="{Binding HasSelection}"
+                                             RefreshCommand="{Binding RefreshCommand}"/>
                 <!-- Search -->
                 <Border Grid.Column="2" Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
                         BorderThickness="1" CornerRadius="7" Height="32" Width="220">
@@ -151,51 +135,9 @@
                         <!-- ═══ GROUP GENERAL INFO (read mode) ═══ -->
                         <TextBlock Text="GROUP INFORMATION" FontSize="10" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,10"/>
 
-                        <!-- ═══ GROUP EDIT FORM ═══ -->
-                        <Border Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,12"
-                                Visibility="{Binding IsEditingGroup, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <StackPanel>
-                                <TextBlock Text="Group Details" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
-
-                                <!-- Name -->
-                                <TextBlock Text="Name" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding EditGroupName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Padding="8,6" Margin="0,0,0,10"/>
-
-                                <!-- Group Type -->
-                                <TextBlock Text="Selection Type" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                <ComboBox SelectedValue="{Binding EditGroupType}" SelectedValuePath="Value"
-                                          DisplayMemberPath="Value" ItemsSource="{Binding GroupTypeOptions}" Margin="0,0,0,10"/>
-
-                                <!-- Required + Active -->
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <CheckBox Content="Required" IsChecked="{Binding EditIsRequired}" Margin="0,0,16,0" FontSize="12"/>
-                                    <CheckBox Content="Active" IsChecked="{Binding EditIsActive}" FontSize="12"/>
-                                </StackPanel>
-
-                                <!-- Min / Max -->
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <StackPanel Margin="0,0,12,0">
-                                        <TextBlock Text="Min Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding EditMinSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
-                                    </StackPanel>
-                                    <StackPanel Margin="0,0,12,0">
-                                        <TextBlock Text="Max Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding EditMaxSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBlock Text="Display Order" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding EditSortOrder, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <!-- Save / Cancel -->
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryGradientBtn}" Content="Save" Command="{Binding SaveGroupCommand}" Margin="0,0,8,0"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelGroupEditCommand}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                        <!-- ═══ GROUP EDIT FORM (extracted UC) ═══ -->
+                        <modifiers:ModifierGroupEditFormView
+                            Visibility="{Binding IsEditingGroup, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <!-- ═══ MODIFIER OPTIONS ═══ -->
                         <Border BorderBrush="{StaticResource BrandBorder}" BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,0,0,8">
@@ -205,9 +147,14 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="MODIFIER OPTIONS" FontSize="10" FontWeight="Medium" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Style="{StaticResource PrimaryGradientBtn}" Command="{Binding AddOptionCommand}" Height="28" Padding="10,0">
-                                    <TextBlock Text="＋ Add Option" FontSize="11" Foreground="White"/>
-                                </Button>
+                                <controls:CrudActionButtons Grid.Column="1"
+                                                             AddCommand="{Binding AddOptionCommand}"
+                                                             AddLabel="Add Option"
+                                                             EditCommand="{Binding EditOptionCommand}"
+                                                             EditLabel="Edit Option"
+                                                             DeleteCommand="{Binding DeleteOptionCommand}"
+                                                             DeleteLabel="Delete Option"
+                                                             ShowRefresh="False"/>
                             </Grid>
                         </Border>
 
@@ -224,49 +171,12 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <!-- Option action buttons -->
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <Button Style="{StaticResource OutlineBtn}" Margin="0,0,6,0" IsEnabled="{Binding HasOptionSelection}" Command="{Binding EditOptionCommand}">
-                                <TextBlock Text="✏ Edit Option" FontSize="11"/>
-                            </Button>
-                            <Button Style="{StaticResource DangerBtn}" IsEnabled="{Binding HasOptionSelection}" Command="{Binding DeleteOptionCommand}">
-                                <TextBlock Text="🗑 Delete Option" FontSize="11"/>
-                            </Button>
-                        </StackPanel>
+                        <!-- Option action buttons moved to the CrudActionButtons
+                             in the MODIFIER OPTIONS section header above. -->
 
-                        <!-- ═══ OPTION EDIT FORM ═══ -->
-                        <Border Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
-                                BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,10"
-                                Visibility="{Binding IsEditingOption, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <StackPanel>
-                                <TextBlock Text="Option Details" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
-
-                                <TextBlock Text="Name" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding EditOptionName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Padding="8,6" Margin="0,0,0,10"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <StackPanel Margin="0,0,12,0">
-                                        <TextBlock Text="Price Add" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding EditOptionPrice, UpdateSourceTrigger=PropertyChanged}" Width="100" FontSize="13" Padding="8,6"/>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBlock Text="Display Order" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding EditOptionSortOrder, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <CheckBox Content="Allow Quantity" IsChecked="{Binding EditOptionAllowQuantity}" Margin="0,0,16,0" FontSize="12"/>
-                                    <CheckBox Content="Default (Regular)" IsChecked="{Binding EditOptionIsDefault}" Margin="0,0,16,0" FontSize="12"/>
-                                    <CheckBox Content="Active" IsChecked="{Binding EditOptionIsActive}" FontSize="12"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource PrimaryGradientBtn}" Content="Save Option" Command="{Binding SaveOptionCommand}" Margin="0,0,8,0"/>
-                                    <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelOptionEditCommand}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                        <!-- ═══ OPTION EDIT FORM (extracted UC) ═══ -->
+                        <modifiers:ModifierOptionEditFormView
+                            Visibility="{Binding IsEditingOption, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     </StackPanel>
                 </ScrollViewer>
@@ -275,7 +185,7 @@
             <!-- Empty state when no group selected -->
             <Border Grid.Column="2" Background="White" BorderBrush="{StaticResource BrandBorder}" BorderThickness="0.5"
                     CornerRadius="10" Padding="16"
-                    Visibility="{Binding HasDetail, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}">
+                    Visibility="{Binding HasDetail, Converter={StaticResource InverseBoolToVisibilityConverter}, FallbackValue=Visible}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="⚡" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,8"/>
                     <TextBlock Text="Select a modifier group to view its details" FontSize="14" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
