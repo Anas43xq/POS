@@ -18,48 +18,46 @@
         <Border Grid.Row="0"
                 Background="White"
                 BorderBrush="{StaticResource BrandBorder}"
-                BorderThickness="1"
-                CornerRadius="12"
-                Padding="16,14"
-                Margin="0,0,0,12">
+                BorderThickness="0.5"
+                CornerRadius="10"
+                Padding="14,9"
+                Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Product Management"
-                               FontSize="22"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource TextDark}"/>
-                    <TextBlock Text="Manage products by category, search by name and keep stock visible at a glance."
-                               FontSize="12"
-                               Foreground="{StaticResource TextMuted}"
-                               Margin="0,4,0,0"/>
-                </StackPanel>
+                <TextBlock Grid.Column="0"
+                           Text="Product Management"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextDark}"
+                           VerticalAlignment="Center"/>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Content="＋ Add"
                             Style="{StaticResource PrimaryGradientBtn}"
-                            Width="96"
-                            Height="36"
-                            Margin="0,0,8,0"
+                            Padding="14,0"
+                            Margin="0,0,6,0"
                             Command="{Binding AddProductCommand}"/>
                     <Button Content="✏ Edit"
                             Style="{StaticResource OutlineBtn}"
-                            Width="96"
-                            Height="36"
-                            Margin="0,0,8,0"
+                            Padding="14,0"
+                            Margin="0,0,6,0"
                             Command="{Binding EditProductCommand}"
                             IsEnabled="{Binding CanEdit}"/>
                     <Button Content="🗑 Delete"
                             Style="{StaticResource DangerBtn}"
-                            Width="96"
-                            Height="36"
+                            Padding="14,0"
+                            Margin="0,0,6,0"
                             Command="{Binding DeleteProductCommand}"
                             IsEnabled="{Binding CanDelete}"/>
+                    <Border Width="1" Height="18" Background="{StaticResource BrandBorder}" Margin="4,0,10,0"/>
+                    <Button Content="🔄 Refresh"
+                            Style="{StaticResource OutlineBtn}"
+                            Padding="14,0"
+                            Command="{Binding RefreshCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -147,30 +145,18 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Products"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextDark}"/>
-                            <TextBlock Text="{Binding CurrentCategoryLabel}"
-                                       FontSize="12"
-                                       Foreground="{StaticResource TextMuted}"
-                                       Margin="0,2,0,0"/>
-                        </StackPanel>
-
-                        <Button Grid.Column="1"
-                                Style="{StaticResource OutlineBtn}"
-                                Content="Refresh"
-                                Width="90"
-                                Height="34"
-                                Command="{Binding RefreshCommand}"/>
-                    </Grid>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Products"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextDark}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentCategoryLabel}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextMuted}"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
 
                     <Border Grid.Row="1"
                             Background="{StaticResource BrandLight}"
