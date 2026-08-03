@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Extensions.DependencyInjection;
 using UI.ViewModels;
 
 namespace UI.Views;
@@ -40,5 +39,24 @@ public partial class SettingsWindow : Window
             Close();
             e.Handled = true;
         }
+        else if (e.Key == Key.Enter)
+        {
+            if (DataContext is SettingsViewModel vm)
+            {
+                vm.SaveCommand.Execute(null);
+                e.Handled = true;
+            }
+        }
+    }
+
+    private void OverlayGrid_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.Source == OverlayGrid)
+            Close();
+    }
+
+    private void DialogCard_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
     }
 }

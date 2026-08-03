@@ -17,7 +17,8 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        KeyDown="AddEditCategoryDialog_KeyDown">
 
     <Window.Resources>
         <ResourceDictionary>

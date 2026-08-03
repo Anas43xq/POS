@@ -94,6 +94,8 @@ namespace UI.ViewModels
                 if (_fromDate == value) return;
                 _fromDate = value;
                 OnPropertyChanged();
+                if (SelectedPeriodType == ReportFilterMode.Period && !_isLoading)
+                    _ = LoadReportAsync();
             }
         }
 
@@ -105,6 +107,8 @@ namespace UI.ViewModels
                 if (_toDate == value) return;
                 _toDate = value;
                 OnPropertyChanged();
+                if (SelectedPeriodType == ReportFilterMode.Period && !_isLoading)
+                    _ = LoadReportAsync();
             }
         }
 

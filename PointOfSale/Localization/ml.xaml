@@ -165,6 +165,22 @@
     <sys:String x:Key="Cashier.ShiftClosed">ഷിഫ്റ്റ് അടച്ചു</sys:String>
     <sys:String x:Key="Cashier.NoShift">ഷിഫ്റ്റ് ഇല്ല</sys:String>
 
+    <sys:String x:Key="Cashier.CurrentOrder">നിലവിലെ ഓർഡർ</sys:String>
+    <sys:String x:Key="Cashier.SearchPlaceholder">ഉൽപ്പന്നങ്ങൾ തിരയുക...</sys:String>
+    <sys:String x:Key="Cashier.NoProductsTitle">ഉൽപ്പന്നങ്ങളൊന്നും കണ്ടെത്തിയില്ല</sys:String>
+    <sys:String x:Key="Cashier.NoProductsSub">മറ്റൊരു തിരയൽ പദമോ വിഭാഗമോ പരീക്ഷിക്കുക.</sys:String>
+    <sys:String x:Key="Cashier.CustomBadge">ഇഷ്ടാനുസൃതം</sys:String>
+
+    <sys:String x:Key="Cashier.Required">ആവശ്യമാണ്</sys:String>
+    <sys:String x:Key="Cashier.Base">അടിസ്ഥാനം</sys:String>
+    <sys:String x:Key="Cashier.SelectRequired">തുടരാൻ ആവശ്യമായ ഓപ്ഷനുകൾ തിരഞ്ഞെടുക്കുക</sys:String>
+    <sys:String x:Key="Cashier.AddToCart">കാർട്ടിലേക്ക് ചേർക്കുക</sys:String>
+    <sys:String x:Key="Cashier.UpdateCart">കാർട്ട് അപ്ഡേറ്റ് ചെയ്യുക</sys:String>
+    <sys:String x:Key="Cashier.CartEmptyTitle">കാർട്ട് ശൂന്യമാണ്</sys:String>
+    <sys:String x:Key="Cashier.CartEmptySub">ആരംഭിക്കാൻ ഒരു ഉൽപ്പന്നത്തിൽ ടാപ്പ് ചെയ്യുക</sys:String>
+
+    <sys:String x:Key="Cashier.Settings">ക്രമീകരണങ്ങൾ</sys:String>
+
     <!-- ========================================================= -->
     <!-- Payment -->
     <!-- ========================================================= -->

@@ -1,0 +1,81 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   PurchaseReceiptToolbarControl                      ║
+    ║   Reusable action bar for VAT / Non-VAT purchase      ║
+    ║   receipt tabs. The Sales tab uses its own simpler    ║
+    ║   toolbar (only "Open" + "Refresh") because its        ║
+    ║   functionality differs.                              ║
+    ║                                                       ║
+    ║   Hierarchy:                                          ║
+    ║     Primary:  Add (filled brand button)              ║
+    ║     Secondary: Edit / View / Export (outline)         ║
+    ║     Destructive: Delete (red)                          ║
+    ║                                                       ║
+    ║   All commands / IsEnabled booleans are bound to the   ║
+    ║   host page's ViewModel.  Inherits the parent          ║
+    ║   DataContext.  No DataContext of its own.            ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.PurchaseReceiptToolbarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="32" d:DesignWidth="500">
+
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <!-- ── Primary: Add ── -->
+        <Button Style="{StaticResource PrimaryGradientBtn}"
+                Margin="0,0,6,0"
+                Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="＋  " FontSize="13" Foreground="White"/>
+                <TextBlock Text="{Binding AddLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                           FontSize="12" FontWeight="Medium" Foreground="White"/>
+            </StackPanel>
+        </Button>
+
+        <!-- ── Secondary: Edit ── -->
+        <Button Style="{StaticResource CrudEditBtn}"
+                Margin="0,0,6,0"
+                IsEnabled="{Binding HasSelection, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Command="{Binding EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="✏  " FontSize="12"/>
+                <TextBlock Text="{Binding EditLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- ── Secondary: View ── -->
+        <Button Style="{StaticResource OutlineBtn}"
+                Margin="0,0,6,0"
+                IsEnabled="{Binding HasSelection, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Command="{Binding ViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="👁  " FontSize="12"/>
+                <TextBlock Text="{Binding ViewLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- ── Destructive: Delete ── -->
+        <Button Style="{StaticResource CrudDeleteBtn}"
+                Margin="0,0,6,0"
+                IsEnabled="{Binding HasSelection, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Command="{Binding DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="🗑  " FontSize="12"/>
+                <TextBlock Text="{Binding DeleteLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+
+        <!-- ── Secondary: Export (divider before) ── -->
+        <Border Width="1" Height="18" Background="{StaticResource BrandBorder}" Margin="4,0,10,0"/>
+        <Button Style="{StaticResource OutlineBtn}"
+                Command="{Binding ExportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="⬇  " FontSize="12"/>
+                <TextBlock Text="{Binding ExportLabel, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12"/>
+            </StackPanel>
+        </Button>
+    </StackPanel>
+</UserControl>

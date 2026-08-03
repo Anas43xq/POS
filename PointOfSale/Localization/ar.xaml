@@ -176,6 +176,22 @@
     <sys:String x:Key="Cashier.ShiftClosed">الدوام مغلق</sys:String>
     <sys:String x:Key="Cashier.NoShift">لا يوجد دوام</sys:String>
 
+    <sys:String x:Key="Cashier.CurrentOrder">الطلب الحالي</sys:String>
+    <sys:String x:Key="Cashier.SearchPlaceholder">ابحث عن منتجات...</sys:String>
+    <sys:String x:Key="Cashier.NoProductsTitle">لم يتم العثور على منتجات</sys:String>
+    <sys:String x:Key="Cashier.NoProductsSub">جرب مصطلح بحث أو فئة مختلفة.</sys:String>
+    <sys:String x:Key="Cashier.CustomBadge">مخصص</sys:String>
+
+    <sys:String x:Key="Cashier.Required">مطلوب</sys:String>
+    <sys:String x:Key="Cashier.Base">الأساسي</sys:String>
+    <sys:String x:Key="Cashier.SelectRequired">حدد الخيارات المطلوبة للمتابعة</sys:String>
+    <sys:String x:Key="Cashier.AddToCart">إضافة إلى السلة</sys:String>
+    <sys:String x:Key="Cashier.UpdateCart">تحديث السلة</sys:String>
+    <sys:String x:Key="Cashier.CartEmptyTitle">السلة فارغة</sys:String>
+    <sys:String x:Key="Cashier.CartEmptySub">اضغط على منتج للبدء</sys:String>
+
+    <sys:String x:Key="Cashier.Settings">الإعدادات</sys:String>
+
     <!-- ========================================================= -->
     <!-- Payment -->
     <!-- ========================================================= -->

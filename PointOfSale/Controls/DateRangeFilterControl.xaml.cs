@@ -33,6 +33,14 @@ public partial class DateRangeFilterControl : UserControl
     public static readonly DependencyProperty ApplyCommandProperty =
         DependencyProperty.Register(nameof(ApplyCommand), typeof(ICommand), typeof(DateRangeFilterControl), new PropertyMetadata(null));
 
+    // ── Chip state ────────────────────────────────────────────────────
+    public static readonly DependencyProperty SelectedDateRangeProperty =
+        DependencyProperty.Register(
+            nameof(SelectedDateRange),
+            typeof(string),
+            typeof(DateRangeFilterControl),
+            new FrameworkPropertyMetadata("Day", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
     // ── Period pickers ────────────────────────────────────────────────
     // IsPeriodFilterVisible is one-way (VM → View) by intent: the source
     // property on the host ViewModel is a get-only computed result of
@@ -114,6 +122,12 @@ public partial class DateRangeFilterControl : UserControl
     {
         get => (ICommand?)GetValue(ApplyCommandProperty);
         set => SetValue(ApplyCommandProperty, value);
+    }
+
+    public string SelectedDateRange
+    {
+        get => (string)GetValue(SelectedDateRangeProperty);
+        set => SetValue(SelectedDateRangeProperty, value);
     }
 
     public bool IsPeriodFilterVisible

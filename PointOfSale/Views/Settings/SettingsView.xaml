@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:localization="clr-namespace:POS.Contracts.Localization;assembly=Contracts"
              mc:Ignorable="d"
              d:DesignWidth="400" d:DesignHeight="600">
 
@@ -14,47 +13,12 @@
             <Setter Property="Foreground" Value="#0F172A"/>
             <Setter Property="Margin" Value="0,0,0,16"/>
         </Style>
-
-        <Style x:Key="SectionSubHeader" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#334155"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
-        </Style>
-
-        <Style x:Key="OutlineBtn" TargetType="Button">
-            <Setter Property="Height" Value="36"/>
-            <Setter Property="Padding" Value="16,0"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Foreground" Value="#475569"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg" CornerRadius="7" Background="White"
-                                BorderBrush="#CBD5E1" BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#F1F5F9"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Grid Margin="20">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -90,55 +54,57 @@
                     </ListBox>
                 </StackPanel>
 
-                <!-- Printing Settings -->
-                <StackPanel Grid.Row="2" Margin="0,24,0,0">
-                    <TextBlock Text="{DynamicResource Settings.Printing}"
-                               FontSize="18" FontWeight="Bold"
-                               Foreground="#0F172A"
-                               Margin="0,0,0,16"/>
+                <!-- Manager-only section -->
+                <StackPanel Grid.Row="2"
+                            Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                    <!-- Receipt Printer -->
-                    <TextBlock Text="{DynamicResource Settings.ReceiptPrinter}"
-                               FontSize="14" FontWeight="SemiBold"
-                               Foreground="#334155"
-                               Margin="0,0,0,6"/>
+                    <!-- Printing Settings -->
+                    <StackPanel Margin="0,24,0,0">
+                        <TextBlock Text="{DynamicResource Settings.Printing}"
+                                   FontSize="18" FontWeight="Bold"
+                                   Foreground="#0F172A"
+                                   Margin="0,0,0,16"/>
 
-                    <Grid Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- Receipt Printer -->
+                        <TextBlock Text="{DynamicResource Settings.ReceiptPrinter}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#334155"
+                                   Margin="0,0,0,6"/>
 
-                        <ComboBox Grid.Column="0"
-                                  ItemsSource="{Binding AvailablePrinters}"
-                                  SelectedItem="{Binding SelectedReceiptPrinter}"
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding AvailablePrinters}"
+                                      SelectedItem="{Binding SelectedReceiptPrinter}"
+                                      FontSize="14"
+                                      Height="32"
+                                      VerticalContentAlignment="Center"/>
+
+                            <Button Grid.Column="1"
+                                    Content="{DynamicResource Settings.Refresh}"
+                                    Width="80" Height="32"
+                                    Margin="8,0,0,0"
+                                    Command="{Binding RefreshPrintersCommand}"
+                                    FontSize="12"/>
+                        </Grid>
+
+                        <!-- Paper Width -->
+                        <TextBlock Text="{DynamicResource Settings.PaperWidth}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#334155"
+                                   Margin="0,0,0,6"/>
+
+                        <ComboBox ItemsSource="{Binding PaperWidthOptions}"
+                                  SelectedItem="{Binding PaperWidth}"
                                   FontSize="14"
                                   Height="32"
-                                  VerticalContentAlignment="Center"/>
+                                  VerticalContentAlignment="Center"
+                                  Margin="0,0,0,12"/>
 
-                        <Button Grid.Column="1"
-                                Content="{DynamicResource Settings.Refresh}"
-                                Width="80" Height="32"
-                                Margin="8,0,0,0"
-                                Command="{Binding RefreshPrintersCommand}"
-                                FontSize="12"/>
-                    </Grid>
-
-                    <!-- Paper Width -->
-                    <TextBlock Text="{DynamicResource Settings.PaperWidth}"
-                               FontSize="14" FontWeight="SemiBold"
-                               Foreground="#334155"
-                               Margin="0,0,0,6"/>
-
-                    <ComboBox ItemsSource="{Binding PaperWidthOptions}"
-                              SelectedItem="{Binding PaperWidth}"
-                              FontSize="14"
-                              Height="32"
-                              VerticalContentAlignment="Center"
-                              Margin="0,0,0,12"/>
-
-                    <!-- Manager-only print behavior options -->
-                    <StackPanel Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
                         <!-- Auto Print -->
                         <CheckBox Content="{DynamicResource Settings.AutoPrintAfterPayment}"
                                   IsChecked="{Binding AutoPrint}"
@@ -162,59 +128,51 @@
                                  Width="60" Height="32"
                                  VerticalContentAlignment="Center"
                                  Margin="0,0,0,12"/>
+
+                        <!-- Test Print Action -->
+                        <TextBlock Text="{DynamicResource Settings.TestPrintAction}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#334155"
+                                   Margin="0,12,0,6"/>
+                        <ComboBox ItemsSource="{Binding TestPrintActionOptions}"
+                                  SelectedValue="{Binding TestPrintAction, Mode=TwoWay}"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Label"
+                                  FontSize="14"
+                                  Height="32"
+                                  VerticalContentAlignment="Center"
+                                  Margin="0,0,0,8"
+                                  HorizontalAlignment="Stretch"/>
+
+                        <!-- Test Print -->
+                        <Button Content="{DynamicResource Settings.PrintTestReceipt}"
+                                Command="{Binding PrintTestReceiptCommand}"
+                                Width="160" Height="36"
+                                Background="#3B82F6" Foreground="White"
+                                FontSize="12"
+                                HorizontalAlignment="Left"
+                                Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <!-- Test Print Action: Print to printer OR Save to PDF file -->
-                    <TextBlock Text="{DynamicResource Settings.TestPrintAction}"
-                               FontSize="14" FontWeight="SemiBold"
-                               Foreground="#334155"
-                               Margin="0,12,0,6"/>
-                    <ComboBox ItemsSource="{Binding TestPrintActionOptions}"
-                              SelectedValue="{Binding TestPrintAction, Mode=TwoWay}"
-                              SelectedValuePath="Value"
-                              DisplayMemberPath="Label"
-                              FontSize="14"
-                              Height="32"
-                              VerticalContentAlignment="Center"
-                              Margin="0,0,0,8"
-                              HorizontalAlignment="Stretch"/>
+                    <!-- Keyboard Shortcuts Section -->
+                    <StackPanel Margin="0,24,0,0">
+                        <TextBlock Text="{DynamicResource Settings.KeyboardShortcuts}"
+                                   Style="{StaticResource SectionHeader}"/>
 
-                    <!-- Test Print -->
-                    <Button Content="{DynamicResource Settings.PrintTestReceipt}"
-                            Command="{Binding PrintTestReceiptCommand}"
-                            Width="160" Height="36"
-                            Background="#3B82F6" Foreground="White"
-                            FontSize="12"
-                            HorizontalAlignment="Left"
-                            Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource Settings.KeyboardShortcutsDescription}"
+                                   FontSize="13" Foreground="#64748B"
+                                   Margin="0,0,0,12"/>
+
+                        <Border Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1"
+                                CornerRadius="6" Padding="12">
+                            <TextBlock Text="Keyboard shortcut configuration is not available yet. This feature will be redesigned in a future update."
+                                       FontSize="13" Foreground="#92400E"
+                                       TextWrapping="Wrap"/>
+                        </Border>
+                    </StackPanel>
+
                 </StackPanel>
 
-                <!-- Keyboard Shortcuts Section (placeholder stub) -->
-                <StackPanel Grid.Row="3" Margin="0,24,0,0"
-                            Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="{DynamicResource Settings.KeyboardShortcuts}"
-                               Style="{StaticResource SectionHeader}"/>
-
-                    <TextBlock Text="{DynamicResource Settings.KeyboardShortcutsDescription}"
-                               FontSize="13" Foreground="#64748B"
-                               Margin="0,0,0,12"/>
-
-                    <Border Background="#FEF3C7" BorderBrush="#F59E0B" BorderThickness="1"
-                            CornerRadius="6" Padding="12">
-                        <TextBlock Text="Keyboard shortcut configuration is not available yet. This feature will be redesigned in a future update."
-                                   FontSize="13" Foreground="#92400E"
-                                   TextWrapping="Wrap"/>
-                    </Border>
-                </StackPanel>
-
-                <!-- Close Button -->
-                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
-                    <Button Content="{DynamicResource Common.Close}"
-                            Width="100" Height="38"
-                            Background="#E2E8F0" Foreground="#0F172A"
-                            Command="{Binding CloseCommand}"
-                            FontSize="12"/>
-                </StackPanel>
             </Grid>
         </ScrollViewer>
     </Grid>

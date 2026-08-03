@@ -43,7 +43,6 @@ namespace UI.ViewModels
             {
                 _productName = value;
                 OnPropertyChanged();
-                CheckProductExists();
             }
         }
 
@@ -66,7 +65,6 @@ namespace UI.ViewModels
             {
                 _selectedCategory = value;
                 OnPropertyChanged();
-                CheckProductExists();
             }
         }
 
@@ -278,6 +276,9 @@ namespace UI.ViewModels
                 ErrorMessage = "Price cannot be negative.";
                 return;
             }
+
+            // Only check for duplicate on Save, not on every keystroke
+            CheckProductExists();
 
             if (ProductExistsWarning)
             {

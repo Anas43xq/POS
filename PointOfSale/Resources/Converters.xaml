@@ -7,4 +7,5 @@
     <conv:ModifierLineConverter x:Key="ModifierLineConverter" />
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     <conv:BoolToChipForegroundConverter x:Key="BoolToChipForegroundConverter" />
+    <conv:StringEqualityConverter x:Key="StringEqualityConverter" />
 </ResourceDictionary>

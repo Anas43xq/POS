@@ -21,20 +21,23 @@
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <RadioButton Style="{StaticResource FilterChip}"
                      Content="{Binding DayLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                     IsChecked="True"
+                     IsChecked="{Binding SelectedDateRange, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringEqualityConverter}, ConverterParameter=Day}"
                      Command="{Binding DayCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <RadioButton Style="{StaticResource FilterChip}"
                      Content="{Binding WeekLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     IsChecked="{Binding SelectedDateRange, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringEqualityConverter}, ConverterParameter=Week}"
                      Command="{Binding WeekCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <RadioButton Style="{StaticResource FilterChip}"
                      Content="{Binding MonthLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     IsChecked="{Binding SelectedDateRange, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringEqualityConverter}, ConverterParameter=Month}"
                      Command="{Binding MonthCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <RadioButton Style="{StaticResource FilterChip}"
                      Content="{Binding PeriodLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                     IsChecked="{Binding SelectedDateRange, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringEqualityConverter}, ConverterParameter=Period}"
                      Command="{Binding PeriodCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
-        <!-- Period group: From / To / Apply. Hidden until the consumer
-             flips IsPeriodFilterVisible. -->
+        <!-- Period group: From / To (auto-apply on date change).
+             Hidden until the consumer flips IsPeriodFilterVisible. -->
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Center"
                     Margin="6,0,0,0"
@@ -57,9 +60,6 @@
             <DatePicker Style="{StaticResource DateInput}"
                         SelectedDate="{Binding ToDate, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
                         Margin="0,0,12,0"/>
-            <Button Style="{StaticResource ApplyBtn}"
-                    Content="{Binding ApplyButtonText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    Command="{Binding ApplyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

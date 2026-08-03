@@ -160,7 +160,7 @@ namespace UI.ViewModels
                 _fromDate = value;
                 OnPropertyChanged();
                 if (CurrentFilterMode == TransactionFilterMode.Period)
-                    RefreshView();
+                    ApplyPeriod();
             }
         }
 
@@ -176,7 +176,7 @@ namespace UI.ViewModels
                 _toDate = value;
                 OnPropertyChanged();
                 if (CurrentFilterMode == TransactionFilterMode.Period)
-                    RefreshView();
+                    ApplyPeriod();
             }
         }
 

@@ -257,9 +257,21 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColGrandTotal}"
-                                            Binding="{Binding GrandTotal, StringFormat={}{0:N2}}"
-                                            Width="120"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Reports.ColGrandTotal}" Width="120">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource ManagerDataGridColumnHeader}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:CurrencyText Amount="{Binding GrandTotal}"
+                                                           Foreground="{StaticResource TextDark}"
+                                                           HorizontalAlignment="Right"
+                                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColNote}"
                                             Binding="{Binding Note}"
                                             Width="*"/>
@@ -296,9 +308,21 @@
                         <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColQuantity}"
                                             Binding="{Binding Quantity}"
                                             Width="100"/>
-                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColLineTotal}"
-                                            Binding="{Binding LineTotal, StringFormat={}{0:N2}}"
-                                            Width="*"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Reports.ColLineTotal}" Width="*">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource ManagerDataGridColumnHeader}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:CurrencyText Amount="{Binding LineTotal}"
+                                                           Foreground="{StaticResource TextDark}"
+                                                           HorizontalAlignment="Right"
+                                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

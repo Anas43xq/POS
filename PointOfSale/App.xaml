@@ -26,6 +26,7 @@
                 <ResourceDictionary Source="Resources/Common/Buttons.xaml" />
                 <ResourceDictionary Source="Resources/Common/Lists.xaml" />
                 <ResourceDictionary Source="Resources/Common/DataGrid.xaml" />
+                <ResourceDictionary Source="Resources/Common/FilterField.xaml" />
                 <!-- 3. Dashboard chrome (brushes, KPI tiles, card styles) -->
                 <ResourceDictionary Source="Resources/DashboardChrome.xaml" />
                 <!-- 4. Dialog chrome (modal styles) -->

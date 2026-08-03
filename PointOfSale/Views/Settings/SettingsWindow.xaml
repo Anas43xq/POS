@@ -6,18 +6,94 @@
         xmlns:settings="clr-namespace:UI.Views"
         mc:Ignorable="d"
         Title="{DynamicResource Settings.Title}"
-        Width="440" Height="350"
+        Width="560" Height="600"
         WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
         ResizeMode="NoResize"
         WindowStyle="None"
-        Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Background="Transparent">
 
-    <Border Background="White"
-            Padding="0"
-            BorderBrush="#CBD5E1"
-            BorderThickness="1"
-            CornerRadius="8">
-        <settings:SettingsView DataContext="{Binding}"/>
-    </Border>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="OverlayGrid"
+          Background="#4D0F2A4A"
+          MouseDown="OverlayGrid_MouseDown">
+
+        <Border x:Name="DialogCard"
+                Width="520"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource ModalCardBorder}"
+                MouseDown="DialogCard_MouseDown">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Header  -->
+                    <RowDefinition Height="*"/>
+                    <!-- Body    -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Footer  -->
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Style="{StaticResource ModalHeaderBorder}"
+                        Padding="18,14">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="28" Height="28" CornerRadius="7"
+                                    Background="{StaticResource ModalBrandDark}"
+                                    Margin="0,0,10,0">
+                                <TextBlock Text="⚙" FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Settings.Title}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{StaticResource ModalTextDark}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="✕" FontSize="13"
+                                Style="{StaticResource ModalCloseButton}"
+                                Command="{Binding CloseCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Body -->
+                <settings:SettingsView Grid.Row="1" DataContext="{Binding}"/>
+
+                <!-- Footer -->
+                <Border Grid.Row="3"
+                        Style="{StaticResource ModalFooterBorder}"
+                        Padding="18,12">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource OutlineBtn}"
+                                Content="{DynamicResource Common.Cancel}"
+                                Margin="0,0,8,0"
+                                Command="{Binding CloseCommand}"/>
+                        <Button Style="{StaticResource PrimaryGradientBtn}"
+                                Content="{DynamicResource Common.Save}"
+                                Foreground="White"
+                                Command="{Binding SaveCommand}"/>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

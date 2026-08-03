@@ -19,10 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <!-- -
-         ROOT  –  4 rows: error banner | header | content | footer
-         Matches HTML: error-banner | topbar(52px) | main(flex) | paybar(58px)
-         -->
+
     <Grid>
         <Grid.Background>
             <SolidColorBrush Color="#ECEEEA"/>
@@ -93,7 +90,7 @@
                     <!-- Clear     -->
                 </Grid.ColumnDefinitions>
 
-                <!-- CASH (HTML: .pay-btn.pay-cash, height 50px, padding 0 24px) -->
+
                 <Button Height="50"
                         Margin="0,0,10,0"
                         BorderThickness="0"

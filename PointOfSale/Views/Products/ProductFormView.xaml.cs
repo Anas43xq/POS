@@ -31,6 +31,14 @@ namespace UI.Views
                         Close();
                     };
                 }
+
+                if (Owner != null)
+                {
+                    Left = Owner.Left;
+                    Top = Owner.Top;
+                    Width = Owner.ActualWidth;
+                    Height = Owner.ActualHeight;
+                }
             };
         }
 

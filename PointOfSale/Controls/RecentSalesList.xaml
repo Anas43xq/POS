@@ -1,46 +1,128 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   RecentSalesList                                     ║
+    ║   Medium-density list of the last few sales. Lives    ║
+    ║   inside the cashier dashboard, so it sits between    ║
+    ║   the cashier's large 50–58px touch targets and the   ║
+    ║   manager module's compact 42px rows.  Visually       ║
+    ║   consistent with the rest of the app (uses the       ║
+    ║   shared ManagerDataGrid chrome + CardBorder +        ║
+    ║   BadgeBase / OutlineBtn).                            ║
+    ║                                                       ║
+    ║   Hosts:                                             ║
+    ║     • Receipt #  (text)                               ║
+    ║     • Date / time                                    ║
+    ║     • Payment method                                 ║
+    ║     • Status (BadgeBase)                             ║
+    ║     • Total (right-aligned, CurrencyText)            ║
+    ║     • Open (OutlineBtn → opens the receipt)          ║
+    ║                                                       ║
+    ║   Reuses the same chrome family as Transactions and  ║
+    ║   Shift Management so the cashier's "open" surface    ║
+    ║   feels like the rest of the app.                    ║
+    ╚══════════════════════════════════════════════════════╝
+-->
 <UserControl x:Class="UI.Controls.RecentSalesList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:UI.Controls"
              x:Name="root">
-    <Border BorderBrush="#CBD5E1"
-            BorderThickness="1">
-        <DataGrid ItemsSource="{Binding ItemsSource, ElementName=root}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  CanUserSortColumns="True"
-                  RowHeight="52"
-                  ColumnHeaderHeight="42"
-                  BorderThickness="0"
-                  FontSize="14">
+
+    <UserControl.Resources>
+        <!--
+            Status badge — same visual language as the Sales tab in
+            ReceiptManagementView and the Transaction list.  Inherits
+            the shared BadgeBase / BadgeText styles and only changes
+            the background and foreground per status.
+        -->
+        <Style x:Key="RecentStatusBadgeBorderStyle" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                    <Setter Property="Background" Value="#DBEAFE"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Voided">
+                    <Setter Property="Background" Value="{StaticResource DangerLight}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Pending">
+                    <Setter Property="Background" Value="#FEF3C7"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="RecentStatusBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                    <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Voided">
+                    <Setter Property="Foreground" Value="{StaticResource DangerDark}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Pending">
+                    <Setter Property="Foreground" Value="#92400E"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardBorder}">
+        <DataGrid Style="{StaticResource ManagerDataGrid}"
+                  RowHeight="46"
+                  ItemsSource="{Binding ItemsSource, ElementName=root}">
             <DataGrid.Columns>
+
+                <!-- Receipt number -->
                 <DataGridTextColumn Header="{DynamicResource Common.Receipt}"
                                     Binding="{Binding ReceiptNumber}"
                                     Width="*"
                                     MinWidth="130"/>
+
+                <!-- Date / time -->
                 <DataGridTextColumn Header="{DynamicResource Common.Date}"
                                     Binding="{Binding TransactionDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
                                     Width="155"/>
+
+                <!-- Payment method -->
                 <DataGridTextColumn Header="{DynamicResource Common.Payment}"
                                     Binding="{Binding PaymentMethod}"
                                     Width="110"/>
-                <DataGridTextColumn Header="{DynamicResource Common.Status}"
-                                    Binding="{Binding Status}"
-                                    Width="100"/>
-                <DataGridTemplateColumn Header="{DynamicResource Common.Total}" Width="105">
+
+                <!-- Status badge (Completed / Voided / Pending) -->
+                <DataGridTemplateColumn Header="{DynamicResource Common.Status}" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:CurrencyText Amount="{Binding GrandTotal}" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    Style="{StaticResource RecentStatusBadgeBorderStyle}">
+                                <TextBlock Text="{Binding Status}"
+                                           Style="{StaticResource RecentStatusBadgeTextStyle}"/>
+                            </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="" Width="95">
+
+                <!-- Total (right-aligned, shared CurrencyText) -->
+                <DataGridTemplateColumn Header="{DynamicResource Common.Total}" Width="115">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource ManagerDataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="{DynamicResource Common.Open}"
-                                    Height="34"
+                            <controls:CurrencyText Amount="{Binding GrandTotal}"
+                                                   Foreground="{StaticResource TextDark}"
+                                                   HorizontalAlignment="Right"
+                                                   Margin="0,0,10,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Open action (shared OutlineBtn) -->
+                <DataGridTemplateColumn Header="" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource OutlineBtn}"
+                                    Content="{DynamicResource Common.Open}"
+                                    Padding="10,0"
                                     Command="{Binding OpenCommand, ElementName=root}"
                                     CommandParameter="{Binding TransactionId}"/>
                         </DataTemplate>

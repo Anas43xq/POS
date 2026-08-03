@@ -164,6 +164,8 @@ namespace UI.ViewModels
 
                 _periodFromDate = value;
                 OnPropertyChanged();
+                if (CurrentFilterMode == DashboardFilterMode.Period)
+                    _ = LoadFilteredSectionsAsync();
             }
         }
 
@@ -178,6 +180,8 @@ namespace UI.ViewModels
 
                 _periodToDate = value;
                 OnPropertyChanged();
+                if (CurrentFilterMode == DashboardFilterMode.Period)
+                    _ = LoadFilteredSectionsAsync();
             }
         }
 

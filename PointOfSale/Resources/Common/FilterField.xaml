@@ -1,0 +1,85 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Shared form / filter field styles used by the Manager module
+        form views (PurchaseReceiptFormView) and filter panels
+        (ReceiptFilterPanelControl).  These were previously defined
+        locally in each view; centralising them here means every
+        page uses the same height, font size, and border treatment.
+
+        All styles are based on the common brand surface
+        (BrandLight background, BrandBorder border).
+    -->
+
+    <!-- Small uppercase / muted field label used above form/filter inputs -->
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="Margin" Value="0,0,0,4"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Section / card title text -->
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!--
+        Single text-input / combobox / datepicker style used by the
+        form and filter fields.  Height 32 matches the app-wide
+        button height so a row of inputs lines up with the action
+        buttons beside it.
+    -->
+    <Style x:Key="FilterField" TargetType="Control">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!-- Compact 26px filter input used in the horizontal filter bars
+         (sits at chip height alongside the FilterChip radio buttons). -->
+    <Style x:Key="FilterInput" TargetType="Control">
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!--
+        Round-cornered page tab item.  Header sits on a light surface
+        and turns brand-coloured when selected.  Reused by every
+        Manager page that uses tabs (Receipts uses three).
+    -->
+    <Style x:Key="ManagerTabItem" TargetType="TabItem">
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Border" CornerRadius="8,8,0,0" Background="Transparent" Margin="0,0,6,0" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="{StaticResource BrandDark}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#F6FAFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

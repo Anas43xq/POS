@@ -37,7 +37,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _selectedLanguage = value;
                 OnPropertyChanged();
-                _ = SetLanguageAsync(value.Code);
             }
         }
     }
@@ -61,7 +60,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _selectedReceiptPrinter = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
@@ -76,7 +74,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _paperWidth = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
@@ -91,7 +88,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _autoPrint = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
@@ -106,7 +102,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _showPrintDialog = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
@@ -121,7 +116,6 @@ public class SettingsViewModel : BaseViewModel
             {
                 _copies = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
@@ -136,14 +130,14 @@ public class SettingsViewModel : BaseViewModel
             {
                 _testPrintAction = value;
                 OnPropertyChanged();
-                _ = SavePrinterSettingsAsync();
             }
         }
     }
 
-    public ICommand CloseCommand { get; }
-    public ICommand RefreshPrintersCommand { get; }
-    public ICommand PrintTestReceiptCommand { get; }
+        public ICommand CloseCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand RefreshPrintersCommand { get; }
+        public ICommand PrintTestReceiptCommand { get; }
 
     public bool IsManager => string.Equals(_sessionService.CurrentUser?.RoleName, "Manager", StringComparison.OrdinalIgnoreCase);
 
@@ -170,6 +164,7 @@ public class SettingsViewModel : BaseViewModel
             .FirstOrDefault(l => l.Code == _localizationService.CurrentLanguage.Code);
 
         CloseCommand = new RelayCommand(_ => CloseRequested?.Invoke());
+        SaveCommand = new AsyncRelayCommand(SaveAndCloseAsync);
         RefreshPrintersCommand = new RelayCommand(_ => LoadPrinters());
         PrintTestReceiptCommand = new RelayCommand(_ => _ = PrintTestReceiptAsync());
 
@@ -228,25 +223,26 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    private async System.Threading.Tasks.Task SavePrinterSettingsAsync()
-    {
-        var settings = new PrinterSettings
+        private async System.Threading.Tasks.Task SaveAndCloseAsync()
         {
-            ReceiptPrinterName = SelectedReceiptPrinter ?? string.Empty,
-            PaperWidth = PaperWidth,
-            AutoPrint = AutoPrint,
-            ShowPrintDialog = ShowPrintDialog,
-            Copies = Copies,
-            TestPrintAction = TestPrintAction
-        };
+            // Persist printer settings
+            var settings = new PrinterSettings
+            {
+                ReceiptPrinterName = SelectedReceiptPrinter ?? string.Empty,
+                PaperWidth = PaperWidth,
+                AutoPrint = AutoPrint,
+                ShowPrintDialog = ShowPrintDialog,
+                Copies = Copies,
+                TestPrintAction = TestPrintAction
+            };
+            await _settingsService.SetPrinterSettingsAsync(settings);
 
-        await _settingsService.SetPrinterSettingsAsync(settings);
-    }
+            // Persist language
+            if (_selectedLanguage is not null)
+                await _localizationService.SetLanguageAsync(_selectedLanguage.Code);
 
-    private async System.Threading.Tasks.Task SetLanguageAsync(LanguageCode code)
-    {
-        await _localizationService.SetLanguageAsync(code);
-    }
+            CloseRequested?.Invoke();
+        }
 
     /// <summary>
     /// Generic "print any receipt" helper. Centralises the

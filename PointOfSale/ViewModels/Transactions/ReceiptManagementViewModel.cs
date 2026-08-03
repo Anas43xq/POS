@@ -24,11 +24,16 @@ namespace UI.ViewModels
         private readonly ISupplierService _supplierService;
         private readonly ExcelReportExporter _excelExporter;
 
+        /// <summary>When true, property-change-triggered auto-loads are suppressed
+        /// (used during programmatic refresh to avoid re-entrant cycles).</summary>
+        private bool _isLoading;
+
         private string _searchText = string.Empty;
         private DateTime? _dateFrom;
         private DateTime? _dateTo;
         private string _categoryFilter = string.Empty;
         private SupplierDto? _selectedSupplier;
+        private string _selectedDateRange = "Day";
         private string _selectedReceiptTypeFilter = "All";
         private string _statusMessage = string.Empty;
         private string _formTitle = "Add Purchase Receipt";
@@ -68,6 +73,15 @@ namespace UI.ViewModels
             RefreshCommand = new RelayCommand(_ => { _ = LoadAllAsync(); });
             ApplyFiltersCommand = new RelayCommand(_ => { _ = LoadAllAsync(); });
             ResetFiltersCommand = new RelayCommand(_ => ResetFilters());
+
+            // Quick-range chips bound by the shared DateRangeFilterControl.
+            // Day / Week / Month set the date range immediately; Period just
+            // reveals the From / To pickers, the user then clicks Apply.
+            LoadDayCommand = new RelayCommand(_ => { SelectedDateRange = "Day"; ApplyDateRange(DateTime.Today, DateTime.Today); });
+            LoadWeekCommand = new RelayCommand(_ => { SelectedDateRange = "Week"; ApplyDateRange(StartOfWeek(DateTime.Today), DateTime.Today); });
+            LoadMonthCommand = new RelayCommand(_ => { SelectedDateRange = "Month"; ApplyDateRange(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), DateTime.Today); });
+            LoadPeriodCommand = new RelayCommand(_ => { SelectedDateRange = "Period"; IsPeriodFilterVisible = true; });
+            ApplyPeriodCommand = new RelayCommand(_ => { _ = LoadAllAsync(); });
             OpenSalesReceiptCommand = new RelayCommand(_ => OpenSelectedSalesReceipt());
             AddVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, false));
             EditVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, true));
@@ -96,6 +110,11 @@ namespace UI.ViewModels
         public ICommand RefreshCommand { get; }
         public ICommand ApplyFiltersCommand { get; }
         public ICommand ResetFiltersCommand { get; }
+        public ICommand LoadDayCommand { get; }
+        public ICommand LoadWeekCommand { get; }
+        public ICommand LoadMonthCommand { get; }
+        public ICommand LoadPeriodCommand { get; }
+        public ICommand ApplyPeriodCommand { get; }
         public ICommand OpenSalesReceiptCommand { get; }
         public ICommand AddVatReceiptCommand { get; }
         public ICommand EditVatReceiptCommand { get; }
@@ -113,31 +132,61 @@ namespace UI.ViewModels
         public string SearchText
         {
             get => _searchText;
-            set { _searchText = value ?? string.Empty; OnPropertyChanged(); }
+            set { _searchText = value ?? string.Empty; OnPropertyChanged(); if (!_isLoading) _ = LoadAllAsync(); }
         }
 
         public DateTime? DateFrom
         {
             get => _dateFrom;
-            set { _dateFrom = value; OnPropertyChanged(); }
+            set { _dateFrom = value; OnPropertyChanged(); if (!_isLoading && IsPeriodFilterVisible) _ = LoadAllAsync(); }
         }
 
         public DateTime? DateTo
         {
             get => _dateTo;
-            set { _dateTo = value; OnPropertyChanged(); }
+            set { _dateTo = value; OnPropertyChanged(); if (!_isLoading && IsPeriodFilterVisible) _ = LoadAllAsync(); }
+        }
+
+        /// <summary>
+        /// Whether the custom From / To date pickers are visible inside
+        /// the shared <see cref="UI.Controls.DateRangeFilterControl"/>.
+        /// Toggled by the Period chip on the filter bar.
+        /// </summary>
+        private bool _isPeriodFilterVisible;
+        public bool IsPeriodFilterVisible
+        {
+            get => _isPeriodFilterVisible;
+            private set
+            {
+                if (_isPeriodFilterVisible == value)
+                    return;
+
+                _isPeriodFilterVisible = value;
+                OnPropertyChanged();
+            }
         }
 
         public string CategoryFilter
         {
             get => _categoryFilter;
-            set { _categoryFilter = value ?? string.Empty; OnPropertyChanged(); }
+            set { _categoryFilter = value ?? string.Empty; OnPropertyChanged(); if (!_isLoading) _ = LoadAllAsync(); }
+        }
+
+        /// <summary>
+        /// Tracks the currently active quick-range chip so the
+        /// DateRangeFilterControl RadioButtons can reflect the
+        /// correct checked state (Day / Week / Month / Period).
+        /// </summary>
+        public string SelectedDateRange
+        {
+            get => _selectedDateRange;
+            set { _selectedDateRange = value ?? "Day"; OnPropertyChanged(); }
         }
 
         public SupplierDto? SelectedSupplier
         {
             get => _selectedSupplier;
-            set { _selectedSupplier = value; OnPropertyChanged(); }
+            set { _selectedSupplier = value; OnPropertyChanged(); if (!_isLoading) _ = LoadAllAsync(); }
         }
 
         public string SelectedReceiptTypeFilter
@@ -148,9 +197,46 @@ namespace UI.ViewModels
 
         public ObservableCollection<string> ReceiptTypeFilterOptions { get; } = new() { "All", "Sales", "VAT", "Non-VAT" };
 
-        public TransactionListItemDto? SelectedSalesReceipt { get; set; }
-        public PurchaseReceiptDto? SelectedVatReceipt { get; set; }
-        public PurchaseReceiptDto? SelectedNonVatReceipt { get; set; }
+        private TransactionListItemDto? _selectedSalesReceipt;
+        public TransactionListItemDto? SelectedSalesReceipt
+        {
+            get => _selectedSalesReceipt;
+            set { if (_selectedSalesReceipt == value) return; _selectedSalesReceipt = value; OnPropertyChanged(); }
+        }
+
+        private PurchaseReceiptDto? _selectedVatReceipt;
+        public PurchaseReceiptDto? SelectedVatReceipt
+        {
+            get => _selectedVatReceipt;
+            set
+            {
+                if (_selectedVatReceipt == value) return;
+                _selectedVatReceipt = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasVatSelection));
+            }
+        }
+
+        private PurchaseReceiptDto? _selectedNonVatReceipt;
+        public PurchaseReceiptDto? SelectedNonVatReceipt
+        {
+            get => _selectedNonVatReceipt;
+            set
+            {
+                if (_selectedNonVatReceipt == value) return;
+                _selectedNonVatReceipt = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasNonVatSelection));
+            }
+        }
+
+        /// <summary>True when a VAT row is selected; used by the
+        /// purchase-receipt toolbar to gate Edit / View / Delete.</summary>
+        public bool HasVatSelection => SelectedVatReceipt is not null;
+
+        /// <summary>True when a Non-VAT row is selected; used by the
+        /// purchase-receipt toolbar to gate Edit / View / Delete.</summary>
+        public bool HasNonVatSelection => SelectedNonVatReceipt is not null;
 
         public string StatusMessage
         {
@@ -231,10 +317,19 @@ namespace UI.ViewModels
 
         private async Task LoadAllAsync()
         {
-            StatusMessage = string.Empty;
-            await LoadSuppliersAsync();
-            await LoadSalesReceiptsAsync();
-            await LoadPurchaseReceiptsAsync();
+            if (_isLoading) return;
+            _isLoading = true;
+            try
+            {
+                StatusMessage = string.Empty;
+                await LoadSuppliersAsync();
+                await LoadSalesReceiptsAsync();
+                await LoadPurchaseReceiptsAsync();
+            }
+            finally
+            {
+                _isLoading = false;
+            }
         }
 
         private async Task LoadSalesReceiptsAsync()
@@ -350,6 +445,11 @@ namespace UI.ViewModels
         {
             try
             {
+                // Preserve the current selection across the reload so the
+                // TwoWay binding on the Supplier ComboBox isn't destroyed
+                // when Suppliers.Clear() removes the selected item.
+                var savedSupplierId = SelectedSupplier?.SupplierId;
+
                 var result = await _supplierService.GetAllAsync();
                 Suppliers.Clear();
                 if (result.IsSuccess && result.Value is not null)
@@ -359,6 +459,11 @@ namespace UI.ViewModels
                         Suppliers.Add(supplier);
                     }
                 }
+
+                // Restore the previously selected supplier, if it still exists.
+                SelectedSupplier = savedSupplierId.HasValue
+                    ? Suppliers.FirstOrDefault(s => s.SupplierId == savedSupplierId.Value)
+                    : null;
             }
             catch (Exception ex)
             {
@@ -369,12 +474,37 @@ namespace UI.ViewModels
         private void ResetFilters()
         {
             SearchText = string.Empty;
-            DateFrom = null;
-            DateTo = null;
+            DateFrom = DateTime.Today;
+            DateTo = DateTime.Today;
             CategoryFilter = string.Empty;
             SelectedSupplier = null;
             SelectedReceiptTypeFilter = "All";
+            IsPeriodFilterVisible = false;
+            SelectedDateRange = "Day";
             _ = LoadAllAsync();
+        }
+
+        /// <summary>
+        /// Sets the active date range and immediately reloads the
+        /// visible records.  Used by the quick-range chips on the
+        /// shared <see cref="UI.Controls.DateRangeFilterControl"/>.
+        /// </summary>
+        private void ApplyDateRange(DateTime from, DateTime to)
+        {
+            DateFrom = from;
+            DateTo = to;
+            _ = LoadAllAsync();
+        }
+
+        /// <summary>
+        /// Returns the Monday on or before <paramref name="date"/>.
+        /// The UI uses a Monday-anchored week to match the rest of
+        /// the Manager module.
+        /// </summary>
+        private static DateTime StartOfWeek(DateTime date)
+        {
+            int diff = (7 + (int)date.DayOfWeek - (int)DayOfWeek.Monday) % 7;
+            return date.Date.AddDays(-diff);
         }
 
         private void OpenSelectedSalesReceipt()

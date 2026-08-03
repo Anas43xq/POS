@@ -23,11 +23,12 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
                         <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="Bold"
                                    Foreground="{StaticResource TextDark}" Margin="0,0,6,0"/>
-                        <Border Style="{StaticResource RequiredPill}"
+                        <Border Style="{DynamicResource RequiredPill}"
                                 Visibility="{Binding IsRequired, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="{DynamicResource Cashier.Required}" FontSize="9" FontWeight="Bold" Foreground="White"/>
                         </Border>
                     </StackPanel>
+                    <!-- MultiSelectGroupViewModel -->
                     <ItemsControl ItemsSource="{Binding Options}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -61,7 +62,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,7">
                         <TextBlock Text="{Binding Name}" FontSize="12.5" FontWeight="Bold"
                                    Foreground="{StaticResource TextDark}" Margin="0,0,6,0"/>
-                        <Border Style="{StaticResource RequiredPill}"
+                        <Border Style="{DynamicResource RequiredPill}"
                                 Visibility="{Binding IsRequired, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Text="{DynamicResource Cashier.Required}" FontSize="9" FontWeight="Bold" Foreground="White"/>
                         </Border>
@@ -202,10 +203,10 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding ModifierConfirmLabel}"
-                                       VerticalAlignment="Center"/>
+                                       Foreground="White" VerticalAlignment="Center"/>
                             <controls:CurrencyText Grid.Column="1"
                                        Amount="{Binding ModifierRunningTotal}"
-                                       Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                                       Foreground="White" FontWeight="Bold"  VerticalAlignment="Center"/>
                         </Grid>
                     </Button>
                     <TextBlock Text="{DynamicResource Cashier.SelectRequired}"

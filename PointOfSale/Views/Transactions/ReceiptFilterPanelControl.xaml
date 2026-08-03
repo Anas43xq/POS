@@ -1,0 +1,165 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   ReceiptFilterPanelControl                          ║
+    ║   Compact, two-row filter bar for the Receipt         ║
+    ║   Management page.  Mirrors the architecture of        ║
+    ║   TransactionsFilterPanelControl / ShiftFilter /     ║
+    ║   ReportFilter — inherits the host VM, no DataContext  ║
+    ║   of its own.                                         ║
+    ║                                                       ║
+    ║   Row 1 — always visible:                             ║
+    ║     [Search] │ [Day][Week][Month][Period] │            ║
+    ║     [Supplier] │ [Category]    [Apply][Reset][Refresh] ║
+    ║                                                       ║
+    ║   Row 2 — only when Period chip is selected:          ║
+    ║     From: [date]   To: [date]   [Apply Period]        ║
+    ║                                                       ║
+    ║   Splitting the rows avoids the From / To pickers     ║
+    ║   overlapping the supplier / category combos when     ║
+    ║   the user expands the period filter.                 ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.ReceiptFilterPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" d:DesignHeight="80" d:DesignWidth="1420">
+
+    <UserControl.Resources>
+        <!--
+            Compact inputs (26px) that line up with the date-range
+            chips.  Kept local so the host page isn't required to
+            provide them.
+        -->
+        <Style x:Key="ReceiptFilterCombo" TargetType="ComboBox">
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="ReceiptFilterTextBox" TargetType="TextBox">
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource BrandLight}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="ReceiptSearchBox" TargetType="TextBox" BasedOn="{StaticResource ReceiptFilterTextBox}">
+            <Setter Property="Width" Value="200"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource FilterPanel}">
+        <StackPanel>
+
+            <!-- ═══ ROW 1 — chips + combos + actions ═══ -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <!-- Search -->
+                    <Grid VerticalAlignment="Center" Margin="0,0,10,0">
+                        <TextBox x:Name="SearchBox"
+                                 Style="{StaticResource ReceiptSearchBox}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="{DynamicResource Common.Search}"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextMuted}"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
+                                   IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="0,0,10,0"/>
+
+                    <!-- Quick-range chips.  PeriodCommand is bound to the
+                         DateRangeFilterControl's PeriodCommand DP, which
+                         in turn flips IsPeriodFilterVisible on the VM. -->
+                    <controls:DateRangeFilterControl
+                        SelectedDateRange="{Binding SelectedDateRange}"
+                        DayCommand="{Binding LoadDayCommand}"
+                        WeekCommand="{Binding LoadWeekCommand}"
+                        MonthCommand="{Binding LoadMonthCommand}"
+                        PeriodCommand="{Binding LoadPeriodCommand}"
+                        DayLabel="{DynamicResource Common.Day}"
+                        WeekLabel="{DynamicResource Common.Week}"
+                        MonthLabel="{DynamicResource Common.Month}"
+                        PeriodLabel="{DynamicResource Common.Period}"/>
+
+                    <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="10,0,10,0"/>
+
+                    <!-- Supplier filter -->
+                    <ComboBox Style="{StaticResource ReceiptFilterCombo}"
+                              ItemsSource="{Binding Suppliers}"
+                              SelectedItem="{Binding SelectedSupplier, Mode=TwoWay}"
+                              DisplayMemberPath="CompanyName"/>
+
+                    <Border Width="1" Height="20" Background="{StaticResource BrandBorder}" Margin="10,0,10,0"/>
+
+                    <!-- Category filter -->
+                    <TextBox Style="{StaticResource ReceiptFilterTextBox}"
+                             Text="{Binding CategoryFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <!-- Actions (far right) -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource OutlineBtn}"
+                            Content="{DynamicResource Common.Reset}"
+                            Margin="0,0,6,0"
+                            Command="{Binding ResetFiltersCommand}"/>
+                    <Button Style="{StaticResource OutlineBtn}"
+                            Content="{DynamicResource Common.Refresh}"
+                            Command="{Binding RefreshCommand}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ═══ ROW 2 — custom From / To (only when Period is active) ═══ -->
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="0,8,0,0"
+                        Visibility="{Binding IsPeriodFilterVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="{DynamicResource Common.From}"
+                           VerticalAlignment="Center"
+                           FontSize="11"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="0,0,6,0"/>
+                <DatePicker Style="{StaticResource DateInput}"
+                            SelectedDate="{Binding DateFrom, Mode=TwoWay}"
+                            Margin="0,0,12,0"/>
+                <TextBlock Text="{DynamicResource Common.To}"
+                           VerticalAlignment="Center"
+                           FontSize="11"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="0,0,6,0"/>
+                <DatePicker Style="{StaticResource DateInput}"
+                            SelectedDate="{Binding DateTo, Mode=TwoWay}"
+                            Margin="0,0,12,0"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -16,7 +16,8 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Effect">
             <Setter.Value>
-                <DropShadowEffect Color="#0F2A4A" Opacity="0.16" BlurRadius="24" ShadowDepth="6" Direction="270"/>
+                <DropShadowEffect Color="#0F2A4A" Opacity="0.16" BlurRadius="24" ShadowDepth="6" Direction="270"
+                                   RenderingBias="Quality"/>
             </Setter.Value>
         </Setter>
     </Style>

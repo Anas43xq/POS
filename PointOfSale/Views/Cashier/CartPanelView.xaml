@@ -158,7 +158,7 @@
             </ScrollViewer>
             </Grid>
 
-            <!-- Totals block (HTML: .cart-summary padding 10px 12px) -->
+            <!-- Totals block (.cart-summary padding 10px 12px) -->
             <Border Grid.Row="2"
                     Background="{StaticResource CardBg}"
                     BorderBrush="{StaticResource BrandBorder}"

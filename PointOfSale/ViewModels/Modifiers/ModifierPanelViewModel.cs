@@ -109,6 +109,8 @@ namespace UI.ViewModels.Modifiers
             _cartModifierService = cartModifierService;
             _localization = localization;
 
+            _localization.LanguageChanged += OnLanguageChanged;
+
             ConfirmModifierCommand = new RelayCommand(Confirm);
             CloseModifierPanelCommand = new RelayCommand(Close);
         }
@@ -131,8 +133,8 @@ namespace UI.ViewModels.Modifiers
 
             SelectedProductForModifier = product;
             ModifierConfirmLabel = existingItem != null
-                ? "Update Cart"
-                : "Add to Cart";
+                ? _localization.GetString("Cashier.UpdateCart")
+                : _localization.GetString("Cashier.AddToCart");
             ModifierRunningTotal = 0;
             AllRequiredGroupsSatisfied = false;
             IsModifierPanelOpen = true;
@@ -367,10 +369,17 @@ namespace UI.ViewModels.Modifiers
 
         private void UpdateConfirmLabel()
         {
-            var prefix = _existingItem != null ? "Update Cart" : "Add to Cart";
+            var prefix = _existingItem != null
+                ? _localization.GetString("Cashier.UpdateCart")
+                : _localization.GetString("Cashier.AddToCart");
             ModifierConfirmLabel = _modifierRunningTotal > 0
                 ? $"{prefix} — AED {_modifierRunningTotal:N2}"
                 : prefix;
+        }
+
+        private void OnLanguageChanged(object? sender, EventArgs e)
+        {
+            UpdateConfirmLabel();
         }
 
         // ─── Confirm / Close ───────────────────────────────

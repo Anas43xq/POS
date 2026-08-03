@@ -22,6 +22,17 @@ namespace UI.Views
                 NameBox.Focus();
                 NameBox.SelectAll();
             };
+
+            Loaded += (_, _) =>
+            {
+                if (Owner != null)
+                {
+                    Left = Owner.Left;
+                    Top = Owner.Top;
+                    Width = Owner.ActualWidth;
+                    Height = Owner.ActualHeight;
+                }
+            };
         }
 
         // ── Overlay click → close (same as Cancel) ──────────────────────────
@@ -53,6 +64,26 @@ namespace UI.Views
             }
 
             Close();
+        }
+
+        // ── Keyboard shortcuts: Enter = Save, Escape = Cancel ─────────────────
+        private void AddEditCategoryDialog_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                CloseDialog();
+            }
+            else if (e.Key == Key.Enter)
+            {
+                if (DataContext is { } vm)
+                {
+                    var saveProp = vm.GetType().GetProperty("SaveCommand");
+                    if (saveProp?.GetValue(vm) is ICommand cmd && cmd.CanExecute(null))
+                    {
+                        cmd.Execute(null);
+                    }
+                }
+            }
         }
     }
 }

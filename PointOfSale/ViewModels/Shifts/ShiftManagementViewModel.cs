@@ -145,6 +145,8 @@ namespace UI.ViewModels
 
                 _fromDate = value;
                 OnPropertyChanged();
+                if (CurrentFilterMode == ShiftFilterMode.Period)
+                    ApplyPeriod();
             }
         }
 
@@ -159,6 +161,8 @@ namespace UI.ViewModels
 
                 _toDate = value;
                 OnPropertyChanged();
+                if (CurrentFilterMode == ShiftFilterMode.Period)
+                    ApplyPeriod();
             }
         }
 
