@@ -1,7 +1,10 @@
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using BLL.DTOs;
 using UI.Services;
@@ -11,34 +14,34 @@ namespace UI.ViewModels
 {
     public partial class ReportViewModel
     {
-        private async Task LoadProductsAsync()
-        {
-            var languageCode = _localization.CurrentLanguage.FilePrefix;
-            var result = await _productService.GetProductSummariesAsync(languageCode);
-            if (result.IsSuccess && result.Value != null)
-            {
-                Products.Clear();
-                foreach (var p in result.Value)
-                
-                    Products.Add(new { p.ProductId, p.Name });
-
-            }
-        }
-
         public ICommand ReportCommand { get; }
         public ICommand OpenReceiptCommand { get; }
 
         private async void OnReportAction(string? action)
         {
+            if (_isLoading)
+                return;
+
             switch (action)
             {
                 case "GenerateAndExport":
-                    await LoadReportAsync();
-                    ExportToExcel();
+                    IsLoading = true;
+                    try
+                    {
+                        await LoadReportDataAsync();
+                        await ExportToExcelAsync();
+                    }
+                    finally
+                    {
+                        IsLoading = false;
+                    }
                     break;
             }
         }
 
+        // Called by filter commands (Today/Week/Month/Period) — manages
+        // its own IsLoading guard since those commands don't have an outer
+        // IsLoading scope.
         private async Task LoadReportAsync()
         {
             if (_isLoading)
@@ -47,44 +50,7 @@ namespace UI.ViewModels
             IsLoading = true;
             try
             {
-                string periodType = _selectedPeriodType switch
-                {
-                    ReportFilterMode.Today => "Today",
-                    ReportFilterMode.Week => "Week",
-                    ReportFilterMode.Month => "Month",
-                    ReportFilterMode.Period => "Custom",
-                    _ => "Today"
-                };
-
-                if (IsSalesMode)
-                {
-                    var data = await _reportService.GetTransactionReportAsync(periodType, _fromDate, _toDate);
-                    TransactionReports.Clear();
-                    foreach (var item in data)
-                        TransactionReports.Add(item);
-
-                    TotalOrders = TransactionReports.Count.ToString();
-                    TotalSales = TransactionReports.Sum(t => t.GrandTotal).ToString("AED 0.00");
-                    CashTotal = TransactionReports.Where(t => t.PaymentMethod == "Cash").Sum(t => t.GrandTotal).ToString("AED 0.00");
-                    CardTotal = TransactionReports.Where(t => t.PaymentMethod == "Card").Sum(t => t.GrandTotal).ToString("AED 0.00");
-                }
-                else
-                {
-                    int? productId = _selectedProduct != null
-                        ? (int?)_selectedProduct.GetType().GetProperty("ProductId")?.GetValue(_selectedProduct)
-                        : null;
-
-                    var data = await _reportService.GetProductSalesReportAsync(periodType, _fromDate, _toDate, productId);
-                    ProductReports.Clear();
-                    foreach (var item in data)
-                        ProductReports.Add(item);
-
-                    int totalQty = ProductReports.Sum(p => p.Quantity);
-                    decimal totalRev = ProductReports.Sum(p => p.LineTotal);
-                    TotalQuantitySold = totalQty.ToString();
-                    TotalRevenue = totalRev.ToString("AED 0.00");
-                    AveragePrice = totalQty > 0 ? (totalRev / totalQty).ToString("AED 0.00") : "AED 0.00";
-                }
+                await LoadReportDataAsync();
             }
             finally
             {
@@ -92,8 +58,57 @@ namespace UI.ViewModels
             }
         }
 
-        private void ExportToExcel()
+        // Core data-loading logic without IsLoading management.
+        // OnReportAction calls this directly after setting IsLoading=true
+        // so that the loading state spans both Load + Export.
+        private async Task LoadReportDataAsync()
         {
+            string periodType = _selectedPeriodType switch
+            {
+                ReportFilterMode.Today => "Today",
+                ReportFilterMode.Week => "Week",
+                ReportFilterMode.Month => "Month",
+                ReportFilterMode.Period => "Custom",
+                _ => "Today"
+            };
+
+            if (IsSalesMode)
+            {
+                var data = await _reportService.GetTransactionReportAsync(periodType, _fromDate, _toDate);
+                TransactionReports.Clear();
+                foreach (var item in data)
+                    TransactionReports.Add(item);
+
+                TotalOrders = TransactionReports.Count.ToString();
+                TotalSales = TransactionReports.Sum(t => t.GrandTotal).ToString("AED 0.00");
+                CashTotal = TransactionReports.Where(t => t.PaymentMethod == "Cash").Sum(t => t.GrandTotal).ToString("AED 0.00");
+                CardTotal = TransactionReports.Where(t => t.PaymentMethod == "Card").Sum(t => t.GrandTotal).ToString("AED 0.00");
+            }
+            else if (IsSalesAnalysisMode)
+            {
+                var data = await _reportService.GetSalesAnalysisReportAsync(periodType, _fromDate, _toDate);
+                SalesAnalysisReports.Clear();
+                foreach (var item in data)
+                    SalesAnalysisReports.Add(item);
+
+                int categoriesSold = SalesAnalysisReports.Select(r => r.CategoryId).Distinct().Count();
+                int productsSold = SalesAnalysisReports.Select(r => r.ProductId).Distinct().Count();
+                int variantsSold = SalesAnalysisReports.Count;
+                int totalQty = SalesAnalysisReports.Sum(r => r.Quantity);
+                decimal totalSales = SalesAnalysisReports.Sum(r => r.LineTotal);
+
+                CategoriesSold = categoriesSold.ToString();
+                ProductsSold = productsSold.ToString();
+                VariantsSold = variantsSold.ToString();
+                SalesAnalysisTotalQuantitySold = totalQty.ToString();
+                SalesAnalysisTotalSales = totalSales.ToString("AED 0.00");
+            }
+        }
+
+        private async Task ExportToExcelAsync()
+        {
+            // WPF dialogs must run on the STA/UI thread — capture everything
+            // needed before offloading CPU-bound work to the thread pool.
             var saveDialog = new Microsoft.Win32.SaveFileDialog
             {
                 Filter = "Excel Files (*.xlsx)|*.xlsx",
@@ -110,6 +125,7 @@ namespace UI.ViewModels
             {
                 if (IsSalesMode)
                 {
+                    // Build the request on the UI thread (reads VM properties)
                     var request = new ExcelReportRequest
                     {
                         ReportType = ReportType.Transactions,
@@ -126,36 +142,49 @@ namespace UI.ViewModels
                         Data = TransactionReports.ToList()
                     };
 
-                    byte[] bytes = _excelExporter.Export(request);
-                    File.WriteAllBytes(saveDialog.FileName, bytes);
+                    string filePath = saveDialog.FileName;
+
+                    // Offload CPU-bound export + write to background thread
+                    byte[] bytes = await Task.Run(() => _excelExporter.Export(request));
+                    await File.WriteAllBytesAsync(filePath, bytes);
                     StatusMessage = string.Empty;
+
+                    ShowExportSuccess(filePath);
                 }
-                else
+                else if (IsSalesAnalysisMode)
                 {
-                    if (ProductReports.Count == 0)
+                    if (SalesAnalysisReports.Count == 0)
                     {
-                        StatusMessage = "No product report data to export for the selected period.";
+                        StatusMessage = "No sales analysis data to export for the selected period.";
                         return;
                     }
 
+                    // Build the request on the UI thread (reads VM properties)
                     var request = new ExcelReportRequest
                     {
-                        ReportType = ReportType.ProductReport,
-                        Title = "PRODUCT SALES REPORT",
+                        ReportType = ReportType.SalesAnalysis,
+                        Title = "SALES ANALYSIS REPORT",
                         FromDate = from,
                         ToDate = to,
-                        Summary = new ProductReportSummary
+                        Summary = new SalesAnalysisReportSummary
                         {
-                            TotalQuantitySold = TotalQuantitySold,
-                            TotalRevenue = TotalRevenue,
-                            AveragePrice = AveragePrice
+                            CategoriesSold = CategoriesSold,
+                            ProductsSold = ProductsSold,
+                            VariantsSold = VariantsSold,
+                            TotalQuantitySold = SalesAnalysisTotalQuantitySold,
+                            TotalSales = SalesAnalysisTotalSales
                         },
-                        Data = ProductReports.ToList()
+                        Data = SalesAnalysisReports.ToList()
                     };
 
-                    byte[] bytes = _excelExporter.Export(request);
-                    File.WriteAllBytes(saveDialog.FileName, bytes);
+                    string filePath = saveDialog.FileName;
+
+                    // Offload CPU-bound export + write to background thread
+                    byte[] bytes = await Task.Run(() => _excelExporter.Export(request));
+                    await File.WriteAllBytesAsync(filePath, bytes);
                     StatusMessage = string.Empty;
+
+                    ShowExportSuccess(filePath);
                 }
             }
             catch (Exception ex)
@@ -173,6 +202,31 @@ namespace UI.ViewModels
                 _isLoading = value;
                 OnPropertyChanged();
                 ((RelayCommand<string>)ReportCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        private static void ShowExportSuccess(string filePath)
+        {
+            var result = MessageBox.Show(
+                "Report exported successfully.",
+                "Export Complete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true
+                    });
+                }
+                catch
+                {
+                    // Opening the file is best-effort; no error shown if it fails.
+                }
             }
         }
 

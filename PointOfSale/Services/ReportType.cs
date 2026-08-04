@@ -5,6 +5,6 @@ namespace UI.Services
         Transactions,
         VatPurchaseRegister,
         NonVatPurchaseRegister,
-        ProductReport
+        SalesAnalysis
     }
 }

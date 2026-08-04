@@ -394,16 +394,28 @@
         വിൽപ്പന മോഡ്
     </sys:String>
 
-    <sys:String x:Key="Manager.Reports.ProductMode">
-        ഉൽപ്പന്ന മോഡ്
+    <sys:String x:Key="Manager.Reports.SalesAnalysisMode">
+        സെയിൽസ് അനാലിസിസ്
     </sys:String>
+
+<sys:String x:Key="Manager.Reports.CategoriesSold">
+    വിറ്റ വിഭാഗങ്ങൾ
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ProductsSold">
+    വിറ്റ ഉൽപ്പന്നങ്ങൾ
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.VariantsSold">
+    വിറ്റ വകഭേദങ്ങൾ
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ColCategory">വിഭാഗം</sys:String>
+<sys:String x:Key="Manager.Reports.ColProduct">ഉൽപ്പന്നം</sys:String>
+<sys:String x:Key="Manager.Reports.ColSize">വലുപ്പം</sys:String>
 
     <sys:String x:Key="Manager.Reports.GenerateExport">
         സൃഷ്ടിക്കുകയും എക്സ്പോർട്ട് ചെയ്യുകയും ചെയ്യുക
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.ProductLabel">
-        ഉൽപ്പന്നം:
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.TotalOrders">
@@ -424,14 +436,6 @@
 
     <sys:String x:Key="Manager.Reports.TotalQuantitySold">
         ആകെ വിറ്റ അളവ്
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.TotalRevenue">
-        ആകെ വരുമാനം
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.AveragePrice">
-        ശരാശരി വില
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.ColReceiptNumber">രസീത് നമ്പർ</sys:String>

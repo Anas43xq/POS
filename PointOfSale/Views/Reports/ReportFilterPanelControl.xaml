@@ -1,12 +1,13 @@
 <!--
     ╔══════════════════════════════════════════════════════╗
-    ║   Reports filter bar. One adaptive panel for both     ║
-    ║   report modes — avoids two near-identical filter      ║
-    ║   panels. Top row: Sales/Product segmented toggle +    ║
-    ║   Generate/Export action. Bottom row: the shared        ║
-    ║   <controls:DateRangeFilterControl/> (same mechanism   ║
-    ║   as Home/Transactions/Shifts) plus the Product combo, ║
-    ║   which only appears in Product mode.                  ║
+    ║   Reports filter bar. One adaptive panel for all       ║
+    ║   two report modes — avoids near-identical filter      ║
+    ║   panels. Top row: Sales/Sales Analysis segmented      ║
+    ║   toggle + Generate/Export action. Bottom row: the     ║
+    ║   shared <controls:DateRangeFilterControl/> (same      ║
+    ║   mechanism as Home/Transactions/Shifts). Sales        ║
+    ║   Analysis mode only needs the shared date filter, so  ║
+    ║   it reuses the same row unchanged.                    ║
     ║   No DataContext of its own — inherits the host VM.    ║
     ╚══════════════════════════════════════════════════════╝
 -->
@@ -23,18 +24,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/AppChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <!-- Same visual language as DateInput (height/border/radius),
-                 just for the Product ComboBox. -->
-            <Style x:Key="ProductFilterCombo" TargetType="ComboBox">
-                <Setter Property="Width" Value="160"/>
-                <Setter Property="Height" Value="26"/>
-                <Setter Property="FontSize" Value="11"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="Background" Value="{StaticResource BrandLight}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource BrandBorder}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -51,7 +40,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Segmented Sales / Product toggle -->
+                <!-- Segmented Sales / Sales Analysis toggle -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <RadioButton Style="{StaticResource FilterChip}"
                                  GroupName="ReportMode"
@@ -59,8 +48,8 @@
                                  IsChecked="{Binding IsSalesMode}"/>
                     <RadioButton Style="{StaticResource FilterChip}"
                                  GroupName="ReportMode"
-                                 Content="{DynamicResource Manager.Reports.ProductMode}"
-                                 IsChecked="{Binding IsProductMode}"/>
+                                 Content="{DynamicResource Manager.Reports.SalesAnalysisMode}"
+                                 IsChecked="{Binding IsSalesAnalysisMode}"/>
                 </StackPanel>
 
                 <Button Grid.Column="2"
@@ -75,7 +64,7 @@
             <Border Height="0.5" Background="{StaticResource BrandBorder}" Margin="0,0,0,10"/>
 
             <!-- ══════════════════════════════════════
-                 ROW 2 — Date range + Product selector
+                 ROW 2 — Date range
                  ══════════════════════════════════════ -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 
@@ -98,28 +87,6 @@
                     FromLabel="{DynamicResource Common.From}"
                     ToLabel="{DynamicResource Common.To}"
                     ApplyButtonText="{DynamicResource Common.Apply}"/>
-
-                <!-- Product selector — only visible in Product mode.
-                     Reuses ProductGridVisibility (already true only when
-                     IsProductMode is true), no new VM surface needed. -->
-                <Border Width="1" Height="20"
-                        Background="{StaticResource BrandBorder}"
-                        Margin="12,0,10,0"
-                        Visibility="{Binding ProductGridVisibility}"/>
-
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            Visibility="{Binding ProductGridVisibility}">
-                    <TextBlock Text="{DynamicResource Manager.Reports.ProductLabel}"
-                               VerticalAlignment="Center"
-                               Margin="0,0,6,0"
-                               FontSize="11"
-                               Foreground="{StaticResource TextMuted}"/>
-                    <ComboBox Style="{StaticResource ProductFilterCombo}"
-                              ItemsSource="{Binding Products}"
-                              SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                              DisplayMemberPath="Name"/>
-                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Border>

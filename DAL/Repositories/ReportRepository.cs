@@ -63,11 +63,10 @@ namespace DAL.Repositories
             return items;
         }
 
-        public async Task<List<ProductReportEntity>> GetProductSalesReportAsync(
+        public async Task<List<SalesAnalysisEntity>> GetSalesAnalysisReportAsync(
             string periodType,
             DateTime? fromDate,
-            DateTime? toDate,
-            int? productId)
+            DateTime? toDate)
         {
             await using var context = await _contextFactory.CreateDbContextAsync();
             string connectionString = context.Database.GetConnectionString()
@@ -76,7 +75,7 @@ namespace DAL.Repositories
             await using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync();
 
-            await using var command = new SqlCommand("SP_GetProductSalesReport", connection)
+            await using var command = new SqlCommand("SP_GetSalesAnalysisReport", connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -84,19 +83,22 @@ namespace DAL.Repositories
             command.Parameters.Add("@PeriodType", SqlDbType.NVarChar, 10).Value = periodType;
             command.Parameters.Add("@FromDate", SqlDbType.DateTime2).Value = (object?)fromDate ?? DBNull.Value;
             command.Parameters.Add("@ToDate", SqlDbType.DateTime2).Value = (object?)toDate ?? DBNull.Value;
-            command.Parameters.Add("@ProductId", SqlDbType.Int).Value = (object?)productId ?? DBNull.Value;
 
             await using var reader = await command.ExecuteReaderAsync();
 
-            var items = new List<ProductReportEntity>();
+            var items = new List<SalesAnalysisEntity>();
 
             while (await reader.ReadAsync())
             {
-                items.Add(new ProductReportEntity
+                items.Add(new SalesAnalysisEntity
                 {
-                    ReceiptNumber = Helpers.GetStringSafe(reader, "ReceiptNumber"),
-                    TransactionDate = reader.GetDateTime(reader.GetOrdinal("TransactionDate")),
-                    PaymentMethod = Helpers.GetStringSafe(reader, "PaymentMethod"),
+                    CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                    CategoryName = Helpers.GetStringSafe(reader, "CategoryName"),
+                    ProductId = reader.GetInt32(reader.GetOrdinal("ProductId")),
+                    ProductName = Helpers.GetStringSafe(reader, "ProductName"),
+                    SizeId = reader.GetInt32(reader.GetOrdinal("SizeId")),
+                    SizeName = Helpers.GetStringSafe(reader, "SizeName"),
+                    SizeDisplayOrder = reader.GetInt32(reader.GetOrdinal("SizeDisplayOrder")),
                     Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
                     LineTotal = reader.GetDecimal(reader.GetOrdinal("LineTotal"))
                 });

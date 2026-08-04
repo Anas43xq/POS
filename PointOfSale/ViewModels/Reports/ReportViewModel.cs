@@ -22,7 +22,6 @@ namespace UI.ViewModels
     public partial class ReportViewModel : BaseViewModel
     {
         private readonly IReportService _reportService;
-        private readonly IProductService _productService;
         private readonly ILocalizationService _localization;
         private readonly ExcelReportExporter _excelExporter;
         private readonly IReceiptDisplayService _receiptDisplayService;
@@ -30,23 +29,23 @@ namespace UI.ViewModels
         private ReportFilterMode _selectedPeriodType = ReportFilterMode.Today;
         private DateTime? _fromDate;
         private DateTime? _toDate;
-        private object? _selectedProduct;
         private bool _isSalesMode = true;
-        private bool _isProductMode;
+        private bool _isSalesAnalysisMode;
         private bool _isPeriodFilterVisible;
         private bool _isLoading;
         private string _totalOrders = "0";
         private string _totalSales = "AED 0.00";
         private string _cashTotal = "AED 0.00";
         private string _cardTotal = "AED 0.00";
-        private string _totalQuantitySold = "0";
-        private string _totalRevenue = "AED 0.00";
-        private string _averagePrice = "AED 0.00";
+        private string _categoriesSold = "0";
+        private string _productsSold = "0";
+        private string _variantsSold = "0";
+        private string _salesAnalysisTotalQuantitySold = "0";
+        private string _salesAnalysisTotalSales = "AED 0.00";
 
-        public ReportViewModel(IReportService reportService, IProductService productService, ILocalizationService localization, ExcelReportExporter excelExporter, IReceiptDisplayService receiptDisplayService)
+        public ReportViewModel(IReportService reportService, ILocalizationService localization, ExcelReportExporter excelExporter, IReceiptDisplayService receiptDisplayService)
         {
             _reportService = reportService;
-            _productService = productService;
             _localization = localization;
             _excelExporter = excelExporter;
             _receiptDisplayService = receiptDisplayService;
@@ -55,11 +54,9 @@ namespace UI.ViewModels
             OpenReceiptCommand = new RelayCommand<TransactionReportDto?>(OpenReceipt);
 
             TransactionReports = new ObservableCollection<TransactionReportDto>();
-            ProductReports = new ObservableCollection<ProductReportDto>();
-            Products = new ObservableCollection<object>();
+            SalesAnalysisReports = new ObservableCollection<SalesAnalysisDto>();
 
             IsSalesMode = true;
-            _ = LoadProductsAsync();
         }
 
         // ================================================================
@@ -112,16 +109,6 @@ namespace UI.ViewModels
             }
         }
 
-        public object? SelectedProduct
-        {
-            get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value;
-                OnPropertyChanged();
-            }
-        }
-
         // ================================================================
         // FILTER COMMANDS
         // ================================================================
@@ -146,31 +133,33 @@ namespace UI.ViewModels
             {
                 if (_isSalesMode == value) return;
                 _isSalesMode = value;
-                if (value) _isProductMode = false;
+                if (value) { _isSalesAnalysisMode = false; }
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(IsProductMode));
-                OnPropertyChanged(nameof(SalesSummaryVisibility));
-                OnPropertyChanged(nameof(ProductSummaryVisibility));
-                OnPropertyChanged(nameof(SalesGridVisibility));
-                OnPropertyChanged(nameof(ProductGridVisibility));
+                OnPropertyChanged(nameof(IsSalesAnalysisMode));
+                RaiseModeVisibilityChanged();
             }
         }
 
-        public bool IsProductMode
+        public bool IsSalesAnalysisMode
         {
-            get => _isProductMode;
+            get => _isSalesAnalysisMode;
             set
             {
-                if (_isProductMode == value) return;
-                _isProductMode = value;
-                if (value) _isSalesMode = false;
+                if (_isSalesAnalysisMode == value) return;
+                _isSalesAnalysisMode = value;
+                if (value) { _isSalesMode = false; }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsSalesMode));
-                OnPropertyChanged(nameof(SalesSummaryVisibility));
-                OnPropertyChanged(nameof(ProductSummaryVisibility));
-                OnPropertyChanged(nameof(SalesGridVisibility));
-                OnPropertyChanged(nameof(ProductGridVisibility));
+                RaiseModeVisibilityChanged();
             }
+        }
+
+        private void RaiseModeVisibilityChanged()
+        {
+            OnPropertyChanged(nameof(SalesSummaryVisibility));
+            OnPropertyChanged(nameof(SalesGridVisibility));
+            OnPropertyChanged(nameof(SalesAnalysisSummaryVisibility));
+            OnPropertyChanged(nameof(SalesAnalysisGridVisibility));
         }
 
         // ================================================================
@@ -201,24 +190,36 @@ namespace UI.ViewModels
         }
 
         // ================================================================
-        // PRODUCT SUMMARY
+        // SALES ANALYSIS SUMMARY
         // ================================================================
-        public string TotalQuantitySold
+        public string CategoriesSold
         {
-            get => _totalQuantitySold;
-            set { _totalQuantitySold = value; OnPropertyChanged(); }
+            get => _categoriesSold;
+            set { _categoriesSold = value; OnPropertyChanged(); }
         }
 
-        public string TotalRevenue
+        public string ProductsSold
         {
-            get => _totalRevenue;
-            set { _totalRevenue = value; OnPropertyChanged(); }
+            get => _productsSold;
+            set { _productsSold = value; OnPropertyChanged(); }
         }
 
-        public string AveragePrice
+        public string VariantsSold
         {
-            get => _averagePrice;
-            set { _averagePrice = value; OnPropertyChanged(); }
+            get => _variantsSold;
+            set { _variantsSold = value; OnPropertyChanged(); }
+        }
+
+        public string SalesAnalysisTotalQuantitySold
+        {
+            get => _salesAnalysisTotalQuantitySold;
+            set { _salesAnalysisTotalQuantitySold = value; OnPropertyChanged(); }
+        }
+
+        public string SalesAnalysisTotalSales
+        {
+            get => _salesAnalysisTotalSales;
+            set { _salesAnalysisTotalSales = value; OnPropertyChanged(); }
         }
 
         private string _statusMessage = string.Empty;
@@ -238,20 +239,19 @@ namespace UI.ViewModels
         public System.Windows.Visibility SalesSummaryVisibility =>
             IsSalesMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
-        public System.Windows.Visibility ProductSummaryVisibility =>
-            IsProductMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-
         public System.Windows.Visibility SalesGridVisibility =>
             IsSalesMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
-        public System.Windows.Visibility ProductGridVisibility =>
-            IsProductMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+        public System.Windows.Visibility SalesAnalysisSummaryVisibility =>
+            IsSalesAnalysisMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
+        public System.Windows.Visibility SalesAnalysisGridVisibility =>
+            IsSalesAnalysisMode ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
         // ================================================================
         // COLLECTIONS
         // ================================================================
         public ObservableCollection<TransactionReportDto> TransactionReports { get; }
-        public ObservableCollection<ProductReportDto> ProductReports { get; }
-        public ObservableCollection<object> Products { get; }
+        public ObservableCollection<SalesAnalysisDto> SalesAnalysisReports { get; }
     }
 }

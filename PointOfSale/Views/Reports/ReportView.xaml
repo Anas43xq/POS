@@ -2,7 +2,7 @@
     ╔══════════════════════════════════════════════════════╗
     ║   Cafeteria Hawa POS  –  Manager · Reports            ║
     ║   Filter bar + mode-dependent KPI strip + dedicated   ║
-    ║   Sales/Product DataGrid.                              ║
+    ║   Sales DataGrid.                                      ║
     ║                                                       ║
     ║   The filter bar lives in its own UserControl          ║
     ║   (<views:ReportFilterPanelControl/>) so the same      ║
@@ -74,7 +74,7 @@
         <!-- ══════════════════════════════════════
              KPI STRIP — one card per mode, toggled by
              the existing SalesSummaryVisibility /
-             ProductSummaryVisibility bindings. Tiles
+             SalesAnalysisSummaryVisibility bindings. Tiles
              reuse the same DashboardKpiTile style as
              HomeView's KpiMetricsControl.
              ══════════════════════════════════════ -->
@@ -130,23 +130,39 @@
                 </StackPanel>
             </Border>
 
-            <!-- Product KPIs -->
+            <!-- Sales Analysis KPIs -->
             <Border Style="{StaticResource CardBorder}"
-                    Visibility="{Binding ProductSummaryVisibility}">
+                    Visibility="{Binding SalesAnalysisSummaryVisibility}">
                 <StackPanel>
                     <Border Style="{StaticResource CardHeaderBorder}">
                         <TextBlock Style="{StaticResource CardTitle}">
-                            <Run Text="📦  "/>
-                            <Run Text="{DynamicResource Manager.Reports.ProductMode}"/>
+                            <Run Text="🧾  "/>
+                            <Run Text="{DynamicResource Manager.Reports.SalesAnalysisMode}"/>
                         </TextBlock>
                     </Border>
 
-                    <UniformGrid Columns="3" Margin="12,10,12,12">
+                    <UniformGrid Columns="5" Margin="12,10,12,12">
                         <Border Style="{StaticResource DashboardKpiTile}" Margin="0,0,6,0">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Manager.Reports.TotalRevenue}"
+                                <TextBlock Text="{DynamicResource Manager.Reports.CategoriesSold}"
                                            Style="{StaticResource DashboardKpiLabel}"/>
-                                <TextBlock Text="{Binding TotalRevenue}"
+                                <TextBlock Text="{Binding CategoriesSold}"
+                                           Style="{StaticResource DashboardKpiValue}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DashboardKpiTile}" Margin="6,0">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Manager.Reports.ProductsSold}"
+                                           Style="{StaticResource DashboardKpiLabel}"/>
+                                <TextBlock Text="{Binding ProductsSold}"
+                                           Style="{StaticResource DashboardKpiValue}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DashboardKpiTile}" Margin="6,0">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Manager.Reports.VariantsSold}"
+                                           Style="{StaticResource DashboardKpiLabel}"/>
+                                <TextBlock Text="{Binding VariantsSold}"
                                            Style="{StaticResource DashboardKpiValue}"/>
                             </StackPanel>
                         </Border>
@@ -154,15 +170,15 @@
                             <StackPanel>
                                 <TextBlock Text="{DynamicResource Manager.Reports.TotalQuantitySold}"
                                            Style="{StaticResource DashboardKpiLabel}"/>
-                                <TextBlock Text="{Binding TotalQuantitySold}"
+                                <TextBlock Text="{Binding SalesAnalysisTotalQuantitySold}"
                                            Style="{StaticResource DashboardKpiValue}"/>
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource DashboardKpiTile}" Margin="6,0,0,0">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Manager.Reports.AveragePrice}"
+                                <TextBlock Text="{DynamicResource Manager.Reports.TotalSales}"
                                            Style="{StaticResource DashboardKpiLabel}"/>
-                                <TextBlock Text="{Binding AveragePrice}"
+                                <TextBlock Text="{Binding SalesAnalysisTotalSales}"
                                            Style="{StaticResource DashboardKpiValue}"
                                            Foreground="{StaticResource BrandDark}"/>
                             </StackPanel>
@@ -279,32 +295,28 @@
                 </DataGrid>
 
                 <!-- ═══════════════════════════════
-                     DATA GRID — PRODUCT MODE
+                     DATA GRID — SALES ANALYSIS MODE
+                     Flat Category/Product/Size rows on
+                     screen; the Category -> Product -> Size
+                     hierarchy with outline grouping is built
+                     during Excel export (see ExcelReportExporter).
                      ═══════════════════════════════ -->
                 <DataGrid Grid.Row="1"
                           Style="{StaticResource ManagerDataGrid}"
-                          ItemsSource="{Binding ProductReports}"
+                          ItemsSource="{Binding SalesAnalysisReports}"
                           SelectionMode="Single"
                           SelectionUnit="FullRow"
-                          Visibility="{Binding ProductGridVisibility}">
+                          Visibility="{Binding SalesAnalysisGridVisibility}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColReceiptNumber}"
-                                            Binding="{Binding ReceiptNumber}"
-                                            Width="150"/>
-                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColDateTime}"
-                                            Binding="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
-                                            Width="160"/>
-                        <DataGridTemplateColumn Header="{DynamicResource Manager.Reports.ColPaymentMethod}" Width="110">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center"
-                                            Style="{StaticResource ReportPaymentBadgeBorderStyle}">
-                                        <TextBlock Text="{Binding PaymentMethod}"
-                                                   Style="{StaticResource ReportPaymentBadgeTextStyle}"/>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColCategory}"
+                                            Binding="{Binding CategoryName}"
+                                            Width="180"/>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColProduct}"
+                                            Binding="{Binding ProductName}"
+                                            Width="220"/>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColSize}"
+                                            Binding="{Binding SizeName}"
+                                            Width="120"/>
                         <DataGridTextColumn Header="{DynamicResource Manager.Reports.ColQuantity}"
                                             Binding="{Binding Quantity}"
                                             Width="100"/>

@@ -35,15 +35,19 @@ namespace BLL.Services
             }).ToList();
         }
 
-        public async Task<List<ProductReportDto>> GetProductSalesReportAsync(
-            string periodType, DateTime? fromDate, DateTime? toDate, int? productId)
+        public async Task<List<SalesAnalysisDto>> GetSalesAnalysisReportAsync(
+            string periodType, DateTime? fromDate, DateTime? toDate)
         {
-            var entities = await _reportRepository.GetProductSalesReportAsync(periodType, fromDate, toDate, productId);
-            return entities.Select(e => new ProductReportDto
+            var entities = await _reportRepository.GetSalesAnalysisReportAsync(periodType, fromDate, toDate);
+            return entities.Select(e => new SalesAnalysisDto
             {
-                ReceiptNumber = e.ReceiptNumber,
-                TransactionDate = e.TransactionDate,
-                PaymentMethod = e.PaymentMethod,
+                CategoryId = e.CategoryId,
+                CategoryName = e.CategoryName,
+                ProductId = e.ProductId,
+                ProductName = e.ProductName,
+                SizeId = e.SizeId,
+                SizeName = e.SizeName,
+                SizeDisplayOrder = e.SizeDisplayOrder,
                 Quantity = e.Quantity,
                 LineTotal = e.LineTotal
             }).ToList();

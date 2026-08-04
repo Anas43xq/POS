@@ -9,10 +9,9 @@ namespace BLL.Interfaces
             DateTime? fromDate,
             DateTime? toDate);
 
-        Task<List<ProductReportDto>> GetProductSalesReportAsync(
+        Task<List<SalesAnalysisDto>> GetSalesAnalysisReportAsync(
             string periodType,
             DateTime? fromDate,
-            DateTime? toDate,
-            int? productId);
+            DateTime? toDate);
     }
 }

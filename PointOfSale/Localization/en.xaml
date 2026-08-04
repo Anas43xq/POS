@@ -389,16 +389,28 @@
         Sales Mode
     </sys:String>
 
-    <sys:String x:Key="Manager.Reports.ProductMode">
-        Product Mode
+    <sys:String x:Key="Manager.Reports.SalesAnalysisMode">
+        Sales Analysis
     </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CategoriesSold">
+        Categories Sold
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ProductsSold">
+        Products Sold
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.VariantsSold">
+        Variants Sold
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ColCategory">Category</sys:String>
+    <sys:String x:Key="Manager.Reports.ColProduct">Product</sys:String>
+    <sys:String x:Key="Manager.Reports.ColSize">Size</sys:String>
 
     <sys:String x:Key="Manager.Reports.GenerateExport">
         Generate and Export
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.ProductLabel">
-        Product:
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.TotalOrders">
@@ -419,14 +431,6 @@
 
     <sys:String x:Key="Manager.Reports.TotalQuantitySold">
         Total Quantity Sold
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.TotalRevenue">
-        Total Revenue
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.AveragePrice">
-        Average Price
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.ColReceiptNumber">Receipt Number</sys:String>
@@ -452,7 +456,7 @@
     <sys:String x:Key="Manager.Transactions.ColPayment">PAYMENT</sys:String>
     <sys:String x:Key="Manager.Transactions.ColNotes">NOTES</sys:String>
     <sys:String x:Key="Manager.Transactions.ColStatus">STATUS</sys:String>
-    <sys:String x:Key="Manager.Transactions.ColDateTime">DATE &amp;  TIME</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColDateTime">Date &amp;  Time</sys:String>
 
     <sys:String x:Key="Manager.Transactions.VoidButton">Void</sys:String>
 
@@ -510,9 +514,9 @@
     <sys:String x:Key="Manager.ProductForm.CurrencyAED">AED</sys:String>
     <sys:String x:Key="Manager.ProductForm.FieldTax">Tax</sys:String>
     <sys:String x:Key="Manager.ProductForm.FieldIsActive">
-        Is active (visible to cashiers)
+        Active (visible to cashier)
     </sys:String>
-    <sys:String x:Key="Manager.ProductForm.FieldAdditionalTax">Additional tax</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldAdditionalTax">Additional Tax</sys:String>
     <sys:String x:Key="Manager.ProductForm.FieldDescription">Description</sys:String>
 
     <!-- ========================================================= -->
@@ -527,14 +531,14 @@
         Add Subcategory
     </sys:String>
 
-    <sys:String x:Key="Manager.Categories.SectionCategories">CATEGORIES</sys:String>
+    <sys:String x:Key="Manager.Categories.SectionCategories">Categories</sys:String>
 
     <sys:String x:Key="Manager.Categories.EmptySearchMessage">
         No categories match your search.
     </sys:String>
 
     <sys:String x:Key="Manager.Categories.SubcategoriesSuffix">
-         — subcategories
+         — Subcategories
     </sys:String>
 
     <sys:String x:Key="Manager.Categories.EmptySubcategoriesMessage">
@@ -563,30 +567,30 @@
     </sys:String>
 
     <sys:String x:Key="Manager.Receipt.Subtitle">
-        Sales receipts, supplier purchases and receipt documents in one manager workspace.
+        Sales receipts, supplier purchases, and receipt documents in one manager workspace.
     </sys:String>
 
     <sys:String x:Key="Manager.Receipt.TabSales">Sales</sys:String>
     <sys:String x:Key="Manager.Receipt.TabVatPurchases">VAT Purchases</sys:String>
     <sys:String x:Key="Manager.Receipt.TabNonVatPurchases">Non-VAT Purchases</sys:String>
 
-    <sys:String x:Key="Manager.Receipt.SalesReceiptsTitle">Sales receipts</sys:String>
-    <sys:String x:Key="Manager.Receipt.VatPurchaseReceiptsTitle">VAT purchase receipts</sys:String>
-    <sys:String x:Key="Manager.Receipt.NonVatPurchaseReceiptsTitle">Non-VAT purchase receipts</sys:String>
+    <sys:String x:Key="Manager.Receipt.SalesReceiptsTitle">Sales Receipts</sys:String>
+    <sys:String x:Key="Manager.Receipt.VatPurchaseReceiptsTitle">VAT Purchase Receipts</sys:String>
+    <sys:String x:Key="Manager.Receipt.NonVatPurchaseReceiptsTitle">Non-VAT Purchase Receipts</sys:String>
 
     <sys:String x:Key="Manager.Receipt.FieldVatRate">VAT Rate</sys:String>
     <sys:String x:Key="Manager.Receipt.FieldVatAmount">VAT Amount</sys:String>
     <sys:String x:Key="Manager.Receipt.FieldReceiptImage">Receipt Image</sys:String>
 
-    <sys:String x:Key="Manager.Receipt.ColReceipt">Receipt</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColDate">Date</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColSupplier">Supplier</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColCategory">Category</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColSubtotal">Subtotal</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColGrandTotal">Grand Total</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColStatus">Status</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColPaymentMethod">Payment Method</sys:String>
-    <sys:String x:Key="Manager.Receipt.ColReceiptNumber">Receipt Number</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColReceipt">RECEIPT</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColDate">DATE</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSupplier">SUPPLIER</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColCategory">CATEGORY</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSubtotal">SUBTOTAL</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColGrandTotal">GRAND TOTAL</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColStatus">STATUS</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColPaymentMethod">PAYMENT METHOD</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColReceiptNumber">RECEIPT NUMBER</sys:String>
 
     <!-- ========================================================= -->
     <!-- Manager Shifts -->
@@ -594,16 +598,16 @@
 
     <sys:String x:Key="Manager.Shifts.Title">Shift Management</sys:String>
 
-    <sys:String x:Key="Manager.Shifts.ColShiftId">SHIFT ID</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColCashier">CASHIER</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColOpenedAt">OPENED AT</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColClosedAt">CLOSED AT</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColOpening">OPENING</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColClosing">CLOSING</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColExpected">EXPECTED</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColDifference">DIFFERENCE</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColStatus">STATUS</sys:String>
-    <sys:String x:Key="Manager.Shifts.ColDuration">DURATION</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColShiftId">Shift ID</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColCashier">Cashier</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpenedAt">Opened At</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosedAt">Closed At</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpening">Opening</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosing">Closing</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColExpected">Expected</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDifference">Difference</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColStatus">Status</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDuration">Duration</sys:String>
 
     <!-- Shift filter -->
     <sys:String x:Key="Manager.Shifts.StatusFilter">Status:</sys:String>
@@ -637,22 +641,6 @@
     <sys:String x:Key="Manager.Shifts.DetailTransactions">Transactions</sys:String>
     <sys:String x:Key="Manager.Shifts.DetailClose">Close</sys:String>
 
-    <sys:String x:Key="Cashier.CurrentOrder">Current Order</sys:String>
-    <sys:String x:Key="Cashier.SearchPlaceholder">Search products…</sys:String>
-    <sys:String x:Key="Cashier.NoProductsTitle">No products found</sys:String>
-    <sys:String x:Key="Cashier.NoProductsSub">Try a different search term or category.</sys:String>
-    <sys:String x:Key="Cashier.CustomBadge">CUSTOM</sys:String>
-
-    <sys:String x:Key="Cashier.Required">REQUIRED</sys:String>
-    <sys:String x:Key="Cashier.Base">Base</sys:String>
-    <sys:String x:Key="Cashier.SelectRequired">Select required options to continue</sys:String>
-    <sys:String x:Key="Cashier.AddToCart">Add to Cart</sys:String>
-    <sys:String x:Key="Cashier.UpdateCart">Update Cart</sys:String>
-    <sys:String x:Key="Cashier.CartEmptyTitle">Cart is empty</sys:String>
-    <sys:String x:Key="Cashier.CartEmptySub">Tap a product to start</sys:String>
-
-    <sys:String x:Key="Cashier.Settings">Settings</sys:String>
-
     <!-- ========================================================= -->
     <!-- Settings (Cashier + Manager) -->
     <!-- ========================================================= -->
@@ -672,7 +660,6 @@
     <sys:String x:Key="Settings.ShowWindowsPrintDialog">Show Windows Print Dialog</sys:String>
     <sys:String x:Key="Settings.Copies">Copies</sys:String>
     <sys:String x:Key="Settings.PrintTestReceipt">Print Test Receipt</sys:String>
-    <sys:String x:Key="Settings.TestPrintAction">Test Print Action</sys:String>
 
     <sys:String x:Key="Settings.KeyboardShortcuts">Keyboard Shortcuts</sys:String>
     <sys:String x:Key="Settings.KeyboardShortcutsDescription">Customize keyboard shortcuts for faster navigation and operations.</sys:String>

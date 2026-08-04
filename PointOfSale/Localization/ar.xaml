@@ -405,16 +405,28 @@
         وضع المبيعات
     </sys:String>
 
-    <sys:String x:Key="Manager.Reports.ProductMode">
-        وضع المنتجات
+    <sys:String x:Key="Manager.Reports.SalesAnalysisMode">
+        تحليل المبيعات
     </sys:String>
+
+<sys:String x:Key="Manager.Reports.CategoriesSold">
+    الفئات المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ProductsSold">
+    المنتجات المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.VariantsSold">
+    الأصناف المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ColCategory">الفئة</sys:String>
+<sys:String x:Key="Manager.Reports.ColProduct">المنتج</sys:String>
+<sys:String x:Key="Manager.Reports.ColSize">الحجم</sys:String>
 
     <sys:String x:Key="Manager.Reports.GenerateExport">
         إنشاء وتصدير
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.ProductLabel">
-        المنتج:
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.TotalOrders">
@@ -435,14 +447,6 @@
 
     <sys:String x:Key="Manager.Reports.TotalQuantitySold">
         إجمالي الكمية المباعة
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.TotalRevenue">
-        إجمالي الإيرادات
-    </sys:String>
-
-    <sys:String x:Key="Manager.Reports.AveragePrice">
-        متوسط السعر
     </sys:String>
 
     <sys:String x:Key="Manager.Reports.ColReceiptNumber">رقم الإيصال</sys:String>

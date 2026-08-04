@@ -157,10 +157,10 @@ GO
 :r .\DAL\db\StoredProcedures\dbo.SP_GetTransactionKpis.StoredProcedure.sql
 GO
 
-:r .\DAL\db\StoredProcedures\dbo.SP_GetProductSalesReport.StoredProcedure.sql
+:r .\DAL\db\StoredProcedures\dbo.SP_GetTransactionsReport.StoredProcedure.sql
 GO
 
-:r .\DAL\db\StoredProcedures\dbo.SP_GetTransactionsReport.StoredProcedure.sql
+:r .\DAL\db\StoredProcedures\dbo.SP_GetSalesAnalysisReport.StoredProcedure.sql
 GO
 
 :r .\DAL\db\StoredProcedures\dbo.GetRecentTransactionsByCashier.StoredProcedure.sql

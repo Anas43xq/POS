@@ -55,18 +55,7 @@ namespace UI.Services
             ws.Cell(2, 1).Style.Font.FontSize = 11;
             ws.Cell(2, 1).Style.Font.FontColor = summaryLabelColor;
 
-            // ================================================================
-            // ROW 3: PRODUCT NAME (if product mode)
-            // ================================================================
-            if (request.ReportType == ReportType.ProductReport && !string.IsNullOrEmpty(request.ProductName))
-            {
-                ws.Cell(3, 1).Value = $"Product: {request.ProductName}";
-                ws.Range(3, 1, 3, 6).Merge();
-                ws.Cell(3, 1).Style.Font.FontSize = 12;
-                ws.Cell(3, 1).Style.Font.Bold = true;
-                ws.Cell(3, 1).Style.Font.FontColor = summaryLabelColor;
-            }
-            int currentRow = 4;
+            int currentRow = 3;
 
             // ================================================================
             // SUMMARY SECTION
@@ -85,12 +74,15 @@ namespace UI.Services
                     WriteSummaryRow(ws, currentRow, "Card Total", summary.CardTotal, summaryLabelColor, summaryValueColor, col: 5);
                     currentRow += 2;
                 }
-                else if (request.ReportType == ReportType.ProductReport)
+                else if (request.ReportType == ReportType.SalesAnalysis)
                 {
-                    var summary = (ProductReportSummary)request.Summary;
+                    var summary = (SalesAnalysisReportSummary)request.Summary;
+                    WriteSummaryRow(ws, currentRow, "Categories Sold", summary.CategoriesSold, summaryLabelColor, summaryValueColor);
+                    WriteSummaryRow(ws, currentRow, "Products Sold", summary.ProductsSold, summaryLabelColor, summaryValueColor, col: 3);
+                    WriteSummaryRow(ws, currentRow, "Variants Sold", summary.VariantsSold, summaryLabelColor, summaryValueColor, col: 5);
+                    currentRow++;
                     WriteSummaryRow(ws, currentRow, "Total Quantity Sold", summary.TotalQuantitySold, summaryLabelColor, summaryValueColor);
-                    WriteSummaryRow(ws, currentRow, "Total Revenue", summary.TotalRevenue, summaryLabelColor, summaryValueColor, col: 3);
-                    WriteSummaryRow(ws, currentRow, "Average Price", summary.AveragePrice, summaryLabelColor, summaryValueColor, col: 5);
+                    WriteSummaryRow(ws, currentRow, "Total Sales", summary.TotalSales, summaryLabelColor, summaryValueColor, col: 3);
                     currentRow += 2;
                 }
             }
@@ -175,13 +167,11 @@ private static readonly string[] PurchaseHeaders =
     "Note"
 };
 
-private static readonly string[] ProductReportHeaders =
+private static readonly string[] SalesAnalysisHeaders =
 {
-    "Receipt Number",
-    "Transaction Date",
-    "Payment Method",
-    "Quantity",
-    "Line Total"
+    "Category / Product / Size",
+    "Quantity Sold",
+    "Total Sales"
 };
 
 private static string[] BuildHeader(ReportType reportType)
@@ -199,7 +189,7 @@ private static string[] BuildHeader(ReportType reportType)
 
         ReportType.VatPurchaseRegister => PurchaseHeaders,
         ReportType.NonVatPurchaseRegister => PurchaseHeaders,
-        ReportType.ProductReport => ProductReportHeaders,
+        ReportType.SalesAnalysis => SalesAnalysisHeaders,
 
         _ => throw new ArgumentOutOfRangeException(nameof(reportType), reportType, null)
     };
@@ -261,28 +251,200 @@ private static string[] BuildHeader(ReportType reportType)
                 else
                     WriteNonVatTotals(ws, row, totalAmount, XLColor.FromArgb(21, 101, 192));
             }
-            else if (reportType == ReportType.ProductReport && data is IEnumerable<ProductReportDto> products)
+            else if (reportType == ReportType.SalesAnalysis && data is IEnumerable<SalesAnalysisDto> salesAnalysis)
             {
-                var list = products.ToList();
-                foreach (var item in list)
-                {
-                    // 1:1 with ProductReportHeaders: Receipt Number, Transaction Date, Payment Method, Quantity, Line Total
-                    ws.Cell(row, 1).Value = item.ReceiptNumber;
-                    ws.Cell(row, 2).Value = item.TransactionDate.ToString("g");
-                    ws.Cell(row, 3).Value = item.PaymentMethod;
-                    ws.Cell(row, 4).Value = item.Quantity;
-                    ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0";
-                    ws.Cell(row, 5).Value = item.LineTotal;
-                    ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
+                WriteSalesAnalysisRows(ws, ref row, salesAnalysis.ToList());
+            }
+        }
 
-                    ApplyRowBorder(ws, row, 5, borderColor: XLColor.FromArgb(229, 231, 235));
+        // ================================================================
+        // SALES ANALYSIS — hierarchical Category -> Product -> Size
+        // rendering with Excel Outline Grouping for expand/collapse.
+        //
+        // Perf: style templates are built once on a scratch row (10000) and
+        // applied per cell via `cell.Style = templateCell.Style`, which copies
+        // all properties in a single internal operation.  The old pattern of
+        // setting Font.Bold / Font.FontColor / Alignment.Indent individually
+        // on every cell triggered a separate ClosedXML style-table lookup
+        // per property, which is O(rows × properties) and very slow.
+        // ================================================================
+        private static void WriteSalesAnalysisRows(
+            IXLWorksheet ws,
+            ref int row,
+            List<SalesAnalysisDto> list)
+        {
+            var categoryColor = XLColor.FromArgb(21, 101, 192);
+            var productColor = XLColor.FromArgb(51, 51, 51);
+            var borderColor = XLColor.FromArgb(229, 231, 235);
+
+            const int scratch = 10000;
+
+            // ---------- Pre-build style templates (once) ----------
+            // Category header  (col 1): bold + categoryColor
+            var catHdrCell = ws.Cell(scratch, 1);
+            catHdrCell.Style.Font.Bold = true;
+            catHdrCell.Style.Font.FontColor = categoryColor;
+            var catHdrStyle = catHdrCell.Style;
+
+            // Product header  (col 1): bold + productColor + indent=1
+            var prodHdrCell = ws.Cell(scratch, 2);
+            prodHdrCell.Style.Font.Bold = true;
+            prodHdrCell.Style.Font.FontColor = productColor;
+            prodHdrCell.Style.Alignment.Indent = 1;
+            var prodHdrStyle = prodHdrCell.Style;
+
+            // Variant label  (col 1): indent=2, no bold
+            var varLblCell = ws.Cell(scratch, 3);
+            varLblCell.Style.Alignment.Indent = 2;
+            var varLblStyle = varLblCell.Style;
+
+            // Variant qty    (col 2): number format #,##0
+            var varQtyCell = ws.Cell(scratch, 4);
+            varQtyCell.Style.NumberFormat.Format = "#,##0";
+            var varQtyStyle = varQtyCell.Style;
+
+            // Variant total  (col 3): number format #,##0.00
+            var varTotCell = ws.Cell(scratch, 5);
+            varTotCell.Style.NumberFormat.Format = "#,##0.00";
+            var varTotStyle = varTotCell.Style;
+
+            // Product total label (col 1): bold + indent=1
+            var prodTotLblCell = ws.Cell(scratch, 6);
+            prodTotLblCell.Style.Font.Bold = true;
+            prodTotLblCell.Style.Alignment.Indent = 1;
+            var prodTotLblStyle = prodTotLblCell.Style;
+
+            // Product total qty   (col 2): bold + #,##0
+            var prodTotQtyCell = ws.Cell(scratch, 7);
+            prodTotQtyCell.Style.Font.Bold = true;
+            prodTotQtyCell.Style.NumberFormat.Format = "#,##0";
+            var prodTotQtyStyle = prodTotQtyCell.Style;
+
+            // Product total value (col 3): bold + #,##0.00
+            var prodTotValCell = ws.Cell(scratch, 8);
+            prodTotValCell.Style.Font.Bold = true;
+            prodTotValCell.Style.NumberFormat.Format = "#,##0.00";
+            var prodTotValStyle = prodTotValCell.Style;
+
+            // Category total label (col 1): bold + categoryColor
+            var catTotLblCell = ws.Cell(scratch, 9);
+            catTotLblCell.Style.Font.Bold = true;
+            catTotLblCell.Style.Font.FontColor = categoryColor;
+            var catTotLblStyle = catTotLblCell.Style;
+
+            // Category total qty   (col 2): bold + #,##0
+            var catTotQtyCell = ws.Cell(scratch, 10);
+            catTotQtyCell.Style.Font.Bold = true;
+            catTotQtyCell.Style.NumberFormat.Format = "#,##0";
+            var catTotQtyStyle = catTotQtyCell.Style;
+
+            // Category total value (col 3): bold + #,##0.00
+            var catTotValCell = ws.Cell(scratch, 11);
+            catTotValCell.Style.Font.Bold = true;
+            catTotValCell.Style.NumberFormat.Format = "#,##0.00";
+            var catTotValStyle = catTotValCell.Style;
+
+            // ---------- Build report ----------
+            var categoryGroups = list
+                .GroupBy(r => new { r.CategoryId, r.CategoryName })
+                .OrderBy(g => g.Key.CategoryName);
+
+            foreach (var categoryGroup in categoryGroups)
+            {
+                // ---- Category header row (always visible; level 0) ----
+                var c = ws.Cell(row, 1);
+                c.Value = categoryGroup.Key.CategoryName;
+                c.Style = catHdrStyle;
+                ws.Row(row).OutlineLevel = 0;
+                ApplyRowBorder(ws, row, 3, borderColor);
+                row++;
+
+                int categoryQty = 0;
+                decimal categoryTotal = 0m;
+
+                var productGroups = categoryGroup
+                    .GroupBy(r => new { r.ProductId, r.ProductName })
+                    .OrderBy(g => g.Key.ProductName);
+
+                foreach (var productGroup in productGroups)
+                {
+                    // ---- Product header row (level 1) ----
+                    var pc = ws.Cell(row, 1);
+                    pc.Value = productGroup.Key.ProductName;
+                    pc.Style = prodHdrStyle;
+                    ws.Row(row).OutlineLevel = 1;
+                    ApplyRowBorder(ws, row, 3, borderColor);
                     row++;
+
+                    int productQty = 0;
+                    decimal productTotal = 0m;
+
+                    // ---- Size / variant rows (level 2) ----
+                    foreach (var variant in productGroup.OrderBy(v => v.SizeDisplayOrder))
+                    {
+                        var vc = ws.Cell(row, 1);
+                        vc.Value = variant.SizeName;
+                        vc.Style = varLblStyle;
+
+                        var vq = ws.Cell(row, 2);
+                        vq.Value = variant.Quantity;
+                        vq.Style = varQtyStyle;
+
+                        var vt = ws.Cell(row, 3);
+                        vt.Value = variant.LineTotal;
+                        vt.Style = varTotStyle;
+
+                        ws.Row(row).OutlineLevel = 2;
+                        ApplyRowBorder(ws, row, 3, borderColor);
+                        row++;
+
+                        productQty += variant.Quantity;
+                        productTotal += variant.LineTotal;
+                    }
+
+                    // ---- Product Total row (level 1) ----
+                    var ptc = ws.Cell(row, 1);
+                    ptc.Value = $"{productGroup.Key.ProductName} Total";
+                    ptc.Style = prodTotLblStyle;
+
+                    var ptq = ws.Cell(row, 2);
+                    ptq.Value = productQty;
+                    ptq.Style = prodTotQtyStyle;
+
+                    var ptv = ws.Cell(row, 3);
+                    ptv.Value = productTotal;
+                    ptv.Style = prodTotValStyle;
+
+                    ws.Row(row).OutlineLevel = 1;
+                    ApplyRowBorder(ws, row, 3, borderColor);
+                    row++;
+
+                    categoryQty += productQty;
+                    categoryTotal += productTotal;
                 }
 
-                var totalQty = list.Sum(p => p.Quantity);
-                var totalLine = list.Sum(p => p.LineTotal);
-                WriteProductTotals(ws, row, totalQty, totalLine, XLColor.FromArgb(21, 101, 192));
+                // ---- Category Total row (always visible; level 0) ----
+                var ctc = ws.Cell(row, 1);
+                ctc.Value = $"{categoryGroup.Key.CategoryName} Total";
+                ctc.Style = catTotLblStyle;
+
+                var ctq = ws.Cell(row, 2);
+                ctq.Value = categoryQty;
+                ctq.Style = catTotQtyStyle;
+
+                var ctv = ws.Cell(row, 3);
+                ctv.Value = categoryTotal;
+                ctv.Style = catTotValStyle;
+
+                ws.Row(row).OutlineLevel = 0;
+                ApplyRowBorder(ws, row, 3, borderColor);
+                row++;
             }
+
+            // Summary rows sit below their detail rows (Product Total below
+            // its Size rows, Category Total below its Product blocks), so
+            // collapsing a group hides the detail rows above the summary.
+            ws.Outline.SummaryVLocation = XLOutlineSummaryVLocation.Bottom;
         }
 
         private static void ApplyRowBorder(IXLWorksheet ws, int row, int columns, XLColor borderColor)
@@ -322,19 +484,6 @@ private static string[] BuildHeader(ReportType reportType)
             ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
             ws.Cell(row, 6).Style.Font.Bold = true;
         }
-
-        private static void WriteProductTotals(IXLWorksheet ws, int row, int totalQuantity, decimal totalLineTotal, XLColor headerColor)
-        {
-            ws.Cell(row, 1).Value = "Totals";
-            ws.Cell(row, 1).Style.Font.Bold = true;
-            ws.Cell(row, 1).Style.Font.FontColor = headerColor;
-            ws.Cell(row, 4).Value = totalQuantity;
-            ws.Cell(row, 4).Style.NumberFormat.Format = "#,##0";
-            ws.Cell(row, 4).Style.Font.Bold = true;
-            ws.Cell(row, 5).Value = totalLineTotal;
-            ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0.00";
-            ws.Cell(row, 5).Style.Font.Bold = true;
-        }
     }
 
     // ================================================================
@@ -348,10 +497,12 @@ private static string[] BuildHeader(ReportType reportType)
         public string CardTotal { get; set; } = "AED 0.00";
     }
 
-    public class ProductReportSummary
+    public class SalesAnalysisReportSummary
     {
+        public string CategoriesSold { get; set; } = "0";
+        public string ProductsSold { get; set; } = "0";
+        public string VariantsSold { get; set; } = "0";
         public string TotalQuantitySold { get; set; } = "0";
-        public string TotalRevenue { get; set; } = "AED 0.00";
-        public string AveragePrice { get; set; } = "AED 0.00";
+        public string TotalSales { get; set; } = "AED 0.00";
     }
 }

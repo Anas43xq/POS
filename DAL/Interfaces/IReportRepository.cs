@@ -9,10 +9,9 @@ namespace DAL.Interfaces
             DateTime? fromDate,
             DateTime? toDate);
 
-        Task<List<ProductReportEntity>> GetProductSalesReportAsync(
+        Task<List<SalesAnalysisEntity>> GetSalesAnalysisReportAsync(
             string periodType,
             DateTime? fromDate,
-            DateTime? toDate,
-            int? productId);
+            DateTime? toDate);
     }
 }
