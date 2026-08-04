@@ -79,11 +79,18 @@
             </Setter>
         </Style>
 
-        <!-- ── Nav item icon glyph ── -->
+        <!-- ── Nav item icon glyph (legacy emoji TextBlock — unused now, kept in case of rollback) ── -->
         <Style x:Key="NavIcon" TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Width"    Value="18"/>
             <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ── Nav item icon image (small PNG icons — placeholder assets under Assets/nav) ── -->
+        <Style x:Key="NavIconImage" TargetType="Image">
+            <Setter Property="Width"   Value="18"/>
+            <Setter Property="Height"  Value="18"/>
+            <Setter Property="Stretch" Value="Uniform"/>
         </Style>
 
         <!-- ── Nav item label ── -->
@@ -169,9 +176,12 @@
                                 <GradientStop Color="#2589E0" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
-                        <TextBlock Text="🏪" FontSize="16"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                        <!-- Brand logo image (existing asset) — replaces the old emoji stand-in -->
+                        <Image Source="pack://application:,,,/UI;component/Assets/logo.png"
+                               Width="18" Height="18"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                     </Border>
                     <TextBlock Text="{DynamicResource Login.Brand}"
                                FontSize="14" FontWeight="Medium"
@@ -201,11 +211,11 @@
                         Margin="0,0,6,0"
                         Command="{Binding ShowSetting}"
                         ToolTip="{DynamicResource Settings.Title}">
-                    <TextBlock Text="&#xE713;"
-                               FontSize="14"
-                               FontFamily="Segoe MDL2 Assets"
-                               Foreground="{StaticResource BrandDark}"
-                               VerticalAlignment="Center"/>
+                    <!-- Settings gear (placeholder asset — swap Assets/nav/settings_dark.png when a final icon is ready) -->
+                    <Image Source="pack://application:,,,/UI;component/Assets/nav/settings_dark.png"
+                           Width="14" Height="14"
+                           Stretch="Uniform"
+                           VerticalAlignment="Center"/>
                 </Button>
 
                 <!-- Logout -->
@@ -248,7 +258,7 @@
                                  IsChecked="True"
                                  Command="{Binding NavigateHomeCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="🏠" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/home.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Home}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -256,7 +266,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateTransactionsCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/transactions.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Transactions}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -264,7 +274,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateShiftManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="🕓" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/shift.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.ShiftManagement}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -272,7 +282,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateReportsCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="📊" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/reports.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Reports}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -280,7 +290,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateProductManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="📦" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/products.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -288,7 +298,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateCategoryManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="🏷" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/categories.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -296,7 +306,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateSizeManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="📏" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/sizes.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.Sizes}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -304,7 +314,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateReceiptManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="🧾" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/receipts.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>
@@ -312,7 +322,7 @@
                     <RadioButton Style="{StaticResource NavItem}"
                                  Command="{Binding NavigateModifierGroupManagementCommand}">
                         <RadioButton.Tag>
-                            <TextBlock Text="⚡" Style="{StaticResource NavIcon}"/>
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png" Style="{StaticResource NavIconImage}"/>
                         </RadioButton.Tag>
                         <TextBlock Text="{DynamicResource Manager.Nav.ModifierGroups}" Style="{StaticResource NavLabel}"/>
                     </RadioButton>

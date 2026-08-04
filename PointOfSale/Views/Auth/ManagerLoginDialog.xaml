@@ -3,110 +3,174 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:UI.Behaviors"
         Title="Manager Login"
-        Width="420"
+        Width="400"
         SizeToContent="Height"
-        MinHeight="320"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        WindowStyle="SingleBorderWindow"
-        Background="#F5F7FA">
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True">
 
-    <Border Margin="24"
-            Padding="20"
-            Background="White"
-            BorderBrush="#D9DEE7"
-            BorderThickness="1"
-            CornerRadius="12">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <StackPanel>
+            <!-- Transparent inner TextBox — ModalInputBorder only styles the
+                 border/background, so (as in AddEditCategoryDialog) the box
+                 itself needs a local style with no border of its own. -->
+            <Style x:Key="FieldTextBox" TargetType="TextBox">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
+                <Setter Property="CaretBrush" Value="{StaticResource ModalBrandDark}"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="10,0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            </Style>
 
-            <!-- Title -->
-            <TextBlock Text="Manager Login"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       Foreground="#1A3A5C"
+            <!-- Same treatment for PasswordBox (no shared style exists yet). -->
+            <Style x:Key="FieldPasswordBox" TargetType="PasswordBox">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Foreground" Value="{StaticResource ModalTextDark}"/>
+                <Setter Property="CaretBrush" Value="{StaticResource ModalBrandDark}"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="10,0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Style="{StaticResource ModalCardBorder}" Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="Auto"/>
+                <!-- Body   -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Style="{StaticResource ModalHeaderBorder}" Padding="16,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="7"
+                                Background="{StaticResource ModalBrandDark}"
+                                Margin="0,0,9,0">
+                            <TextBlock Text="&#128274;" FontSize="13"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Manager Login"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{StaticResource ModalTextDark}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ModalCloseButton}"
+                            Content="&#x2715;"
+                            FontSize="13"
+                            Click="CancelButton_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Body -->
+            <StackPanel Grid.Row="1" Margin="20,18,20,4">
+
+                <!-- Illustration — secondary to the form, kept small -->
+                <Image Source="pack://application:,,,/UI;component/Assets/ManagerLoginIllustration.png"
+                       Height="92"
+                       Stretch="Uniform"
                        HorizontalAlignment="Center"
-                       Margin="0,0,0,4"/>
+                       Margin="0,0,0,12"/>
 
-            <TextBlock Text="Sign in to access manager tools."
-                       FontSize="12"
-                       Foreground="#6B7280"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,18"/>
+                <TextBlock Text="Sign in with your manager account to continue."
+                           FontSize="12"
+                           Foreground="{StaticResource ModalTextMuted}"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="0,0,0,18"/>
 
-            <!-- Username -->
-            <TextBlock Text="Username"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Foreground="#1A3A5C"
-                       Margin="0,0,0,4"/>
-            <TextBox x:Name="UsernameBox"
-                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                     IsReadOnly="{Binding IsUsernameReadOnly}"
-                     Height="36"
-                     Padding="10,0"
-                     FontSize="13"
-                     Background="#F0F7FF"
-                     BorderBrush="#B8D8F5"
-                     BorderThickness="1"
-                     VerticalContentAlignment="Center"
-                     behaviors:FocusExtension.IsFocused="{Binding FocusUsername}"/>
+                <!-- Username -->
+                <TextBlock Text="Username" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,14">
+                    <TextBox x:Name="UsernameBox"
+                             Style="{StaticResource FieldTextBox}"
+                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             IsReadOnly="{Binding IsUsernameReadOnly}"
+                             behaviors:FocusExtension.IsFocused="{Binding FocusUsername}">
+                        <TextBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                             Color="#B8D8F5"/>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
 
-            <!-- Password -->
-            <TextBlock Text="Password"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Foreground="#1A3A5C"
-                       Margin="0,14,0,4"/>
-            <PasswordBox x:Name="PasswordBox"
-                         Height="36"
-                         Padding="10,0"
-                         FontSize="13"
-                         Background="#F0F7FF"
-                         BorderBrush="#B8D8F5"
-                         BorderThickness="1"
-                         VerticalContentAlignment="Center"
-                         PasswordChanged="PasswordBox_PasswordChanged"
-                         behaviors:FocusExtension.IsFocused="{Binding FocusPassword}"/>
+                <!-- Password -->
+                <TextBlock Text="Password" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,4">
+                    <PasswordBox x:Name="PasswordBox"
+                                 Style="{StaticResource FieldPasswordBox}"
+                                 PasswordChanged="PasswordBox_PasswordChanged"
+                                 behaviors:FocusExtension.IsFocused="{Binding FocusPassword}">
+                        <PasswordBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                             Color="#B8D8F5"/>
+                        </PasswordBox.Resources>
+                    </PasswordBox>
+                </Border>
 
-            <!-- Error -->
-            <TextBlock Text="{Binding ErrorMessage}"
-                       FontSize="11"
-                       Foreground="#A32D2D"
-                       TextWrapping="Wrap"
-                       Margin="0,10,0,0"
-                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-            <!-- Buttons -->
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="0,20,0,0">
-                <Button Content="Cancel"
-                        Command="{Binding CancelCommand}"
-                        IsCancel="True"
-                        Width="90"
-                        Height="34"
-                        Margin="0,0,8,0"
-                        Background="#EEEEEE"
-                        Foreground="#1A3A5C"
-                        BorderBrush="#CBD5E1"
+                <!-- Error banner -->
+                <Border Background="{StaticResource ModalErrorBg}"
+                        BorderBrush="{StaticResource ModalErrorBorder}"
                         BorderThickness="1"
-                        FontSize="12"/>
-                <Button Content="Login"
-                        Command="{Binding LoginCommand}"
-                        IsDefault="True"
-                        Width="90"
-                        Height="34"
-                        Background="#1A6FC4"
-                        Foreground="White"
-                        BorderThickness="0"
-                        FontSize="12"
-                        FontWeight="SemiBold"/>
+                        CornerRadius="8"
+                        Padding="12,9"
+                        Margin="0,14,0,0"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#9888; " FontSize="12"
+                                   Foreground="{StaticResource ModalErrorFg}"
+                                   VerticalAlignment="Top"/>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   FontSize="11.5"
+                                   Foreground="{StaticResource ModalErrorFg}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
 
-        </StackPanel>
+            <!-- Footer -->
+            <Border Grid.Row="2" Style="{StaticResource ModalFooterBorder}" Padding="16,10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel"
+                            Style="{StaticResource OutlineBtn}"
+                            Click="CancelButton_Click"
+                            IsCancel="True"
+                            Width="96"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Login"
+                            Style="{StaticResource PrimaryGradientBtn}"
+                            Command="{Binding LoginCommand}"
+                            IsDefault="True"
+                            Width="96"/>
+                </StackPanel>
+            </Border>
 
+        </Grid>
     </Border>
 
 </Window>

@@ -3,4 +3,5 @@
   <Project Path="../Contracts/Contracts.csproj" Id="7c2ab172-ea84-4345-8b48-39fd03c98567" />
   <Project Path="../DAL/DAL.csproj" />
   <Project Path="UI.csproj" />
+  <Project Path="../BLL.Tests/BLL.Tests.csproj" />
 </Solution>

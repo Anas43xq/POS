@@ -2,154 +2,176 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource LoginAs.Title}"
+        Width="400"
         SizeToContent="Height"
-        Width="520"
-        MinHeight="560"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
         Background="#F5F7FA">
 
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DialogChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style x:Key="RoleButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#D9DEE7"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="0,0,0,18"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="18">
-
-                            <ContentPresenter
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"/>
-
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border"
-                                        Property="Background"
-                                        Value="#EEF5FF"/>
-                                <Setter TargetName="Border"
-                                        Property="BorderBrush"
-                                        Value="#2563EB"/>
-                            </Trigger>
-
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border"
-                                        Property="Background"
-                                        Value="#DCEBFF"/>
-                            </Trigger>
-
-                        </ControlTemplate.Triggers>
-
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-        </Style>
-
+            <!--
+                Compact role-selection row. Deliberately not a big square
+                "card" — a single-line row with an icon badge, title,
+                subtitle and chevron keeps the picker scannable and
+                consistent with the app's list-row visual language
+                instead of reading like a touch/marketing tile.
+            -->
+            <Style x:Key="RoleRowBtn" TargetType="Button">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ModalBrandBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bg"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="{StaticResource ModalBrandLight}"/>
+                                    <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource ModalBrandDark}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="#E1EEFC"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Bg" Property="Background" Value="{StaticResource DisabledBg}"/>
+                                    <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource DisabledBg}"/>
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Margin="40">
+    <Border Style="{StaticResource ModalCardBorder}" Margin="16">
+        <StackPanel Margin="24,26,24,24">
 
-        <Grid.RowDefinitions>
+            <!-- Illustration -->
+            <Image Source="pack://application:,,,/UI;component/Assets/LoginAsIllustration.png"
+                   Height="86"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,14"/>
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="40"/>
+            <!-- Title -->
+            <TextBlock Text="{DynamicResource LoginAs.Title}"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource ModalTextDark}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,4"/>
+            <TextBlock Text="{DynamicResource LoginAs.Subtitle}"
+                       FontSize="12"
+                       Foreground="{StaticResource ModalTextMuted}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
 
-            <RowDefinition Height="*"/>
+            <!-- Manager -->
+            <Button Style="{StaticResource RoleRowBtn}"
+                    Padding="14,12"
+                    Margin="0,0,0,10"
+                    Command="{Binding OpenManagerCommand}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <RowDefinition Height="20"/>
+                    <Border Width="36" Height="36" CornerRadius="8"
+                            Background="{StaticResource ModalBrandDark}"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="&#128272;" FontSize="14"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
 
-            <RowDefinition Height="*"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <TextBlock Text="{DynamicResource LoginAs.Manager}"
+                                   FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{StaticResource ModalTextDark}"/>
+                        <TextBlock Text="Sign in with a manager account"
+                                   FontSize="10.5"
+                                   Foreground="{StaticResource ModalTextMuted}"/>
+                    </StackPanel>
 
-        </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="2" Text="&#8250;" FontSize="16"
+                               Foreground="{StaticResource ModalTextMuted}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
 
-        <!-- Header -->
+            <!-- Cashier -->
+            <Button Style="{StaticResource RoleRowBtn}"
+                    Padding="14,12"
+                    Command="{Binding OpenCashierCommand}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            FontSize="30"
-            FontWeight="SemiBold"
-            Text="{DynamicResource LoginAs.Title}"/>
+                    <Border Width="36" Height="36" CornerRadius="8"
+                            Background="{StaticResource ModalBrandDark}"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="&#129534;" FontSize="14"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
 
-        <TextBlock
-            Grid.Row="1"
-            Margin="0,8,0,0"
-            HorizontalAlignment="Center"
-            FontSize="15"
-            Foreground="#6B7280"
-            Text="{DynamicResource LoginAs.Subtitle}"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <TextBlock Text="{DynamicResource LoginAs.Cashier}"
+                                   FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{StaticResource ModalTextDark}"/>
+                        <TextBlock Text="Continue with the default cashier"
+                                   FontSize="10.5"
+                                   Foreground="{StaticResource ModalTextMuted}"/>
+                    </StackPanel>
 
-        <!-- Manager -->
+                    <TextBlock Grid.Column="2" Text="&#8250;" FontSize="16"
+                               Foreground="{StaticResource ModalTextMuted}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
 
-        <Button
-            Grid.Row="3"
-            Style="{StaticResource RoleButtonStyle}"
-            Command="{Binding OpenManagerCommand}">
+            <!-- Error banner -->
+            <Border Background="{StaticResource ModalErrorBg}"
+                    BorderBrush="{StaticResource ModalErrorBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12,9"
+                    Margin="0,16,0,0"
+                    Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#9888; " FontSize="12"
+                               Foreground="{StaticResource ModalErrorFg}"
+                               VerticalAlignment="Top"/>
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               FontSize="11.5"
+                               Foreground="{StaticResource ModalErrorFg}"
+                               TextWrapping="Wrap"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
 
-            <StackPanel
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-
-                <TextBlock
-                    FontFamily="Segoe Fluent Icons"
-                    FontSize="64"
-                    HorizontalAlignment="Center"
-                    Text="&#xE77B;"/>
-
-                <TextBlock
-                    Margin="0,18,0,0"
-                    FontSize="24"
-                    FontWeight="SemiBold"
-                    HorizontalAlignment="Center"
-                    Text="{DynamicResource LoginAs.Manager}"/>
-
-            </StackPanel>
-
-        </Button>
-
-        <!-- Cashier -->
-
-        <Button
-            Grid.Row="5"
-            Style="{StaticResource RoleButtonStyle}"
-            Command="{Binding OpenCashierCommand}">
-
-            <StackPanel
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-
-                <TextBlock
-                    FontFamily="Segoe Fluent Icons"
-                    FontSize="64"
-                    HorizontalAlignment="Center"
-                    Text="&#xE8C7;"/>
-
-                <TextBlock
-                    Margin="0,18,0,0"
-                    FontSize="24"
-                    FontWeight="SemiBold"
-                    HorizontalAlignment="Center"
-                    Text="{DynamicResource LoginAs.Cashier}"/>
-
-            </StackPanel>
-
-        </Button>
-
-    </Grid>
+        </StackPanel>
+    </Border>
 
 </Window>

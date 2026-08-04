@@ -106,7 +106,6 @@ namespace UI
             services.AddTransient<ManagerLoginViewModel>();
 
             // Views / Windows
-            services.AddTransient<LoginView>();
             services.AddTransient<LoginAsWindow>();
             services.AddTransient<ManagerLoginDialog>();
             services.AddTransient<MainWindow>();

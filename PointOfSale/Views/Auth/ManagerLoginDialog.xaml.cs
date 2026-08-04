@@ -57,5 +57,15 @@ namespace UI.Views
                 vm.Password = passwordBox.Password;
             }
         }
+
+        /// <summary>
+        /// Closes the dialog with a negative result. Called by both the
+        /// header (×) close button and the footer Cancel button.
+        /// </summary>
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
     }
 }
