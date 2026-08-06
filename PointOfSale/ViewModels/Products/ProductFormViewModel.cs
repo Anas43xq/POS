@@ -1,7 +1,6 @@
 using BLL.Interfaces;
 using BLL.Models;
 using BLL.DTOs;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
+using UI.Services;
 using UI.Views;
 
 namespace UI.ViewModels
@@ -19,6 +19,7 @@ namespace UI.ViewModels
         private readonly ICategoryService _categoryService;
         private readonly ITaxRateService _taxRateService;
         private readonly ILocalizationService _localization;
+        private readonly IViewModelFactory _viewModelFactory;
         private readonly ProductManagementViewModel _parentVm;
 
         private ProductRowViewModel? _existingProduct;
@@ -154,6 +155,7 @@ namespace UI.ViewModels
             ICategoryService categoryService,
             ITaxRateService taxRateService,
             ILocalizationService localization,
+            IViewModelFactory viewModelFactory,
             ProductManagementViewModel parentVm,
             ProductRowViewModel? existingProduct = null)
         {
@@ -161,6 +163,7 @@ namespace UI.ViewModels
             _categoryService = categoryService;
             _taxRateService = taxRateService;
             _localization = localization;
+            _viewModelFactory = viewModelFactory;
             _parentVm = parentVm;
             _existingProduct = existingProduct;
 
@@ -241,7 +244,7 @@ namespace UI.ViewModels
                 return;
             }
 
-            bool exists = _parentVm.Products.Any(p =>
+            bool exists = _parentVm.Products.Cast<ProductRowViewModel>().Any(p =>
                 p.Name.Equals(ProductName.Trim(), StringComparison.OrdinalIgnoreCase) &&
                 p.CategoryId == SelectedCategory.Id &&
                 (_existingProduct == null || p.Id != _existingProduct.Id));
@@ -338,13 +341,10 @@ namespace UI.ViewModels
         {
             if (_existingProduct == null) return;
 
-            var vm = new TranslationDialogViewModel(
+            var vm = _viewModelFactory.Create<TranslationDialogViewModel>(
                 TranslationDialogViewModel.EntityType.Product,
                 _existingProduct.Id,
-                _existingProduct.Name,
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.IProductTranslationService>(),
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ICategoryTranslationService>(),
-                App.ServiceProvider.GetRequiredService<BLL.Interfaces.ISizeTranslationService>());
+                _existingProduct.Name);
 
             var dialog = new Views.TranslationDialogView { DataContext = vm };
             var owner = Application.Current?.MainWindow;

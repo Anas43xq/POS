@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using UI.Services;
 using System.Windows.Input;
 using UI.Commands;
 using UI.Services;
@@ -20,6 +21,7 @@ namespace UI.ViewModels
     {
         private readonly IShiftManagementService _shiftManagementService;
         private readonly IReceiptDisplayService _receiptDisplayService;
+        private readonly IViewModelFactory _viewModelFactory;
 
         private readonly ObservableCollection<ShiftListItemDto> _shifts = new();
         private ICollectionView? _shiftsView;
@@ -31,10 +33,12 @@ namespace UI.ViewModels
 
         public ShiftManagementViewModel(
             IShiftManagementService shiftManagementService,
-            IReceiptDisplayService receiptDisplayService)
+            IReceiptDisplayService receiptDisplayService,
+            IViewModelFactory viewModelFactory)
         {
             _shiftManagementService = shiftManagementService;
             _receiptDisplayService = receiptDisplayService;
+            _viewModelFactory = viewModelFactory;
 
             LoadDayCommand = new RelayCommand(_ => LoadDay());
             LoadWeekCommand = new RelayCommand(_ => LoadWeek());

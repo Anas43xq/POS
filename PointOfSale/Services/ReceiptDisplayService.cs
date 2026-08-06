@@ -13,15 +13,18 @@ public class ReceiptDisplayService : IReceiptDisplayService
     private readonly IReceiptService _receiptService;
     private readonly IPrintingService _printingService;
     private readonly ILogger<ReceiptDisplayService> _logger;
+    private readonly INotificationService _notifications;
 
     public ReceiptDisplayService(
         IReceiptService receiptService,
         IPrintingService printingService,
-        ILogger<ReceiptDisplayService> logger)
+        ILogger<ReceiptDisplayService> logger,
+        INotificationService notifications)
     {
         _receiptService = receiptService;
         _printingService = printingService;
         _logger = logger;
+        _notifications = notifications;
     }
 
     public async Task ShowReceiptAsync(int transactionId)
@@ -63,15 +66,11 @@ public class ReceiptDisplayService : IReceiptDisplayService
         if (receipt == null)
         {
             _logger.LogWarning("Receipt could not be loaded for transaction {TransactionId}", transactionId);
-            MessageBox.Show(
-                "Transaction completed, but receipt could not be loaded.",
-                "Receipt Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            _notifications.ShowWarning("Transaction completed, but receipt could not be loaded.");
             return;
         }
 
-        var receiptViewModel = new ReceiptViewModel(receipt, _printingService, _logger);
+        var receiptViewModel = new ReceiptViewModel(receipt, _printingService, _logger, _notifications);
         var receiptWindow = new ReceiptWindow(receiptViewModel);
 
         if (Application.Current.MainWindow != null &&
@@ -88,11 +87,7 @@ public class ReceiptDisplayService : IReceiptDisplayService
         if (receipt == null)
         {
             _logger.LogWarning("Receipt could not be loaded for printing transaction {TransactionId}", transactionId);
-            MessageBox.Show(
-                "No receipt is available to print.",
-                "Print Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            _notifications.ShowWarning("No receipt is available to print.");
             return;
         }
 
@@ -103,11 +98,7 @@ public class ReceiptDisplayService : IReceiptDisplayService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", transactionId);
-            MessageBox.Show(
-                "Printing failed. Please check the printer and try again.",
-                "Print Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            _notifications.ShowError("Printing failed. Please check the printer and try again.");
         }
     }
 }

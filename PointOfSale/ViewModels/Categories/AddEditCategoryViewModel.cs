@@ -5,8 +5,8 @@ using System.Windows;
 using System.Windows.Input;
 using BLL.Interfaces;
 using BLL.DTOs;
-using Microsoft.Extensions.DependencyInjection;
 using UI.Commands;
+using UI.Services;
 using UI.Views;
 
 namespace UI.ViewModels
@@ -15,20 +15,25 @@ namespace UI.ViewModels
     {
         private readonly ICategoryService? _categoryService;
         private readonly ILocalizationService? _localization;
+        private readonly IViewModelFactory? _viewModelFactory;
         private string _name = string.Empty;
         private string _icon = "📦";
         private ParentCategoryOption? _selectedParent;
         private bool _hasError;
         private string _errorMessage = string.Empty;
 
-        public AddEditCategoryViewModel() : this(null, null)
+        public AddEditCategoryViewModel() : this(null, null, null)
         {
         }
 
-        public AddEditCategoryViewModel(ICategoryService? categoryService, ILocalizationService? localization = null)
+        public AddEditCategoryViewModel(
+            ICategoryService? categoryService,
+            ILocalizationService? localization = null,
+            IViewModelFactory? viewModelFactory = null)
         {
             _categoryService = categoryService;
             _localization = localization;
+            _viewModelFactory = viewModelFactory;
             SaveCommand = new RelayCommand(Save, CanSave);
             CancelCommand = new RelayCommand(Cancel);
             TranslationsCommand = new RelayCommand(OpenTranslations, () => CategoryId > 0);
@@ -202,15 +207,12 @@ namespace UI.ViewModels
 
         private void OpenTranslations()
         {
-            if (CategoryId <= 0) return;
+            if (CategoryId <= 0 || _viewModelFactory == null) return;
 
-            var vm = new TranslationDialogViewModel(
+            var vm = _viewModelFactory.Create<TranslationDialogViewModel>(
                 TranslationDialogViewModel.EntityType.Category,
                 CategoryId,
-                Name,
-                App.ServiceProvider.GetRequiredService<IProductTranslationService>(),
-                App.ServiceProvider.GetRequiredService<ICategoryTranslationService>(),
-                App.ServiceProvider.GetRequiredService<ISizeTranslationService>());
+                Name);
 
             var dialog = new TranslationDialogView { DataContext = vm };
             var owner = Application.Current?.MainWindow;

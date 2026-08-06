@@ -34,6 +34,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
     private readonly ITransactionService _transactionService;
     private readonly IReceiptDisplayService _receiptDisplayService;
     private readonly ILocalizationService _localization;
+    private readonly IViewModelFactory _viewModelFactory;
 
     private readonly IModifierService _modifierService;
     private readonly ICartModifierService _cartModifierService;
@@ -311,6 +312,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ILocalizationService localization,
         IModifierService modifierService,
         ICartModifierService cartModifierService,
+        IViewModelFactory viewModelFactory,
         ILogger<CashierDashboardViewModel> logger)
     {
         _session = session;
@@ -324,10 +326,10 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _localization = localization;
         _modifierService = modifierService;
         _cartModifierService = cartModifierService;
+        _viewModelFactory = viewModelFactory;
         _logger = logger;
 
-        _modifierPanel = new ModifierPanelViewModel(
-            _modifierService, _cartModifierService, _localization);
+        _modifierPanel = _viewModelFactory.Create<ModifierPanelViewModel>();
 
         // Cart count badge uses a localized format string ("{0} items"),
         // so it must re-evaluate when the language changes — not just
@@ -505,5 +507,22 @@ public partial class CashierDashboardViewModel : BaseViewModel
                 else
                     item.LocalizedProductName = item.ProductName; // fallback to English
             }
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _localization.LanguageChanged -= OnLocalizationLanguageChanged;
+
+                // _modifierPanel is owned exclusively by this ViewModel for
+                // its entire lifetime (see field comment above), so it must
+                // be disposed here too — it has its own LanguageChanged
+                // subscription that would otherwise leak independently.
+                _modifierPanel.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
 }

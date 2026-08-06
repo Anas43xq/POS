@@ -33,4 +33,16 @@
     <SolidColorBrush x:Key="SuccessDark"  Color="#15803D"/>
     <SolidColorBrush x:Key="SuccessLight" Color="#DCFCE7"/>
     <SolidColorBrush x:Key="SuccessBorder" Color="#BBF7D0"/>
+
+    <!-- Warning emphasis (amber) -->
+    <SolidColorBrush x:Key="WarningAmber"  Color="#D97706"/>
+    <SolidColorBrush x:Key="WarningDark"   Color="#B45309"/>
+    <SolidColorBrush x:Key="WarningLight"  Color="#FEF3C7"/>
+    <SolidColorBrush x:Key="WarningBorder" Color="#FDE68A"/>
+
+    <!-- Info emphasis (blue, distinct from brand blue) -->
+    <SolidColorBrush x:Key="InfoBlue"    Color="#2563EB"/>
+    <SolidColorBrush x:Key="InfoDark"    Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="InfoLight"   Color="#DBEAFE"/>
+    <SolidColorBrush x:Key="InfoBorder"  Color="#BFDBFE"/>
 </ResourceDictionary>

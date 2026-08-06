@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Windows;
 using UI.Views;
@@ -9,12 +8,7 @@ namespace UI.ViewModels
     {
         private void AddProduct()
         {
-            var formVm = new ProductFormViewModel(
-                _productService,
-                _categoryService,
-                _taxRateService,
-                _localization,
-                this);
+            var formVm = _viewModelFactory.Create<ProductFormViewModel>(this);
 
             _dialogService.ShowDialog<ProductFormView>(formVm);
         }
@@ -24,13 +18,7 @@ namespace UI.ViewModels
             if (SelectedProduct == null)
                 return;
 
-            var formVm = new ProductFormViewModel(
-                _productService,
-                _categoryService,
-                _taxRateService,
-                _localization,
-                this,
-                SelectedProduct);
+            var formVm = _viewModelFactory.Create<ProductFormViewModel>(this, SelectedProduct);
 
             _dialogService.ShowDialog<ProductFormView>(formVm);
         }
@@ -49,19 +37,8 @@ namespace UI.ViewModels
             if (result != MessageBoxResult.Yes)
                 return;
 
-            try
-            {
-                await _productService.DeleteProductAsync(SelectedProduct.Id);
-                await RefreshDataAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Failed to delete product: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
+            await _productService.DeleteProductAsync(SelectedProduct.Id);
+            await RefreshDataAsync();
         }
 
         public async Task RefreshDataAsync()

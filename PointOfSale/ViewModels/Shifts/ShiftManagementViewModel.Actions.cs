@@ -180,7 +180,7 @@ namespace UI.ViewModels
                     return;
                 }
 
-                var viewModel = new ShiftDetailViewModel(result.Value!, _receiptDisplayService);
+                var viewModel = _viewModelFactory.Create<ShiftDetailViewModel>(result.Value!);
                 var dialog = new ShiftDetailView
                 {
                     DataContext = viewModel

@@ -29,6 +29,7 @@ namespace UI.ViewModels
         private readonly ModifierGroupManagementViewModel _modifierGroupManagementViewModel;
         private readonly ISessionService _sessionService;
         private readonly IDialogService _dialogService;
+        private readonly IViewModelFactory _viewModelFactory;
         private CancellationTokenSource? _timeCancellationTokenSource;
         private object? _receiptFormPage;
 
@@ -136,7 +137,8 @@ namespace UI.ViewModels
             ReceiptManagementViewModel receiptManagementViewModel,
             ModifierGroupManagementViewModel modifierGroupManagementViewModel,
             ISessionService sessionService,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IViewModelFactory viewModelFactory)
         {
             _homeViewModel = homeViewModel;
             _transactionsViewModel = transactionsViewModel;
@@ -149,6 +151,7 @@ namespace UI.ViewModels
             _modifierGroupManagementViewModel = modifierGroupManagementViewModel;
             _sessionService = sessionService;
             _dialogService = dialogService;
+            _viewModelFactory = viewModelFactory;
 
             _homeViewModel.ViewAllShiftsRequested -= NavigateToShiftManagement;
             _homeViewModel.ShowAllTransactionsRequested -= NavigateToTransactions;

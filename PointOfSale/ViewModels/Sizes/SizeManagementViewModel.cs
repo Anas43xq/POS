@@ -15,10 +15,8 @@ namespace UI.ViewModels;
 public class SizeManagementViewModel : BaseViewModel
 {
     private readonly ISizeService _sizeService;
-    private readonly IProductTranslationService _productTranslationService;
-    private readonly ICategoryTranslationService _categoryTranslationService;
-    private readonly ISizeTranslationService _sizeTranslationService;
     private readonly IDialogService _dialogService;
+    private readonly IViewModelFactory _viewModelFactory;
 
     private SizeRowViewModel? _selectedSize;
     private string _errorMessage = string.Empty;
@@ -30,16 +28,12 @@ public class SizeManagementViewModel : BaseViewModel
 
     public SizeManagementViewModel(
         ISizeService sizeService,
-        IProductTranslationService productTranslationService,
-        ICategoryTranslationService categoryTranslationService,
-        ISizeTranslationService sizeTranslationService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IViewModelFactory viewModelFactory)
     {
         _sizeService = sizeService;
-        _productTranslationService = productTranslationService;
-        _categoryTranslationService = categoryTranslationService;
-        _sizeTranslationService = sizeTranslationService;
         _dialogService = dialogService;
+        _viewModelFactory = viewModelFactory;
 
         AddCommand = new RelayCommand(StartAdd);
         EditCommand = new RelayCommand(StartEdit, () => SelectedSize != null);
@@ -226,13 +220,10 @@ public class SizeManagementViewModel : BaseViewModel
     {
         if (SelectedSize == null) return;
 
-        var vm = new TranslationDialogViewModel(
+        var vm = _viewModelFactory.Create<TranslationDialogViewModel>(
             TranslationDialogViewModel.EntityType.Size,
             SelectedSize.Id,
-            SelectedSize.Name,
-            _productTranslationService,
-            _categoryTranslationService,
-            _sizeTranslationService);
+            SelectedSize.Name);
 
         var dialog = new Views.TranslationDialogView { DataContext = vm };
         var owner = Application.Current?.MainWindow;

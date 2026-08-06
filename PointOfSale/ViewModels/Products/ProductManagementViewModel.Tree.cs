@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using BLL.DTOs;
 
 namespace UI.ViewModels
@@ -39,11 +40,32 @@ namespace UI.ViewModels
             _ = LoadDataAsync();
         }
 
+        /// <summary>
+        /// Loads categories and products for the current language.
+        /// <para>
+        /// The BLL/DAL calls this method awaits (<c>GetAllCategoriesWithChildrenAsync</c>,
+        /// <c>GetAllProductsAsync</c>) don't accept a <see cref="CancellationToken"/>,
+        /// so this can't cancel in-flight I/O. What it does guard against is
+        /// a rapid double-trigger (e.g. the user switches language twice in
+        /// quick succession, firing <see cref="OnLanguageChanged"/> twice):
+        /// each call cancels the token belonging to any still-running
+        /// previous call, and that previous call checks the token after
+        /// each await before touching VM state — so if two loads overlap,
+        /// only the most recent one is allowed to apply its results.
+        /// </para>
+        /// </summary>
         private async Task LoadDataAsync()
         {
+            _loadCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            _loadCts = cts;
+
             var languageCode = _localization.CurrentLanguage.FilePrefix;
 
             var categoriesResult = await _categoryService.GetAllCategoriesWithChildrenAsync(languageCode);
+            if (cts.Token.IsCancellationRequested)
+                return;
+
             if (categoriesResult.IsSuccess && categoriesResult.Value != null)
             {
                 _allCategoryNodes.Clear();
@@ -54,6 +76,9 @@ namespace UI.ViewModels
             }
 
             var productsResult = await _productService.GetAllProductsAsync(languageCode);
+            if (cts.Token.IsCancellationRequested)
+                return;
+
             if (productsResult.IsSuccess && productsResult.Value != null)
             {
                 _allProducts.Clear();
@@ -173,29 +198,27 @@ namespace UI.ViewModels
 
         private void ApplyProductFilter()
         {
-            Products.Clear();
+            Products.Refresh();
 
-            var query = ProductSearchText.Trim();
-
-            var filtered = _allProducts.Where(product =>
-            {
-                var matchesText = string.IsNullOrWhiteSpace(query) ||
-                    product.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
-
-                var matchesCategory = _cachedCategoryIds == null || _cachedCategoryIds.Contains(product.CategoryId);
-
-                return matchesText && matchesCategory;
-            });
-
-            foreach (var product in filtered.OrderBy(p => p.Name))
-            {
-                Products.Add(product);
-            }
-
-            if (SelectedProduct != null && !Products.Contains(SelectedProduct))
+            if (SelectedProduct != null && !Products.Cast<ProductRowViewModel>().Contains(SelectedProduct))
             {
                 SelectedProduct = null;
             }
+        }
+
+        private bool FilterProduct(object obj)
+        {
+            if (obj is not ProductRowViewModel product)
+                return false;
+
+            var query = ProductSearchText.Trim();
+
+            var matchesText = string.IsNullOrWhiteSpace(query) ||
+                product.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+            var matchesCategory = _cachedCategoryIds == null || _cachedCategoryIds.Contains(product.CategoryId);
+
+            return matchesText && matchesCategory;
         }
     }
 }

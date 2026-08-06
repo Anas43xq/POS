@@ -9,9 +9,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Printing;
-using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
+using UI.Services;
 
 namespace UI.ViewModels;
 
@@ -23,6 +23,7 @@ public class SettingsViewModel : BaseViewModel
     private readonly IPrintingService _printingService;
     private readonly IReceiptFileWriter _receiptFileWriter;
     private readonly ILogger<SettingsViewModel> _logger;
+    private readonly INotificationService _notifications;
 
 
     public ObservableCollection<LanguageDto> SupportedLanguages { get; }
@@ -147,7 +148,8 @@ public class SettingsViewModel : BaseViewModel
         ISessionService sessionService,
         IPrintingService printingService,
         IReceiptFileWriter receiptFileWriter,
-        ILogger<SettingsViewModel> logger
+        ILogger<SettingsViewModel> logger,
+        INotificationService notifications
         )
     {
         _localizationService = localizationService;
@@ -156,6 +158,7 @@ public class SettingsViewModel : BaseViewModel
         _printingService = printingService;
         _receiptFileWriter = receiptFileWriter;
         _logger = logger;
+        _notifications = notifications;
 
         SupportedLanguages = new ObservableCollection<LanguageDto>(
             _localizationService.GetSupportedLanguages());
@@ -246,7 +249,7 @@ public class SettingsViewModel : BaseViewModel
 
     /// <summary>
     /// Generic "print any receipt" helper. Centralises the
-    /// try / catch / log / MessageBox pattern so every print command
+    /// try / catch / log / toast pattern so every print command
     /// in this view-model behaves the same way and reuses the same
     /// error contract. Reused by the test-print command and any
     /// future receipt-printing command added here.
@@ -263,11 +266,7 @@ public class SettingsViewModel : BaseViewModel
                 ex,
                 "Failed to print receipt {ReceiptNumber}",
                 receipt?.ReceiptNumber);
-            MessageBox.Show(
-                "Printing failed. Please check the printer and try again.",
-                "Print Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            _notifications.ShowError("Printing failed. Please check the printer and try again.");
         }
     }
 
@@ -318,20 +317,11 @@ public class SettingsViewModel : BaseViewModel
                 receipt.ReceiptNumber,
                 filePath);
 
-            MessageBox.Show(
-                $"Test receipt saved to:\n{filePath}",
-                "Test Receipt Saved",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
-        }
+            _notifications.ShowSuccess($"Test receipt saved to:\n{filePath}");        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to save test receipt as PDF");
-            MessageBox.Show(
-                $"Could not save the PDF.\n\n{ex.Message}",
-                "Save Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            _notifications.ShowError($"Could not save the PDF.\n\n{ex.Message}");
         }
     }
 

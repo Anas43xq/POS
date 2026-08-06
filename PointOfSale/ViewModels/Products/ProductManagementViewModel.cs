@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using BLL.Interfaces;
@@ -18,14 +21,17 @@ namespace UI.ViewModels
         private readonly ITaxRateService _taxRateService;
         private readonly IDialogService _dialogService;
         private readonly ILocalizationService _localization;
+        private readonly IViewModelFactory _viewModelFactory;
+        private readonly INotificationService _notifications;
         private readonly List<CategoryNodeViewModel> _allCategoryNodes = new();
-        private readonly List<ProductRowViewModel> _allProducts = new();
+        private readonly ObservableCollection<ProductRowViewModel> _allProducts = new();
         private readonly DispatcherTimer _searchDebounceTimer;
         private string _categorySearchText = string.Empty;
         private string _productSearchText = string.Empty;
         private CategoryNodeViewModel? _selectedCategory;
         private ProductRowViewModel? _selectedProduct;
         private HashSet<int>? _cachedCategoryIds;
+        private CancellationTokenSource? _loadCts;
 
 
         public ProductManagementViewModel(
@@ -33,13 +39,22 @@ namespace UI.ViewModels
             ICategoryService categoryService,
             ITaxRateService taxRateService,
             IDialogService dialogService,
-            ILocalizationService localization)
+            ILocalizationService localization,
+            IViewModelFactory viewModelFactory,
+            INotificationService notifications)
         {
             _productService = productService;
             _categoryService = categoryService;
             _taxRateService = taxRateService;
             _dialogService = dialogService;
             _localization = localization;
+            _viewModelFactory = viewModelFactory;
+            _notifications = notifications;
+
+            Products = CollectionViewSource.GetDefaultView(_allProducts);
+            Products.Filter = FilterProduct;
+            Products.SortDescriptions.Add(
+                new SortDescription(nameof(ProductRowViewModel.Name), ListSortDirection.Ascending));
 
             _localization.LanguageChanged += OnLanguageChanged;
 
@@ -51,7 +66,10 @@ namespace UI.ViewModels
 
             AddProductCommand = new RelayCommand(AddProduct);
             EditProductCommand = new RelayCommand(EditProduct, CanEditProduct);
-            DeleteProductCommand = new AsyncRelayCommand(DeleteProductAsync, CanDeleteProduct);
+            DeleteProductCommand = new AsyncRelayCommand(
+                DeleteProductAsync,
+                CanDeleteProduct,
+                onError: ex => _notifications.ShowError($"Failed to delete product: {ex.Message}"));
             RefreshCommand = new AsyncRelayCommand(RefreshDataAsync);
 
             // NOTE: Data is intentionally NOT loaded here. This VM is a
@@ -81,7 +99,15 @@ namespace UI.ViewModels
         }
 
         public ObservableCollection<CategoryNodeViewModel> CategoryRoots { get; } = new();
-        public ObservableCollection<ProductRowViewModel> Products { get; } = new();
+
+        // Products is an ICollectionView over the stable _allProducts
+        // collection rather than a separately-maintained list that gets
+        // Clear()'d and rebuilt with Add() on every keystroke. Filtering
+        // now calls Products.Refresh(), which re-evaluates the Filter
+        // predicate and raises a single CollectionChanged(Reset) instead
+        // of one Add notification per matching row — the DataGrid
+        // re-measures once per search instead of once per item.
+        public ICollectionView Products { get; }
 
         public string CategorySearchText
         {
@@ -181,6 +207,24 @@ namespace UI.ViewModels
         }
 
         public override string ToString() => DisplayName;
+    }
+
+    public partial class ProductManagementViewModel
+    {
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _localization.LanguageChanged -= OnLanguageChanged;
+                _searchDebounceTimer.Tick -= OnSearchDebounceTick;
+                _searchDebounceTimer.Stop();
+                _loadCts?.Cancel();
+                _loadCts?.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 
     public class ProductRowViewModel : BaseViewModel

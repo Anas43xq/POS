@@ -320,10 +320,8 @@ namespace UI.ViewModels.Modifiers
                         {
                             ModifierGroupId = group.ModifierGroupId,
                             GroupName = group.Name,
-                            EnglishGroupName = string.IsNullOrWhiteSpace(group.EnglishName) ? group.Name : group.EnglishName,
                             ModifierOptionId = option.ModifierOptionId,
                             OptionName = option.Name,
-                            EnglishOptionName = string.IsNullOrWhiteSpace(option.EnglishName) ? option.Name : option.EnglishName,
                             Quantity = optVm.Quantity,
                             PriceAdd = option.PriceAdd,
                             GroupType = group.GroupType
@@ -426,6 +424,17 @@ namespace UI.ViewModels.Modifiers
                 Modifiers = new List<CartItemModifier>(_selections),
                 ModifierSummary = _cartModifierService.BuildModifierSummary(_selections)
             };
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _localization.LanguageChanged -= OnLanguageChanged;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

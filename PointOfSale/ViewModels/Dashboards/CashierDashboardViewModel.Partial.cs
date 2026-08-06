@@ -11,8 +11,6 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
-using POS.Contracts.Printing;
 using UI.Commands;
 using UI.ViewModels;
 using UI.Views;
@@ -23,7 +21,7 @@ namespace UI.ViewModels
     {
         private void ShowStartDayDialog()
         {
-            var viewModel = new StartDayDialogViewModel(_shiftService, _session);
+            var viewModel = _viewModelFactory.Create<StartDayDialogViewModel>();
             _dialogService.ShowDialog<StartDayDialog>(viewModel);
             LoadTopBar();
             RefreshCommandStates();
@@ -31,7 +29,7 @@ namespace UI.ViewModels
 
         private void ShowEndDayDialog()
         {
-            var viewModel = new EndDayDialogViewModel(_shiftService, _session);
+            var viewModel = _viewModelFactory.Create<EndDayDialogViewModel>();
             _dialogService.ShowDialog<EndDayDialog>(viewModel);
 
             LoadTopBar();
@@ -189,14 +187,7 @@ namespace UI.ViewModels
 
         public async Task OpenSetting()
         {
-            var sp = App.ServiceProvider;
-            var vm = new SettingsViewModel(
-                sp.GetRequiredService<BLL.Interfaces.ILocalizationService>(),
-                sp.GetRequiredService<BLL.Interfaces.ISettingsService>(),
-                sp.GetRequiredService<BLL.Interfaces.ISessionService>(),
-                sp.GetRequiredService<IPrintingService>(),
-                sp.GetRequiredService<IReceiptFileWriter>(),
-                sp.GetRequiredService<ILogger<SettingsViewModel>>());
+            var vm = _viewModelFactory.Create<SettingsViewModel>();
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

@@ -16,6 +16,7 @@ namespace UI.ViewModels
     {
         private readonly ICategoryService _categoryService;
         private readonly ILocalizationService _localization;
+        private readonly IViewModelFactory _viewModelFactory;
         private readonly ObservableCollection<CategoryCardViewModel> _allCategories = new();
         private string _searchText = string.Empty;
         private CategoryCardViewModel? _selectedCategory;
@@ -24,10 +25,12 @@ namespace UI.ViewModels
 
         public CategoryManagementViewModel(
             ICategoryService categoryService,
-            ILocalizationService localization)
+            ILocalizationService localization,
+            IViewModelFactory viewModelFactory)
         {
             _categoryService = categoryService;
             _localization = localization;
+            _viewModelFactory = viewModelFactory;
 
             _localization.LanguageChanged += OnLanguageChanged;
 
@@ -78,13 +81,6 @@ namespace UI.ViewModels
                     OnPropertyChanged(nameof(IsSubcategoriesEmpty));
                     RefreshSubcategories();
                     UpdateSelectionState();
-
-                    // Raise CanExecuteChanged so toolbar buttons re-query
-                    // their can-execute predicates (Edit/Delete depend on
-                    // HasSelection; AddSubcategory depends on SelectedCategory).
-                    if (EditCommand is RelayCommand editCmd) editCmd.RaiseCanExecuteChanged();
-                    if (DeleteCommand is RelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
-                    if (AddSubcategoryCommand is RelayCommand addSubCmd) addSubCmd.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -287,7 +283,8 @@ namespace UI.ViewModels
 
         private void OpenAddDialog()
         {
-            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization) { DialogTitle = "Add Category" };
+            var viewModel = _viewModelFactory.Create<AddEditCategoryViewModel>();
+            viewModel.DialogTitle = "Add Category";
             var dialog = new AddEditCategoryDialog { DataContext = viewModel };
             var owner = Application.Current?.MainWindow;
             if (owner != null && !ReferenceEquals(owner, dialog))
@@ -304,14 +301,12 @@ namespace UI.ViewModels
                 return;
             }
 
-            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization)
-            {
-                CategoryId = SelectedCategory.Id,
-                DialogTitle = "Edit Category",
-                Name = SelectedCategory.Name,
-                Icon = SelectedCategory.Icon,
-                SelectedParent = new AddEditCategoryViewModel.ParentCategoryOption { DisplayName = "— None —" }
-            };
+            var viewModel = _viewModelFactory.Create<AddEditCategoryViewModel>();
+            viewModel.CategoryId = SelectedCategory.Id;
+            viewModel.DialogTitle = "Edit Category";
+            viewModel.Name = SelectedCategory.Name;
+            viewModel.Icon = SelectedCategory.Icon;
+            viewModel.SelectedParent = new AddEditCategoryViewModel.ParentCategoryOption { DisplayName = "— None —" };
 
             var dialog = new AddEditCategoryDialog { DataContext = viewModel };
             var owner = Application.Current?.MainWindow;
@@ -330,11 +325,9 @@ namespace UI.ViewModels
                 DisplayName = SelectedCategory?.Name ?? "— None —"
             };
 
-            var viewModel = new AddEditCategoryViewModel(_categoryService, _localization)
-            {
-                DialogTitle = "Add Subcategory",
-                SelectedParent = parentOption
-            };
+            var viewModel = _viewModelFactory.Create<AddEditCategoryViewModel>();
+            viewModel.DialogTitle = "Add Subcategory";
+            viewModel.SelectedParent = parentOption;
 
             var dialog = new AddEditCategoryDialog { DataContext = viewModel };
             var owner = Application.Current?.MainWindow;
@@ -388,5 +381,15 @@ namespace UI.ViewModels
 
         private bool CanDelete() => SelectedCategory != null;
 
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _localization.LanguageChanged -= OnLanguageChanged;
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

@@ -1,10 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BLL.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using POS.Contracts.Printing;
 using UI.Views;
 
 namespace UI.ViewModels
@@ -108,21 +104,14 @@ namespace UI.ViewModels
         }
 
         /// <summary>
-        /// Opens the same Settings dialog the cashier header uses. The dialog
-        /// resolves <see cref="SettingsViewModel"/> via the application's
-        /// service provider so it picks up the current language without the
-        /// manager having to know about DI.
+        /// Opens the same Settings dialog the cashier header uses. The
+        /// dialog's ViewModel is created through <see cref="IViewModelFactory"/>
+        /// so it picks up the current language and all its services the
+        /// same way every other dialog in the app does.
         /// </summary>
         private async Task OpenSetting()
         {
-            var sp = App.ServiceProvider;
-            var vm = new SettingsViewModel(
-                sp.GetRequiredService<ILocalizationService>(),
-                sp.GetRequiredService<ISettingsService>(),
-                sp.GetRequiredService<ISessionService>(),
-                sp.GetRequiredService<IPrintingService>(),
-                sp.GetRequiredService<IReceiptFileWriter>(),
-                sp.GetRequiredService<ILogger<SettingsViewModel>>());
+            var vm = _viewModelFactory.Create<SettingsViewModel>();
             _dialogService.ShowDialog<SettingsWindow>(vm);
             await Task.CompletedTask;
         }

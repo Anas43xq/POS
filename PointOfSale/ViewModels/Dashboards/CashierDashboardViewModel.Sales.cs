@@ -133,7 +133,7 @@ namespace UI.ViewModels
             if (!TryValidatePaymentPrerequisites())
                 return;
 
-            var confirmViewModel = new CardPaymentConfirmDialogViewModel(Total, _localization);
+            var confirmViewModel = _viewModelFactory.Create<CardPaymentConfirmDialogViewModel>(Total);
             bool? confirmed = _dialogService.ShowDialogWithResult<CardPaymentConfirmDialog>(confirmViewModel);
 
             if (confirmed != true)
@@ -144,12 +144,7 @@ namespace UI.ViewModels
 
         private async Task ShowPaymentDialogAsync()
         {
-            var paymentViewModel = new PaymentDialogViewModel(
-                Total,
-                this,
-                _transactionService,
-                _session,
-                _logger);
+            var paymentViewModel = _viewModelFactory.Create<PaymentDialogViewModel>(Total, this);
 
             paymentViewModel.PaymentCompleted += async (transactionId) =>
             {
@@ -246,8 +241,8 @@ namespace UI.ViewModels
                     {
                         ModifierOptionId = m.ModifierOptionId,
                         ModifierGroupId = m.ModifierGroupId,
-                        GroupName = string.IsNullOrWhiteSpace(m.EnglishGroupName) ? m.GroupName : m.EnglishGroupName,
-                        OptionName = string.IsNullOrWhiteSpace(m.EnglishOptionName) ? m.OptionName : m.EnglishOptionName,
+                        GroupName = m.GroupName,
+                        OptionName = m.OptionName,
                         Quantity = m.Quantity,
                         PriceAdd = m.PriceAdd,
                         IsDefault = m.IsDefault
@@ -260,7 +255,7 @@ namespace UI.ViewModels
         {
             await LoadRecentSalesAsync();
 
-            var recentSalesViewModel = new RecentSalesDialogViewModel(this, _receiptDisplayService);
+            var recentSalesViewModel = _viewModelFactory.Create<RecentSalesDialogViewModel>(this);
 
             _dialogService.ShowDialog<RecentSalesDialog>(recentSalesViewModel);
         }

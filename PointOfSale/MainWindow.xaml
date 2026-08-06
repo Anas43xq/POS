@@ -7,6 +7,7 @@
         xmlns:views="clr-namespace:UI.Views"
         xmlns:cashier="clr-namespace:UI.Views.Cashier"
         xmlns:conv="clr-namespace:UI.Converters"
+        xmlns:controls="clr-namespace:UI.Controls"
         mc:Ignorable="d"
         Title="Point of Sale"
         WindowState="Maximized"
@@ -32,6 +33,11 @@
 
     <Grid>
         <ContentControl Content="{Binding CurrentViewModel}" />
+
+        <!-- Toast overlay: sits above whatever screen is active, resolves
+             its own DataContext from INotificationService (see
+             ToastHost.xaml.cs) so it needs no binding wired here. -->
+        <controls:ToastHost Panel.ZIndex="1000"/>
     </Grid>
 
 </Window>

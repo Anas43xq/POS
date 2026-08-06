@@ -77,6 +77,8 @@ namespace UI
             services.AddTransient<ExcelReportExporter>();
             services.AddSingleton<IRegistryService, RegistryService>();
             services.AddSingleton<IApplicationShellService, ApplicationShellService>();
+            services.AddSingleton<INotificationService, NotificationService>();
+            services.AddSingleton<IViewModelFactory, ViewModelFactory>();
 
             // Shortcut configuration
             services.AddSingleton(new UI.Configuration.ShortcutSettings(configuration));

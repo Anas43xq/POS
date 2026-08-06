@@ -1,7 +1,6 @@
 using POS.Contracts.Printing;
 using POS.Contracts.Receipts;
 using Microsoft.Extensions.Logging;
-using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
 using UI.Services;
@@ -12,6 +11,7 @@ namespace UI.ViewModels
     {
         private readonly IPrintingService _printingService;
         private readonly ILogger<ReceiptDisplayService> _logger;
+        private readonly INotificationService _notifications;
 
         public ReceiptDetailsDto Receipt { get; }
 
@@ -30,11 +30,16 @@ namespace UI.ViewModels
 
         public ICommand PrintReceiptCommand { get; }
 
-        public ReceiptViewModel(ReceiptDetailsDto receipt, IPrintingService printingService, ILogger<ReceiptDisplayService> logger)
+        public ReceiptViewModel(
+            ReceiptDetailsDto receipt,
+            IPrintingService printingService,
+            ILogger<ReceiptDisplayService> logger,
+            INotificationService notifications)
         {
             Receipt = receipt;
             _printingService = printingService;
             _logger = logger;
+            _notifications = notifications;
             PrintReceiptCommand = new AsyncRelayCommand(PrintReceiptAsync);
         }
 
@@ -47,11 +52,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", Receipt.TransactionId);
-                MessageBox.Show(
-                    "Printing failed. Please check the printer and try again.",
-                    "Print Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                _notifications.ShowError("Printing failed. Please check the printer and try again.");
             }
         }
     }
