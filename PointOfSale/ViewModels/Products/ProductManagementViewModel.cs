@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using BLL.Interfaces;
@@ -53,7 +54,30 @@ namespace UI.ViewModels
             DeleteProductCommand = new AsyncRelayCommand(DeleteProductAsync, CanDeleteProduct);
             RefreshCommand = new AsyncRelayCommand(RefreshDataAsync);
 
-            _ = LoadDataAsync();
+            // NOTE: Data is intentionally NOT loaded here. This VM is a
+            // mandatory constructor parameter of ManagerMainViewModel, so an
+            // eager load here would fire on every manager login regardless
+            // of whether the manager ever opens the Products page. Instead,
+            // ManagerMainViewModel.NavigateToProductManagement() triggers
+            // EnsureDataLoadedAsync() the first time this page is actually
+            // navigated to, matching the existing lazy pattern already used
+            // by TransactionsViewModel/ShiftManagementViewModel. See
+            // login-performance-analysis.md §11.
+        }
+
+        private bool _hasLoadedOnce;
+
+        /// <summary>
+        /// Loads data the first time this page is navigated to; subsequent
+        /// navigations are no-ops (use RefreshCommand to force a reload).
+        /// </summary>
+        public Task EnsureDataLoadedAsync()
+        {
+            if (_hasLoadedOnce)
+                return Task.CompletedTask;
+
+            _hasLoadedOnce = true;
+            return LoadDataAsync();
         }
 
         public ObservableCollection<CategoryNodeViewModel> CategoryRoots { get; } = new();

@@ -39,7 +39,25 @@ namespace UI.ViewModels
             SelectSubcategoryCommand = new RelayCommand<object?>(SelectSubcategory);
             AddSubcategoryCommand = new RelayCommand(OpenAddSubcategoryDialog, () => SelectedCategory != null);
 
-            _ = LoadDataAsync();
+            // NOTE: Data is intentionally NOT loaded here — see
+            // ProductManagementViewModel for the rationale. Load is
+            // triggered on first navigation via EnsureDataLoadedAsync(),
+            // called from ManagerMainViewModel.NavigateToCategoryManagement().
+        }
+
+        private bool _hasLoadedOnce;
+
+        /// <summary>
+        /// Loads data the first time this page is navigated to; subsequent
+        /// navigations are no-ops (use RefreshCommand to force a reload).
+        /// </summary>
+        public Task EnsureDataLoadedAsync()
+        {
+            if (_hasLoadedOnce)
+                return Task.CompletedTask;
+
+            _hasLoadedOnce = true;
+            return LoadDataAsync();
         }
 
         public ObservableCollection<CategoryCardViewModel> FilteredCategories { get; } = new();

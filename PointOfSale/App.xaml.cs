@@ -84,7 +84,6 @@ namespace UI
             services.AddSingleton<BLL.Interfaces.ILocalizationService, UI.Services.LocalizationService>();
 
             // ViewModels
-            services.AddTransient<LoginViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<CashierDashboardViewModel>();
             services.AddTransient<HomeViewModel>();

@@ -38,7 +38,7 @@ public class RecentSalesDialogViewModel : BaseViewModel
         _receiptDisplayService = receiptDisplayService;
 
         CloseDialogCommand = new RelayCommand(CloseDialog);
-        OpenReceiptCommand = new RelayCommand<int>(OpenReceipt);
+        OpenReceiptCommand = new AsyncRelayCommand<int>(OpenReceipt);
     }
 
     private void CloseDialog(object? obj)
@@ -46,13 +46,13 @@ public class RecentSalesDialogViewModel : BaseViewModel
         DialogClosed?.Invoke();
     }
 
-    private void OpenReceipt(int transactionId)
+    private async System.Threading.Tasks.Task OpenReceipt(int transactionId)
     {
         if (transactionId <= 0)
             return;
 
         // Show receipt directly via independent service
-        _receiptDisplayService.ShowReceipt(transactionId);
+        await _receiptDisplayService.ShowReceiptAsync(transactionId);
 
         // Close this dialog
         CloseDialog(null);

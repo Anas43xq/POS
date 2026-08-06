@@ -15,7 +15,6 @@ namespace UI.ViewModels;
 
 public partial class MainViewModel : BaseViewModel
 {
-    private readonly CashierDashboardViewModel _cashierDashboardViewModel;
     private readonly INavigationService _navigationService;
     private readonly ISessionService _sessionService;
 
@@ -31,13 +30,19 @@ public partial class MainViewModel : BaseViewModel
     public bool IsManagerView => _navigationService.CurrentViewModel is ManagerMainViewModel;
 
     public MainViewModel(
-        CashierDashboardViewModel cashierDashboardViewModel,
         INavigationService navigationService,
         ITransactionService transactionService,
         ISessionService sessionService,
         IDialogService dialogService)
     {
-        _cashierDashboardViewModel = cashierDashboardViewModel;
+        // NOTE: CashierDashboardViewModel is intentionally NOT a constructor
+        // dependency here. It used to be a mandatory ctor parameter, which
+        // meant DI eagerly constructed it (and its 4-query InitializeAsync
+        // load) on EVERY login, including Manager logins that never see the
+        // cashier dashboard. It is now resolved lazily/role-conditionally by
+        // NavigateToDashboardByRole() below, via
+        // _navigationService.NavigateTo<CashierDashboardViewModel>(), which
+        // only runs on the Cashier branch. See login-performance-analysis.md.
         _navigationService = navigationService;
         _sessionService = sessionService;
 

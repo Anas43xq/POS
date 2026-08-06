@@ -41,7 +41,7 @@ namespace UI.ViewModels
             LoadPeriodCommand = new RelayCommand(_ => LoadPeriod());
             ApplyPeriodCommand = new RelayCommand(_ => ApplyPeriod());
             RefreshCommand = new RelayCommand(_ => _ = RefreshAsync());
-            OpenReceiptCommand = new RelayCommand<TransactionListItemDto>(OpenReceipt);
+            OpenReceiptCommand = new AsyncRelayCommand<TransactionListItemDto>(OpenReceipt);
             PreviousPageCommand = new RelayCommand(_ => PreviousPage(), _ => CanGoPreviousPage);
             NextPageCommand = new RelayCommand(_ => NextPage(), _ => CanGoNextPage);
             VoidTransactionCommand = new AsyncRelayCommand<TransactionListItemDto?>(

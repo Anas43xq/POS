@@ -206,12 +206,12 @@ namespace UI.ViewModels
             ShowAllTransactionsRequested?.Invoke();
         }
 
-        private void OpenReceipt(RecentTransactionDto? transaction)
+        private async Task OpenReceipt(RecentTransactionDto? transaction)
         {
             if (transaction == null || transaction.TransactionId <= 0)
                 return;
 
-            _receiptDisplayService.ShowReceipt(transaction.TransactionId);
+            await _receiptDisplayService.ShowReceiptAsync(transaction.TransactionId);
         }
 
         public async Task LoadKpisAsync(GetTransactionKpisRequest request, CancellationToken ct = default)

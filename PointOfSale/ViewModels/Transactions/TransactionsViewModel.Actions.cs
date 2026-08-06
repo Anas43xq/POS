@@ -179,12 +179,12 @@ namespace UI.ViewModels
             return true;
         }
 
-        private void OpenReceipt(TransactionListItemDto? transaction)
+        private async Task OpenReceipt(TransactionListItemDto? transaction)
         {
             if (transaction == null)
                 return;
 
-            _receiptDisplayService.ShowReceipt(transaction.TransactionId);
+            await _receiptDisplayService.ShowReceiptAsync(transaction.TransactionId);
         }
 
         /// <summary>

@@ -79,7 +79,25 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         SaveOptionCommand = new AsyncRelayCommand(SaveOptionAsync);
         CancelOptionEditCommand = new RelayCommand(CancelOptionEdit);
 
-        _ = LoadGroupsAsync();
+        // NOTE: Data is intentionally NOT loaded here — see
+        // ProductManagementViewModel for the rationale. Load is triggered
+        // on first navigation via EnsureDataLoadedAsync(), called from
+        // ManagerMainViewModel.NavigateToModifierGroupManagement().
+    }
+
+    private bool _hasLoadedOnce;
+
+    /// <summary>
+    /// Loads data the first time this page is navigated to; subsequent
+    /// navigations are no-ops (use RefreshCommand to force a reload).
+    /// </summary>
+    public Task EnsureDataLoadedAsync()
+    {
+        if (_hasLoadedOnce)
+            return Task.CompletedTask;
+
+        _hasLoadedOnce = true;
+        return LoadGroupsAsync();
     }
 
     // ── Collections ─────────────────────────────────────

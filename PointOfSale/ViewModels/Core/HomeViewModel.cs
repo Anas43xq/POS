@@ -51,7 +51,7 @@ namespace UI.ViewModels
             FilterMonthCommand = new RelayCommand(_ => OnFilterThisMonth());
             ShowPeriodFilterCommand = new RelayCommand(_ => OnShowPeriodFilter());
             ApplyPeriodFilterCommand = new RelayCommand(_ => OnApplyPeriodFilter());
-            OpenReceiptCommand = new RelayCommand<RecentTransactionDto>(OpenReceipt);
+            OpenReceiptCommand = new AsyncRelayCommand<RecentTransactionDto>(OpenReceipt);
             OpenShiftManagementCommand = new RelayCommand(OpenShiftManagement);
             ShowAllTransactionsCommand = new RelayCommand(ShowAllTransactions);
             RefreshCommand = new AsyncRelayCommand(RefreshDataAsync);

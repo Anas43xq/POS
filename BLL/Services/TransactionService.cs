@@ -78,7 +78,12 @@ namespace BLL.Services
         public async Task<int> CreateTransactionAsync(CreateTransactionRequest request)
         {
             ValidateCreateTransactionRequest(request);
-            await ValidateShiftIsOpenAsync(request.ShiftId);
+
+            // Shift-open status is validated atomically inside SP_CreateTransaction
+            // (with UPDLOCK/HOLDLOCK against the Shifts row), so a separate
+            // pre-check query here would be redundant and just add DB latency.
+            // TranslateSqlException below turns the SP's "No open shift found"
+            // error into the same InvalidOperationException this used to throw.
             int transactionId = await _transactionCommandRepository.CreateTransactionAsync(request);
 
             // Save modifier selections (SP doesn't handle modifiers)
@@ -109,17 +114,6 @@ namespace BLL.Services
 
             if (request.PaymentMethod == "Cash" && request.AmountTendered < request.GrandTotal)
                 throw new InvalidOperationException("Cash received is less than total.");
-        }
-
-        private async Task ValidateShiftIsOpenAsync(int shiftId)
-        {
-            var shift = await _shiftRepository.GetByIdAsync(shiftId);
-
-            if (shift == null)
-                throw new InvalidOperationException("No active shift. Please start a shift first.");
-
-            if (shift.Status != ShiftStatus.Open)
-                throw new InvalidOperationException("No active shift. Please start a shift first.");
         }
 
         private static TransactionDto MapToDto(Transaction e) => new()

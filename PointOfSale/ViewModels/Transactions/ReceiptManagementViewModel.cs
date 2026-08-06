@@ -82,7 +82,7 @@ namespace UI.ViewModels
             LoadMonthCommand = new RelayCommand(_ => { SelectedDateRange = "Month"; ApplyDateRange(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), DateTime.Today); });
             LoadPeriodCommand = new RelayCommand(_ => { SelectedDateRange = "Period"; IsPeriodFilterVisible = true; });
             ApplyPeriodCommand = new RelayCommand(_ => { _ = LoadAllAsync(); });
-            OpenSalesReceiptCommand = new RelayCommand(_ => OpenSelectedSalesReceipt());
+            OpenSalesReceiptCommand = new AsyncRelayCommand(OpenSelectedSalesReceipt);
             AddVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, false));
             EditVatReceiptCommand = new RelayCommand(_ => NavigateToForm(1, true));
             DeleteVatReceiptCommand = new RelayCommand(_ => { _ = DeleteSelectedReceipt(1); });
@@ -507,7 +507,7 @@ namespace UI.ViewModels
             return date.Date.AddDays(-diff);
         }
 
-        private void OpenSelectedSalesReceipt()
+        private async Task OpenSelectedSalesReceipt()
         {
             if (SelectedSalesReceipt is null)
             {
@@ -515,7 +515,7 @@ namespace UI.ViewModels
                 return;
             }
 
-            _receiptDisplayService.ShowReceipt(SelectedSalesReceipt.TransactionId);
+            await _receiptDisplayService.ShowReceiptAsync(SelectedSalesReceipt.TransactionId);
         }
 
         private void NavigateToForm(byte receiptTypeId, bool isEditing)

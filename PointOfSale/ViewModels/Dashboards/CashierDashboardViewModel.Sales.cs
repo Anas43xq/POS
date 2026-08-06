@@ -154,9 +154,12 @@ namespace UI.ViewModels
             paymentViewModel.PaymentCompleted += async (transactionId) =>
             {
                 ClearCurrentSale();
+
+                // Show (and print) the receipt immediately — this is what the cashier
+                // is waiting on. Refreshing the recent-sales panel doesn't need to
+                // block that, so it happens afterward instead of before.
+                await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
                 await LoadRecentSalesAsync();
-                _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
-                _receiptDisplayService.ShowReceipt(transactionId);
             };
 
             _dialogService.ShowDialog<PaymentDialog>(paymentViewModel);
@@ -174,9 +177,9 @@ namespace UI.ViewModels
                         referenceNumber: null));
 
                 ClearCurrentSale();
+
+                await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
                 await LoadRecentSalesAsync();
-                _ = _receiptDisplayService.PrintReceiptAsync(transactionId);
-                _receiptDisplayService.ShowReceipt(transactionId);
             }
             catch (Exception ex)
             {

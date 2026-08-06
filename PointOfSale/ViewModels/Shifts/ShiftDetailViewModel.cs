@@ -1,5 +1,6 @@
 using Contracts.Shifts;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using UI.Commands;
@@ -17,7 +18,7 @@ namespace UI.ViewModels
             Detail = detail;
 
             Transactions = new ObservableCollection<ShiftTransactionDto>(detail.Transactions);
-            OpenReceiptCommand = new RelayCommand<ShiftTransactionDto?>(OpenReceipt);
+            OpenReceiptCommand = new AsyncRelayCommand<ShiftTransactionDto?>(OpenReceipt);
             CloseCommand = new RelayCommand(_ => Close());
         }
 
@@ -28,12 +29,12 @@ namespace UI.ViewModels
         public ICommand OpenReceiptCommand { get; }
         public ICommand CloseCommand { get; }
 
-        private void OpenReceipt(ShiftTransactionDto? transaction)
+        private async Task OpenReceipt(ShiftTransactionDto? transaction)
         {
             if (transaction == null)
                 return;
 
-            _receiptDisplayService.ShowReceipt(transaction.TransactionId);
+            await _receiptDisplayService.ShowReceiptAsync(transaction.TransactionId);
         }
 
         private void Close()

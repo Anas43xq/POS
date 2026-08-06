@@ -24,15 +24,42 @@ public class ReceiptDisplayService : IReceiptDisplayService
         _logger = logger;
     }
 
-    public void ShowReceipt(int transactionId)
+    public async Task ShowReceiptAsync(int transactionId)
     {
         if (transactionId <= 0)
             return;
 
-        var receipt = Task.Run(
-            () => _receiptService.GetReceiptByTransactionIdAsync(transactionId))
-            .GetAwaiter().GetResult();
+        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
+        ShowReceiptWindow(receipt, transactionId);
+    }
 
+    public async Task PrintReceiptAsync(int transactionId)
+    {
+        if (transactionId <= 0)
+            return;
+
+        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
+        await PrintReceiptCoreAsync(receipt, transactionId);
+    }
+
+    public async Task PrintAndShowReceiptAsync(int transactionId)
+    {
+        if (transactionId <= 0)
+            return;
+
+        // Fetch the receipt once and reuse it for both printing and display,
+        // instead of issuing the same (joined) query twice.
+        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
+
+        // Printing can continue in the background; it doesn't need to block
+        // showing the receipt to the cashier.
+        _ = PrintReceiptCoreAsync(receipt, transactionId);
+
+        ShowReceiptWindow(receipt, transactionId);
+    }
+
+    private void ShowReceiptWindow(POS.Contracts.Receipts.ReceiptDetailsDto? receipt, int transactionId)
+    {
         if (receipt == null)
         {
             _logger.LogWarning("Receipt could not be loaded for transaction {TransactionId}", transactionId);
@@ -56,13 +83,8 @@ public class ReceiptDisplayService : IReceiptDisplayService
         receiptWindow.ShowDialog();
     }
 
-    public async Task PrintReceiptAsync(int transactionId)
+    private async Task PrintReceiptCoreAsync(POS.Contracts.Receipts.ReceiptDetailsDto? receipt, int transactionId)
     {
-        if (transactionId <= 0)
-            return;
-
-        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
-
         if (receipt == null)
         {
             _logger.LogWarning("Receipt could not be loaded for printing transaction {TransactionId}", transactionId);

@@ -40,16 +40,19 @@ namespace UI.ViewModels
         private void NavigateToProductManagement()
         {
             CurrentPage = _productManagementViewModel;
+            _ = _productManagementViewModel.EnsureDataLoadedAsync();
         }
 
         private void NavigateToCategoryManagement()
         {
             CurrentPage = _categoryManagementViewModel;
+            _ = _categoryManagementViewModel.EnsureDataLoadedAsync();
         }
 
         private void NavigateToSizeManagement()
         {
             CurrentPage = _sizeManagementViewModel;
+            _ = _sizeManagementViewModel.EnsureDataLoadedAsync();
         }
 
         private void NavigateToReceiptManagement()
@@ -60,6 +63,7 @@ namespace UI.ViewModels
         private void NavigateToModifierGroupManagement()
         {
             CurrentPage = _modifierGroupManagementViewModel;
+            _ = _modifierGroupManagementViewModel.EnsureDataLoadedAsync();
         }
 
         private void OnReceiptNavigateToForm()

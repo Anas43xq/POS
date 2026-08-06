@@ -270,14 +270,29 @@ namespace BLL.Services
 
         private async Task<HashSet<int>> BuildModifierProductIdSetAsync()
         {
-            var productIds = new HashSet<int>();
+            // NOTE: The two lookups below are independent of one another
+            // (direct product->modifier-group assignments vs.
+            // category->modifier-group assignments), so they're fired
+            // concurrently instead of as two sequential round trips. The
+            // third query (resolving which products fall under a
+            // modifier-flagged category) genuinely depends on the result of
+            // the second, so it can't join the same Task.WhenAll batch.
+            // A single SQL view/UNION combining all three into one round
+            // trip would be a further improvement, but that requires a
+            // DB-side change (a view or a joined query at the repository
+            // level) and was left out here so this stays a pure
+            // sequencing/timing change with no schema impact — see
+            // login-performance-analysis.md §9/§11.
+            var productAssignmentsTask = _productModifierGroupRepo.GetAllAsync();
+            var categoryAssignmentsTask = _categoryModifierGroupRepo.GetAllAsync();
 
-            var productAssignments = await _productModifierGroupRepo.GetAllAsync();
-            foreach (var a in productAssignments)
+            await Task.WhenAll(productAssignmentsTask, categoryAssignmentsTask);
+
+            var productIds = new HashSet<int>();
+            foreach (var a in productAssignmentsTask.Result)
                 productIds.Add(a.ProductId);
 
-            var categoryAssignments = await _categoryModifierGroupRepo.GetAllAsync();
-            var categoryIds = categoryAssignments.Select(a => a.CategoryId).ToHashSet();
+            var categoryIds = categoryAssignmentsTask.Result.Select(a => a.CategoryId).ToHashSet();
 
             // For category-level modifiers, resolve which products belong to those categories
             if (categoryIds.Count > 0)

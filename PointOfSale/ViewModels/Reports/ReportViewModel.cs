@@ -51,7 +51,7 @@ namespace UI.ViewModels
             _receiptDisplayService = receiptDisplayService;
 
             ReportCommand = new RelayCommand<string>(OnReportAction, _ => !_isLoading);
-            OpenReceiptCommand = new RelayCommand<TransactionReportDto?>(OpenReceipt);
+            OpenReceiptCommand = new AsyncRelayCommand<TransactionReportDto?>(OpenReceipt);
 
             TransactionReports = new ObservableCollection<TransactionReportDto>();
             SalesAnalysisReports = new ObservableCollection<SalesAnalysisDto>();
