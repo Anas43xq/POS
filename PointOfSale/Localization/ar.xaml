@@ -85,6 +85,7 @@
     <sys:String x:Key="Common.Warning">تحذير</sys:String>
     <sys:String x:Key="Common.Error">خطأ</sys:String>
     <sys:String x:Key="Common.Information">معلومات</sys:String>
+    <sys:String x:Key="Common.Translations">ترجمات</sys:String>
     <sys:String x:Key="Common.Confirmation">تأكيد</sys:String>
     <sys:String x:Key="Common.Yes">نعم</sys:String>
     <sys:String x:Key="Common.No">لا</sys:String>
@@ -124,6 +125,10 @@
     </sys:String>
 
     <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="ManagerLogin.Title">تسجيل دخول المدير</sys:String>
+    <sys:String x:Key="ManagerLogin.Subtitle">سجل الدخول باستخدام حساب المدير للمتابعة.</sys:String>
+    <sys:String x:Key="ManagerLogin.LoginButton">تسجيل الدخول</sys:String>
 
     <sys:String x:Key="LoginAs.Title">تسجيل الدخول باسم</sys:String>
     <sys:String x:Key="LoginAs.Subtitle">اختر كيف تريد المتابعة.</sys:String>
@@ -329,6 +334,37 @@
     <sys:String x:Key="Manager.Nav.ModifierGroups">
         مجموعات التعديلات
     </sys:String>
+
+    <sys:String x:Key="Manager.ModifierGroup.Title">مجموعات التعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddGroup">إضافة مجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupDetails">تفاصيل المجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectionType">نوع الاختيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Required">مطلوب</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Active">نشط</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MinSelections">الحد الأدنى للاختيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MaxSelections">الحد الأقصى للاختيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupInformation">معلومات المجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.ModifierOptions">خيارات التعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddOption">إضافة خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditOption">تعديل خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DeleteOption">حذف خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.OptionsLabel"> خيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectEmptyHint">اختر مجموعة تعديلات لعرض تفاصيلها</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TranslationsButton">ترجمات…</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.OptionDetails">تفاصيل الخيار</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.PriceAdd">إضافة سعر</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.AllowQuantity">السماح بالكمية</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DefaultRegular">افتراضي (عادي)</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.Active">نشط</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.SaveOption">حفظ الخيار</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.TranslationsButton">ترجمات…</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOptionName">اسم الخيار</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColPrice">السعر</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColDefault">افتراضي</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColActive">نشط</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOrder">الترتيب</sys:String>
 
     <!-- ========================================================= -->
     <!-- Manager Dashboard / Home -->

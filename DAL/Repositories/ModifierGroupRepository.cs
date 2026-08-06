@@ -20,6 +20,7 @@ public class ModifierGroupRepository : Repository<ModifierGroup>, IModifierGroup
         await using var context = await _asyncContextFactory.CreateDbContextAsync();
         return await context.ModifierGroups
             .Include(mg => mg.ModifierOptions)
+                .ThenInclude(o => o.ModifierOptionTranslations)
             .Include(mg => mg.ModifierGroupTranslations)
             .OrderBy(mg => mg.SortOrder)
             .AsNoTracking()

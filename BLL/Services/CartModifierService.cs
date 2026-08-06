@@ -88,8 +88,10 @@ namespace BLL.Services
             {
                 ModifierGroupId = group.ModifierGroupId,
                 GroupName = group.Name,
+                EnglishGroupName = string.IsNullOrWhiteSpace(group.EnglishName) ? group.Name : group.EnglishName,
                 ModifierOptionId = option.ModifierOptionId,
                 OptionName = option.Name,
+                EnglishOptionName = string.IsNullOrWhiteSpace(option.EnglishName) ? option.Name : option.EnglishName,
                 Quantity = quantity,
                 PriceAdd = option.PriceAdd,
                 GroupType = group.GroupType,

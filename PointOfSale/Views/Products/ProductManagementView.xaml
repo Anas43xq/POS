@@ -38,11 +38,15 @@
 
                 <controls:CrudActionButtons Grid.Column="1" VerticalAlignment="Center"
                                              AddCommand="{Binding AddProductCommand}"
+                                             AddLabel="{DynamicResource Common.Add}"
                                              EditCommand="{Binding EditProductCommand}"
                                              EditEnabled="{Binding CanEdit}"
+                                             EditLabel="{DynamicResource Common.Edit}"
                                              DeleteCommand="{Binding DeleteProductCommand}"
                                              DeleteEnabled="{Binding CanDelete}"
-                                             RefreshCommand="{Binding RefreshCommand}"/>
+                                             DeleteLabel="{DynamicResource Common.Delete}"
+                                             RefreshCommand="{Binding RefreshCommand}"
+                                             RefreshLabel="{DynamicResource Common.Refresh}"/>
             </Grid>
         </Border>
 

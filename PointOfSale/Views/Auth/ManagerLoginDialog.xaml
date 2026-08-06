@@ -72,7 +72,7 @@
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Text="Manager Login"
+                        <TextBlock Text="{DynamicResource ManagerLogin.Title}"
                                    FontSize="14" FontWeight="SemiBold"
                                    Foreground="{StaticResource ModalTextDark}"
                                    VerticalAlignment="Center"/>
@@ -95,7 +95,7 @@
                        HorizontalAlignment="Center"
                        Margin="0,0,0,12"/>
 
-                <TextBlock Text="Sign in with your manager account to continue."
+                <TextBlock Text="{DynamicResource ManagerLogin.Subtitle}"
                            FontSize="12"
                            Foreground="{StaticResource ModalTextMuted}"
                            TextWrapping="Wrap"
@@ -103,7 +103,7 @@
                            Margin="0,0,0,18"/>
 
                 <!-- Username -->
-                <TextBlock Text="Username" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                <TextBlock Text="{DynamicResource Login.Username}" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
                 <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,14">
                     <TextBox x:Name="UsernameBox"
                              Style="{StaticResource FieldTextBox}"
@@ -118,7 +118,7 @@
                 </Border>
 
                 <!-- Password -->
-                <TextBlock Text="Password" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
+                <TextBlock Text="{DynamicResource Login.Password}" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
                 <Border Style="{StaticResource ModalInputBorder}" Height="40" Margin="0,0,0,4">
                     <PasswordBox x:Name="PasswordBox"
                                  Style="{StaticResource FieldPasswordBox}"
@@ -156,17 +156,19 @@
             <!-- Footer -->
             <Border Grid.Row="2" Style="{StaticResource ModalFooterBorder}" Padding="16,10">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancel"
+                    <Button Content="{DynamicResource Common.Cancel}"
                             Style="{StaticResource OutlineBtn}"
                             Click="CancelButton_Click"
                             IsCancel="True"
-                            Width="96"
+                            MinWidth="96"
+                            Padding="16,0"
                             Margin="0,0,8,0"/>
-                    <Button Content="Login"
+                    <Button Content="{DynamicResource ManagerLogin.LoginButton}"
                             Style="{StaticResource PrimaryGradientBtn}"
                             Command="{Binding LoginCommand}"
                             IsDefault="True"
-                            Width="96"/>
+                            MinWidth="96"
+                            Padding="16,0"/>
                 </StackPanel>
             </Border>
 

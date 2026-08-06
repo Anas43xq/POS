@@ -52,23 +52,58 @@ namespace DAL.Repositories
 
         public async Task AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            if (_contextFactory is null)
+            {
+                await _dbSet.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            await context.Set<T>().AddAsync(entity);
+            await context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            if (_contextFactory is null)
+            {
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            // Use a fresh, short-lived context per update. Reusing the
+            // long-lived _context created in the constructor would keep
+            // tracking whatever entity instance was last saved through it;
+            // a later save of a *different* instance with the same key
+            // (e.g. re-fetched via GetByIdAsync) then throws
+            // "instance ... cannot be tracked because another instance
+            // with the same key value is already being tracked."
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            context.Set<T>().Update(entity);
+            await context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var entity = await _dbSet.FindAsync(id);
-            if (entity is not null)
+            if (_contextFactory is null)
             {
-                _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
+                var entity = await _dbSet.FindAsync(id);
+                if (entity is not null)
+                {
+                    _dbSet.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return;
+            }
+
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            var trackedEntity = await context.Set<T>().FindAsync(id);
+            if (trackedEntity is not null)
+            {
+                context.Set<T>().Remove(trackedEntity);
+                await context.SaveChangesAsync();
             }
         }
 

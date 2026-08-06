@@ -101,6 +101,7 @@ namespace BLL.Services
         {
             ModifierGroupId = e.ModifierGroupId,
             Name = e.Name,
+            EnglishName = e.Name,
             GroupType = e.GroupType,
             IsRequired = e.IsRequired,
             MinSelections = e.MinSelections,
@@ -113,6 +114,7 @@ namespace BLL.Services
                 {
                     ModifierOptionId = o.ModifierOptionId,
                     Name = o.Name,
+                    EnglishName = o.Name,
                     PriceAdd = o.PriceAdd,
                     AllowQuantity = o.AllowQuantity,
                     IsDefault = o.IsDefault,
@@ -130,6 +132,7 @@ namespace BLL.Services
             {
                 ModifierGroupId = e.ModifierGroupId,
                 Name = translation?.Name ?? e.Name,
+                EnglishName = e.Name,
                 GroupType = e.GroupType,
                 IsRequired = e.IsRequired,
                 MinSelections = e.MinSelections,
@@ -147,6 +150,7 @@ namespace BLL.Services
                         {
                             ModifierOptionId = o.ModifierOptionId,
                             Name = optTranslation?.Name ?? o.Name,
+                            EnglishName = o.Name,
                             PriceAdd = o.PriceAdd,
                             AllowQuantity = o.AllowQuantity,
                             IsDefault = o.IsDefault,

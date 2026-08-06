@@ -445,6 +445,51 @@ public class ModifierManagementService : IModifierManagementService
         }
     }
 
+    // ── Localized overloads ─────────────────────────────
+
+    public async Task<Result<List<ModifierGroupSummaryDto>>> GetAllGroupsAsync(string languageCode)
+    {
+        if (string.IsNullOrWhiteSpace(languageCode) || languageCode == "en")
+            return await GetAllGroupsAsync();
+
+        try
+        {
+            var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
+            var summaries = groups
+                .OrderBy(g => g.SortOrder)
+                .ThenBy(g => g.Name)
+                .Select(g => MapToSummaryLocalized(g, languageCode))
+                .ToList();
+            return Result<List<ModifierGroupSummaryDto>>.Success(summaries);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load all modifier groups in language {Language}", languageCode);
+            return Result<List<ModifierGroupSummaryDto>>.Failure(ex.Message);
+        }
+    }
+
+    public async Task<Result<ModifierGroupDetailDto>> GetGroupDetailAsync(int groupId, string languageCode)
+    {
+        if (string.IsNullOrWhiteSpace(languageCode) || languageCode == "en")
+            return await GetGroupDetailAsync(groupId);
+
+        try
+        {
+            var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
+            var group = groups.FirstOrDefault(g => g.ModifierGroupId == groupId);
+            if (group is null)
+                return Result<ModifierGroupDetailDto>.Failure($"Modifier group {groupId} not found.");
+
+            return Result<ModifierGroupDetailDto>.Success(MapToDetailLocalized(group, languageCode));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load modifier group detail for {GroupId} in language {Language}", groupId, languageCode);
+            return Result<ModifierGroupDetailDto>.Failure(ex.Message);
+        }
+    }
+
     // ── Mapping helpers ─────────────────────────────────
 
     private static ModifierGroupSummaryDto MapToSummary(ModifierGroup g) => new()
@@ -464,6 +509,30 @@ public class ModifierManagementService : IModifierManagementService
         OptionCount = g.ModifierOptions.Count,
         SortOrder = g.SortOrder
     };
+
+    private static ModifierGroupSummaryDto MapToSummaryLocalized(ModifierGroup g, string languageCode)
+    {
+        var translation = g.ModifierGroupTranslations
+            .FirstOrDefault(t => t.LanguageCode == languageCode);
+
+        return new ModifierGroupSummaryDto
+        {
+            ModifierGroupId = g.ModifierGroupId,
+            Name = translation?.Name ?? g.Name,
+            GroupType = g.GroupType,
+            GroupTypeDisplay = g.GroupType switch
+            {
+                1 => "Single Select",
+                2 => "Multi Select",
+                3 => "Quantity",
+                _ => "Unknown"
+            },
+            IsRequired = g.IsRequired,
+            IsActive = g.IsActive,
+            OptionCount = g.ModifierOptions.Count,
+            SortOrder = g.SortOrder
+        };
+    }
 
     private static ModifierGroupDetailDto MapToDetail(ModifierGroup g) => new()
     {
@@ -489,4 +558,40 @@ public class ModifierManagementService : IModifierManagementService
             })
             .ToList()
     };
+
+    private static ModifierGroupDetailDto MapToDetailLocalized(ModifierGroup g, string languageCode)
+    {
+        var translation = g.ModifierGroupTranslations
+            .FirstOrDefault(t => t.LanguageCode == languageCode);
+
+        return new ModifierGroupDetailDto
+        {
+            ModifierGroupId = g.ModifierGroupId,
+            Name = translation?.Name ?? g.Name,
+            GroupType = g.GroupType,
+            IsRequired = g.IsRequired,
+            IsActive = g.IsActive,
+            MinSelections = g.MinSelections,
+            MaxSelections = g.MaxSelections,
+            SortOrder = g.SortOrder,
+            Options = g.ModifierOptions
+                .OrderBy(o => o.SortOrder)
+                .Select(o =>
+                {
+                    var optTranslation = o.ModifierOptionTranslations
+                        .FirstOrDefault(t => t.LanguageCode == languageCode);
+                    return new ModifierOptionDetailDto
+                    {
+                        ModifierOptionId = o.ModifierOptionId,
+                        Name = optTranslation?.Name ?? o.Name,
+                        PriceAdd = o.PriceAdd,
+                        AllowQuantity = o.AllowQuantity,
+                        IsDefault = o.IsDefault,
+                        IsActive = o.IsActive,
+                        SortOrder = o.SortOrder
+                    };
+                })
+                .ToList()
+        };
+    }
 }

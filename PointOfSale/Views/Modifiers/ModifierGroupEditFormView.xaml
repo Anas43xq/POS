@@ -14,43 +14,44 @@
     <Border Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
             BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,12">
         <StackPanel>
-            <TextBlock Text="Group Details" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+            <TextBlock Text="{DynamicResource Manager.ModifierGroup.GroupDetails}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
 
             <!-- Name -->
-            <TextBlock Text="Name" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+            <TextBlock Text="{DynamicResource Common.Name}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
             <TextBox Text="{Binding EditGroupName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Padding="8,6" Margin="0,0,0,10"/>
 
             <!-- Group Type -->
-            <TextBlock Text="Selection Type" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
-            <ComboBox SelectedValue="{Binding EditGroupType}" SelectedValuePath="Value"
+            <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectionType}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+            <ComboBox SelectedValue="{Binding EditGroupType}" SelectedValuePath="Key"
                       DisplayMemberPath="Value" ItemsSource="{Binding GroupTypeOptions}" Margin="0,0,0,10"/>
 
             <!-- Required + Active -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <CheckBox Content="Required" IsChecked="{Binding EditIsRequired}" Margin="0,0,16,0" FontSize="12"/>
-                <CheckBox Content="Active" IsChecked="{Binding EditIsActive}" FontSize="12"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Required}" IsChecked="{Binding EditIsRequired}" Margin="0,0,16,0" FontSize="12"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Active}" IsChecked="{Binding EditIsActive}" FontSize="12"/>
             </StackPanel>
 
             <!-- Min / Max / Order -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,12,0">
-                    <TextBlock Text="Min Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.MinSelections}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding EditMinSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,12,0">
-                    <TextBlock Text="Max Selections" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.MaxSelections}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding EditMaxSelections, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Display Order" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.DisplayOrder}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding EditSortOrder, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
                 </StackPanel>
             </StackPanel>
 
-            <!-- Save / Cancel -->
+            <!-- Save / Cancel / Translations -->
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource PrimaryGradientBtn}" Content="Save" Command="{Binding SaveGroupCommand}" Margin="0,0,8,0"/>
-                <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelGroupEditCommand}"/>
+                <Button Style="{StaticResource PrimaryGradientBtn}" Content="{DynamicResource Common.Save}" Command="{Binding SaveGroupCommand}" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Cancel}" Command="{Binding CancelGroupEditCommand}" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Manager.ModifierGroup.TranslationsButton}" Command="{Binding GroupTranslationsCommand}"/>
             </StackPanel>
         </StackPanel>
     </Border>

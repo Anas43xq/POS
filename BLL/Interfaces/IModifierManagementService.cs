@@ -14,7 +14,9 @@ public interface IModifierManagementService
     // ── Group CRUD ──────────────────────────────────────
 
     Task<Result<List<ModifierGroupSummaryDto>>> GetAllGroupsAsync();
+    Task<Result<List<ModifierGroupSummaryDto>>> GetAllGroupsAsync(string languageCode);
     Task<Result<ModifierGroupDetailDto>> GetGroupDetailAsync(int groupId);
+    Task<Result<ModifierGroupDetailDto>> GetGroupDetailAsync(int groupId, string languageCode);
     Task<Result<int>> CreateGroupAsync(ModifierGroupWriteDto dto);
     Task<Result<bool>> UpdateGroupAsync(ModifierGroupWriteDto dto);
     Task<Result<bool>> DeleteGroupAsync(int groupId);

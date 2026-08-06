@@ -7,8 +7,10 @@ using System.Windows;
 using System.Windows.Input;
 using BLL.DTOs;
 using BLL.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using UI.Commands;
 using UI.Services;
+using UI.Views;
 
 namespace UI.ViewModels;
 
@@ -64,6 +66,8 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         _localizationService = localizationService;
         _dialogService = dialogService;
 
+        _localizationService.LanguageChanged += OnLanguageChanged;
+
         // Group commands
         AddGroupCommand = new RelayCommand(StartAddGroup);
         EditGroupCommand = new RelayCommand(StartEditGroup, () => SelectedGroup != null);
@@ -78,6 +82,10 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         DeleteOptionCommand = new AsyncRelayCommand(DeleteOptionAsync, () => SelectedOption != null);
         SaveOptionCommand = new AsyncRelayCommand(SaveOptionAsync);
         CancelOptionEditCommand = new RelayCommand(CancelOptionEdit);
+
+        // Translation commands
+        GroupTranslationsCommand = new RelayCommand(OpenGroupTranslations, () => SelectedGroup != null && SelectedGroup.ModifierGroupId > 0);
+        OptionTranslationsCommand = new RelayCommand(OpenOptionTranslations, () => SelectedOption != null && SelectedOption.ModifierOptionId > 0);
 
         // NOTE: Data is intentionally NOT loaded here — see
         // ProductManagementViewModel for the rationale. Load is triggered
@@ -98,6 +106,11 @@ public class ModifierGroupManagementViewModel : BaseViewModel
 
         _hasLoadedOnce = true;
         return LoadGroupsAsync();
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        _ = LoadGroupsAsync();
     }
 
     // ── Collections ─────────────────────────────────────
@@ -230,13 +243,17 @@ public class ModifierGroupManagementViewModel : BaseViewModel
     public ICommand SaveOptionCommand { get; }
     public ICommand CancelOptionEditCommand { get; }
 
+    public ICommand GroupTranslationsCommand { get; }
+    public ICommand OptionTranslationsCommand { get; }
+
     // ── Group CRUD ──────────────────────────────────────
 
     private List<ModifierGroupSummaryDto> _allGroups = new();
 
     private async Task LoadGroupsAsync()
     {
-        var result = await _managementService.GetAllGroupsAsync();
+        var languageCode = _localizationService.CurrentLanguage.FilePrefix;
+        var result = await _managementService.GetAllGroupsAsync(languageCode);
         Groups.Clear();
         if (result.IsSuccess && result.Value != null)
         {
@@ -268,7 +285,8 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         Options.Clear();
         if (SelectedGroup == null) return;
 
-        var result = await _managementService.GetGroupDetailAsync(SelectedGroup.ModifierGroupId);
+        var languageCode = _localizationService.CurrentLanguage.FilePrefix;
+        var result = await _managementService.GetGroupDetailAsync(SelectedGroup.ModifierGroupId, languageCode);
         if (result.IsSuccess && result.Value != null)
         {
             foreach (var o in result.Value.Options)
@@ -306,13 +324,13 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         EditSortOrder = SelectedGroup.SortOrder.ToString();
 
         // Load full detail to get min/max
-        _ = LoadGroupEditFieldsAsync(SelectedGroup.ModifierGroupId);
+        _ = LoadGroupEditFieldsAsync(SelectedGroup.ModifierGroupId, _localizationService.CurrentLanguage.FilePrefix);
         IsEditingGroup = true;
     }
 
-    private async Task LoadGroupEditFieldsAsync(int groupId)
+    private async Task LoadGroupEditFieldsAsync(int groupId, string languageCode)
     {
-        var result = await _managementService.GetGroupDetailAsync(groupId);
+        var result = await _managementService.GetGroupDetailAsync(groupId, languageCode);
         if (result.IsSuccess && result.Value != null)
         {
             EditMinSelections = result.Value.MinSelections.ToString();
@@ -553,12 +571,50 @@ public class ModifierGroupManagementViewModel : BaseViewModel
         if (EditGroupCommand is RelayCommand e) e.RaiseCanExecuteChanged();
         if (DeleteGroupCommand is RelayCommand d) d.RaiseCanExecuteChanged();
         if (AddOptionCommand is RelayCommand a) a.RaiseCanExecuteChanged();
+        if (GroupTranslationsCommand is RelayCommand t) t.RaiseCanExecuteChanged();
     }
 
     private void RaiseOptionCommandCanExecute()
     {
         if (EditOptionCommand is RelayCommand e) e.RaiseCanExecuteChanged();
         if (DeleteOptionCommand is RelayCommand d) d.RaiseCanExecuteChanged();
+        if (OptionTranslationsCommand is RelayCommand t) t.RaiseCanExecuteChanged();
+    }
+
+    private void OpenGroupTranslations()
+    {
+        if (SelectedGroup == null || SelectedGroup.ModifierGroupId <= 0) return;
+
+        var vm = new TranslationDialogViewModel(
+            TranslationDialogViewModel.EntityType.ModifierGroup,
+            SelectedGroup.ModifierGroupId,
+            SelectedGroup.Name,
+            modifierGroupTranslationService: App.ServiceProvider.GetRequiredService<IModifierGroupTranslationService>());
+
+        ShowTranslationDialog(vm);
+    }
+
+    private void OpenOptionTranslations()
+    {
+        if (SelectedOption == null || SelectedOption.ModifierOptionId <= 0) return;
+
+        var vm = new TranslationDialogViewModel(
+            TranslationDialogViewModel.EntityType.ModifierOption,
+            SelectedOption.ModifierOptionId,
+            SelectedOption.Name,
+            modifierOptionTranslationService: App.ServiceProvider.GetRequiredService<IModifierOptionTranslationService>());
+
+        ShowTranslationDialog(vm);
+    }
+
+    private static void ShowTranslationDialog(TranslationDialogViewModel vm)
+    {
+        var dialog = new TranslationDialogView { DataContext = vm };
+        var owner = Application.Current?.MainWindow;
+        if (owner != null && !ReferenceEquals(owner, dialog))
+            dialog.Owner = owner;
+        vm.RequestClose = () => dialog.Close();
+        dialog.ShowDialog();
     }
 
     // ── Mapping helpers ─────────────────────────────────

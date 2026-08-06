@@ -108,5 +108,32 @@ IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId =
     INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (5, @LangArOpt, N'عجين عادي', SYSUTCDATETIME());
 GO
 
+/* ---- Modifier Group Translations (Malayalam) ---- */
+DECLARE @LangMlGrp NVARCHAR(10) = N'ml';
+
+IF NOT EXISTS (SELECT 1 FROM ModifierGroupTranslations WHERE ModifierGroupId = 1 AND LanguageCode = @LangMlGrp)
+    INSERT INTO ModifierGroupTranslations (ModifierGroupId, LanguageCode, Name, CreatedAt)
+    VALUES (1, @LangMlGrp, N'അധികങ്ങൾ', SYSUTCDATETIME());
+
+IF NOT EXISTS (SELECT 1 FROM ModifierGroupTranslations WHERE ModifierGroupId = 2 AND LanguageCode = @LangMlGrp)
+    INSERT INTO ModifierGroupTranslations (ModifierGroupId, LanguageCode, Name, CreatedAt)
+    VALUES (2, @LangMlGrp, N'മാവിന്റെ കനം', SYSUTCDATETIME());
+GO
+
+/* ---- Modifier Option Translations (Malayalam) ---- */
+DECLARE @LangMlOpt NVARCHAR(10) = N'ml';
+
+IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId = 1 AND LanguageCode = @LangMlOpt)
+    INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (1, @LangMlOpt, N'അധിക ചീസ്', SYSUTCDATETIME());
+IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId = 2 AND LanguageCode = @LangMlOpt)
+    INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (2, @LangMlOpt, N'അധിക ഇറച്ചി', SYSUTCDATETIME());
+IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId = 3 AND LanguageCode = @LangMlOpt)
+    INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (3, @LangMlOpt, N'അധിക സഅ്തർ', SYSUTCDATETIME());
+IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId = 4 AND LanguageCode = @LangMlOpt)
+    INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (4, @LangMlOpt, N'നേർത്ത മാവ്', SYSUTCDATETIME());
+IF NOT EXISTS (SELECT 1 FROM ModifierOptionTranslations WHERE ModifierOptionId = 5 AND LanguageCode = @LangMlOpt)
+    INSERT INTO ModifierOptionTranslations (ModifierOptionId, LanguageCode, Name, CreatedAt) VALUES (5, @LangMlOpt, N'സാധാരണ മാവ്', SYSUTCDATETIME());
+GO
+
 PRINT 'Modifier seed data deployed successfully.';
 GO

@@ -44,14 +44,19 @@
                 Margin="0,0,0,10">
             <controls:CrudActionButtons
                 AddCommand="{Binding AddCommand}"
+                AddLabel="{DynamicResource Common.Add}"
                 EditCommand="{Binding EditCommand}"
                 EditEnabled="{Binding HasSelection}"
+                EditLabel="{DynamicResource Common.Edit}"
                 DeleteCommand="{Binding DeleteCommand}"
                 DeleteEnabled="{Binding HasSelection}"
+                DeleteLabel="{DynamicResource Common.Delete}"
                 ShowTranslations="True"
                 TranslationsCommand="{Binding TranslationsCommand}"
                 TranslationsEnabled="{Binding HasSelection}"
-                RefreshCommand="{Binding RefreshCommand}"/>
+                TranslationsLabel="{DynamicResource Common.Translations}"
+                RefreshCommand="{Binding RefreshCommand}"
+                RefreshLabel="{DynamicResource Common.Refresh}"/>
         </Border>
 
         <!-- Content -->

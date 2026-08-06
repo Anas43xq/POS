@@ -74,6 +74,7 @@
     <sys:String x:Key="Common.Warning">മുന്നറിയിപ്പ്</sys:String>
     <sys:String x:Key="Common.Error">പിശക്</sys:String>
     <sys:String x:Key="Common.Information">വിവരം</sys:String>
+    <sys:String x:Key="Common.Translations">പരിഭാഷകൾ</sys:String>
     <sys:String x:Key="Common.Confirmation">സ്ഥിരീകരിക്കുക</sys:String>
     <sys:String x:Key="Common.Yes">ഉവ്വ്</sys:String>
     <sys:String x:Key="Common.No">ഇല്ല</sys:String>
@@ -113,6 +114,10 @@
     </sys:String>
 
     <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="ManagerLogin.Title">മാനേജർ ലോഗിൻ</sys:String>
+    <sys:String x:Key="ManagerLogin.Subtitle">തുടരാൻ നിങ്ങളുടെ മാനേജർ അക്കൗണ്ട് ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക.</sys:String>
+    <sys:String x:Key="ManagerLogin.LoginButton">ലോഗിൻ</sys:String>
 
     <sys:String x:Key="LoginAs.Title">ആയി ലോഗിൻ ചെയ്യുക</sys:String>
     <sys:String x:Key="LoginAs.Subtitle">എങ്ങനെ തുടരണമെന്ന് തിരഞ്ഞെടുക്കുക.</sys:String>
@@ -318,6 +323,37 @@
     <sys:String x:Key="Manager.Nav.ModifierGroups">
         മോഡിഫയർ ഗ്രൂപ്പുകൾ
     </sys:String>
+
+    <sys:String x:Key="Manager.ModifierGroup.Title">മോഡിഫയർ ഗ്രൂപ്പുകൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddGroup">ഗ്രൂപ്പ് ചേർക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupDetails">ഗ്രൂപ്പ് വിശദാംശങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectionType">തിരഞ്ഞെടുപ്പ് തരം</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Required">ആവശ്യമാണ്</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Active">സജീവം</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MinSelections">കുറഞ്ഞ തിരഞ്ഞെടുപ്പുകൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MaxSelections">കൂടിയ തിരഞ്ഞെടുപ്പുകൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DisplayOrder">പ്രദർശന ക്രമം</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupInformation">ഗ്രൂപ്പ് വിവരം</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.ModifierOptions">മോഡിഫയർ ഓപ്ഷനുകൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddOption">ഓപ്ഷൻ ചേർക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditOption">ഓപ്ഷൻ തിരുത്തുക</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DeleteOption">ഓപ്ഷൻ ഇല്ലാതാക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.OptionsLabel"> ഓപ്ഷനുകൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectEmptyHint">വിശദാംശങ്ങൾ കാണാൻ ഒരു മോഡിഫയർ ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TranslationsButton">പരിഭാഷകൾ…</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.OptionDetails">ഓപ്ഷൻ വിശദാംശങ്ങൾ</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.PriceAdd">വില കൂട്ടിച്ചേർക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DisplayOrder">പ്രദർശന ക്രമം</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.AllowQuantity">അളവ് അനുവദിക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DefaultRegular">ഡിഫോൾട്ട് (സാധാരണ)</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.Active">സജീവം</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.SaveOption">ഓപ്ഷൻ സംരക്ഷിക്കുക</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.TranslationsButton">പരിഭാഷകൾ…</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOptionName">ഓപ്ഷൻ പേര്</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColPrice">വില</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColDefault">ഡിഫോൾട്ട്</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColActive">സജീവം</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOrder">ക്രമം</sys:String>
 
     <!-- ========================================================= -->
     <!-- Manager Dashboard / Home -->

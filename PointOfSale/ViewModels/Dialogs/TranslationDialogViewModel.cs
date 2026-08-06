@@ -18,7 +18,7 @@ namespace UI.ViewModels;
 /// </summary>
 public class TranslationDialogViewModel : BaseViewModel
 {
-    public enum EntityType { Product, Category, Size }
+    public enum EntityType { Product, Category, Size, ModifierGroup, ModifierOption }
 
     private readonly EntityType _entityType;
     private readonly int _entityId;
@@ -27,6 +27,8 @@ public class TranslationDialogViewModel : BaseViewModel
     private readonly IProductTranslationService? _productTranslationService;
     private readonly ICategoryTranslationService? _categoryTranslationService;
     private readonly ISizeTranslationService? _sizeTranslationService;
+    private readonly IModifierGroupTranslationService? _modifierGroupTranslationService;
+    private readonly IModifierOptionTranslationService? _modifierOptionTranslationService;
 
     private TranslationItemViewModel? _selectedTranslation;
     private TranslationItemViewModel? _editItem;
@@ -38,7 +40,9 @@ public class TranslationDialogViewModel : BaseViewModel
         string canonicalName,
         IProductTranslationService? productTranslationService = null,
         ICategoryTranslationService? categoryTranslationService = null,
-        ISizeTranslationService? sizeTranslationService = null)
+        ISizeTranslationService? sizeTranslationService = null,
+        IModifierGroupTranslationService? modifierGroupTranslationService = null,
+        IModifierOptionTranslationService? modifierOptionTranslationService = null)
     {
         _entityType = entityType;
         _entityId = entityId;
@@ -46,12 +50,16 @@ public class TranslationDialogViewModel : BaseViewModel
         _productTranslationService = productTranslationService;
         _categoryTranslationService = categoryTranslationService;
         _sizeTranslationService = sizeTranslationService;
+        _modifierGroupTranslationService = modifierGroupTranslationService;
+        _modifierOptionTranslationService = modifierOptionTranslationService;
 
         Title = entityType switch
         {
             EntityType.Product => "Product Translation",
             EntityType.Category => "Category Translation",
             EntityType.Size => "Size Translation",
+            EntityType.ModifierGroup => "Modifier Group Translation",
+            EntityType.ModifierOption => "Modifier Option Translation",
             _ => "Translation"
         };
 
@@ -151,6 +159,10 @@ public class TranslationDialogViewModel : BaseViewModel
                 => await _categoryTranslationService.GetByCategoryIdAsync(_entityId),
             EntityType.Size when _sizeTranslationService != null
                 => await _sizeTranslationService.GetBySizeIdAsync(_entityId),
+            EntityType.ModifierGroup when _modifierGroupTranslationService != null
+                => await _modifierGroupTranslationService.GetByModifierGroupIdAsync(_entityId),
+            EntityType.ModifierOption when _modifierOptionTranslationService != null
+                => await _modifierOptionTranslationService.GetByModifierOptionIdAsync(_entityId),
             _ => Enumerable.Empty<object>()
         };
 
@@ -182,6 +194,20 @@ public class TranslationDialogViewModel : BaseViewModel
             LanguageCode = s.LanguageCode,
             LanguageName = Languages.FirstOrDefault(l => l.FilePrefix == s.LanguageCode)?.DisplayName ?? s.LanguageCode,
             TranslatedName = s.TranslatedName
+        },
+        ModifierGroupTranslationDto mg => new TranslationItemViewModel
+        {
+            TranslationId = mg.ModifierGroupTranslationId,
+            LanguageCode = mg.LanguageCode,
+            LanguageName = Languages.FirstOrDefault(l => l.FilePrefix == mg.LanguageCode)?.DisplayName ?? mg.LanguageCode,
+            TranslatedName = mg.TranslatedName
+        },
+        ModifierOptionTranslationDto mo => new TranslationItemViewModel
+        {
+            TranslationId = mo.ModifierOptionTranslationId,
+            LanguageCode = mo.LanguageCode,
+            LanguageName = Languages.FirstOrDefault(l => l.FilePrefix == mo.LanguageCode)?.DisplayName ?? mo.LanguageCode,
+            TranslatedName = mo.TranslatedName
         },
         _ => new TranslationItemViewModel()
     };
@@ -285,6 +311,36 @@ public class TranslationDialogViewModel : BaseViewModel
                 else
                     await _sizeTranslationService.AddAsync(dto);
             }
+            else if (_entityType == EntityType.ModifierGroup && _modifierGroupTranslationService != null)
+            {
+                var dto = new ModifierGroupTranslationDto
+                {
+                    ModifierGroupTranslationId = EditItem.TranslationId,
+                    ModifierGroupId = _entityId,
+                    LanguageCode = EditItem.SelectedLanguage.FilePrefix,
+                    TranslatedName = EditItem.TranslatedName.Trim()
+                };
+
+                if (EditItem.TranslationId > 0)
+                    await _modifierGroupTranslationService.UpdateAsync(dto);
+                else
+                    await _modifierGroupTranslationService.AddAsync(dto);
+            }
+            else if (_entityType == EntityType.ModifierOption && _modifierOptionTranslationService != null)
+            {
+                var dto = new ModifierOptionTranslationDto
+                {
+                    ModifierOptionTranslationId = EditItem.TranslationId,
+                    ModifierOptionId = _entityId,
+                    LanguageCode = EditItem.SelectedLanguage.FilePrefix,
+                    TranslatedName = EditItem.TranslatedName.Trim()
+                };
+
+                if (EditItem.TranslationId > 0)
+                    await _modifierOptionTranslationService.UpdateAsync(dto);
+                else
+                    await _modifierOptionTranslationService.AddAsync(dto);
+            }
 
             CancelEdit();
             await LoadTranslationsAsync();
@@ -307,6 +363,10 @@ public class TranslationDialogViewModel : BaseViewModel
                 await _categoryTranslationService.DeleteAsync(SelectedTranslation.TranslationId);
             else if (_entityType == EntityType.Size && _sizeTranslationService != null)
                 await _sizeTranslationService.DeleteAsync(SelectedTranslation.TranslationId);
+            else if (_entityType == EntityType.ModifierGroup && _modifierGroupTranslationService != null)
+                await _modifierGroupTranslationService.DeleteAsync(SelectedTranslation.TranslationId);
+            else if (_entityType == EntityType.ModifierOption && _modifierOptionTranslationService != null)
+                await _modifierOptionTranslationService.DeleteAsync(SelectedTranslation.TranslationId);
 
             await LoadTranslationsAsync();
         }

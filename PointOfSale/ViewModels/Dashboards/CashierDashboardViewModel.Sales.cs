@@ -246,8 +246,8 @@ namespace UI.ViewModels
                     {
                         ModifierOptionId = m.ModifierOptionId,
                         ModifierGroupId = m.ModifierGroupId,
-                        GroupName = m.GroupName,
-                        OptionName = m.OptionName,
+                        GroupName = string.IsNullOrWhiteSpace(m.EnglishGroupName) ? m.GroupName : m.EnglishGroupName,
+                        OptionName = string.IsNullOrWhiteSpace(m.EnglishOptionName) ? m.OptionName : m.EnglishOptionName,
                         Quantity = m.Quantity,
                         PriceAdd = m.PriceAdd,
                         IsDefault = m.IsDefault

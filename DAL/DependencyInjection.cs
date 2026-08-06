@@ -64,6 +64,8 @@ public static class DependencyInjection
 
         services.AddScoped<IModifierGroupRepository, ModifierGroupRepository>();
         services.AddScoped<IModifierOptionRepository, ModifierOptionRepository>();
+        services.AddScoped<IModifierGroupTranslationRepository, ModifierGroupTranslationRepository>();
+        services.AddScoped<IModifierOptionTranslationRepository, ModifierOptionTranslationRepository>();
         services.AddScoped<ICategoryModifierGroupRepository, CategoryModifierGroupRepository>();
         services.AddScoped<IProductModifierGroupRepository, ProductModifierGroupRepository>();
 

@@ -78,6 +78,13 @@ namespace UI.ViewModels
                     OnPropertyChanged(nameof(IsSubcategoriesEmpty));
                     RefreshSubcategories();
                     UpdateSelectionState();
+
+                    // Raise CanExecuteChanged so toolbar buttons re-query
+                    // their can-execute predicates (Edit/Delete depend on
+                    // HasSelection; AddSubcategory depends on SelectedCategory).
+                    if (EditCommand is RelayCommand editCmd) editCmd.RaiseCanExecuteChanged();
+                    if (DeleteCommand is RelayCommand deleteCmd) deleteCmd.RaiseCanExecuteChanged();
+                    if (AddSubcategoryCommand is RelayCommand addSubCmd) addSubCmd.RaiseCanExecuteChanged();
                 }
             }
         }

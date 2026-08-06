@@ -39,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<ICategoryTranslationService, CategoryTranslationService>();
         services.AddScoped<IProductTranslationService, ProductTranslationService>();
         services.AddScoped<ISizeTranslationService, SizeTranslationService>();
+        services.AddScoped<IModifierGroupTranslationService, ModifierGroupTranslationService>();
+        services.AddScoped<IModifierOptionTranslationService, ModifierOptionTranslationService>();
         services.AddScoped<ISizeService, SizeService>();
         services.AddScoped<IModifierService, ModifierService>();
         services.AddScoped<IModifierManagementService, ModifierManagementService>();

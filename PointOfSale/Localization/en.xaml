@@ -85,6 +85,7 @@
     <sys:String x:Key="Common.Warning">Warning</sys:String>
     <sys:String x:Key="Common.Error">Error</sys:String>
     <sys:String x:Key="Common.Information">Information</sys:String>
+    <sys:String x:Key="Common.Translations">Translations</sys:String>
     <sys:String x:Key="Common.Confirmation">Confirm</sys:String>
     <sys:String x:Key="Common.Yes">Yes</sys:String>
     <sys:String x:Key="Common.No">No</sys:String>
@@ -124,6 +125,10 @@
     </sys:String>
 
     <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="ManagerLogin.Title">Manager Login</sys:String>
+    <sys:String x:Key="ManagerLogin.Subtitle">Sign in with your manager account to continue.</sys:String>
+    <sys:String x:Key="ManagerLogin.LoginButton">Login</sys:String>
 
     <sys:String x:Key="LoginAs.Title">Login As</sys:String>
     <sys:String x:Key="LoginAs.Subtitle">Choose how you want to continue.</sys:String>
@@ -313,6 +318,45 @@
     <sys:String x:Key="Manager.Nav.ModifierGroups">
         Modifier Groups
     </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Modifier Groups -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.ModifierGroup.Title">Modifier Groups</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddGroup">Add Group</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupDetails">Group Details</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectionType">Selection Type</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Required">Required</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Active">Active</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MinSelections">Min Selections</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MaxSelections">Max Selections</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DisplayOrder">Display Order</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupInformation">GROUP INFORMATION</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.ModifierOptions">MODIFIER OPTIONS</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddOption">Add Option</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditOption">Edit Option</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DeleteOption">Delete Option</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.OptionsLabel"> options</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectEmptyHint">Select a modifier group to view its details</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TranslationsButton">Translations…</sys:String>
+
+    <!-- Manager Modifier Options -->
+    <sys:String x:Key="Manager.ModifierOption.OptionDetails">Option Details</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.PriceAdd">Price Add</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DisplayOrder">Display Order</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.AllowQuantity">Allow Quantity</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DefaultRegular">Default (Regular)</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.Active">Active</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.SaveOption">Save Option</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.TranslationsButton">Translations…</sys:String>
+
+    <!-- Manager Modifier Group / Option DataGrid -->
+    <sys:String x:Key="Manager.Modifier.ColOptionName">Option Name</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColPrice">Price</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColDefault">Default</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColActive">Active</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOrder">Order</sys:String>
 
     <!-- ========================================================= -->
     <!-- Manager Dashboard / Home -->

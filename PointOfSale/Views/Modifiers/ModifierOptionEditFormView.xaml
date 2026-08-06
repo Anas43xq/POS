@@ -14,35 +14,36 @@
     <Border Background="{StaticResource BrandLight}" BorderBrush="{StaticResource BrandBorder}"
             BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,10">
         <StackPanel>
-            <TextBlock Text="Option Details" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
+            <TextBlock Text="{DynamicResource Manager.ModifierOption.OptionDetails}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextDark}" Margin="0,0,0,10"/>
 
             <!-- Name -->
-            <TextBlock Text="Name" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+            <TextBlock Text="{DynamicResource Common.Name}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
             <TextBox Text="{Binding EditOptionName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Padding="8,6" Margin="0,0,0,10"/>
 
             <!-- Price / Order -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,12,0">
-                    <TextBlock Text="Price Add" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Manager.ModifierOption.PriceAdd}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding EditOptionPrice, UpdateSourceTrigger=PropertyChanged}" Width="100" FontSize="13" Padding="8,6"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Display Order" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Manager.ModifierOption.DisplayOrder}" FontSize="11" FontWeight="Medium" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding EditOptionSortOrder, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="13" Padding="8,6"/>
                 </StackPanel>
             </StackPanel>
 
             <!-- Checkboxes -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <CheckBox Content="Allow Quantity" IsChecked="{Binding EditOptionAllowQuantity}" Margin="0,0,16,0" FontSize="12"/>
-                <CheckBox Content="Default (Regular)" IsChecked="{Binding EditOptionIsDefault}" Margin="0,0,16,0" FontSize="12"/>
-                <CheckBox Content="Active" IsChecked="{Binding EditOptionIsActive}" FontSize="12"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierOption.AllowQuantity}" IsChecked="{Binding EditOptionAllowQuantity}" Margin="0,0,16,0" FontSize="12"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierOption.DefaultRegular}" IsChecked="{Binding EditOptionIsDefault}" Margin="0,0,16,0" FontSize="12"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierOption.Active}" IsChecked="{Binding EditOptionIsActive}" FontSize="12"/>
             </StackPanel>
 
-            <!-- Save / Cancel -->
+            <!-- Save / Cancel / Translations -->
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource PrimaryGradientBtn}" Content="Save Option" Command="{Binding SaveOptionCommand}" Margin="0,0,8,0"/>
-                <Button Style="{StaticResource OutlineBtn}" Content="Cancel" Command="{Binding CancelOptionEditCommand}"/>
+                <Button Style="{StaticResource PrimaryGradientBtn}" Content="{DynamicResource Manager.ModifierOption.SaveOption}" Command="{Binding SaveOptionCommand}" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Common.Cancel}" Command="{Binding CancelOptionEditCommand}" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource OutlineBtn}" Content="{DynamicResource Manager.ModifierOption.TranslationsButton}" Command="{Binding OptionTranslationsCommand}"/>
             </StackPanel>
         </StackPanel>
     </Border>
