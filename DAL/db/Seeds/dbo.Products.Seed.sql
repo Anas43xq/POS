@@ -1,9 +1,11 @@
 ﻿/* ============================================================
    dbo.Products.Seed.sql
-   Seeds Products + ProductTranslations (ar) + ProductVariants
+   Seeds Products + ProductTranslations (ar, en) + ProductVariants
    for the Hawa Cafeteria menu, in the normalized multilingual
    schema. Self-contained: resolves Category/TaxRate/Size ids
    by name so it can be run independently or via seed.sql.
+   'ml' ProductTranslations are omitted — no reliable Malayalam
+   product data exists in the project to seed from.
    ============================================================ */
 
 DECLARE @StdTaxId INT = (SELECT TaxRateId FROM TaxRates WHERE Name = 'Standard');
@@ -227,6 +229,21 @@ INSERT INTO ProductTranslations (ProductId, LanguageCode, Name, Description, Cre
 SELECT i.ProductId, N'ar', s.ArabicName, NULL, GETDATE()
 FROM @Inserted i
 JOIN @ProductStage s ON s.SeqNo = i.SeqNo;
+
+/* English ProductTranslations (FIX: previously missing).
+   Reuses the base Products.Name / Products.Description values,
+   which are already English, as the 'en' translation row. */
+INSERT INTO ProductTranslations (ProductId, LanguageCode, Name, Description, CreatedAt)
+SELECT i.ProductId, N'en', s.Name, s.Description, GETDATE()
+FROM @Inserted i
+JOIN @ProductStage s ON s.SeqNo = i.SeqNo;
+
+/* NOTE: Malayalam ('ml') ProductTranslations are intentionally
+   omitted here. No reliable Malayalam values exist for these
+   products anywhere in the project/data, and inventing
+   translations would risk shipping incorrect menu text. Add
+   an 'ml' INSERT block above (same shape as the 'en' block)
+   once verified Malayalam names are available. */
 
 /* ProductVariants (one per product, size resolved by name) */
 INSERT INTO ProductVariants (ProductId, SizeId, UnitPrice, IsActive, CreatedAt, UpdatedAt)
