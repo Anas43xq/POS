@@ -81,6 +81,8 @@
                                     <ColumnDefinition Width="18"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                                   VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="▾" FontSize="10"
                                            Foreground="{StaticResource ModalBrandDark}"
@@ -259,8 +261,13 @@
                     <ComboBox Style="{StaticResource FieldComboBox}"
                               ItemsSource="{Binding CategoryOptions}"
                               SelectedItem="{Binding SelectedCategory}"
-                              DisplayMemberPath="Name"
-                              Margin="0,0,0,18"/>
+                              Margin="0,0,0,18">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <!-- ═══ Pricing &amp; Tax ═══ -->
                     <TextBlock Text="PRICING &amp; TAX" Style="{StaticResource SectionCaption}" Margin="0,0,0,10"/>
@@ -295,8 +302,13 @@
                             <TextBlock Text="Tax" Style="{StaticResource ModalLabel}" Margin="0,0,0,6"/>
                             <ComboBox Style="{StaticResource FieldComboBox}"
                                       ItemsSource="{Binding TaxOptions}"
-                                      SelectedItem="{Binding SelectedTax}"
-                                      DisplayMemberPath="Name"/>
+                                      SelectedItem="{Binding SelectedTax}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                     </Grid>
 

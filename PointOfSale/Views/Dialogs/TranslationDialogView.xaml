@@ -70,6 +70,8 @@
                                     <ColumnDefinition Width="18"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                                   VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" Text="▾" FontSize="10"
                                            Foreground="{StaticResource BrandDark}"
@@ -280,8 +282,13 @@
                         <ComboBox Style="{StaticResource FieldComboBox}"
                                   ItemsSource="{Binding Languages}"
                                   SelectedItem="{Binding EditItem.SelectedLanguage}"
-                                  DisplayMemberPath="DisplayName"
-                                  Margin="0,0,0,10"/>
+                                  Margin="0,0,0,10">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
                         <TextBlock Text="Name" Style="{StaticResource FieldLabel}"/>
                         <Border Style="{StaticResource InputBorder}" Margin="0,0,0,10">
