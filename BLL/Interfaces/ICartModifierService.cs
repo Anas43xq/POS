@@ -41,6 +41,16 @@ namespace BLL.Interfaces
         decimal CalculateModifierTotal(List<CartItemModifier> modifiers);
 
         /// <summary>
+        /// Calculates the effective per-unit price for a cart line: the
+        /// product's base price plus the total price of all selected
+        /// modifiers. This is the single formula every cart-item
+        /// construction path (quick-add, modifier panel, edit-from-cart)
+        /// must use so a line's charged price can never diverge from its
+        /// selected modifiers.
+        /// </summary>
+        decimal CalculateEffectiveUnitPrice(decimal baseUnitPrice, List<CartItemModifier> modifiers);
+
+        /// <summary>
         /// Builds a compact summary string for display in the cart UI
         /// (e.g. "Whole Milk, Extra Shot ×2").
         /// </summary>

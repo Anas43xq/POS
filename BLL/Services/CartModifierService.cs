@@ -112,15 +112,16 @@ namespace BLL.Services
             return modifiers.Sum(m => m.LineTotal);
         }
 
+        public decimal CalculateEffectiveUnitPrice(decimal baseUnitPrice, List<CartItemModifier> modifiers)
+        {
+            return baseUnitPrice + CalculateModifierTotal(modifiers);
+        }
+
         public string BuildModifierSummary(List<CartItemModifier> modifiers)
         {
-            // Skip default options — only show actual customer customizations
-            var nonDefaults = modifiers.Where(m => !m.IsDefault).ToList();
-            if (nonDefaults.Count == 0)
-                return string.Empty;
 
             var sb = new StringBuilder();
-            foreach (var modifier in nonDefaults)
+            foreach (var modifier in modifiers)
             {
                 if (sb.Length > 0)
                     sb.Append(", ");

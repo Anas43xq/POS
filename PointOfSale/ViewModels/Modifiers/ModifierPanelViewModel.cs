@@ -411,15 +411,13 @@ namespace UI.ViewModels.Modifiers
 
         private CartItem BuildCartItem()
         {
-            var modifierTotal = _cartModifierService.CalculateModifierTotal(_selections);
-
             return new CartItem
             {
                 VariantId = _selectedProduct!.VariantId,
                 ProductName = _selectedProduct.EnglishDisplayName,
                 LocalizedProductName = _selectedProduct.DisplayName,
                 Quantity = _existingItem?.Quantity ?? 1,
-                UnitPrice = _selectedProduct.UnitPrice + modifierTotal,
+                UnitPrice = _cartModifierService.CalculateEffectiveUnitPrice(_selectedProduct.UnitPrice, _selections),
                 TaxRate = _selectedProduct.TaxRate,
                 Modifiers = new List<CartItemModifier>(_selections),
                 ModifierSummary = _cartModifierService.BuildModifierSummary(_selections)

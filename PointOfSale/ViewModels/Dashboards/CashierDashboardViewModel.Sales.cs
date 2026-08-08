@@ -339,6 +339,12 @@ namespace UI.ViewModels
                 }
 
                 item.ModifierSummary = _cartModifierService.BuildModifierSummary(item.Modifiers);
+
+                // Fold default-modifier pricing into UnitPrice using the same
+                // formula ModifierPanelViewModel.BuildCartItem uses, so a
+                // product's charged price never depends on which add-to-cart
+                // path the cashier used.
+                item.UnitPrice = _cartModifierService.CalculateEffectiveUnitPrice(product.UnitPrice, item.Modifiers);
             }
             catch (Exception ex)
             {

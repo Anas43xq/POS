@@ -78,13 +78,6 @@ namespace BLL.Services
         public async Task<int> CreateTransactionAsync(CreateTransactionRequest request)
         {
             ValidateCreateTransactionRequest(request);
-
-            // Shift-open status is validated atomically inside SP_CreateTransaction
-            // (with UPDLOCK/HOLDLOCK against the Shifts row), so a separate
-            // pre-check query here would be redundant and just add DB latency.
-            // TranslateSqlException below turns the SP's "No open shift found"
-            // error into the same InvalidOperationException this used to throw.
-            //
             // The header, items, payment, and modifier selections are all
             // inserted by SP_CreateTransaction inside a single DB transaction
             // (items and modifiers are passed as separate table-valued
