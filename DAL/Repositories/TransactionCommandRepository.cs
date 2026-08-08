@@ -1,6 +1,5 @@
 using System.Data;
 using Contracts.Transactions;
-using DAL.Entities;
 using DAL.Entities.Data;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -45,10 +44,20 @@ namespace DAL.Repositories
             AddDecimalParameter(command, "@ChangeGiven", request.ChangeGiven, 10, 2);
             command.Parameters.Add("@ReferenceNumber", SqlDbType.NVarChar, 100).Value = (object?)request.ReferenceNumber ?? DBNull.Value;
 
-            // Items (table-valued parameter)
+            // Items (table-valued parameter). Each row carries the cart's
+            // LineNumber so the SP can attach modifiers to the correct
+            // line even when two lines share the same VariantId.
             SqlParameter itemsParameter = command.Parameters.Add("@Items", SqlDbType.Structured);
             itemsParameter.Value = BuildItemsTable(request.Items);
             itemsParameter.TypeName = "dbo.TransactionItemType";
+
+            // Modifiers (table-valued parameter). Inserted by the SP inside
+            // the same transaction as the items/header/payment, so a
+            // partial failure can never leave a billed sale with missing
+            // modifiers. Correlated to @Items by LineNumber, not VariantId.
+            SqlParameter modifiersParameter = command.Parameters.Add("@Modifiers", SqlDbType.Structured);
+            modifiersParameter.Value = BuildModifiersTable(request.Items);
+            modifiersParameter.TypeName = "dbo.TransactionItemModifierType";
 
             try
             {
@@ -73,6 +82,9 @@ namespace DAL.Repositories
                 if (ex.Message.Contains("inactive or do not exist", StringComparison.OrdinalIgnoreCase))
                     return new InvalidOperationException("One or more product variants are inactive or do not exist.", ex);
 
+                if (ex.Message.Contains("cart line that does not exist", StringComparison.OrdinalIgnoreCase))
+                    return new InvalidOperationException("One or more modifiers reference a cart line that does not exist.", ex);
+
                 // Any other deliberately raised business-rule error from the SP.
                 return new InvalidOperationException(ex.Message, ex);
             }
@@ -82,6 +94,7 @@ namespace DAL.Repositories
         private static DataTable BuildItemsTable(IEnumerable<CreateTransactionItemRequest> items)
         {
             var table = new DataTable();
+            table.Columns.Add("LineNumber", typeof(int));
             table.Columns.Add("VariantId", typeof(int));
             table.Columns.Add("ProductName", typeof(string));
             table.Columns.Add("UnitPrice", typeof(decimal));
@@ -91,9 +104,11 @@ namespace DAL.Repositories
             table.Columns.Add("LineTax", typeof(decimal));
             table.Columns.Add("LineTotal", typeof(decimal));
 
+            int lineNumber = 0;
             foreach (CreateTransactionItemRequest item in items)
             {
                 table.Rows.Add(
+                    lineNumber,
                     item.VariantId,
                     item.ProductName,
                     item.UnitPrice,
@@ -102,52 +117,45 @@ namespace DAL.Repositories
                     item.LineSubtotal,
                     item.LineTax,
                     item.LineTotal);
+
+                lineNumber++;
             }
 
             return table;
         }
 
-        public async Task SaveTransactionItemModifiersAsync(int transactionId, IEnumerable<CreateTransactionItemRequest> items)
+        private static DataTable BuildModifiersTable(IEnumerable<CreateTransactionItemRequest> items)
         {
-            // Use EF Core to insert modifiers after SP creates the transaction.
-            // The SP does not handle modifiers — we append them here.
-            await using var context = await _contextFactory.CreateDbContextAsync();
+            var table = new DataTable();
+            table.Columns.Add("LineNumber", typeof(int));
+            table.Columns.Add("ModifierOptionId", typeof(int));
+            table.Columns.Add("ModifierGroupId", typeof(int));
+            table.Columns.Add("GroupName", typeof(string));
+            table.Columns.Add("OptionName", typeof(string));
+            table.Columns.Add("Quantity", typeof(int));
+            table.Columns.Add("PriceAdd", typeof(decimal));
+            table.Columns.Add("IsDefault", typeof(bool));
 
-            // Load the TransactionItems that were just created by the SP
-            var transactionItems = await context.TransactionItems
-                .Where(ti => ti.TransactionId == transactionId)
-                .AsTracking()
-                .ToListAsync();
-
-            foreach (var item in items)
+            int lineNumber = 0;
+            foreach (CreateTransactionItemRequest item in items)
             {
-                if (item.Modifiers.Count == 0)
-                    continue;
-
-                var txItem = transactionItems.FirstOrDefault(ti => ti.VariantId == item.VariantId);
-                if (txItem is null)
-                    continue;
-
-                foreach (var modifier in item.Modifiers)
+                foreach (CreateTransactionItemModifierRequest modifier in item.Modifiers)
                 {
-                    var entity = new TransactionItemModifier
-                    {
-                        TransactionItemId = txItem.TransactionItemId,
-                        ModifierOptionId = modifier.ModifierOptionId,
-                        ModifierGroupId = modifier.ModifierGroupId,
-                        GroupName = modifier.GroupName,
-                        OptionName = modifier.OptionName,
-                        Quantity = modifier.Quantity,
-                        PriceAdd = modifier.PriceAdd,
-                        LineTotal = modifier.PriceAdd * modifier.Quantity,
-                        IsDefault = modifier.IsDefault
-                    };
-
-                    context.TransactionItemModifiers.Add(entity);
+                    table.Rows.Add(
+                        lineNumber,
+                        (object?)modifier.ModifierOptionId ?? DBNull.Value,
+                        modifier.ModifierGroupId,
+                        modifier.GroupName,
+                        modifier.OptionName,
+                        modifier.Quantity,
+                        modifier.PriceAdd,
+                        modifier.IsDefault);
                 }
+
+                lineNumber++;
             }
 
-            await context.SaveChangesAsync();
+            return table;
         }
 
         private static void AddDecimalParameter(SqlCommand command, string parameterName, decimal value, byte precision, byte scale)

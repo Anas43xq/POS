@@ -3,6 +3,7 @@ using Contracts.Enum;
 using Contracts.Sales;
 using Contracts.Transactions;
 using POS.Contracts.Receipts;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,8 @@ namespace UI.ViewModels
         private readonly ISessionService _sessionService;
         private readonly IDialogService _dialogService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly ILogger<ManagerMainViewModel> _logger;
+        private readonly INotificationService _notifications;
         private CancellationTokenSource? _timeCancellationTokenSource;
         private object? _receiptFormPage;
 
@@ -138,7 +141,9 @@ namespace UI.ViewModels
             ModifierGroupManagementViewModel modifierGroupManagementViewModel,
             ISessionService sessionService,
             IDialogService dialogService,
-            IViewModelFactory viewModelFactory)
+            IViewModelFactory viewModelFactory,
+            ILogger<ManagerMainViewModel> logger,
+            INotificationService notifications)
         {
             _homeViewModel = homeViewModel;
             _transactionsViewModel = transactionsViewModel;
@@ -152,6 +157,8 @@ namespace UI.ViewModels
             _sessionService = sessionService;
             _dialogService = dialogService;
             _viewModelFactory = viewModelFactory;
+            _logger = logger;
+            _notifications = notifications;
 
             _homeViewModel.ViewAllShiftsRequested -= NavigateToShiftManagement;
             _homeViewModel.ShowAllTransactionsRequested -= NavigateToTransactions;
@@ -173,7 +180,11 @@ namespace UI.ViewModels
 
             // Settings — mirrors the cashier header's gear button so the
             // manager can also change the UI language.
-            ShowSetting = new AsyncRelayCommand(OpenSetting);
+            ShowSetting = new AsyncRelayCommand(OpenSetting, onError: ex =>
+            {
+                _logger.LogError(ex, "Failed to open Settings dialog");
+                _notifications.ShowError("Unable to open Settings. Please try again.");
+            });
 
             // Subscribe to receipt navigation events
             _receiptManagementViewModel.NavigateToFormRequested += OnReceiptNavigateToForm;

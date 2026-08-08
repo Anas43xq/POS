@@ -40,6 +40,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
     private readonly ICartModifierService _cartModifierService;
 
     private readonly ILogger<CashierDashboardViewModel> _logger;
+    private readonly INotificationService _notifications;
 
     // ─── Modifier Panel (single reusable instance) ──────
 
@@ -313,7 +314,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
         IModifierService modifierService,
         ICartModifierService cartModifierService,
         IViewModelFactory viewModelFactory,
-        ILogger<CashierDashboardViewModel> logger)
+        ILogger<CashierDashboardViewModel> logger,
+        INotificationService notifications)
     {
         _session = session;
         _shiftService = shiftService;
@@ -328,6 +330,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _cartModifierService = cartModifierService;
         _viewModelFactory = viewModelFactory;
         _logger = logger;
+        _notifications = notifications;
 
         _modifierPanel = _viewModelFactory.Create<ModifierPanelViewModel>();
 
@@ -364,7 +367,11 @@ public partial class CashierDashboardViewModel : BaseViewModel
             ClearSales,
             () => SaleItems.Any());
 
-            ShowSetting = new AsyncRelayCommand(OpenSetting);
+            ShowSetting = new AsyncRelayCommand(OpenSetting, onError: ex =>
+            {
+                _logger.LogError(ex, "Failed to open Settings dialog");
+                _notifications.ShowError("Unable to open Settings. Please try again.");
+            });
 
         SelectCategoryCommand = new AsyncRelayCommand<CategoryDto>(SelectParentCategoryAsync);
 

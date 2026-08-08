@@ -49,6 +49,23 @@ namespace DAL.Repositories
             var result = await command.ExecuteScalarAsync(ct);
             return result is DBNull ? 0m : Convert.ToDecimal(result);
         }
+
+        public async Task<decimal> GetShiftCashTotalAsync(int shiftId, CancellationToken ct = default)
+        {
+            await using var context = await _contextFactory!.CreateDbContextAsync(ct);
+            string connectionString = context.Database.GetConnectionString()
+                ?? throw new InvalidOperationException("Connection string not found.");
+
+            await using var connection = new SqlConnection(connectionString);
+            await connection.OpenAsync(ct);
+
+            const string sql = "SELECT dbo.FN_GetShiftCashTotal(@ShiftId)";
+
+            await using var command = new SqlCommand(sql, connection);
+            command.Parameters.Add("@ShiftId", SqlDbType.Int).Value = shiftId;
+
+            var result = await command.ExecuteScalarAsync(ct);
+            return result is DBNull ? 0m : Convert.ToDecimal(result);
+        }
     }
 }
-

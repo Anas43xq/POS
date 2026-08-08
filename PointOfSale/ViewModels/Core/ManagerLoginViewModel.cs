@@ -146,7 +146,13 @@ namespace UI.ViewModels
             _registryService = registryService;
             _logger = logger;
 
-            LoginCommand = new AsyncRelayCommand(LoginAsync, CanLogin);
+            LoginCommand = new AsyncRelayCommand(LoginAsync, CanLogin, ex =>
+            {
+                _logger.LogError(ex, "Manager login failed for {Username}", Username);
+                ErrorMessage = "An unexpected error occurred. Please try again.";
+                IsNonManagerRejection = false;
+                RejectedRole = null;
+            });
             CancelCommand = new RelayCommand(Cancel);
 
             // Registry read happens exactly once per dialog open,
@@ -254,13 +260,6 @@ namespace UI.ViewModels
                 await _registryService.SaveRememberedUsernameAsync(user.Username);
 
                 LoginSucceeded?.Invoke(user);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Manager login failed for {Username}", Username);
-                ErrorMessage = "An unexpected error occurred. Please try again.";
-                IsNonManagerRejection = false;
-                RejectedRole = null;
             }
             finally
             {

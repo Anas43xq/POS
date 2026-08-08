@@ -10,19 +10,13 @@ namespace BLL.Services
     public class ShiftService : IShiftService
     {
         private readonly IShiftRepository _shiftrepo;
-        private readonly IPaymentService _paymentService;
-        private readonly ITransactionRepository _transactionRepository;
         private readonly ILogger<ShiftService> _logger;
 
         public ShiftService(
             IShiftRepository ShiftRepo,
-            IPaymentService paymentService,
-            ITransactionRepository transactionRepository,
             ILogger<ShiftService> logger)
         {
             _shiftrepo = ShiftRepo;
-            _paymentService = paymentService;
-            _transactionRepository = transactionRepository;
             _logger = logger;
         }
 
@@ -123,17 +117,7 @@ namespace BLL.Services
                 shift.ClosedAt = DateTime.Now;
                 shift.Status = DAL.Entities.ShiftStatus.Closed;
 
-                var payments = (await _paymentService.GetAllPaymentsAsync()).ToList();
-                var transactions = (await _transactionRepository.GetAllAsync()).ToList();
-                var txIdsInShift = transactions
-                    .Where(t => t.ShiftId == shift.ShiftId)
-                    .Select(t => t.TransactionId)
-                    .ToHashSet();
-
-                var cashTotal = payments
-                    .Where(p => string.Equals(p.PaymentMethod, "Cash", StringComparison.OrdinalIgnoreCase)
-                                && txIdsInShift.Contains(p.TransactionId))
-                    .Sum(p => p.AmountTendered);
+                decimal cashTotal = await _shiftrepo.GetShiftCashTotalAsync(shift.ShiftId);
 
                 shift.ExpectedCash = shift.OpeningCash + cashTotal;
                 shift.CashDifference = closingCash - shift.ExpectedCash;

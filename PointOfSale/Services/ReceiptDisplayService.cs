@@ -54,6 +54,15 @@ public class ReceiptDisplayService : IReceiptDisplayService
         // instead of issuing the same (joined) query twice.
         var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
 
+        // Payment has been recorded and the receipt payload is in hand.
+        // Surface a non-modal success toast so the cashier gets explicit
+        // confirmation even if the receipt window is dismissed quickly
+        // or the printer is slow.
+        if (receipt != null)
+        {
+            _notifications.ShowSuccess("Payment completed successfully.");
+        }
+
         // Printing can continue in the background; it doesn't need to block
         // showing the receipt to the cashier.
         _ = PrintReceiptCoreAsync(receipt, transactionId);
@@ -79,7 +88,12 @@ public class ReceiptDisplayService : IReceiptDisplayService
             receiptWindow.Owner = Application.Current.MainWindow;
         }
 
-        receiptWindow.ShowDialog();
+        // Non-modal so the cashier can continue working (e.g. start the
+        // next sale, refresh recent sales) while the customer is shown
+        // the receipt. ShowDialog() would block the UI thread until the
+        // window is closed, which is no longer desired now that the
+        // success toast carries the user-facing feedback.
+        receiptWindow.Show();
     }
 
     private async Task PrintReceiptCoreAsync(POS.Contracts.Receipts.ReceiptDetailsDto? receipt, int transactionId)

@@ -109,6 +109,9 @@ GO
 :r .\DAL\db\UserDefinedTypes\dbo.TransactionItemType.UserDefinedTableType.sql
 GO
 
+:r .\DAL\db\UserDefinedTypes\dbo.TransactionItemModifierType.UserDefinedTableType.sql
+GO
+
 /* -------------------------------------------------
    3. INDEXES
    ------------------------------------------------- */
@@ -137,6 +140,9 @@ GO
     4b. USER-DEFINED FUNCTIONS
     ------------------------------------------------- */
 :r .\DAL\db\Functions\dbo.FN_GetShiftTotalSales.Function.sql
+GO
+
+:r .\DAL\db\Functions\dbo.FN_GetShiftCashTotal.Function.sql
 GO
 
 /* -------------------------------------------------

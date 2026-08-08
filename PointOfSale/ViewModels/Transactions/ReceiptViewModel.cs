@@ -40,20 +40,16 @@ namespace UI.ViewModels
             _printingService = printingService;
             _logger = logger;
             _notifications = notifications;
-            PrintReceiptCommand = new AsyncRelayCommand(PrintReceiptAsync);
+            PrintReceiptCommand = new AsyncRelayCommand(PrintReceiptAsync, onError: ex =>
+            {
+                _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", Receipt.TransactionId);
+                _notifications.ShowError("Printing failed. Please check the printer and try again.");
+            });
         }
 
         private async Task PrintReceiptAsync()
         {
-            try
-            {
-                await _printingService.PrintReceiptDirectAsync(Receipt, showDialog: true);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to print receipt for transaction {TransactionId}", Receipt.TransactionId);
-                _notifications.ShowError("Printing failed. Please check the printer and try again.");
-            }
+            await _printingService.PrintReceiptDirectAsync(Receipt, showDialog: true);
         }
     }
 }

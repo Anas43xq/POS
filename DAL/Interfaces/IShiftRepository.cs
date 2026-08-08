@@ -7,5 +7,6 @@ namespace DAL.Interfaces
         Task<Shift?> GetOpenShiftAsync(int userId);
         Task<IEnumerable<Shift>> GetLastShiftsAsync(int count);
         Task<decimal> GetShiftTotalSalesAsync(int shiftId, CancellationToken ct = default);
+        Task<decimal> GetShiftCashTotalAsync(int shiftId, CancellationToken ct = default);
     }
 }

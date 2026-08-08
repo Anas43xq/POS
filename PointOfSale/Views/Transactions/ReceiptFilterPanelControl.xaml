@@ -99,9 +99,18 @@
 
                     <!-- Quick-range chips.  PeriodCommand is bound to the
                          DateRangeFilterControl's PeriodCommand DP, which
-                         in turn flips IsPeriodFilterVisible on the VM. -->
+                         in turn flips IsPeriodFilterVisible on the VM.
+                         The control's internal From/To pickers must also
+                         be wired to the VM, otherwise typing a date in
+                         them does nothing (the values never reach
+                         DateFrom / DateTo on the VM and the filter never
+                         runs).  The page's own Row 2 pickers duplicate
+                         the same control, so both are kept in sync. -->
                     <controls:DateRangeFilterControl
                         SelectedDateRange="{Binding SelectedDateRange}"
+                        IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                        FromDate="{Binding DateFrom, Mode=TwoWay}"
+                        ToDate="{Binding DateTo, Mode=TwoWay}"
                         DayCommand="{Binding LoadDayCommand}"
                         WeekCommand="{Binding LoadWeekCommand}"
                         MonthCommand="{Binding LoadMonthCommand}"

@@ -13,14 +13,12 @@ using System.Windows.Data;
 using UI.Services;
 using System.Windows.Input;
 using UI.Commands;
-using UI.Services;
 
 namespace UI.ViewModels
 {
     public partial class ShiftManagementViewModel : BaseViewModel
     {
         private readonly IShiftManagementService _shiftManagementService;
-        private readonly IReceiptDisplayService _receiptDisplayService;
         private readonly IViewModelFactory _viewModelFactory;
 
         private readonly ObservableCollection<ShiftListItemDto> _shifts = new();
@@ -37,7 +35,6 @@ namespace UI.ViewModels
             IViewModelFactory viewModelFactory)
         {
             _shiftManagementService = shiftManagementService;
-            _receiptDisplayService = receiptDisplayService;
             _viewModelFactory = viewModelFactory;
 
             LoadDayCommand = new RelayCommand(_ => LoadDay());
