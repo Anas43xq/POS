@@ -146,7 +146,7 @@ namespace BLL.Services
                 if (variants is null || !variants.Any())
                     return Result<List<ProductDto>>.Success([]);
 
-                var modifierProductIds = await BuildModifierProductIdSetAsync();
+                var modifierProductIds = await BuildModifierProductIdSetAsync(GetActiveProductsFromVariants(variants));
 
                 var result = variants.Select(v =>
                 {
@@ -197,7 +197,7 @@ namespace BLL.Services
                     .GetAllByLanguageCodeAsync(languageCode))
                     .ToDictionary(t => t.SizeId, t => t.TranslatedName);
 
-                var modifierProductIds = await BuildModifierProductIdSetAsync();
+                var modifierProductIds = await BuildModifierProductIdSetAsync(GetActiveProductsFromVariants(variants));
 
                 var result = variants.Select(v =>
                 {
@@ -268,21 +268,21 @@ namespace BLL.Services
         public async Task DeleteProductAsync(int id) =>
             await _productrepo.DeleteAsync(id);
 
-        private async Task<HashSet<int>> BuildModifierProductIdSetAsync()
+        private async Task<HashSet<int>> BuildModifierProductIdSetAsync(IEnumerable<Product> activeProducts)
         {
             // NOTE: The two lookups below are independent of one another
             // (direct product->modifier-group assignments vs.
             // category->modifier-group assignments), so they're fired
             // concurrently instead of as two sequential round trips. The
-            // third query (resolving which products fall under a
+            // third step (resolving which products fall under a
             // modifier-flagged category) genuinely depends on the result of
-            // the second, so it can't join the same Task.WhenAll batch.
-            // A single SQL view/UNION combining all three into one round
-            // trip would be a further improvement, but that requires a
-            // DB-side change (a view or a joined query at the repository
-            // level) and was left out here so this stays a pure
-            // sequencing/timing change with no schema impact — see
-            // login-performance-analysis.md §9/§11.
+            // the second, so it can't join the same Task.WhenAll batch —
+            // but it no longer needs its own DB round trip at all: callers
+            // already have the full Product set loaded (from the variants
+            // query), so it's resolved from that in-memory data instead of
+            // re-querying Products. See login-performance-analysis.md §9/§11
+            // for the (deferred) idea of collapsing all of this into a
+            // single SQL view/UNION, which would require a DB-side change.
             var productAssignmentsTask = _productModifierGroupRepo.GetAllAsync();
             var categoryAssignmentsTask = _categoryModifierGroupRepo.GetAllAsync();
 
@@ -297,13 +297,28 @@ namespace BLL.Services
             // For category-level modifiers, resolve which products belong to those categories
             if (categoryIds.Count > 0)
             {
-                var allProducts = await _productrepo.GetAllProductsWithTaxRateAsync();
-                foreach (var p in allProducts.Where(p => categoryIds.Contains(p.CategoryId)))
+                foreach (var p in activeProducts.Where(p => categoryIds.Contains(p.CategoryId)))
                     productIds.Add(p.ProductId);
             }
 
             return productIds;
         }
+
+        /// <summary>
+        /// Extracts the distinct, active Product entities already attached
+        /// to a variants result (loaded via ProductRepository.GetAllVariantsAsync's
+        /// .Include(v => v.Product)) so BuildModifierProductIdSetAsync can
+        /// resolve category membership from in-memory data instead of
+        /// re-querying Products. Explicitly re-applies the IsActive filter
+        /// that GetAllProductsWithTaxRateAsync used to apply on its own —
+        /// the variants query only filters on variant-level IsActive, not
+        /// the parent Product's, so this keeps prior behavior unchanged.
+        /// </summary>
+        private static IEnumerable<Product> GetActiveProductsFromVariants(IEnumerable<ProductVariant> variants) =>
+            variants
+                .Select(v => v.Product)
+                .Where(p => p != null && p.IsActive)
+                .DistinctBy(p => p!.ProductId)!;
 
         private static Product MapToEntity(ProductWriteDto d) => new()
         {

@@ -67,5 +67,39 @@ namespace DAL.Repositories
             var result = await command.ExecuteScalarAsync(ct);
             return result is DBNull ? 0m : Convert.ToDecimal(result);
         }
+
+        public async Task AddOpenShiftAsync(Shift shift)
+        {
+            await using var context = await _contextFactory!.CreateDbContextAsync();
+
+            try
+            {
+                await context.Shifts.AddAsync(shift);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                throw TranslateSqlException(sqlEx);
+            }
+        }
+
+        /// <summary>
+        /// Translates the SQL Server unique-index violation raised by
+        /// UX_Shifts_OpenShift_User (error 2601, or 2627 if it's ever
+        /// redefined as a constraint) into the same friendly message
+        /// ShiftService's in-memory pre-check already returns for the
+        /// common case. Any other SQL error is passed through as a
+        /// generic failure rather than leaking raw SQL Server text.
+        /// </summary>
+        private static Exception TranslateSqlException(SqlException ex)
+        {
+            if (ex.Number is 2601 or 2627)
+            {
+                return new InvalidOperationException(
+                    "Cannot start a new shift. An open shift already exists for this user.", ex);
+            }
+
+            return new InvalidOperationException("An error occurred while opening the shift.", ex);
+        }
     }
 }

@@ -45,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<IModifierService, ModifierService>();
         services.AddScoped<IModifierManagementService, ModifierManagementService>();
         services.AddScoped<ICartModifierService, CartModifierService>();
+        services.AddScoped<ICartPricingService, CartPricingService>();
 
         services.AddSingleton<ISettingsService, UI.Services.SettingsService>();
         services.AddSingleton<IPrintingService, PrintingService>();

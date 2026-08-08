@@ -26,4 +26,32 @@ public class ModifierGroupRepository : Repository<ModifierGroup>, IModifierGroup
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<ModifierGroup>> GetByIdsWithOptionsAndTranslationsAsync(IEnumerable<int> groupIds)
+    {
+        var idSet = groupIds as ICollection<int> ?? groupIds.ToList();
+        if (idSet.Count == 0)
+            return Enumerable.Empty<ModifierGroup>();
+
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
+        return await context.ModifierGroups
+            .Where(mg => idSet.Contains(mg.ModifierGroupId))
+            .Include(mg => mg.ModifierOptions)
+                .ThenInclude(o => o.ModifierOptionTranslations)
+            .Include(mg => mg.ModifierGroupTranslations)
+            .OrderBy(mg => mg.SortOrder)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<ModifierGroup?> GetByIdWithAssignmentsAsync(int groupId)
+    {
+        await using var context = await _asyncContextFactory.CreateDbContextAsync();
+        return await context.ModifierGroups
+            .Where(mg => mg.ModifierGroupId == groupId)
+            .Include(mg => mg.CategoryModifierGroups)
+            .Include(mg => mg.ProductModifierGroups)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+    }
 }

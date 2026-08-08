@@ -58,8 +58,8 @@ public class ModifierManagementService : IModifierManagementService
     {
         try
         {
-            var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
-            var group = groups.FirstOrDefault(g => g.ModifierGroupId == groupId);
+            var groups = await _groupRepo.GetByIdsWithOptionsAndTranslationsAsync(new[] { groupId });
+            var group = groups.FirstOrDefault();
             if (group is null)
                 return Result<ModifierGroupDetailDto>.Failure($"Modifier group {groupId} not found.");
 
@@ -133,9 +133,12 @@ public class ModifierManagementService : IModifierManagementService
     {
         try
         {
-            // Check for category assignments
-            var allGroups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
-            var group = allGroups.FirstOrDefault(g => g.ModifierGroupId == groupId);
+            // Check for category/product assignments before allowing delete.
+            // Both join tables are ON DELETE CASCADE at the DB level, so this
+            // guard is the only thing standing between "delete this group"
+            // and silently removing every category's/product's assignment
+            // to it — the assignment collections MUST be loaded here.
+            var group = await _groupRepo.GetByIdWithAssignmentsAsync(groupId);
             if (group is null)
                 return Result<bool>.Failure($"Modifier group {groupId} not found.");
 
@@ -188,8 +191,7 @@ public class ModifierManagementService : IModifierManagementService
                 if (existingOptions.Any(o => o.IsDefault))
                 {
                     // Clear existing defaults for single-select groups
-                    var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
-                    var parentGroup = groups.FirstOrDefault(g => g.ModifierGroupId == dto.ModifierGroupId);
+                    var parentGroup = await _groupRepo.GetByIdAsync(dto.ModifierGroupId);
                     if (parentGroup?.GroupType == 1) // SingleSelect
                     {
                         foreach (var existing in existingOptions.Where(o => o.IsDefault))
@@ -239,8 +241,7 @@ public class ModifierManagementService : IModifierManagementService
             // Validate single-select default constraint
             if (dto.IsDefault && !entity.IsDefault)
             {
-                var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
-                var parentGroup = groups.FirstOrDefault(g => g.ModifierGroupId == entity.ModifierGroupId);
+                var parentGroup = await _groupRepo.GetByIdAsync(entity.ModifierGroupId);
                 if (parentGroup?.GroupType == 1) // SingleSelect
                 {
                     var siblings = await _optionRepo.GetByGroupIdAsync(entity.ModifierGroupId);
@@ -476,8 +477,8 @@ public class ModifierManagementService : IModifierManagementService
 
         try
         {
-            var groups = await _groupRepo.GetAllWithOptionsAndTranslationsAsync();
-            var group = groups.FirstOrDefault(g => g.ModifierGroupId == groupId);
+            var groups = await _groupRepo.GetByIdsWithOptionsAndTranslationsAsync(new[] { groupId });
+            var group = groups.FirstOrDefault();
             if (group is null)
                 return Result<ModifierGroupDetailDto>.Failure($"Modifier group {groupId} not found.");
 

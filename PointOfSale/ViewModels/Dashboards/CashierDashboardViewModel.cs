@@ -38,6 +38,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     private readonly IModifierService _modifierService;
     private readonly ICartModifierService _cartModifierService;
+    private readonly ICartPricingService _cartPricingService;
 
     private readonly ILogger<CashierDashboardViewModel> _logger;
     private readonly INotificationService _notifications;
@@ -313,6 +314,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ILocalizationService localization,
         IModifierService modifierService,
         ICartModifierService cartModifierService,
+        ICartPricingService cartPricingService,
         IViewModelFactory viewModelFactory,
         ILogger<CashierDashboardViewModel> logger,
         INotificationService notifications)
@@ -328,6 +330,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _localization = localization;
         _modifierService = modifierService;
         _cartModifierService = cartModifierService;
+        _cartPricingService = cartPricingService;
         _viewModelFactory = viewModelFactory;
         _logger = logger;
         _notifications = notifications;

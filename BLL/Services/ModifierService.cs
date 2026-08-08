@@ -90,11 +90,11 @@ namespace BLL.Services
         /// </summary>
         private async Task<List<DAL.Entities.ModifierGroup>> HydrateGroupsWithOptionsAsync(HashSet<int> groupIds)
         {
-            var allGroups = await _modifierGroupRepo.GetAllWithOptionsAndTranslationsAsync();
+            if (groupIds.Count == 0)
+                return new List<DAL.Entities.ModifierGroup>();
 
-            return allGroups
-                .Where(g => groupIds.Contains(g.ModifierGroupId))
-                .ToList();
+            var groups = await _modifierGroupRepo.GetByIdsWithOptionsAndTranslationsAsync(groupIds);
+            return groups.ToList();
         }
 
         private static ModifierGroupDto MapToDto(DAL.Entities.ModifierGroup e) => new()

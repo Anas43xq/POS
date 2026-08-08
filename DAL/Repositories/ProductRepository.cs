@@ -18,6 +18,7 @@ namespace DAL.Repositories
             return await context.Products
              .Include(p => p.TaxRate)
              .Where(p => p.IsActive)
+             .AsNoTracking()
              .ToListAsync();
         }
 

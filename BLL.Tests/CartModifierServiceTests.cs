@@ -288,7 +288,7 @@ public sealed class CartModifierServiceTests
     // ═══════════════════════════════════════════════════════════════════
 
     [Fact]
-    public void BuildModifierSummary_AllDefault_ReturnsEmptyString()
+    public void BuildModifierSummary_AllDefault_IncludesAllOptions()
     {
         var modifiers = new List<CartItemModifier>
         {
@@ -296,7 +296,7 @@ public sealed class CartModifierServiceTests
             new() { OptionName = "No Extra", IsDefault = true },
         };
 
-        _sut.BuildModifierSummary(modifiers).Should().BeEmpty();
+        _sut.BuildModifierSummary(modifiers).Should().Be("Regular Dough, No Extra");
     }
 
     [Fact]
@@ -336,7 +336,7 @@ public sealed class CartModifierServiceTests
     }
 
     [Fact]
-    public void BuildModifierSummary_MixedDefaultsAndCustomizations_ExcludesDefaults()
+    public void BuildModifierSummary_MixedDefaultsAndCustomizations_IncludesAllOptions()
     {
         var modifiers = new List<CartItemModifier>
         {
@@ -348,6 +348,6 @@ public sealed class CartModifierServiceTests
 
         var summary = _sut.BuildModifierSummary(modifiers);
 
-        summary.Should().Be("Mushrooms, Olives ×2");
+        summary.Should().Be("Regular Dough, Mushrooms, No Sauce, Olives ×2");
     }
 }

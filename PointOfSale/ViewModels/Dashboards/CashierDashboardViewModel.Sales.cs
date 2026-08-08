@@ -19,10 +19,28 @@ namespace UI.ViewModels
             if (product == null)
                 return;
 
-            // Direct add-to-cart — modifier panel opens only when editing from cart
-            CartItem? existingItem = SaleItems
-                .FirstOrDefault(item => item.VariantId == product.VariantId
-                                    && item.UnitPrice == product.UnitPrice);
+            // Direct add-to-cart — modifier panel opens only when editing from cart.
+            // Build the full candidate line (including its default modifiers)
+            // before deciding whether it merges into an existing line, so the
+            // merge decision can compare actual modifier selections rather
+            // than just VariantId + coincidental UnitPrice equality.
+            CartItem candidate = new CartItem
+            {
+                VariantId = product.VariantId,
+                // English-only snapshot for receipts (TransactionItems.ProductName).
+                ProductName = product.EnglishDisplayName,
+                // Localized name for the cart UI.
+                LocalizedProductName = product.DisplayName,
+                Quantity = 1,
+                UnitPrice = product.UnitPrice,
+                TaxRate = product.TaxRate
+            };
+
+            // Auto-select default modifiers for this product
+            await PopulateDefaultModifiersAsync(candidate, product);
+
+            CartItem? existingItem = _cartPricingService.FindMergeableLine(
+                SaleItems, candidate.VariantId, candidate.Modifiers);
 
             if (existingItem != null)
             {
@@ -30,27 +48,10 @@ namespace UI.ViewModels
             }
             else
             {
-                CartItem item = new CartItem
-                {
-                    VariantId = product.VariantId,
-                    // English-only snapshot for receipts (TransactionItems.ProductName).
-                    ProductName = product.EnglishDisplayName,
-                    // Localized name for the cart UI.
-                    LocalizedProductName = product.DisplayName,
-                    Quantity = 1,
-                    UnitPrice = product.UnitPrice,
-                    TaxRate = product.TaxRate
-                };
-
-                // Auto-select default modifiers for this product
-                await PopulateDefaultModifiersAsync(item, product);
-
-                SaleItems.Add(item);
+                SaleItems.Add(candidate);
             }
 
             RefreshTotals();
-
-            await Task.CompletedTask;
         }
 
         private async Task EditCartLineAsync(CartItem? cartItem)
@@ -115,9 +116,10 @@ namespace UI.ViewModels
 
         private void RefreshTotals()
         {
-            Subtotal = SaleItems.Sum(item => item.LineSubtotal);
-            Tax = SaleItems.Sum(item => item.LineTax);
-            Total = Subtotal + Tax;
+            var totals = _cartPricingService.CalculateTotals(SaleItems);
+            Subtotal = totals.Subtotal;
+            Tax = totals.Tax;
+            Total = totals.Total;
         }
 
         private async Task PayCashAsync()

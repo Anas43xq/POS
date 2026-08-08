@@ -81,8 +81,17 @@ namespace BLL.Services
                     ClosingCash = null
                 };
 
-                await _shiftrepo.AddAsync(shift);
+                await _shiftrepo.AddOpenShiftAsync(shift);
                 return Result<ShiftDto>.Success(MapToDto(shift));
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Raised by the DAL when the DB-level unique index rejects
+                // the insert (two concurrent open-shift attempts both
+                // passed the check above before either had inserted).
+                // Message is already the friendly, user-facing text.
+                _logger.LogWarning(ex, "Open-shift race detected for user {UserId}", userId);
+                return Result<ShiftDto>.Failure(ex.Message);
             }
             catch (Exception ex)
             {
