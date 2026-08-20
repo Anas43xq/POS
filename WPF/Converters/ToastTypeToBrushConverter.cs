@@ -26,31 +26,31 @@ namespace UI.Converters
             {
                 ToastType.Success => tone switch
                 {
-                    "Dark" => "SuccessDark",
-                    "Light" => "SuccessLight",
-                    "Border" => "SuccessBorder",
-                    _ => "SuccessGreen"
+                    "Dark" => "Color.Success.Dark",
+                    "Light" => "Color.Success.Light",
+                    "Border" => "Color.Success.Border",
+                    _ => "Color.Success.Default"
                 },
                 ToastType.Error => tone switch
                 {
-                    "Dark" => "DangerDark",
-                    "Light" => "DangerLight",
-                    "Border" => "DangerBorder",
-                    _ => "DangerRed"
+                    "Dark" => "Color.Danger.Dark",
+                    "Light" => "Color.Danger.Light",
+                    "Border" => "Color.Danger.Border",
+                    _ => "Color.Danger.Default"
                 },
                 ToastType.Warning => tone switch
                 {
-                    "Dark" => "WarningDark",
-                    "Light" => "WarningLight",
-                    "Border" => "WarningBorder",
-                    _ => "WarningAmber"
+                    "Dark" => "Color.Warning.Dark",
+                    "Light" => "Color.Warning.Light",
+                    "Border" => "Color.Warning.Border",
+                    _ => "Color.Warning.Default"
                 },
                 _ => tone switch
                 {
-                    "Dark" => "InfoDark",
-                    "Light" => "InfoLight",
-                    "Border" => "InfoBorder",
-                    _ => "InfoBlue"
+                    "Dark" => "Color.Info.Dark",
+                    "Light" => "Color.Info.Light",
+                    "Border" => "Color.Info.Border",
+                    _ => "Color.Info.Default"
                 }
             };
 

@@ -20,14 +20,21 @@ namespace UI.Controls
         public ToastHost()
         {
             InitializeComponent();
-        }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (DesignerProperties.GetIsInDesignMode(this))
-                return;
-
-            DataContext = App.ServiceProvider.GetRequiredService<INotificationService>();
+            // Binding the ItemsControl to {Binding Toasts} only works once
+            // this control owns its own DataContext. If we defer that to
+            // Loaded, the binding is first evaluated against the inherited
+            // DataContext (MainWindow's MainViewModel, which has no Toasts)
+            // and produces a BindingExpression path error (#40). App
+            // builds ServiceProvider in its constructor, so it is guaranteed
+            // to be available before any window — and therefore any ToastHost —
+            // is created, making the constructor the earliest safe point.
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                var svc = App.ServiceProvider.GetRequiredService<INotificationService>();
+                DataContext = svc;
+                TxpTrace.WriteLine($"[TOAST] ToastHost ctor — DataContext set to {svc.GetType().Name}, Toasts.Count={svc.Toasts.Count}");
+            }
         }
 
         private void OnDismissClick(object sender, RoutedEventArgs e)
@@ -36,7 +43,12 @@ namespace UI.Controls
                 DataContext is INotificationService notificationService)
             {
                 notificationService.Dismiss(toast);
+                TxpTrace.WriteLine($"[TOAST] ToastHost.OnDismissClick — dismissed toast {toast.Id}");
             }
+
+            // Always consume the click so it can never fall through to a
+            // control underneath the toast overlay (e.g. the header Logout).
+            e.Handled = true;
         }
 
         private void OnCopyClick(object sender, RoutedEventArgs e)

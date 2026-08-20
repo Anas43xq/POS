@@ -38,29 +38,40 @@ namespace UI.Services
 
         private void Show(string message, ToastType type)
         {
+            TxpTrace.WriteLine($"[TOAST] NotificationService.Show — type={type}, message='{message}'");
+
             if (string.IsNullOrWhiteSpace(message))
+            {
+                TxpTrace.WriteLine("[TOAST] NotificationService.Show — ABORT: message is null/whitespace");
                 return;
+            }
 
             var toast = new ToastMessage(message, type);
 
+            TxpTrace.WriteLine($"[TOAST] NotificationService.Show — dispatching to UI thread (CheckAccess={_dispatcher.CheckAccess()})");
             RunOnUiThread(() =>
             {
+                TxpTrace.WriteLine($"[TOAST] NotificationService.Show — UI thread: adding toast, _toasts.Count before={_toasts.Count}");
                 _toasts.Add(toast);
+                TxpTrace.WriteLine($"[TOAST] NotificationService.Show — UI thread: _toasts.Count after={_toasts.Count}");
 
-                // Error toasts stay visible until manually dismissed — the
-                // user may want to read the full message and copy it
-                // before it disappears. Success/Warning/Info keep the
-                // short auto-dismiss.
+                // Error toasts stay until dismissed (✕ / Dismiss); all other
+                // types auto-dismiss after DisplayDuration.
                 if (type == ToastType.Error)
+                {
+                    TxpTrace.WriteLine("[TOAST] NotificationService.Show — Error toast: no auto-dismiss");
                     return;
+                }
 
                 var timer = new DispatcherTimer { Interval = DisplayDuration };
                 timer.Tick += (_, _) =>
                 {
                     timer.Stop();
                     _toasts.Remove(toast);
+                    TxpTrace.WriteLine("[TOAST] NotificationService.Show — auto-dismissed toast");
                 };
                 timer.Start();
+                TxpTrace.WriteLine($"[TOAST] NotificationService.Show — auto-dismiss timer started ({DisplayDuration.TotalSeconds}s)");
             });
         }
 
@@ -68,10 +79,12 @@ namespace UI.Services
         {
             if (_dispatcher.CheckAccess())
             {
+                TxpTrace.WriteLine("[TOAST] NotificationService.RunOnUiThread — already on UI thread, running inline");
                 action();
             }
             else
             {
+                TxpTrace.WriteLine("[TOAST] NotificationService.RunOnUiThread — off UI thread, BeginInvoke-ing");
                 _dispatcher.BeginInvoke(action);
             }
         }

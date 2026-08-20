@@ -6,7 +6,6 @@
              xmlns:conv="clr-namespace:UI.Converters"
              xmlns:services="clr-namespace:UI.Services"
              mc:Ignorable="d"
-             Loaded="OnLoaded"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              IsHitTestVisible="False"
@@ -19,13 +18,16 @@
     <!-- Outer grid fills the window; toasts dock top-right via margin.
          IsHitTestVisible="False" on the UserControl lets all clicks
          pass through the transparent area. Each toast re-enables
-         hit-testing so its buttons still work. -->
+         hit-testing so its buttons still work.
+         Top margin (64) clears the 52px app header so the toast stack
+         and its ✕ button never sit directly over the top-right Logout
+         button beneath. -->
     <Grid>
         <ItemsControl ItemsSource="{Binding Toasts}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Top"
                       Width="320"
-                      Margin="0,16,16,0"
+                      Margin="0,64,16,0"
                       IsHitTestVisible="True"
                       Focusable="False">
             <ItemsControl.ItemsPanel>

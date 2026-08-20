@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.Logging;
+using UI.Services;
 using UI.ViewModels;
 using UI.Views;
 
@@ -119,19 +120,28 @@ namespace UI.ViewModels
 
         private async Task PayCashAsync()
         {
+            TxpTrace.WriteLine("[TOAST] PayCashAsync — entered");
             if (!TryValidatePaymentPrerequisites())
+            {
+                TxpTrace.WriteLine("[TOAST] PayCashAsync — prerequisites failed, aborting");
                 return;
-
+            }
+            TxpTrace.WriteLine("[TOAST] PayCashAsync — prerequisites OK, opening dialog");
             await ShowPaymentDialogAsync();
         }
 
         private async Task PayCardAsync()
         {
+            TxpTrace.WriteLine("[TOAST] PayCardAsync — entered");
             if (!TryValidatePaymentPrerequisites())
+            {
+                TxpTrace.WriteLine("[TOAST] PayCardAsync — prerequisites failed, aborting");
                 return;
+            }
 
             var confirmViewModel = _viewModelFactory.Create<CardPaymentConfirmDialogViewModel>(Total);
             bool? confirmed = _dialogService.ShowDialogWithResult<CardPaymentConfirmDialog>(confirmViewModel);
+            TxpTrace.WriteLine($"[TOAST] PayCardAsync — card confirm dialog result: {confirmed}");
 
             if (confirmed != true)
                 return;
@@ -141,27 +151,28 @@ namespace UI.ViewModels
 
         private async Task ShowPaymentDialogAsync()
         {
+            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — creating PaymentDialogViewModel");
             var paymentViewModel = _viewModelFactory.Create<PaymentDialogViewModel>(Total, this);
 
             paymentViewModel.PaymentCompleted += async (transactionId) =>
             {
+                TxpTrace.WriteLine($"[TOAST] PaymentCompleted fired — transactionId={transactionId}");
                 ClearCurrentSale();
 
-                // Show (and print) the receipt immediately — this is what the cashier
-                // is waiting on. Refreshing the recent-sales panel doesn't need to
-                // block that, so it happens afterward instead of before.
+                TxpTrace.WriteLine("[TOAST] PaymentCompleted — calling PrintAndShowReceiptAsync");
                 await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
+                TxpTrace.WriteLine("[TOAST] PaymentCompleted — PrintAndShowReceiptAsync done, loading recent sales");
                 await LoadRecentSalesAsync();
             };
 
+            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — showing PaymentDialog");
             _dialogService.ShowDialog<PaymentDialog>(paymentViewModel);
+            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — PaymentDialog returned");
         }
 
         private async Task CreateCardPaymentAsync()
         {
-            // TransactionService is the sole validation authority and
-            // returns Result<int>; errors surface via BaseViewModel.RunAsync.
-
+            TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — calling CreateTransactionAsync");
             await RunAsync(
                 () => _transactionService.CreateTransactionAsync(
                     BuildCreatePaymentRequest(
@@ -171,13 +182,12 @@ namespace UI.ViewModels
                         referenceNumber: null)),
                 async transactionId =>
                 {
-                   
+                    TxpTrace.WriteLine($"[TOAST] CreateCardPaymentAsync — CreateTransactionAsync succeeded, transactionId={transactionId}");
                     ClearCurrentSale();
 
-                    // Show (and print) the receipt immediately — this is what
-                    // the cashier is waiting on. Refreshing the recent-sales
-                    // panel doesn't need to block that.
+                    TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — calling PrintAndShowReceiptAsync");
                     await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
+                    TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — PrintAndShowReceiptAsync done");
                     await LoadRecentSalesAsync();
                 });
         }

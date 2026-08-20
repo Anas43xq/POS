@@ -50,27 +50,35 @@ public class ReceiptDisplayService : IReceiptDisplayService
 
     public async Task PrintAndShowReceiptAsync(int transactionId)
     {
+        TxpTrace.WriteLine($"[TOAST] PrintAndShowReceiptAsync — entered, transactionId={transactionId}");
+
         if (transactionId <= 0)
-            return;
-
-        // Fetch the receipt once and reuse it for both printing and display,
-        // instead of issuing the same (joined) query twice.
-        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
-
-        // Payment has been recorded and the receipt payload is in hand.
-        // Surface a non-modal success toast so the cashier gets explicit
-        // confirmation even if the receipt window is dismissed quickly
-        // or the printer is slow.
-        if (receipt != null)
         {
-            _notifications.ShowSuccess(_localizationService.GetString("Receipt.PaymentSuccess"));
+            TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — ABORT: transactionId <= 0");
+            return;
         }
 
-        // Printing can continue in the background; it doesn't need to block
-        // showing the receipt to the cashier.
+        TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — fetching receipt from service");
+        var receipt = await _receiptService.GetReceiptByTransactionIdAsync(transactionId);
+        TxpTrace.WriteLine($"[TOAST] PrintAndShowReceiptAsync — receipt={( receipt == null ? "NULL" : "OK")}");
+
+        if (receipt != null)
+        {
+            var msg = _localizationService.GetString("Receipt.PaymentSuccess");
+            TxpTrace.WriteLine($"[TOAST] PrintAndShowReceiptAsync — calling ShowSuccess, message='{msg}'");
+            _notifications.ShowSuccess(msg);
+            TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — ShowSuccess returned");
+        }
+        else
+        {
+            TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — receipt is null, skipping ShowSuccess");
+        }
+
         _ = PrintReceiptCoreAsync(receipt, transactionId);
 
+        TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — calling ShowReceiptWindow");
         ShowReceiptWindow(receipt, transactionId);
+        TxpTrace.WriteLine("[TOAST] PrintAndShowReceiptAsync — ShowReceiptWindow returned");
     }
 
     private void ShowReceiptWindow(POS.Contracts.Receipts.ReceiptDetailsDto? receipt, int transactionId)
