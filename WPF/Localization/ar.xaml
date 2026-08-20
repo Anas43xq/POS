@@ -559,6 +559,8 @@
     <sys:String x:Key="ManagerPin.ErrorIncorrect">رمز PIN غير صحيح. {0} محاولة(محاولات) متبقية.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorLocked">تجاوزت عدد المحاولات المسموح به. تم رفض الوصول.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorUnexpected">حدث خطأ. يرجى المحاولة مجدداً.</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinBanner">لم يتم تعيين رمز PIN للتجاوز</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinMessage">لم يتم تكوين رمز PIN للتجاوز. عيّن رمز PIN من 4 أرقام في الإعدادات قبل الموافقة على هذا الإجراء. لوحة الأرقام معطلة حتى يتم تعيينه.</sys:String>
     <!-- Void approval prompt title -->
     <sys:String x:Key="Void.ApprovalTitle">الموافقة على الإلغاء</sys:String>
 

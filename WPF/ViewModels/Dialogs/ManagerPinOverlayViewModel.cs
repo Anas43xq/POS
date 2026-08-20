@@ -25,6 +25,7 @@ namespace UI.ViewModels
         private string _pin = string.Empty;
         private string? _errorMessage;
         private bool _isBusy;
+        private bool _isPinSet;
         private int _failedAttempts;
         private string _reason = string.Empty;
 
@@ -43,9 +44,9 @@ namespace UI.ViewModels
             _logger = logger;
             _notifications = notifications;
 
-            DigitCommand   = new RelayCommand(OnDigit,   _ => !IsBusy && _pin.Length < 4);
-            BackspaceCommand = new RelayCommand(_ => OnBackspace(), _ => !IsBusy && _pin.Length > 0);
-            ConfirmCommand = new AsyncRelayCommand(OnConfirmAsync, () => !IsBusy && _pin.Length == 4);
+            DigitCommand   = new RelayCommand(OnDigit,   _ => !IsBusy && IsPinSet && _pin.Length < 4);
+            BackspaceCommand = new RelayCommand(_ => OnBackspace(), _ => !IsBusy && IsPinSet && _pin.Length > 0);
+            ConfirmCommand = new AsyncRelayCommand(OnConfirmAsync, () => !IsBusy && IsPinSet && _pin.Length == 4);
             CancelCommand  = new RelayCommand(_ => OnCancel(), _ => !IsBusy);
         }
 
@@ -80,6 +81,13 @@ namespace UI.ViewModels
         /// <summary>Dot indicators (0–4 filled dots) bound in the XAML.</summary>
         public int PinLength => _pin.Length;
 
+        /// <summary>True when the current manager has a PIN set. When false the
+        /// keypad is disabled and a "set a PIN in Settings" notice is shown.</summary>
+        public bool IsPinSet => _isPinSet;
+
+        /// <summary>True when no PIN is set — drives the banner and centered notice.</summary>
+        public bool ShowPinNotice => !_isPinSet;
+
         public string? ErrorMessage
         {
             get => _errorMessage;
@@ -111,6 +119,23 @@ namespace UI.ViewModels
         /// <summary>Raised after a failed attempt so the code-behind can clear visual digit state.</summary>
         public event Action? PinClearRequested;
 
+        /// <summary>
+        /// Checks whether the logged-in manager has a PIN set and flips
+        /// <see cref="IsPinSet"/> accordingly. When no PIN exists the keypad is
+        /// disabled and a notice directs the manager to Settings. Must be called
+        /// before the overlay is shown. Fast after login because the PIN hash is
+        /// already cached by <see cref="IPinService.HydrateCacheAsync"/>.
+        /// </summary>
+        public async Task InitializeAsync()
+        {
+            var userId = _sessionService.CurrentUser?.UserId;
+            _isPinSet = userId is int id && await _pinService.HasPinAsync(id);
+
+            OnPropertyChanged(nameof(IsPinSet));
+            OnPropertyChanged(nameof(ShowPinNotice));
+            RaiseAll();
+        }
+
         // TODO: long-term fix — change DigitCommand to AsyncRelayCommand so auto-submit can use a proper
         // async pipeline instead of async void. Deferred because the existing pattern uses RelayCommand
         // for this command and a full ViewModel refactor is out of scope. The async void here is
@@ -118,7 +143,7 @@ namespace UI.ViewModels
         // app's UnhandledException handler.
         private async void OnDigit(object? parameter)
         {
-            if (_pin.Length >= 4 || IsBusy) return;
+            if (!IsPinSet || _pin.Length >= 4 || IsBusy) return;
             _pin += parameter?.ToString() ?? string.Empty;
             ErrorMessage = null;
             OnPropertyChanged(nameof(PinLength));
@@ -139,7 +164,7 @@ namespace UI.ViewModels
 
         private async Task OnConfirmAsync()
         {
-            if (_pin.Length != 4 || IsBusy) return;
+            if (!IsPinSet || _pin.Length != 4 || IsBusy) return;
 
             if (ReasonRequired && string.IsNullOrWhiteSpace(Reason))
             {

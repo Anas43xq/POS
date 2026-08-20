@@ -209,9 +209,14 @@ namespace UI.ViewModels
         {
             if (transaction == null) return;
 
-            // PIN overlay acts as confirmation + authorization.
-            var voidReason = await _managerOverlayService.RequestApprovalWithReasonAsync(
+            // PIN overlay acts as confirmation + authorization. If the manager
+            // cancels, fails the PIN, or has no PIN set, approval is denied and
+            // the transaction must NOT be voided.
+            var approval = await _managerOverlayService.RequestApprovalWithReasonAsync(
                 _localizationService.GetString("Void.ApprovalTitle"));
+
+            if (!approval.Approved)
+                return;
 
             try
             {
@@ -220,7 +225,7 @@ namespace UI.ViewModels
 
                 var result = await _transactionService.VoidTransactionAsync(
                     transaction.TransactionId,
-                    voidReason);
+                    approval.Reason);
 
                 SelectedTransaction = null;
 
@@ -228,15 +233,13 @@ namespace UI.ViewModels
                 {
                     ErrorMessage = result.Error
                         ?? _localizationService.GetString("Transactions.VoidFailed");
-                    await RefreshAsync();
-                    return;
                 }
-
-                var receiptNumber = result.Value?.ReceiptNumber ?? transaction.ReceiptNumber;
-                _notifications.ShowSuccess(
-                    _localizationService.GetString("Transactions.VoidSuccess", receiptNumber));
-
-                await RefreshAsync();
+                else
+                {
+                    var receiptNumber = result.Value?.ReceiptNumber ?? transaction.ReceiptNumber;
+                    _notifications.ShowSuccess(
+                        _localizationService.GetString("Transactions.VoidSuccess", receiptNumber));
+                }
             }
             catch (Exception ex)
             {
@@ -246,6 +249,11 @@ namespace UI.ViewModels
             {
                 IsBusy = false;
             }
+
+            // Refresh AFTER IsBusy is cleared. LoadTransactions() early-returns
+            // while IsBusy is true, so calling it inside the try (IsBusy=true)
+            // would no-op and the list would never update after a void.
+            await RefreshAsync();
         }
     }
 }

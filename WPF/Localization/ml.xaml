@@ -548,6 +548,8 @@
     <sys:String x:Key="ManagerPin.ErrorIncorrect">PIN തെറ്റ്. {0} ശ്രമം(ങ്ങൾ) ബാക്കി.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorLocked">അനുവദനീയമായ ശ്രമങ്ങൾ കഴിഞ്ഞു. ആക്സസ് നിഷേധിച്ചു.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorUnexpected">ഒരു പിശക് സംഭവിച്ചു. ദയവായി വീണ്ടും ശ്രമിക്കുക.</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinBanner">ഓവർറൈഡ് PIN സജ്ജീകരിച്ചിട്ടില്ല</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinMessage">ഓവർറൈഡ് PIN കോൺഫിഗർ ചെയ്തിട്ടില്ല. ഈ പ്രവർത്തനം അംഗീകരിക്കുന്നതിന് മുമ്പ് Settings-ൽ 4 അക്ക PIN സജ്ജീകരിക്കുക. PIN സജ്ജീകരിക്കുന്നതുവരെ കീപാഡ് പ്രവർത്തനരഹിതമാണ്.</sys:String>
     <!-- Void approval prompt title -->
     <sys:String x:Key="Void.ApprovalTitle">ശൂന്യം അംഗീകരിക്കുക</sys:String>
 

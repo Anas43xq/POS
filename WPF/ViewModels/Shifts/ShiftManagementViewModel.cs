@@ -21,6 +21,7 @@ namespace UI.ViewModels
         private readonly IShiftManagementService _shiftManagementService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly ILocalizationService _localizationService;
+        private readonly INotificationService _notifications;
 
         private readonly ObservableCollection<ShiftListItemDto> _shifts = new();
         private ICollectionView? _shiftsView;
@@ -34,11 +35,13 @@ namespace UI.ViewModels
             IShiftManagementService shiftManagementService,
             IReceiptDisplayService receiptDisplayService,
             IViewModelFactory viewModelFactory,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            INotificationService notifications)
         {
             _shiftManagementService = shiftManagementService;
             _viewModelFactory = viewModelFactory;
             _localizationService = localizationService;
+            _notifications = notifications;
 
             LoadDayCommand = new RelayCommand(_ => LoadDay());
             LoadWeekCommand = new RelayCommand(_ => LoadWeek());

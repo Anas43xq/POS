@@ -72,11 +72,10 @@ namespace UI.ViewModels
         {
             if (!PeriodFromDate.HasValue)
             {
-                ErrorMessage = "From date is required for a custom period.";
+                _notifications.ShowError("From date is required for a custom period.");
                 return;
             }
 
-            ErrorMessage = string.Empty;
             CurrentFilterMode = DashboardFilterMode.Period;
             IsPeriodFilterVisible = true;
             _ = LoadFilteredSectionsAsync();
@@ -88,14 +87,13 @@ namespace UI.ViewModels
             try
             {
                 await LoadAsyncCore();
-                ErrorMessage = string.Empty;
                 TxpTrace.WriteLine(
                     $"[TXP] - Manager home initial load completed in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load dashboard data.");
-                ErrorMessage = "Unable to load dashboard data.";
+                _notifications.ShowError("Unable to load dashboard data.");
             }
         }
 
@@ -124,7 +122,6 @@ namespace UI.ViewModels
 
             try
             {
-                ErrorMessage = string.Empty;
                 var request = BuildFilterRequest();
                 await Task.WhenAll(
                     LoadKpisAsync(request),
@@ -133,7 +130,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load filtered dashboard data.");
-                ErrorMessage = "Unable to load filtered data.";
+                _notifications.ShowError("Unable to load filtered data.");
             }
         }
 
@@ -154,7 +151,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load recent transactions.");
-                ErrorMessage = "Unable to load recent transactions.";
+                _notifications.ShowError("Unable to load recent transactions.");
             }
         }
 
@@ -175,7 +172,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load top products.");
-                ErrorMessage = "Unable to load top products.";
+                _notifications.ShowError("Unable to load top products.");
             }
         }
 
@@ -196,7 +193,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load shift summary.");
-                ErrorMessage = "Unable to load shift summary.";
+                _notifications.ShowError("Unable to load shift summary.");
             }
         }
 
@@ -235,7 +232,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to load KPIs.");
-                ErrorMessage = "Unable to load KPIs.";
+                _notifications.ShowError("Unable to load KPIs.");
             }
         }
     }

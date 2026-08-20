@@ -73,17 +73,12 @@
 
                 <!-- ERROR BANNER -->
                 <Border Grid.Row="1"
-                        Background="{StaticResource Color.Danger.ErrorSurface}"
-                        BorderBrush="{StaticResource Color.Danger.ErrorBorder}"
-                        BorderThickness="1" CornerRadius="{StaticResource Radius.IconBadge}"
-                        Padding="{StaticResource Spacing.DialogError}" Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
+                        Style="{StaticResource POS.Dialog.NoticeDanger}"
+                        Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
                         Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⚠ " FontSize="{StaticResource Font.Size.Md}" Foreground="{StaticResource Color.Danger.ErrorText}"/>
-                        <TextBlock Text="{Binding ErrorMessage}"
-                                   FontSize="{StaticResource Font.Size.Sm}" Foreground="{StaticResource Color.Danger.ErrorText}"
-                                   TextWrapping="Wrap" VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Style="{StaticResource POS.Dialog.ErrorText}"
+                               TextWrapping="Wrap"/>
                 </Border>
 
                 <!-- TRANSLATION LIST -->

@@ -150,6 +150,15 @@
         <Setter Property="Padding" Value="{StaticResource Spacing.DialogError}"/>
     </Style>
 
+    <Style x:Key="POS.Dialog.NoticeWarning"
+           TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Color.Surface.Warning}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Color.Warning.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Md}"/>
+        <Setter Property="Padding" Value="{StaticResource Spacing.DialogError}"/>
+    </Style>
+
     <Style x:Key="POS.Dialog.PricePanel"
            TargetType="Border">
         <Setter Property="Background" Value="{StaticResource Color.Brand.Light}"/>

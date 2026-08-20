@@ -31,9 +31,7 @@ namespace UI.Controls
             // is created, making the constructor the earliest safe point.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                var svc = App.ServiceProvider.GetRequiredService<INotificationService>();
-                DataContext = svc;
-                TxpTrace.WriteLine($"[TOAST] ToastHost ctor — DataContext set to {svc.GetType().Name}, Toasts.Count={svc.Toasts.Count}");
+                DataContext = App.ServiceProvider.GetRequiredService<INotificationService>();
             }
         }
 

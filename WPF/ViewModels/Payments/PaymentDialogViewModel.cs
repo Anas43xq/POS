@@ -92,17 +92,13 @@ public class PaymentDialogViewModel : BaseViewModel
 
     private async Task ConfirmPaymentAsync()
     {
-        TxpTrace.WriteLine($"[TOAST] ConfirmPaymentAsync — entered, CashReceived={CashReceived}, Total={PaymentTotal}");
         await RunAsync(
             () =>
             {
-                TxpTrace.WriteLine("[TOAST] ConfirmPaymentAsync — calling CreateTransactionAsync");
                 return _transactionService.CreateTransactionAsync(BuildCreateTransactionRequest());
             },
             async transactionId =>
             {
-                TxpTrace.WriteLine($"[TOAST] ConfirmPaymentAsync — transaction created, id={transactionId}");
-                TxpTrace.WriteLine($"[TOAST] ConfirmPaymentAsync — firing PaymentCompleted (subscribers={PaymentCompleted?.GetInvocationList().Length ?? 0})");
                 PaymentCompleted?.Invoke(transactionId);
                 CloseDialog();
             });

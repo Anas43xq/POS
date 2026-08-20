@@ -120,28 +120,18 @@ namespace UI.ViewModels
 
         private async Task PayCashAsync()
         {
-            TxpTrace.WriteLine("[TOAST] PayCashAsync — entered");
             if (!TryValidatePaymentPrerequisites())
-            {
-                TxpTrace.WriteLine("[TOAST] PayCashAsync — prerequisites failed, aborting");
                 return;
-            }
-            TxpTrace.WriteLine("[TOAST] PayCashAsync — prerequisites OK, opening dialog");
             await ShowPaymentDialogAsync();
         }
 
         private async Task PayCardAsync()
         {
-            TxpTrace.WriteLine("[TOAST] PayCardAsync — entered");
             if (!TryValidatePaymentPrerequisites())
-            {
-                TxpTrace.WriteLine("[TOAST] PayCardAsync — prerequisites failed, aborting");
                 return;
-            }
 
             var confirmViewModel = _viewModelFactory.Create<CardPaymentConfirmDialogViewModel>(Total);
             bool? confirmed = _dialogService.ShowDialogWithResult<CardPaymentConfirmDialog>(confirmViewModel);
-            TxpTrace.WriteLine($"[TOAST] PayCardAsync — card confirm dialog result: {confirmed}");
 
             if (confirmed != true)
                 return;
@@ -151,28 +141,21 @@ namespace UI.ViewModels
 
         private async Task ShowPaymentDialogAsync()
         {
-            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — creating PaymentDialogViewModel");
             var paymentViewModel = _viewModelFactory.Create<PaymentDialogViewModel>(Total, this);
 
             paymentViewModel.PaymentCompleted += async (transactionId) =>
             {
-                TxpTrace.WriteLine($"[TOAST] PaymentCompleted fired — transactionId={transactionId}");
                 ClearCurrentSale();
 
-                TxpTrace.WriteLine("[TOAST] PaymentCompleted — calling PrintAndShowReceiptAsync");
                 await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
-                TxpTrace.WriteLine("[TOAST] PaymentCompleted — PrintAndShowReceiptAsync done, loading recent sales");
                 await LoadRecentSalesAsync();
             };
 
-            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — showing PaymentDialog");
             _dialogService.ShowDialog<PaymentDialog>(paymentViewModel);
-            TxpTrace.WriteLine("[TOAST] ShowPaymentDialogAsync — PaymentDialog returned");
         }
 
         private async Task CreateCardPaymentAsync()
         {
-            TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — calling CreateTransactionAsync");
             await RunAsync(
                 () => _transactionService.CreateTransactionAsync(
                     BuildCreatePaymentRequest(
@@ -182,12 +165,9 @@ namespace UI.ViewModels
                         referenceNumber: null)),
                 async transactionId =>
                 {
-                    TxpTrace.WriteLine($"[TOAST] CreateCardPaymentAsync — CreateTransactionAsync succeeded, transactionId={transactionId}");
                     ClearCurrentSale();
 
-                    TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — calling PrintAndShowReceiptAsync");
                     await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
-                    TxpTrace.WriteLine("[TOAST] CreateCardPaymentAsync — PrintAndShowReceiptAsync done");
                     await LoadRecentSalesAsync();
                 });
         }
@@ -195,20 +175,20 @@ namespace UI.ViewModels
         private bool TryValidatePaymentPrerequisites()
         {
             if (_session.CurrentUser == null)
-                return ShowPrerequisiteError("No active user. Please sign in first.", "User Required");
+                return ShowPrerequisiteError("No active user. Please sign in first.");
 
             if (!IsShiftOpen)
-                return ShowPrerequisiteError("No active shift. Please start a shift first.", "Shift Required");
+                return ShowPrerequisiteError("No active shift. Please start a shift first.");
 
             if (!SaleItems.Any())
-                return ShowPrerequisiteError("Cart is empty.", "Sale Required");
+                return ShowPrerequisiteError("Cart is empty.");
 
             return true;
         }
 
-        private bool ShowPrerequisiteError(string message, string title)
+        private bool ShowPrerequisiteError(string message)
         {
-            ShowHeaderError(message);
+            _notifications.ShowError(message);
             return false;
         }
 
@@ -357,7 +337,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Failed to load default modifiers for product {ProductId}", product.ProductId);
-                ShowHeaderError("Unable to load product modifiers.");
+                _notifications.ShowError("Unable to load product modifiers.");
             }
         }
 

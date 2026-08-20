@@ -66,26 +66,18 @@
                     <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
                             Margin="{StaticResource Spacing.DialogFooterCancelGap}"
                             Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⚠ "
-                                       Style="{StaticResource POS.Dialog.ErrorText}"/>
-                            <TextBlock Text="{Binding ErrorMessage}"
-                                       Style="{StaticResource POS.Dialog.ErrorText}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Style="{StaticResource POS.Dialog.ErrorText}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
                     </Border>
 
                     <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
                             Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⚠ "
-                                       Style="{StaticResource POS.Dialog.ErrorText}"/>
-                            <TextBlock Text="{DynamicResource Manager.ProductForm.DuplicateWarning}"
-                                       Style="{StaticResource POS.Dialog.ErrorText}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.ProductForm.DuplicateWarning}"
+                                   Style="{StaticResource POS.Dialog.ErrorText}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
                     </Border>
                 </StackPanel>
 

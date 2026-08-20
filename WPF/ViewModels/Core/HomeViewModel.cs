@@ -18,6 +18,7 @@ namespace UI.ViewModels
     public partial class HomeViewModel : BaseViewModel
     {
         private readonly ILogger<HomeViewModel>? _logger;
+        private readonly INotificationService _notifications;
         private readonly IKpiService _kpiService;
         private readonly IRecentTransactionService _recentTransactionService;
         private readonly IShiftSummaryService _shiftSummaryService;
@@ -37,9 +38,11 @@ namespace UI.ViewModels
             ITopProductService topProductService,
             ITransactionService transactionService,
             IReceiptDisplayService receiptDisplayService,
+            INotificationService notifications,
             ILogger<HomeViewModel>? logger)
         {
             _logger = logger;
+            _notifications = notifications;
             _kpiService = kpiService;
             _recentTransactionService = recentTransactionService;
             _shiftSummaryService = shiftSummaryService;
@@ -274,12 +277,11 @@ namespace UI.ViewModels
             try
             {
                 await LoadAsyncCore();
-                ErrorMessage = string.Empty;
             }
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to refresh dashboard data.");
-                ErrorMessage = "Unable to refresh dashboard data.";
+                _notifications.ShowError("Unable to refresh dashboard data.");
             }
         }
     }

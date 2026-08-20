@@ -21,6 +21,7 @@ namespace UI.Services
             var vm = _serviceProvider.GetRequiredService<ManagerPinOverlayViewModel>();
             vm.PromptTitle = promptTitle;
             vm.ReasonRequired = reasonRequired;
+            await vm.InitializeAsync();
 
             var window = new ManagerPinOverlayView
             {
@@ -33,11 +34,12 @@ namespace UI.Services
             return await vm.ResultTask;
         }
 
-        public async Task<string?> RequestApprovalWithReasonAsync(string promptTitle)
+        public async Task<ManagerApprovalResult> RequestApprovalWithReasonAsync(string promptTitle)
         {
             var vm = _serviceProvider.GetRequiredService<ManagerPinOverlayViewModel>();
             vm.PromptTitle = promptTitle;
             vm.ReasonRequired = false;
+            await vm.InitializeAsync();
 
             var window = new ManagerPinOverlayView
             {
@@ -47,7 +49,9 @@ namespace UI.Services
 
             window.ShowDialog();
 
-            return await vm.ResultWithReasonTask;
+            bool approved = await vm.ResultTask;
+            string? reason = await vm.ResultWithReasonTask;
+            return new ManagerApprovalResult(approved, approved ? reason : null);
         }
     }
 }

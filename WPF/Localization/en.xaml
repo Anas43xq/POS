@@ -553,6 +553,8 @@
     <sys:String x:Key="ManagerPin.ErrorIncorrect">Incorrect PIN. {0} attempt(s) remaining.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorLocked">Too many incorrect attempts. Access denied.</sys:String>
     <sys:String x:Key="ManagerPin.ErrorUnexpected">An error occurred. Please try again.</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinBanner">No override PIN set</sys:String>
+    <sys:String x:Key="ManagerPin.NoPinMessage">No override PIN is configured. Set a 4-digit PIN in Settings before approving this action. The keypad is disabled until one is set.</sys:String>
     <!-- Void approval prompt title -->
     <sys:String x:Key="Void.ApprovalTitle">Approve Void</sys:String>
 

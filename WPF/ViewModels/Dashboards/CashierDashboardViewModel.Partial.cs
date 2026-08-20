@@ -126,7 +126,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load categories for cashier dashboard");
-                ShowHeaderError("Failed to load categories. Please try again.");
+                _notifications.ShowError("Failed to load categories. Please try again.");
             }
         }
 
@@ -154,7 +154,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load products for cashier dashboard");
-                ShowHeaderError("Failed to load products. Please try again.");
+                _notifications.ShowError("Failed to load products. Please try again.");
             }
         }
 
@@ -183,7 +183,7 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load recent sales for cashier dashboard");
-                ShowHeaderError("Failed to load recent sales.");
+                _notifications.ShowError("Failed to load recent sales.");
             }
         }
 

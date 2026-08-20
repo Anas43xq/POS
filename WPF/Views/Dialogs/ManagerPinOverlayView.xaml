@@ -66,14 +66,34 @@
                     </Grid>
                 </Border>
 
-                <!-- PIN indicator + error banner + reason -->
+                <!-- PIN indicator + no-PIN notice + error banner + reason -->
                 <StackPanel Grid.Row="1" Margin="{StaticResource Spacing.DialogBodyMargin}">
+                    <!-- No-PIN banner: shown when the manager has not set an override PIN -->
+                    <Border Style="{StaticResource POS.Dialog.NoticeWarning}"
+                            Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
+                            Visibility="{Binding ShowPinNotice, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="{DynamicResource ManagerPin.NoPinBanner}"
+                                   Style="{StaticResource POS.Dialog.ErrorText}"
+                                   Foreground="{StaticResource Color.Text.Warning}"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Ellipse Style="{StaticResource POS.Dialog.PinDot.1}"/>
                         <Ellipse Style="{StaticResource POS.Dialog.PinDot.2}"/>
                         <Ellipse Style="{StaticResource POS.Dialog.PinDot.3}"/>
                         <Ellipse Style="{StaticResource POS.Dialog.PinDot.4}"/>
                     </StackPanel>
+
+                    <!-- Centered "set a PIN in Settings" message shown when no PIN exists -->
+                    <TextBlock Text="{DynamicResource ManagerPin.NoPinMessage}"
+                               Style="{StaticResource POS.Dialog.ErrorText}"
+                               Foreground="{StaticResource Color.Text.Warning}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Margin="{StaticResource Spacing.DialogFieldGap}"
+                               Visibility="{Binding ShowPinNotice, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
                             Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
@@ -103,8 +123,10 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Numpad -->
-                <Grid Grid.Row="2" Margin="{StaticResource Spacing.DialogBodyMargin}">
+                <!-- Numpad — disabled until an override PIN is set -->
+                <Grid Grid.Row="2"
+                      Margin="{StaticResource Spacing.DialogBodyMargin}"
+                      IsEnabled="{Binding IsPinSet}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
