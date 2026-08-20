@@ -1,0 +1,904 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ========================================================= -->
+    <!-- Common -->
+    <!-- Reusable, generic UI vocabulary shared across the app.   -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Common.Add">إضافة</sys:String>
+    <sys:String x:Key="Common.Edit">تعديل</sys:String>
+    <sys:String x:Key="Common.Delete">حذف</sys:String>
+    <sys:String x:Key="Common.Save">حفظ</sys:String>
+    <sys:String x:Key="Common.Cancel">إلغاء</sys:String>
+    <sys:String x:Key="Common.Close">إغلاق</sys:String>
+    <sys:String x:Key="Common.Open">فتح</sys:String>
+    <sys:String x:Key="Common.View">عرض</sys:String>
+    <sys:String x:Key="Common.Export">تصدير</sys:String>
+    <sys:String x:Key="Common.Refresh">تحديث</sys:String>
+    <sys:String x:Key="Common.Print">طباعة</sys:String>
+    <sys:String x:Key="Common.Void">إلغاء</sys:String>
+
+    <sys:String x:Key="Common.Search">بحث</sys:String>
+
+    <sys:String x:Key="Common.Apply">تطبيق</sys:String>
+    <sys:String x:Key="Common.Reset">إعادة تعيين</sys:String>
+
+    <sys:String x:Key="Common.Today">اليوم</sys:String>
+    <sys:String x:Key="Common.ThisWeek">هذا الأسبوع</sys:String>
+    <sys:String x:Key="Common.ThisMonth">هذا الشهر</sys:String>
+    <sys:String x:Key="Common.Day">يوم</sys:String>
+    <sys:String x:Key="Common.Week">أسبوع</sys:String>
+    <sys:String x:Key="Common.Month">شهر</sys:String>
+    <sys:String x:Key="Common.Period">الفترة</sys:String>
+    <sys:String x:Key="Common.FromDateRequired">تاريخ البدء مطلوب للفترة المخصصة.</sys:String>
+    <sys:String x:Key="Common.ToDateBeforeFromDate">لا يمكن أن يكون تاريخ الانتهاء قبل تاريخ البدء.</sys:String>
+
+    <sys:String x:Key="Common.From">من</sys:String>
+    <sys:String x:Key="Common.To">إلى</sys:String>
+
+    <sys:String x:Key="Common.Date">التاريخ</sys:String>
+    <sys:String x:Key="Common.Time">الوقت</sys:String>
+    <sys:String x:Key="Common.DateTime">التاريخ والوقت</sys:String>
+    <sys:String x:Key="Common.DateFrom">من تاريخ</sys:String>
+    <sys:String x:Key="Common.DateTo">إلى تاريخ</sys:String>
+
+    <sys:String x:Key="Common.Name">الاسم</sys:String>
+    <sys:String x:Key="Common.Description">الوصف</sys:String>
+    <sys:String x:Key="Common.Notes">ملاحظات</sys:String>
+    <sys:String x:Key="Common.Optional">(اختياري)</sys:String>
+    <sys:String x:Key="Common.Icon">أيقونة</sys:String>
+    <sys:String x:Key="Common.None">— لا شيء —</sys:String>
+    <sys:String x:Key="Common.PointOfSale">POINT OF SALE</sys:String>
+
+    <sys:String x:Key="Common.Category">الفئة</sys:String>
+    <sys:String x:Key="Common.Categories">الفئات</sys:String>
+    <sys:String x:Key="Common.Supplier">المورد</sys:String>
+
+    <sys:String x:Key="Common.Product">المنتج</sys:String>
+    <sys:String x:Key="Common.Products">المنتجات</sys:String>
+
+    <sys:String x:Key="Common.Quantity">الكمية</sys:String>
+    <sys:String x:Key="Common.Price">السعر</sys:String>
+
+    <sys:String x:Key="Common.Subtotal">المجموع الفرعي</sys:String>
+    <sys:String x:Key="Common.Tax">الضريبة</sys:String>
+    <sys:String x:Key="Common.Discount">الخصم</sys:String>
+    <sys:String x:Key="Common.Total">الإجمالي</sys:String>
+    <sys:String x:Key="Common.GrandTotal">المجموع الكلي</sys:String>
+
+    <sys:String x:Key="Common.Amount">المبلغ</sys:String>
+    <sys:String x:Key="Common.Change">الباقي</sys:String>
+
+    <sys:String x:Key="Common.Status">الحالة</sys:String>
+
+    <sys:String x:Key="Common.Payment">الدفع</sys:String>
+    <sys:String x:Key="Common.PaymentMethod">طريقة الدفع</sys:String>
+    <sys:String x:Key="Common.Cash">نقدًا</sys:String>
+    <sys:String x:Key="Common.Card">بطاقة</sys:String>
+
+    <sys:String x:Key="Common.Receipt">الإيصال</sys:String>
+    <sys:String x:Key="Common.ReceiptNumber">رقم الإيصال</sys:String>
+    <sys:String x:Key="Common.ReceiptType">نوع الإيصال</sys:String>
+
+    <sys:String x:Key="Common.Loading">جاري التحميل...</sys:String>
+
+    <sys:String x:Key="Common.Warning">تحذير</sys:String>
+    <sys:String x:Key="Common.Error">خطأ</sys:String>
+    <sys:String x:Key="Common.Information">معلومات</sys:String>
+    <sys:String x:Key="Common.Translations">ترجمات</sys:String>
+    <sys:String x:Key="Common.Confirmation">تأكيد</sys:String>
+    <sys:String x:Key="Common.Yes">نعم</sys:String>
+    <sys:String x:Key="Common.No">لا</sys:String>
+
+    <sys:String x:Key="Common.Clear">مسح</sys:String>
+    <sys:String x:Key="Common.Logout">تسجيل الخروج</sys:String>
+
+    <sys:String x:Key="Common.Start">بدء</sys:String>
+    <sys:String x:Key="Common.End">إنهاء</sys:String>
+
+    <sys:String x:Key="Common.Previous">السابق</sys:String>
+    <sys:String x:Key="Common.Next">التالي</sys:String>
+
+    <sys:String x:Key="Common.Page">صفحة</sys:String>
+    <sys:String x:Key="Common.Transactions">المعاملات</sys:String>
+
+    <sys:String x:Key="Common.PagerTransactions">صفحة {0}  ·  {1} معاملة</sys:String>
+
+    <sys:String x:Key="Common.ItemsCount">{0} عناصر</sys:String>
+
+    <sys:String x:Key="Common.OpenCloseLabel">فتح {0}  ·  إغلاق {1}</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Login -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Login.Title">Cafeteria Hawa – تسجيل الدخول</sys:String>
+    <sys:String x:Key="Login.Brand">Cafeteria Hawa</sys:String>
+
+    <sys:String x:Key="Login.Username">اسم المستخدم</sys:String>
+    <sys:String x:Key="Login.Password">كلمة المرور</sys:String>
+
+    <sys:String x:Key="Login.SignIn">تسجيل الدخول</sys:String>
+
+    <sys:String x:Key="Login.ShowHidePassword">
+        إظهار / إخفاء كلمة المرور
+    </sys:String>
+
+    <sys:String x:Key="Login.Footer">WFA System  ·  v2.0</sys:String>
+
+    <sys:String x:Key="ManagerLogin.Title">تسجيل دخول المدير</sys:String>
+    <sys:String x:Key="ManagerLogin.Subtitle">سجل الدخول باستخدام حساب المدير للمتابعة.</sys:String>
+    <sys:String x:Key="ManagerLogin.LoginButton">تسجيل الدخول</sys:String>
+
+    <sys:String x:Key="LoginAs.Title">تسجيل الدخول باسم</sys:String>
+    <sys:String x:Key="LoginAs.Subtitle">اختر كيف تريد المتابعة.</sys:String>
+    <sys:String x:Key="LoginAs.Manager">المدير</sys:String>
+    <sys:String x:Key="LoginAs.Cashier">الكاشير</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Cashier Dashboard -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Cashier.StartDay">بدء اليوم</sys:String>
+    <sys:String x:Key="Cashier.EndDay">إنهاء اليوم</sys:String>
+
+    <sys:String x:Key="Cashier.RecentSales">المبيعات الأخيرة</sys:String>
+    <sys:String x:Key="Cashier.RecentTransactions">المعاملات الأخيرة</sys:String>
+
+    <sys:String x:Key="Cashier.CurrentSale">البيع الحالي</sys:String>
+
+    <sys:String x:Key="Cashier.Products">المنتجات</sys:String>
+
+    <sys:String x:Key="Cashier.Actions">الإجراءات</sys:String>
+    <sys:String x:Key="Cashier.Sale">بيع</sys:String>
+
+    <sys:String x:Key="Cashier.CashButton">نقدًا</sys:String>
+    <sys:String x:Key="Cashier.CardButton">بطاقة</sys:String>
+
+    <sys:String x:Key="Cashier.Remove">إزالة</sys:String>
+    <sys:String x:Key="Cashier.RemoveItemTooltip">
+        إزالة العنصر
+    </sys:String>
+
+    <sys:String x:Key="Cashier.Quantity">الكمية</sys:String>
+
+    <sys:String x:Key="Cashier.NoProductsFound">
+        لم يتم العثور على منتجات.
+    </sys:String>
+
+    <sys:String x:Key="Cashier.AllCategories">الكل</sys:String>
+
+    <sys:String x:Key="Cashier.ClearSale">
+        مسح البيع
+    </sys:String>
+
+    <sys:String x:Key="Cashier.ColProduct">المنتج</sys:String>
+    <sys:String x:Key="Cashier.ColQty">الكمية</sys:String>
+    <sys:String x:Key="Cashier.ColPrice">السعر</sys:String>
+    <sys:String x:Key="Cashier.ColTotal">الإجمالي</sys:String>
+
+    <sys:String x:Key="Cashier.ShiftOpen">الدوام مفتوح ({0})</sys:String>
+    <sys:String x:Key="Cashier.ShiftClosed">الدوام مغلق</sys:String>
+    <sys:String x:Key="Cashier.NoShift">لا يوجد دوام</sys:String>
+
+    <sys:String x:Key="Cashier.CurrentOrder">الطلب الحالي</sys:String>
+    <sys:String x:Key="Cashier.SearchPlaceholder">ابحث عن منتجات...</sys:String>
+    <sys:String x:Key="Cashier.NoProductsTitle">لم يتم العثور على منتجات</sys:String>
+    <sys:String x:Key="Cashier.NoProductsSub">جرب مصطلح بحث أو فئة مختلفة.</sys:String>
+    <sys:String x:Key="Cashier.CustomBadge">مخصص</sys:String>
+
+    <sys:String x:Key="Cashier.Required">مطلوب</sys:String>
+    <sys:String x:Key="Cashier.Base">الأساسي</sys:String>
+    <sys:String x:Key="Cashier.SelectRequired">حدد الخيارات المطلوبة للمتابعة</sys:String>
+    <sys:String x:Key="Cashier.AddToCart">إضافة إلى السلة</sys:String>
+    <sys:String x:Key="Cashier.UpdateCart">تحديث السلة</sys:String>
+    <sys:String x:Key="Cashier.CartEmptyTitle">السلة فارغة</sys:String>
+    <sys:String x:Key="Cashier.CartEmptySub">اضغط على منتج للبدء</sys:String>
+
+    <sys:String x:Key="Cashier.Settings">الإعدادات</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Payment -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Payment.Cash.Title">الدفع نقدًا</sys:String>
+
+    <sys:String x:Key="Payment.Cash.Subtitle">
+        أكمل عملية البيع نقدًا
+    </sys:String>
+
+    <sys:String x:Key="Payment.AmountDue">المبلغ المستحق</sys:String>
+
+    <sys:String x:Key="Payment.CashReceived">
+        المبلغ المستلم
+    </sys:String>
+
+    <sys:String x:Key="Payment.Cash.Confirm">
+        تأكيد الدفع نقدًا
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Title">
+        تأكيد الدفع بالبطاقة
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Subtitle">
+        راجع الإجمالي قبل خصم المبلغ من البطاقة.
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.ConfirmCharge">
+        هل تريد خصم {0} من البطاقة؟
+    </sys:String>
+
+    <sys:String x:Key="Payment.Card.Confirm">تأكيد</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Shift -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shift.Start.Title">
+        بدء دوام جديد
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Description">
+        أدخل مبلغ النقدية الافتتاحي في الدرج لبدء دوام جديد.
+    </sys:String>
+
+    <sys:String x:Key="Shift.OpeningCash">
+        النقدية الافتتاحية
+    </sys:String>
+
+    <sys:String x:Key="Shift.Start.Button">
+        بدء الدوام
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Title">
+        إغلاق الدوام
+    </sys:String>
+
+    <sys:String x:Key="Shift.WarningMessage">
+        بعد الإغلاق، لن يُسمح بإجراء أي معاملات. تأكد من إنهاء جميع المبيعات قبل المتابعة.
+    </sys:String>
+
+    <sys:String x:Key="Shift.NoActiveShiftFound">لم يتم العثور على دوام نشط.</sys:String>
+    <sys:String x:Key="Shift.InvalidClosingCash">مبلغ الإغلاق النقدي غير صالح.</sys:String>
+    <sys:String x:Key="Shift.ClosingCashNegative">لا يمكن أن يكون المبلغ النقدي عند الإغلاق سالبًا.</sys:String>
+    <sys:String x:Key="Shift.CloseShiftFailed">فشل إغلاق الدوام.</sys:String>
+    <sys:String x:Key="Shift.GenericError">خطأ: {0}</sys:String>
+    <sys:String x:Key="Shift.UserNotAuthenticated">المستخدم غير مصادق عليه.</sys:String>
+    <sys:String x:Key="Shift.InvalidOpeningCash">مبلغ النقد الافتتاحي غير صالح.</sys:String>
+    <sys:String x:Key="Shift.LoadShiftsFailed">فشل تحميل الدوامات.</sys:String>
+    <sys:String x:Key="Shift.LoadShiftDetailsFailed">فشل تحميل تفاصيل الدوام.</sys:String>
+
+    <sys:String x:Key="Shift.TotalSales">
+        إجمالي المبيعات
+    </sys:String>
+
+    <sys:String x:Key="Shift.ExpectedCash">
+        النقدية المتوقعة
+    </sys:String>
+
+    <sys:String x:Key="Shift.ActualClosingCash">
+        النقدية الفعلية عند الإغلاق
+    </sys:String>
+
+    <sys:String x:Key="Shift.CashDifference">
+        فرق النقدية
+    </sys:String>
+
+    <sys:String x:Key="Shift.End.Button">
+        إغلاق الدوام
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Recent Sales / Recent Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="RecentSales.Title">
+        المعاملات الأخيرة
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.Subtitle">
+        افتح إيصالًا حديثًا
+    </sys:String>
+
+    <sys:String x:Key="RecentSales.FooterHint">
+        حدد فتح لعرض الإيصال مرة أخرى.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Navigation -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Nav.Menu">القائمة</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Home">الرئيسية</sys:String>
+
+    <sys:String x:Key="Manager.Nav.Transactions">
+        المعاملات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ShiftManagement">
+        إدارة الدوامات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Reports">
+        التقارير
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Products">
+        المنتجات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Categories">
+        الفئات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.Sizes">
+        الأحجام
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ReceiptManagement">
+        إدارة الفواتير
+    </sys:String>
+
+    <sys:String x:Key="Manager.Nav.ModifierGroups">
+        مجموعات التعديلات
+    </sys:String>
+
+    <sys:String x:Key="Manager.ModifierGroup.Title">مجموعات التعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddGroup">إضافة مجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupDetails">تفاصيل المجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectionType">نوع الاختيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Required">مطلوب</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.Active">نشط</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MinSelections">الحد الأدنى للاختيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.MaxSelections">الحد الأقصى للاختيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.GroupInformation">معلومات المجموعة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.ModifierOptions">خيارات التعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddOption">إضافة خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditOption">تعديل خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.DeleteOption">حذف خيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddGroupTitle">إضافة مجموعة تعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditGroupTitle">تعديل مجموعة التعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.AddOptionTitle">إضافة خيار تعديل</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.EditOptionTitle">تعديل خيار التعديل</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TypeSingle">اختيار واحد</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TypeMulti">اختيارات متعددة</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TypeQuantity">كمية</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectionRules">قواعد الاختيار</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.NoGroupsFound">لم يتم العثور على مجموعات تعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.NoOptionsYet">لا توجد خيارات تعديلات بعد</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectEmptyTitle">اختر مجموعة تعديلات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.InactiveLabel">غير نشط</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.OptionsLabel"> خيارات</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.SelectEmptyHint">اختر مجموعة تعديلات لعرض تفاصيلها</sys:String>
+    <sys:String x:Key="Manager.ModifierGroup.TranslationsButton">ترجمات…</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.OptionDetails">تفاصيل الخيار</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.PriceAdd">إضافة سعر</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.AllowQuantity">السماح بالكمية</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.DefaultRegular">افتراضي (عادي)</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.Active">نشط</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.SaveOption">حفظ الخيار</sys:String>
+    <sys:String x:Key="Manager.ModifierOption.TranslationsButton">ترجمات…</sys:String>
+
+    <sys:String x:Key="Modifiers.MinSelectionsMustBeNumber">الحد الأدنى للاختيارات يجب أن يكون رقمًا.</sys:String>
+    <sys:String x:Key="Modifiers.MaxSelectionsMustBeNumber">الحد الأقصى للاختيارات يجب أن يكون رقمًا.</sys:String>
+    <sys:String x:Key="Modifiers.SortOrderMustBeNumber">ترتيب الفرز يجب أن يكون رقمًا.</sys:String>
+    <sys:String x:Key="Modifiers.LoadGroupsFailed">فشل تحميل المجموعات.</sys:String>
+    <sys:String x:Key="Modifiers.CreateGroupFailed">فشل إنشاء المجموعة.</sys:String>
+    <sys:String x:Key="Modifiers.UpdateGroupFailed">فشل تحديث المجموعة.</sys:String>
+    <sys:String x:Key="Modifiers.DeleteGroupFailed">فشل حذف المجموعة.</sys:String>
+    <sys:String x:Key="Modifiers.PriceMustBeNumber">السعر يجب أن يكون رقمًا.</sys:String>
+    <sys:String x:Key="Modifiers.CreateOptionFailed">فشل إنشاء الخيار.</sys:String>
+    <sys:String x:Key="Modifiers.UpdateOptionFailed">فشل تحديث الخيار.</sys:String>
+    <sys:String x:Key="Modifiers.DeleteOptionFailed">فشل حذف الخيار.</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOptionName">اسم الخيار</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColPrice">السعر</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColDefault">افتراضي</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColActive">نشط</sys:String>
+    <sys:String x:Key="Manager.Modifier.ColOrder">الترتيب</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Dashboard / Home -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Home.KeyMetrics">
+        المؤشرات الرئيسية
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalSales">
+        إجمالي المبيعات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.AverageSale">
+        متوسط البيع
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCash">
+        إجمالي النقدي
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalCard">
+        إجمالي البطاقات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TotalOrders">
+        إجمالي الطلبات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.TopProducts">
+        المنتجات الأكثر مبيعًا
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShiftSummary">
+        ملخص الدوام
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.RecentTransactions">
+        المعاملات الأخيرة
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ViewAll">
+        عرض الكل
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ShowAll">
+        إظهار الكل
+    </sys:String>
+
+    <sys:String x:Key="Manager.Home.ColProduct">المنتج</sys:String>
+    <sys:String x:Key="Manager.Home.ColSales">المبيعات</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashier">الكاشير</sys:String>
+    <sys:String x:Key="Manager.Home.ColCashDifference">فرق النقدية</sys:String>
+    <sys:String x:Key="Manager.Home.ColReceipt">الإيصال</sys:String>
+    <sys:String x:Key="Manager.Home.ColAmount">المبلغ</sys:String>
+    <sys:String x:Key="Manager.Home.ColPayment">الدفع</sys:String>
+    <sys:String x:Key="Manager.Home.ColDate">التاريخ</sys:String>
+
+    <sys:String x:Key="Manager.Home.KpiTotalSales">إجمالي المبيعات</sys:String>
+    <sys:String x:Key="Manager.Home.KpiAverageSale">متوسط البيع</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCash">إجمالي النقدي</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalCard">إجمالي البطاقات</sys:String>
+    <sys:String x:Key="Manager.Home.KpiTotalOrders">إجمالي الطلبات</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Reports -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Reports.Title">
+        التقارير
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.SalesMode">
+        وضع المبيعات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.SalesAnalysisMode">
+        تحليل المبيعات
+    </sys:String>
+
+<sys:String x:Key="Manager.Reports.CategoriesSold">
+    الفئات المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ProductsSold">
+    المنتجات المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.VariantsSold">
+    الأصناف المباعة
+</sys:String>
+
+<sys:String x:Key="Manager.Reports.ColCategory">الفئة</sys:String>
+<sys:String x:Key="Manager.Reports.ColProduct">المنتج</sys:String>
+<sys:String x:Key="Manager.Reports.ColSize">الحجم</sys:String>
+
+    <sys:String x:Key="Manager.Reports.GenerateExport">
+        إنشاء وتصدير
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalOrders">
+        إجمالي الطلبات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalSales">
+        إجمالي المبيعات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CashTotal">
+        إجمالي النقدي
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.CardTotal">
+        إجمالي البطاقات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.TotalQuantitySold">
+        إجمالي الكمية المباعة
+    </sys:String>
+
+    <sys:String x:Key="Manager.Reports.ColReceiptNumber">رقم الإيصال</sys:String>
+    <sys:String x:Key="Manager.Reports.ColDateTime">التاريخ والوقت</sys:String>
+    <sys:String x:Key="Manager.Reports.ColPaymentMethod">طريقة الدفع</sys:String>
+    <sys:String x:Key="Manager.Reports.ColGrandTotal">المجموع الكلي</sys:String>
+    <sys:String x:Key="Manager.Reports.ColNote">ملاحظة</sys:String>
+    <sys:String x:Key="Manager.Reports.ColQuantity">الكمية</sys:String>
+    <sys:String x:Key="Manager.Reports.ColLineTotal">إجمالي السطر</sys:String>
+    <sys:String x:Key="Manager.Reports.NoSalesAnalysisData">لا توجد بيانات تحليل مبيعات للتصدير للفترة المحددة.</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Transactions -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Transactions.Title">
+        المعاملات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.StatusFilter">الحالة:</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.ColReceipt">الإيصال</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColAmount">المبلغ</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColPayment">الدفع</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColNotes">ملاحظات</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColStatus">الحالة</sys:String>
+    <sys:String x:Key="Manager.Transactions.ColDateTime">التاريخ والوقت</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.VoidButton">إلغاء</sys:String>
+
+    <!-- Manager PIN Overlay -->
+    <sys:String x:Key="ManagerPin.Subtitle">أدخل رمز PIN المكوّن من 4 أرقام</sys:String>
+    <sys:String x:Key="ManagerPin.ReasonLabel">السبب</sys:String>
+    <sys:String x:Key="ManagerPin.ReasonPlaceholder">اشرح سبب هذا الإجراء…</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorNoSession">لا توجد جلسة نشطة. يرجى تسجيل الدخول مجدداً.</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorNoPin">لم يتم إعداد رمز PIN للتجاوز. افتح الإعدادات وقم بإعداد رمز PIN أولاً.</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorReasonRequired">يجب إدخال سبب قبل المتابعة.</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorIncorrect">رمز PIN غير صحيح. {0} محاولة(محاولات) متبقية.</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorLocked">تجاوزت عدد المحاولات المسموح به. تم رفض الوصول.</sys:String>
+    <sys:String x:Key="ManagerPin.ErrorUnexpected">حدث خطأ. يرجى المحاولة مجدداً.</sys:String>
+    <!-- Void approval prompt title -->
+    <sys:String x:Key="Void.ApprovalTitle">الموافقة على الإلغاء</sys:String>
+
+    <sys:String x:Key="Manager.Transactions.TransactionsCardTitle">
+        المعاملات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.Loading">
+        جاري التحميل…
+    </sys:String>
+
+    <sys:String x:Key="Manager.Transactions.PagerSuffix">
+        معاملة
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Products -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Products.Title">
+        إدارة المنتجات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.Subtitle">
+        إدارة المنتجات حسب الفئة، والبحث بالاسم، وإبقاء المخزون مرئيًا بنظرة سريعة.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.CategoriesTitle">
+        الفئات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ProductsTitle">
+        المنتجات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.ColProductName">اسم المنتج</sys:String>
+    <sys:String x:Key="Manager.Products.ColCategory">الفئة</sys:String>
+    <sys:String x:Key="Manager.Products.ColPrice">السعر</sys:String>
+    <sys:String x:Key="Manager.Products.ColStatus">الحالة</sys:String>
+
+    <sys:String x:Key="Manager.Products.EmptyCategorySearchMessage">
+        لم يتم العثور على فئات.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Products.EmptyProductSearchMessage">
+        لم يتم العثور على منتجات.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager ProductForm -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.ProductForm.AddProduct">إضافة منتج</sys:String>
+    <sys:String x:Key="Manager.ProductForm.EditProduct">تعديل المنتج</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SaveProduct">حفظ المنتج</sys:String>
+    <sys:String x:Key="Manager.ProductForm.UpdateProduct">تحديث المنتج</sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.DuplicateWarning">
+        يوجد منتج بهذا الاسم بالفعل في الفئة المحددة.
+    </sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.NameRequired">اسم المنتج مطلوب.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.CategoryRequired">يرجى اختيار فئة.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.TaxRequired">يرجى اختيار نسبة الضريبة.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.AtLeastOneSize">أضف حجمًا وسعرًا واحدًا على الأقل.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.RowSizeRequired">كل صف يحتاج إلى اختيار حجم.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.PriceGreaterThanZero">كل حجم يحتاج إلى سعر أكبر من 0.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.DuplicateSize">لا يمكن استخدام الحجم إلا مرة واحدة لكل منتج.</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SaveFailed">فشل حفظ المنتج: {0}</sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.SectionBasicInfo">معلومات أساسية</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SectionPricingTax">التسعير والضريبة</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldSizesPrices">الأحجام والأسعار</sys:String>
+    <sys:String x:Key="Manager.ProductForm.AddSize">إضافة حجم</sys:String>
+    <sys:String x:Key="Manager.ProductForm.SectionVisibilityNotes">الظهور والملاحظات</sys:String>
+    <sys:String x:Key="Manager.ProductForm.DescriptionOptionalSuffix">(اختياري)</sys:String>
+    <sys:String x:Key="Manager.ProductForm.TranslationsButton">الترجمات</sys:String>
+
+    <sys:String x:Key="Manager.ProductForm.FieldProductName">اسم المنتج</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldCategory">الفئة</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldPrice">السعر (درهم)</sys:String>
+    <sys:String x:Key="Manager.ProductForm.CurrencyAED">درهم</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldTax">الضريبة</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldIsActive">
+        نشط (مرئي للكاشير)
+    </sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldAdditionalTax">ضريبة إضافية</sys:String>
+    <sys:String x:Key="Manager.ProductForm.FieldDescription">الوصف</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Categories -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Categories.Title">
+        إدارة الفئات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.AddSubcategory">
+        إضافة فئة فرعية
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SectionCategories">الفئات</sys:String>
+
+    <sys:String x:Key="Category.AddTitle">إضافة فئة</sys:String>
+    <sys:String x:Key="Category.EditTitle">تعديل الفئة</sys:String>
+    <sys:String x:Key="Category.AddSubcategoryTitle">إضافة فئة فرعية</sys:String>
+    <sys:String x:Key="Category.NoParent">— بدون —</sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySearchMessage">
+        لا توجد فئات تطابق بحثك.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.SubcategoriesSuffix">
+         — فئات فرعية
+    </sys:String>
+
+    <sys:String x:Key="Manager.Categories.EmptySubcategoriesMessage">
+        لا توجد فئات فرعية بعد. أضف الفئة الأولى أدناه.
+    </sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager CategoryDialog (Add/Edit) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.CategoryDialog.Title">إضافة فئة</sys:String>
+
+    <sys:String x:Key="Manager.CategoryDialog.NameLabel">الاسم</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryLabel">الفئة الأبوية</sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.ParentCategoryHint">
+        اتركه "— لا شيء —" لإنشاء فئة رئيسية.
+    </sys:String>
+    <sys:String x:Key="Manager.CategoryDialog.IconLabel">أيقونة</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Receipt -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Receipt.Title">
+        إدارة الإيصالات
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.Subtitle">
+        إيصالات المبيعات، ومشتريات الموردين، ومستندات الإيصالات في مساحة عمل مدير واحدة.
+    </sys:String>
+
+    <sys:String x:Key="Manager.Receipt.TabVatPurchases">مشتريات خاضعة للضريبة</sys:String>
+    <sys:String x:Key="Manager.Receipt.TabNonVatPurchases">مشتريات غير خاضعة للضريبة</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.SelectReceiptToEdit">اختر إيصالًا للتعديل.</sys:String>
+    <sys:String x:Key="Manager.Receipt.SelectReceiptToView">اختر إيصالًا للعرض.</sys:String>
+    <sys:String x:Key="Manager.Receipt.FormTitleAdd">إضافة إيصال شراء {0}</sys:String>
+    <sys:String x:Key="Manager.Receipt.FormTitleEdit">تعديل إيصال شراء {0}</sys:String>
+    <sys:String x:Key="Manager.Receipt.FormTitleView">عرض إيصال شراء {0}</sys:String>
+    <sys:String x:Key="Manager.Receipt.FormTitleAddPlain">إضافة إيصال شراء</sys:String>
+    <sys:String x:Key="Manager.Receipt.NumberRequired">رقم الإيصال مطلوب.</sys:String>
+    <sys:String x:Key="Manager.Receipt.CategoryRequired">الفئة مطلوبة.</sys:String>
+    <sys:String x:Key="Manager.Receipt.AmountGreaterThanZero">يجب أن يكون المبلغ أكبر من صفر.</sys:String>
+    <sys:String x:Key="Manager.Receipt.VatRateNegative">لا يمكن أن تكون نسبة ضريبة القيمة المضافة سالبة.</sys:String>
+    <sys:String x:Key="Manager.Receipt.GrandTotalLessThanSubtotal">يجب أن يكون الإجمالي الكلي أكبر من أو يساوي المجموع الفرعي.</sys:String>
+    <sys:String x:Key="Manager.Receipt.SelectReceiptToDelete">اختر إيصالًا لحذفه.</sys:String>
+    <sys:String x:Key="Manager.Receipt.NoVatMatch">لا توجد إيصالات شراء بضريبة القيمة المضافة تطابق الفلاتر الحالية.</sys:String>
+    <sys:String x:Key="Manager.Receipt.NoNonVatMatch">لا توجد إيصالات شراء غير خاضعة لضريبة القيمة المضافة تطابق الفلاتر الحالية.</sys:String>
+    <sys:String x:Key="Manager.Receipt.UpdateFailed">تعذر تحديث الإيصال.</sys:String>
+    <sys:String x:Key="Manager.Receipt.CreateFailed">تعذر إنشاء الإيصال.</sys:String>
+    <sys:String x:Key="Manager.Receipt.DeleteFailed">تعذر حذف الإيصال.</sys:String>
+    <sys:String x:Key="Manager.Receipt.VatExportFailed">فشل تصدير سجل ضريبة القيمة المضافة: {0}</sys:String>
+    <sys:String x:Key="Manager.Receipt.NonVatExportFailed">فشل تصدير السجل غير الخاضع لضريبة القيمة المضافة: {0}</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.FieldVatRate">نسبة الضريبة</sys:String>
+    <sys:String x:Key="Manager.Receipt.FieldVatAmount">مبلغ الضريبة</sys:String>
+
+    <sys:String x:Key="Manager.Receipt.ColReceipt">الإيصال</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColSupplier">المورد</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColCategory">الفئة</sys:String>
+    <sys:String x:Key="Manager.Receipt.ColGrandTotal">المجموع الكلي</sys:String>
+    <sys:String x:Key="Manager.Receipt.AllSuppliers">كل الموردين</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Manager Shifts -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Manager.Shifts.Title">إدارة الدوامات</sys:String>
+
+    <sys:String x:Key="Manager.Shifts.ColShiftId">معرّف الدوام</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColCashier">الكاشير</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpenedAt">وقت الفتح</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosedAt">وقت الإغلاق</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColOpening">الافتتاحية</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColClosing">الختامية</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColExpected">المتوقعة</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDifference">الفرق</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColStatus">الحالة</sys:String>
+    <sys:String x:Key="Manager.Shifts.ColDuration">المدة</sys:String>
+
+    <!-- Shift filter -->
+    <sys:String x:Key="Manager.Shifts.StatusFilter">الحالة:</sys:String>
+    <sys:String x:Key="Manager.Shifts.Loading">جاري التحميل…</sys:String>
+    <sys:String x:Key="Manager.Shifts.PagerSuffix">ورديات</sys:String>
+    <sys:String x:Key="Manager.Shifts.SeeMore">التفاصيل</sys:String>
+    <sys:String x:Key="Manager.Shifts.CardTitle">الورديات</sys:String>
+
+    <!-- Shift detail dialog -->
+    <sys:String x:Key="Manager.Shifts.DetailTitle">تفاصيل الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashReconciliation">مطابقة النقد</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailSchedule">الجدول الزمني</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailShiftNumber">رقم الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashier">الكاشير</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpenTime">وقت الفتح</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCloseTime">وقت الإغلاق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDuration">المدة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailOpeningCash">النقد عند الفتح</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClosingCash">النقد عند الإغلاق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailExpectedCash">النقد المتوقع</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailDifference">الفرق</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatus">الحالة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailStatistics">إحصائيات الوردية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalTransactions">إجمالي المعاملات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashTransactions">معاملات نقدية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardTransactions">معاملات بطاقة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCashSales">مبيعات نقدية</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailCardSales">مبيعات بطاقة</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTotalSales">إجمالي المبيعات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailRefunds">مرتجعات/إلغاءات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailTransactions">المعاملات</sys:String>
+    <sys:String x:Key="Manager.Shifts.DetailClose">إغلاق</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings (Cashier + Manager) -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Title">الإعدادات</sys:String>
+    <sys:String x:Key="Settings.Language">اللغة</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings Dialog                                           -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Settings.Printing">الطباعة</sys:String>
+    <sys:String x:Key="Settings.ReceiptPrinter">طابعة الإيصالات</sys:String>
+    <sys:String x:Key="Settings.Refresh">تحديث</sys:String>
+    <sys:String x:Key="Settings.PaperWidth">عرض الورق</sys:String>
+    <sys:String x:Key="Settings.AutoPrintAfterPayment">الطباعة التلقائية بعد الدفع</sys:String>
+    <sys:String x:Key="Settings.ShowWindowsPrintDialog">إظهار مربع حوار طباعة Windows</sys:String>
+    <sys:String x:Key="Settings.Copies">النسخ</sys:String>
+    <sys:String x:Key="Settings.PrintTestReceipt">طباعة إيصال تجريبي</sys:String>
+
+    <sys:String x:Key="Settings.KeyboardShortcuts">اختصارات لوحة المفاتيح</sys:String>
+    <sys:String x:Key="Settings.KeyboardShortcutsDescription">تخصيص اختصارات لوحة المفاتيح للتنقل والعمليات الأسرع.</sys:String>
+    <sys:String x:Key="Settings.ConfigureKeyboardShortcuts">تخصيص اختصارات لوحة المفاتيح</sys:String>
+    <sys:String x:Key="Settings.BackToSettings">العودة إلى الإعدادات</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Keyboard Shortcuts Dialog                                 -->
+    <!-- ========================================================= -->
+
+    <sys:String x:Key="Shortcuts.Cashier">الكاشير</sys:String>
+    <sys:String x:Key="Shortcuts.Manager">المدير</sys:String>
+    <sys:String x:Key="Shortcuts.Edit">تعديل</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreDefault">استعادة الافتراضي</sys:String>
+    <sys:String x:Key="Shortcuts.RestoreAll">استعادة الكل</sys:String>
+    <sys:String x:Key="Shortcuts.ColAction">الإجراء</sys:String>
+    <sys:String x:Key="Shortcuts.ColCategory">الفئة</sys:String>
+    <sys:String x:Key="Shortcuts.ColCurrentShortcut">الاختصار الحالي</sys:String>
+    <sys:String x:Key="Shortcuts.ColDescription">الوصف</sys:String>
+    <sys:String x:Key="Shortcuts.Cancel">إلغاء</sys:String>
+    <sys:String x:Key="Shortcuts.SaveChanges">حفظ التغييرات</sys:String>
+
+<!-- ========================================================= -->
+    <!-- Sizes — new namespace (SizeManagementView)               -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Sizes.Title">المقاسات</sys:String>
+    <sys:String x:Key="Sizes.DetailsTitle">تفاصيل المقاس</sys:String>
+    <sys:String x:Key="Sizes.ColName">الاسم</sys:String>
+    <sys:String x:Key="Sizes.ColDisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Sizes.ColActive">نشط</sys:String>
+    <sys:String x:Key="Sizes.FieldName">الاسم</sys:String>
+    <sys:String x:Key="Sizes.FieldDisplayOrder">ترتيب العرض</sys:String>
+    <sys:String x:Key="Sizes.IsActive">نشط</sys:String>
+    <sys:String x:Key="Sizes.DisplayOrderMustBeNumber">ترتيب العرض يجب أن يكون رقمًا.</sys:String>
+    <sys:String x:Key="Sizes.SaveFailed">فشل حفظ الحجم.</sys:String>
+    <sys:String x:Key="Sizes.DeleteFailed">فشل حذف الحجم.</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Cashier quick actions panel                               -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Cashier.QuickActions">إجراءات سريعة</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Login As                                                  -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="LoginAs.ManagerOption">سجل الدخول باستخدام حساب المدير</sys:String>
+    <sys:String x:Key="LoginAs.CashierOption">المتابعة مع الكاشير الافتراضي</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Settings                                                  -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Settings.KeyboardShortcutsNotAvailable">تخصيص اختصارات لوحة المفاتيح غير متاح بعد. سيتم إعادة تصميم هذه الميزة في تحديث مستقبلي.</sys:String>
+    <sys:String x:Key="Settings.TestReceiptSaved" xml:space="preserve">تم حفظ إيصال الاختبار في:
+{0}</sys:String>
+    <sys:String x:Key="Settings.PdfSaveFailed" xml:space="preserve">تعذر حفظ ملف PDF.
+
+{0}</sys:String>
+    <sys:String x:Key="Settings.TestPrintAction">إجراء الطباعة التجريبية</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Transactions filter panel                                 -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Transactions.SearchPlaceholder">ابحث في الإيصالات والملاحظات...</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Categories                                                -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Categories.IconHint">رمز تعبيري أو رمز قصير يُستخدم لتحديد هذه الفئة بلمحة واحدة.</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Translation dialog (management of DB-backed business data)-->
+    <!-- ========================================================= -->
+    <sys:String x:Key="TranslationDialog.WindowTitle">الترجمة</sys:String>
+    <sys:String x:Key="TranslationDialog.ExistingTranslations">الترجمات الموجودة</sys:String>
+    <sys:String x:Key="TranslationDialog.ColLanguage">اللغة</sys:String>
+    <sys:String x:Key="TranslationDialog.ColTranslatedName">الاسم المترجم</sys:String>
+    <sys:String x:Key="TranslationDialog.FieldLanguage">اللغة</sys:String>
+    <sys:String x:Key="TranslationDialog.FieldName">الاسم</sys:String>
+    <sys:String x:Key="TranslationDialog.SaveButton">حفظ الترجمة</sys:String>
+    <sys:String x:Key="TranslationDialog.LanguageRequired">يرجى اختيار لغة.</sys:String>
+    <sys:String x:Key="TranslationDialog.NameRequired">الاسم المترجم مطلوب.</sys:String>
+    <sys:String x:Key="TranslationDialog.SaveFailed">فشل حفظ الترجمة: {0}</sys:String>
+    <sys:String x:Key="TranslationDialog.DeleteFailed">فشل حذف الترجمة: {0}</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Common                                                    -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Common.Back">رجوع</sys:String>
+    <sys:String x:Key="Common.Copy">نسخ</sys:String>
+
+    <!-- ========================================================= -->
+    <!-- Receipt (runtime notifications)                           -->
+    <!-- ========================================================= -->
+    <sys:String x:Key="Receipt.PaymentSuccess">تم الدفع بنجاح.</sys:String>
+    <sys:String x:Key="Receipt.CouldNotLoadReceipt">تم إتمام المعاملة، لكن تعذر تحميل الإيصال.</sys:String>
+    <sys:String x:Key="Receipt.NoReceiptToPrint">لا يوجد إيصال متاح للطباعة.</sys:String>
+    <sys:String x:Key="Receipt.PrintingFailed">فشلت الطباعة. يرجى التحقق من الطابعة والمحاولة مرة أخرى.</sys:String>
+</ResourceDictionary>

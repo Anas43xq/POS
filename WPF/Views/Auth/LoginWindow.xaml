@@ -1,0 +1,179 @@
+<Window x:Class="UI.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviors="clr-namespace:UI.Behaviors"
+        Title="{DynamicResource LoginAs.Title}"
+        Width="520"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Border Style="{StaticResource POS.Dialog.Card}"
+            Margin="{StaticResource Spacing.4}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Style="{StaticResource POS.Dialog.Header}"
+                    Padding="{StaticResource Spacing.4}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource POS.Dialog.IconBadge}">
+                            <TextBlock Text="&#128274;"
+                                       Style="{StaticResource POS.Dialog.IconGlyph}"/>
+                        </Border>
+                        <StackPanel Margin="{StaticResource Spacing.3}">
+                            <TextBlock Text="{DynamicResource LoginAs.Title}"
+                                       Style="{StaticResource POS.Dialog.Title}"/>
+                            <TextBlock Text="{DynamicResource LoginAs.Subtitle}"
+                                       Style="{StaticResource POS.Dialog.SectionLabel}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <UniformGrid Columns="2"
+                                 Margin="{StaticResource Spacing.4}">
+                        <Button Style="{StaticResource POS.Button.RoleRow}"
+                                Command="{Binding SelectCashierCommand}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Style="{StaticResource POS.Dialog.IconBadge}">
+                                    <TextBlock Text="&#129534;"
+                                               Style="{StaticResource POS.Dialog.IconGlyph}"/>
+                                </Border>
+                                <StackPanel Grid.Column="1"
+                                            Margin="{StaticResource Spacing.3}">
+                                    <TextBlock Text="{DynamicResource LoginAs.Cashier}"
+                                               Style="{StaticResource POS.Dialog.Title}"/>
+                                    <TextBlock Text="{DynamicResource LoginAs.CashierOption}"
+                                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="Selected"
+                                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                                               Visibility="{Binding IsCashierMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+
+                        <Button Style="{StaticResource POS.Button.RoleRow}"
+                                Command="{Binding SelectManagerCommand}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Style="{StaticResource POS.Dialog.IconBadge}">
+                                    <TextBlock Text="&#128188;"
+                                               Style="{StaticResource POS.Dialog.IconGlyph}"/>
+                                </Border>
+                                <StackPanel Grid.Column="1"
+                                            Margin="{StaticResource Spacing.3}">
+                                    <TextBlock Text="{DynamicResource LoginAs.Manager}"
+                                               Style="{StaticResource POS.Dialog.Title}"/>
+                                    <TextBlock Text="{DynamicResource LoginAs.ManagerOption}"
+                                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="Selected"
+                                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                                               Visibility="{Binding IsManagerMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="1"
+                  Margin="{StaticResource Spacing.3}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Visibility="{Binding IsCashierMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="{DynamicResource LoginAs.CashierOption}"
+                               Style="{StaticResource POS.Dialog.Title}"/>
+                    <TextBlock Text="Continue with the default cashier below."
+                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                               TextWrapping="Wrap"
+                               Margin="{StaticResource Spacing.2}"/>
+                </StackPanel>
+
+                <StackPanel Visibility="{Binding IsManagerMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="{DynamicResource ManagerLogin.Subtitle}"
+                               Style="{StaticResource POS.Dialog.SectionLabel}"
+                               TextWrapping="Wrap"/>
+
+                    <TextBlock Text="{DynamicResource Login.Username}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.2}"/>
+                    <TextBox x:Name="UsernameBox"
+                             Style="{StaticResource POS.TextBox.Default}"
+                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             IsReadOnly="{Binding IsUsernameReadOnly}"
+                             behaviors:FocusExtension.IsFocused="{Binding FocusUsername}"/>
+
+                    <Button Content="Use a different account"
+                            Style="{StaticResource POS.Button.Secondary}"
+                            Command="{Binding UseDifferentAccountCommand}"
+                            HorizontalAlignment="Left"
+                            Margin="{StaticResource Spacing.2}"
+                            Visibility="{Binding IsUsernameReadOnly, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    <TextBlock Text="{DynamicResource Login.Password}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.2}"/>
+                    <PasswordBox x:Name="PasswordBox"
+                                 Style="{StaticResource POS.PasswordBox.Default}"
+                                 PasswordChanged="PasswordBox_PasswordChanged"
+                                 behaviors:FocusExtension.IsFocused="{Binding FocusPassword}"/>
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Style="{StaticResource POS.Dialog.NoticeDanger}"
+                        Margin="{StaticResource Spacing.2}"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Style="{StaticResource POS.Dialog.ErrorText}"
+                                   TextWrapping="Wrap"/>
+                        <Button Content="{DynamicResource LoginAs.Cashier}"
+                                Style="{StaticResource POS.Button.Secondary}"
+                                Command="{Binding ContinueAsCashierCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="{StaticResource Spacing.2}"
+                                Visibility="{Binding IsNonManagerRejection, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="2"
+                    Style="{StaticResource POS.Dialog.Footer}"
+                    Padding="{StaticResource Spacing.3}">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Content="{DynamicResource Common.Cancel}"
+                            Style="{StaticResource POS.Button.Secondary}"
+                            Click="CancelButton_Click"
+                            IsCancel="True"
+                            Margin="{StaticResource Spacing.2}"/>
+                    <Button Content="{DynamicResource ManagerLogin.LoginButton}"
+                            Style="{StaticResource POS.Button.Primary}"
+                            Command="{Binding LoginCommand}"
+                            IsDefault="True"
+                            Visibility="{Binding IsManagerMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Button Content="{DynamicResource LoginAs.Cashier}"
+                            Style="{StaticResource POS.Button.Primary}"
+                            Command="{Binding ContinueAsCashierCommand}"
+                            IsDefault="True"
+                            Visibility="{Binding IsCashierMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

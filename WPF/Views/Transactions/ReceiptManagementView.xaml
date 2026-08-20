@@ -1,0 +1,154 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Cafeteria Hawa POS  –  Manager · Receipts          ║
+    ║   Compact list page: filter bar + single toggleable   ║
+    ║   (VAT / Non-VAT) purchase-receipt grid.  Read-only /  ║
+    ║   select-only grid — all mutation goes through the     ║
+    ║   Add/Edit form page, so Esc can close immediately     ║
+    ║   with no inline-edit state to worry about.            ║
+    ║                                                       ║
+    ║   Visual language matches Home, Transactions,         ║
+    ║   Shift Management, and Reports.  All shared styles   ║
+    ║   are pulled from the App-level merged dictionaries   ║
+    ║   (Brushes / Buttons / Lists / DataGrid / FilterField)║
+    ║   so this view has no locally redefined resources.    ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.ReceiptManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             xmlns:views="clr-namespace:UI.Views"
+             mc:Ignorable="d"
+             d:DesignWidth="1420" d:DesignHeight="820">
+
+    <UserControl.InputBindings>
+        <!--
+            Grid is read-only / select-only (no inline cell editing),
+            so Esc can safely close the page immediately — no dirty
+            state or in-progress edit to guard against.
+        -->
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}"/>
+    </UserControl.InputBindings>
+
+    <Grid Background="{StaticResource Color.Brand.Light}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Page header -->
+            <RowDefinition Height="Auto"/>  <!-- Filter bar  -->
+            <RowDefinition Height="*"/>     <!-- Toggle + toolbar + grid -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════
+             PAGE HEADER
+             ══════════════════════════════════════ -->
+        <TextBlock Grid.Row="0"
+                   Text="{DynamicResource Manager.Receipt.Title}"
+                   FontSize="{StaticResource Font.Size.Lg}"
+                   FontWeight="{StaticResource Font.Weight.Medium}"
+                   Foreground="{StaticResource Color.Text.Default}"
+                   Margin="{StaticResource Spacing.4}"/>
+
+        <!-- ══════════════════════════════════════
+             FILTER BAR
+             ══════════════════════════════════════ -->
+        <views:ReceiptFilterPanelControl Grid.Row="1" Margin="{StaticResource Spacing.4}"/>
+
+        <!-- ══════════════════════════════════════
+             MODE TOGGLE + TOOLBAR + GRID
+             Single card, single grid — replaces the
+             old 3-tab / 3-DataGrid structure. Fewer
+             nested Border wrappers means fewer layout
+             passes on first build and on every toggle.
+             ══════════════════════════════════════ -->
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}" Margin="{StaticResource Spacing.4}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource CardHeaderBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- VAT | Non-VAT segmented toggle -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <RadioButton Style="{StaticResource FilterChip}"
+                                         Content="{DynamicResource Manager.Receipt.TabVatPurchases}"
+                                         IsChecked="{Binding IsVatReceiptMode, Mode=OneWay}"
+                                         Command="{Binding SwitchToVatModeCommand}"/>
+                            <RadioButton Style="{StaticResource FilterChip}"
+                                         Content="{DynamicResource Manager.Receipt.TabNonVatPurchases}"
+                                         IsChecked="{Binding IsNonVatReceiptMode, Mode=OneWay}"
+                                         Command="{Binding SwitchToNonVatModeCommand}"/>
+                        </StackPanel>
+
+                        <views:PurchaseReceiptToolbarControl Grid.Column="2"
+                                                             AddCommand="{Binding AddReceiptCommand}"
+                                                             EditCommand="{Binding EditReceiptCommand}"
+                                                             HasSelection="{Binding HasSelection}"
+                                                             DeleteCommand="{Binding DeleteReceiptCommand}"
+                                                             ViewCommand="{Binding ViewReceiptCommand}"
+                                                             ExportCommand="{Binding ExportReceiptsCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!--
+                    Read-only / select-only grid — no inline cell
+                    editing. All mutation goes through the Add/Edit
+                    form page (SelectedReceipt drives Edit/View/Delete).
+                -->
+                        <DataGrid Grid.Row="1"
+                          Style="{StaticResource ManagerDataGrid}"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          IsReadOnly="True"
+                          ItemsSource="{Binding ActiveReceipts}"
+                          SelectedItem="{Binding SelectedReceipt, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColReceipt}"
+                                            Binding="{Binding InvoiceNumber}" Width="1.1*"/>
+                        <DataGridTextColumn Header="{DynamicResource Common.Date}"
+                                            Binding="{Binding InvoiceDate, StringFormat=d}" Width="1*"/>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColSupplier}"
+                                            Binding="{Binding SupplierName}" Width="1.3*"/>
+                        <DataGridTextColumn Header="{DynamicResource Manager.Receipt.ColCategory}"
+                                            Binding="{Binding Category}" Width="1.2*"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Common.Subtotal}" Width="0.9*"
+                                                 HeaderStyle="{StaticResource ManagerDataGridColumnHeader.Right}"
+                                                 Visibility="{Binding DataContext.IsVatReceiptMode,
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid},
+                                                              Converter={StaticResource BoolToVisibilityConverter}}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:CurrencyText Amount="{Binding Subtotal}"
+                                                           Foreground="{StaticResource Color.Text.Default}"
+                                                           HorizontalAlignment="Right"
+                                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Receipt.ColGrandTotal}" Width="0.9*"
+                                                 HeaderStyle="{StaticResource ManagerDataGridColumnHeader.Right}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <controls:CurrencyText Amount="{Binding GrandTotal}"
+                                                           Foreground="{StaticResource Color.Text.Default}"
+                                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                                           HorizontalAlignment="Right"
+                                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

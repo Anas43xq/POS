@@ -1,0 +1,56 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   HomeView filter bar. Composes the shared          ║
+    ║   <controls:DateRangeFilterControl/> + Refresh, so  ║
+    ║   the date-range mechanism is identical to the       ║
+    ║   Shift and Transactions filter panels.              ║
+    ║   No DataContext of its own — inherits the host VM.  ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.FilterPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" d:DesignHeight="46" d:DesignWidth="1225">
+
+    <Border Style="{StaticResource POS.FilterPanel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── Shared date-range mechanism (Today / This Week /
+                 This Month / Period chips + From / To / Apply). ── -->
+            <controls:DateRangeFilterControl
+                DayCommand="{Binding FilterTodayCommand}"
+                WeekCommand="{Binding FilterThisWeekCommand}"
+                MonthCommand="{Binding FilterMonthCommand}"
+                PeriodCommand="{Binding ShowPeriodFilterCommand}"
+                ApplyCommand="{Binding ApplyPeriodFilterCommand}"
+                IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                FromDate="{Binding PeriodFromDate, Mode=TwoWay}"
+                ToDate="{Binding PeriodToDate, Mode=TwoWay}"
+                DayLabel="{DynamicResource Common.Today}"
+                WeekLabel="{DynamicResource Common.ThisWeek}"
+                MonthLabel="{DynamicResource Common.ThisMonth}"
+                PeriodLabel="{DynamicResource Common.Period}"
+                FromLabel="{DynamicResource Common.From}"
+                ToLabel="{DynamicResource Common.To}"
+                ApplyButtonText="{DynamicResource Common.Apply}"/>
+
+            <Button Grid.Column="1"
+                    Style="{StaticResource POS.Button.Secondary}"
+                    Command="{Binding RefreshCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+                <TextBlock>
+                    <Run Text="🔄 "/>
+                    <Run Text="{DynamicResource Common.Refresh}"/>
+                </TextBlock>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>

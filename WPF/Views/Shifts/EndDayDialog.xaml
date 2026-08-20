@@ -1,0 +1,153 @@
+<Window x:Class="UI.Views.EndDayDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource Cashier.EndDay}" Height="600" Width="470"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Style="{StaticResource POS.Window.Overlay}"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Border Style="{StaticResource POS.Dialog.Card}" Margin="{StaticResource Spacing.3}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- Header  -->
+                <RowDefinition Height="*"/>     <!-- Body    -->
+                <RowDefinition Height="Auto"/>  <!-- Footer  -->
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Style="{StaticResource POS.Dialog.Header}" Padding="{StaticResource Spacing.3}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="{StaticResource Radius.Default}"
+                                Background="{StaticResource Color.Brand.Dark}"
+                                Margin="{StaticResource Spacing.2}">
+                            <TextBlock Text="☾" FontSize="{StaticResource Font.Size.Md}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Shift.End.Title}"
+                                   FontSize="{StaticResource Font.Size.Md}" FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource POS.Dialog.CloseButton}"
+                            Content="&#x2715;"
+                            Command="{Binding CancelCommand}"/>
+                </Grid>
+            </Border>
+
+            <!-- Body -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="{StaticResource Spacing.4}">
+                <StackPanel>
+                    <!-- Warning banner -->
+                    <Border Background="{StaticResource Color.Warning.Surface}" BorderBrush="{StaticResource Color.Warning.Border}" BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.Default}" Padding="{StaticResource Spacing.3}" Margin="{StaticResource Spacing.3}">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Common.Warning}"
+                                       FontSize="{StaticResource Font.Size.Sm}" FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                       Foreground="{StaticResource Color.Warning.Default}" Margin="{StaticResource Spacing.1}"/>
+                            <TextBlock Text="{DynamicResource Shift.WarningMessage}"
+                                       FontSize="{StaticResource Font.Size.Sm}" Foreground="{StaticResource Color.Warning.Default}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Shift summary card -->
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}" Padding="{StaticResource Spacing.3}"
+                            CornerRadius="{StaticResource Radius.Default}" Margin="{StaticResource Spacing.3}">
+                        <StackPanel>
+                            <Grid Margin="{StaticResource Spacing.2}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.OpeningCash}"
+                                           Foreground="{StaticResource Color.Text.Muted}"/>
+                                <TextBlock Text="{Binding OpeningCashDisplay}" Grid.Column="1"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}" Foreground="{StaticResource Color.Text.Default}"/>
+                            </Grid>
+                            <Grid Margin="{StaticResource Spacing.2}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.TotalSales}"
+                                           Foreground="{StaticResource Color.Text.Muted}"/>
+                                <TextBlock Text="{Binding TotalSalesDisplay}" Grid.Column="1"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}" Foreground="{StaticResource Color.Text.Default}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Shift.ExpectedCash}"
+                                           Foreground="{StaticResource Color.Text.Muted}"/>
+                                <TextBlock Text="{Binding ExpectedCashDisplay}" Grid.Column="1"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}" Foreground="{StaticResource Color.Text.Default}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Closing cash input -->
+                    <TextBlock Text="{DynamicResource Shift.ActualClosingCash}"
+                               Style="{StaticResource POS.Dialog.Label}" Margin="{StaticResource Spacing.2}"/>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}" Height="{StaticResource Size.TouchTarget.Min}" CornerRadius="{StaticResource Radius.Default}">
+                        <TextBox x:Name="ClosingCashBox"
+                                 Text="{Binding ClosingCash, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource POS.TextBox.Borderless}"
+                                 VerticalContentAlignment="Center"
+                                 PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                                 DataObject.Pasting="DecimalTextBox_Pasting"
+                                 LostFocus="DecimalTextBox_LostFocus"
+                                 Loaded="ClosingCashBox_Loaded"
+                                 KeyDown="ClosingCashBox_KeyDown"/>
+                    </Border>
+
+                    <!-- Cash difference -->
+                    <Border Background="{StaticResource Color.Success.Surface}" BorderBrush="{StaticResource Color.Success.Border}" BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.Default}" Padding="{StaticResource Spacing.3}" Margin="{StaticResource Spacing.3}"
+                            Visibility="{Binding ShowCashDifference, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{DynamicResource Shift.CashDifference}"
+                                        FontWeight="{StaticResource Font.Weight.SemiBold}" Foreground="{StaticResource Color.Success.Default}"/>
+                            <TextBlock Text="{Binding CashDifferenceDisplay}" Grid.Column="1"
+                                        FontWeight="{StaticResource Font.Weight.SemiBold}" Foreground="{StaticResource Color.Success.Default}"/>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource Color.Danger.Default}"
+                               FontSize="{StaticResource Font.Size.Sm}" TextWrapping="Wrap" Margin="{StaticResource Spacing.2}"
+                               Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Style="{StaticResource POS.Dialog.Footer}" Padding="{StaticResource Spacing.3}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource POS.Button.Secondary}"
+                            Content="{DynamicResource Common.Cancel}"
+                            Margin="{StaticResource Spacing.2}"
+                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                            Command="{Binding CancelCommand}"/>
+                    <Button Style="{StaticResource POS.Button.Danger}"
+                            Content="{DynamicResource Shift.End.Button}"
+                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                            Command="{Binding EndDayCommand}"
+                            Click="EndDayButton_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

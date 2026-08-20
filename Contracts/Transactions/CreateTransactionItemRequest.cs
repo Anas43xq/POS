@@ -1,0 +1,26 @@
+﻿namespace Contracts.Transactions;
+
+public class CreateTransactionItemRequest
+{
+    public int VariantId { get; set; }
+
+    public string ProductName { get; set; } = string.Empty;
+
+    public decimal UnitPrice { get; set; }
+
+    public int Quantity { get; set; }
+
+    public decimal TaxRate { get; set; }
+
+    public decimal LineSubtotal { get; set; }
+
+    public decimal LineTax { get; set; }
+
+    public decimal LineTotal { get; set; }
+
+    /// <summary>
+    /// Modifier selections applied to this cart line.
+    /// Saved to TransactionItemModifiers after the SP creates the transaction.
+    /// </summary>
+    public List<CreateTransactionItemModifierRequest> Modifiers { get; set; } = new();
+}

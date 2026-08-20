@@ -1,0 +1,103 @@
+<UserControl x:Class="UI.Controls.ToastHost"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:conv="clr-namespace:UI.Converters"
+             xmlns:services="clr-namespace:UI.Services"
+             mc:Ignorable="d"
+             Loaded="OnLoaded"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             HorizontalContentAlignment="Stretch"
+             VerticalContentAlignment="Stretch"
+             IsHitTestVisible="True"
+             Focusable="False">
+
+    <UserControl.Resources>
+        <conv:ToastTypeToBrushConverter x:Key="ToastTypeToBrushConverter"/>
+    </UserControl.Resources>
+
+    <!--
+        Centered, non-modal, stacked newest-on-bottom.
+        Placed as an overlay over the main content (see MainWindow.xaml)
+        so it floats above whatever screen is currently active.
+    -->
+    <ItemsControl ItemsSource="{Binding Toasts}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  MaxWidth="560"
+                  Margin="24,16,24,0"
+                  Focusable="False">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type services:ToastMessage}">
+                <Border Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Light}"
+                        BorderBrush="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Border}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="14,10"
+                        Margin="0,0,0,8"
+                        HorizontalAlignment="Center">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.18" BlurRadius="16" ShadowDepth="3" Direction="270"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Color accent bar -->
+                        <Border Grid.Column="0"
+                                Width="4"
+                                Margin="0,0,10,0"
+                                CornerRadius="2"
+                                Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Accent}"
+                                VerticalAlignment="Stretch"/>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Message}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"/>
+
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Top"
+                                    Margin="8,0,0,0">
+                            <Button x:Name="CopyButton"
+                                    Content="{DynamicResource Common.Copy}"
+                                    Padding="6,2"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    FontSize="11"
+                                    Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"
+                                    Click="OnCopyClick"
+                                    Tag="{Binding}"/>
+
+                            <Button Content="✕"
+                                    Padding="4"
+                                    Margin="4,0,0,0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"
+                                    Click="OnDismissClick"
+                                    Tag="{Binding}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

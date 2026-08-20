@@ -1,0 +1,363 @@
+using BLL.DTOs;
+using BLL.Models;
+using Contracts.Transactions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using Microsoft.Extensions.Logging;
+using UI.ViewModels;
+using UI.Views;
+
+namespace UI.ViewModels
+{
+    public partial class CashierDashboardViewModel
+    {
+        private async Task AddProductAsync(ProductDto? product)
+        {
+            if (product == null)
+                return;
+
+            CartItem candidate = new CartItem
+            {
+                VariantId = product.VariantId,
+                // English-only snapshot for receipts (TransactionItems.ProductName).
+                ProductName = product.EnglishDisplayName,
+                // Localized name for the cart UI.
+                LocalizedProductName = product.DisplayName,
+                Quantity = 1,
+                UnitPrice = product.UnitPrice,
+                TaxRate = product.TaxRate
+            };
+
+            if (product.HasModifiers)
+            {
+                await PopulateDefaultModifiersAsync(candidate, product);
+            }
+
+            CartItem? existingItem = _cartPricingService.FindMergeableLine(
+                SaleItems, candidate.VariantId, candidate.Modifiers);
+
+            if (existingItem != null)
+            {
+                existingItem.Quantity++;
+            }
+            else
+            {
+                SaleItems.Add(candidate);
+            }
+
+            RefreshTotals();
+        }
+
+        private async Task EditCartLineAsync(CartItem? cartItem)
+        {
+            if (cartItem == null) return;
+
+            var product = Products.FirstOrDefault(p => p.VariantId == cartItem.VariantId);
+            if (product == null) return;
+
+            _modifierPanel.Open(product, existingItem: cartItem, onCompleted: result =>
+            {
+                if (result != null)
+                {
+                    SaleItems.Remove(cartItem);
+                    SaleItems.Add(result);
+                    RefreshTotals();
+                }
+            });
+
+            await Task.CompletedTask;
+        }
+
+        private async Task RemoveSaleItemAsync(CartItem? item)
+        {
+            if (item == null)
+                return;
+
+            if (_modifierPanel.IsModifierPanelOpen
+                && _modifierPanel.EditingOriginalItem == item)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
+
+            SaleItems.Remove(item);
+
+            await Task.CompletedTask;
+        }
+
+        private void ClearSales()
+        {
+            if (!SaleItems.Any())
+                return;
+
+            MessageBoxResult result = MessageBox.Show(
+                "Are you sure you want to clear the current sale?",
+                "Confirm Clear Sale",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            if (_modifierPanel.IsModifierPanelOpen)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
+
+            SaleItems.Clear();
+        }
+
+        private void RefreshTotals()
+        {
+            var totals = _cartPricingService.CalculateTotals(SaleItems);
+            Subtotal = totals.Subtotal;
+            Tax = totals.Tax;
+            Total = totals.Total;
+        }
+
+        private async Task PayCashAsync()
+        {
+            if (!TryValidatePaymentPrerequisites())
+                return;
+
+            await ShowPaymentDialogAsync();
+        }
+
+        private async Task PayCardAsync()
+        {
+            if (!TryValidatePaymentPrerequisites())
+                return;
+
+            var confirmViewModel = _viewModelFactory.Create<CardPaymentConfirmDialogViewModel>(Total);
+            bool? confirmed = _dialogService.ShowDialogWithResult<CardPaymentConfirmDialog>(confirmViewModel);
+
+            if (confirmed != true)
+                return;
+
+            await CreateCardPaymentAsync();
+        }
+
+        private async Task ShowPaymentDialogAsync()
+        {
+            var paymentViewModel = _viewModelFactory.Create<PaymentDialogViewModel>(Total, this);
+
+            paymentViewModel.PaymentCompleted += async (transactionId) =>
+            {
+                ClearCurrentSale();
+
+                // Show (and print) the receipt immediately — this is what the cashier
+                // is waiting on. Refreshing the recent-sales panel doesn't need to
+                // block that, so it happens afterward instead of before.
+                await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
+                await LoadRecentSalesAsync();
+            };
+
+            _dialogService.ShowDialog<PaymentDialog>(paymentViewModel);
+        }
+
+        private async Task CreateCardPaymentAsync()
+        {
+            // TransactionService is the sole validation authority and
+            // returns Result<int>; errors surface via BaseViewModel.RunAsync.
+
+            await RunAsync(
+                () => _transactionService.CreateTransactionAsync(
+                    BuildCreatePaymentRequest(
+                        paymentMethod: "Card",
+                        amountTendered: Total,
+                        changeGiven: 0m,
+                        referenceNumber: null)),
+                async transactionId =>
+                {
+                   
+                    ClearCurrentSale();
+
+                    // Show (and print) the receipt immediately — this is what
+                    // the cashier is waiting on. Refreshing the recent-sales
+                    // panel doesn't need to block that.
+                    await _receiptDisplayService.PrintAndShowReceiptAsync(transactionId);
+                    await LoadRecentSalesAsync();
+                });
+        }
+
+        private bool TryValidatePaymentPrerequisites()
+        {
+            if (_session.CurrentUser == null)
+                return ShowPrerequisiteError("No active user. Please sign in first.", "User Required");
+
+            if (!IsShiftOpen)
+                return ShowPrerequisiteError("No active shift. Please start a shift first.", "Shift Required");
+
+            if (!SaleItems.Any())
+                return ShowPrerequisiteError("Cart is empty.", "Sale Required");
+
+            return true;
+        }
+
+        private bool ShowPrerequisiteError(string message, string title)
+        {
+            ShowHeaderError(message);
+            return false;
+        }
+
+        private CreateTransactionRequest BuildCreatePaymentRequest(
+            string paymentMethod,
+            decimal amountTendered,
+            decimal changeGiven,
+            string? referenceNumber)
+        {
+            return new CreateTransactionRequest
+            {
+                CashierId = _session.CurrentUser?.UserId ?? 0,
+                ShiftId = _session.CurrentShift?.ShiftId ?? 0,
+                Subtotal = Subtotal,
+                TaxTotal = Tax,
+                GrandTotal = Total,
+                PaymentMethod = paymentMethod,
+                AmountTendered = amountTendered,
+                ChangeGiven = changeGiven,
+                ReferenceNumber = referenceNumber,
+                Items = BuildTransactionItems()
+            };
+        }
+
+        private List<CreateTransactionItemRequest> BuildTransactionItems()
+        {
+            return SaleItems
+                .Select(item => new CreateTransactionItemRequest
+                {
+                    VariantId = item.VariantId,
+                    ProductName = item.ProductName,
+                    UnitPrice = item.UnitPrice,
+                    Quantity = item.Quantity,
+                    TaxRate = item.TaxRate,
+                    LineSubtotal = item.LineSubtotal,
+                    LineTax = item.LineTax,
+                    LineTotal = item.LineTotal,
+                    Modifiers = item.Modifiers?.Select(m => new CreateTransactionItemModifierRequest
+                    {
+                        ModifierOptionId = m.ModifierOptionId,
+                        ModifierGroupId = m.ModifierGroupId,
+                        GroupName = m.GroupName,
+                        OptionName = m.OptionName,
+                        Quantity = m.Quantity,
+                        PriceAdd = m.PriceAdd,
+                        IsDefault = m.IsDefault
+                    }).ToList() ?? new()
+                })
+                .ToList();
+        }
+
+        private async Task ShowRecentSalesAsync()
+        {
+            await LoadRecentSalesAsync();
+
+            var recentSalesViewModel = _viewModelFactory.Create<RecentSalesDialogViewModel>(this);
+
+            _dialogService.ShowDialog<RecentSalesDialog>(recentSalesViewModel);
+        }
+
+        private void LogoutAsync()
+        {
+            LogoutRequested?.Invoke();
+        }
+
+        public void ClearCurrentSale()
+        {
+            SaleItems.Clear();
+        }
+
+        private void IncreaseSelectedQuantity()
+        {
+            if (SelectedCartItem == null)
+                return;
+
+            SelectedCartItem.Quantity++;
+            RefreshTotals();
+        }
+
+        private void DecreaseSelectedQuantity()
+        {
+            if (SelectedCartItem == null)
+                return;
+
+            if (SelectedCartItem.Quantity <= 1)
+            {
+                RemoveSelectedSaleItem();
+                return;
+            }
+
+            SelectedCartItem.Quantity--;
+            RefreshTotals();
+        }
+
+        private void RemoveSelectedSaleItem()
+        {
+            if (SelectedCartItem == null)
+                return;
+
+            if (_modifierPanel.IsModifierPanelOpen
+                && _modifierPanel.EditingOriginalItem == SelectedCartItem)
+            {
+                _modifierPanel.CloseModifierPanelCommand.Execute(null);
+            }
+
+            SaleItems.Remove(SelectedCartItem);
+            SelectedCartItem = SaleItems.LastOrDefault();
+        }
+
+        private async Task PopulateDefaultModifiersAsync(CartItem item, ProductDto product)
+        {
+            try
+            {
+                var result = await _modifierService.GetModifierGroupsForProductAsync(
+                    product.ProductId, product.CategoryId);
+
+                if (!result.IsSuccess || result.Value == null)
+                    return;
+
+                var groups = result.Value
+                    .Where(g => g.Options.Any(o => o.IsDefault))
+                    .ToList();
+
+                foreach (var group in groups)
+                {
+                    var defaultOption = group.Options.FirstOrDefault(o => o.IsDefault);
+                    if (defaultOption == null)
+                        continue;
+
+                    // For single-select groups: auto-select the default option
+                    // For multi-select/quantity: don't auto-select defaults
+                    if (group.GroupType == 1) // SingleSelect
+                    {
+                        _cartModifierService.ApplyModifier(group, defaultOption, 1, item.Modifiers);
+                    }
+                }
+
+                item.ModifierSummary = _cartModifierService.BuildModifierSummary(item.Modifiers);
+
+                // Fold default-modifier pricing into UnitPrice using the same
+                // formula ModifierPanelViewModel.BuildCartItem uses, so a
+                // product's charged price never depends on which add-to-cart
+                // path the cashier used.
+                item.UnitPrice = _cartModifierService.CalculateEffectiveUnitPrice(product.UnitPrice, item.Modifiers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load default modifiers for product {ProductId}", product.ProductId);
+                ShowHeaderError("Unable to load product modifiers.");
+            }
+        }
+
+        private async Task ReprintLastReceiptAsync()
+        {
+            var last = RecentSales.FirstOrDefault();
+            if (last == null)
+                return;
+
+            _ = _receiptDisplayService.PrintReceiptAsync(last.TransactionId);
+        }
+    }
+}

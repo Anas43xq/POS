@@ -1,0 +1,103 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <CornerRadius x:Key="Radius.Sm">4</CornerRadius>
+    <CornerRadius x:Key="Radius.Default">6</CornerRadius>
+    <CornerRadius x:Key="Radius.Md">8</CornerRadius>
+    <CornerRadius x:Key="Radius.Lg">10</CornerRadius>
+    <CornerRadius x:Key="Radius.Xl">14</CornerRadius>
+    <CornerRadius x:Key="Radius.Dialog">8</CornerRadius>
+    <CornerRadius x:Key="Radius.Pill">999</CornerRadius>
+    <CornerRadius x:Key="Radius.Full">999</CornerRadius>
+    <CornerRadius x:Key="Radius.CircleSm">13</CornerRadius>
+
+    <Thickness x:Key="Spacing.0">0</Thickness>
+    <Thickness x:Key="Spacing.1">4</Thickness>
+    <Thickness x:Key="Spacing.2">8</Thickness>
+    <Thickness x:Key="Spacing.3">12</Thickness>
+    <Thickness x:Key="Spacing.4">16</Thickness>
+    <Thickness x:Key="Spacing.5">20</Thickness>
+    <Thickness x:Key="Spacing.6">24</Thickness>
+    <Thickness x:Key="Spacing.8">32</Thickness>
+    <Thickness x:Key="Spacing.10">40</Thickness>
+    <Thickness x:Key="Spacing.12">48</Thickness>
+
+    <Thickness x:Key="Spacing.Xs">4</Thickness>
+    <Thickness x:Key="Spacing.Sm">8</Thickness>
+    <Thickness x:Key="Spacing.Md">12</Thickness>
+    <Thickness x:Key="Spacing.Lg">16</Thickness>
+    <Thickness x:Key="Spacing.Xl">24</Thickness>
+    <Thickness x:Key="Spacing.Xxs">3</Thickness>
+    <Thickness x:Key="Spacing.Xs2">6</Thickness>
+    <Thickness x:Key="Spacing.Sm2">10</Thickness>
+    <Thickness x:Key="Spacing.Md2">14</Thickness>
+    <Thickness x:Key="Spacing.Lg2">18</Thickness>
+    <Thickness x:Key="Spacing.Xl2">20</Thickness>
+    <Thickness x:Key="Spacing.Xxl">26</Thickness>
+
+    <Thickness x:Key="Spacing.DialogOuter">10</Thickness>
+    <Thickness x:Key="Spacing.DialogContent">24,26,24,24</Thickness>
+    <Thickness x:Key="Spacing.DialogHeader">16,12</Thickness>
+    <Thickness x:Key="Spacing.DialogError">12,9</Thickness>
+    <Thickness x:Key="Spacing.DialogFooter">16,10</Thickness>
+    <Thickness x:Key="Spacing.ButtonInline">16,0</Thickness>
+    <Thickness x:Key="Spacing.RoleRowPadding">14,12</Thickness>
+    <Thickness x:Key="Spacing.DialogSectionGap">0,0,0,14</Thickness>
+    <Thickness x:Key="Spacing.DialogLabelGap">0,0,0,6</Thickness>
+    <Thickness x:Key="Spacing.DialogTitleGap">0,0,0,4</Thickness>
+    <Thickness x:Key="Spacing.DialogFooterCancelGap">0,0,8,0</Thickness>
+    <Thickness x:Key="Spacing.DialogErrorMargin">0,16,0,0</Thickness>
+    <Thickness x:Key="Spacing.DialogBodyMargin">20,18,20,4</Thickness>
+    <Thickness x:Key="Spacing.DialogSubtitleGap">0,0,0,18</Thickness>
+    <Thickness x:Key="Spacing.DialogPasswordGap">0,0,0,4</Thickness>
+    <Thickness x:Key="Spacing.DialogTopMargin">0,14,0,0</Thickness>
+    <Thickness x:Key="Spacing.ImageSectionGap">0,0,0,14</Thickness>
+    <Thickness x:Key="Spacing.TitleSectionGap">0,0,0,4</Thickness>
+    <Thickness x:Key="Spacing.RowIconGap">0,0,6,0</Thickness>
+    <Thickness x:Key="Spacing.RowSectionGap">12,0,0,0</Thickness>
+    <Thickness x:Key="Spacing.CardInner">12,0</Thickness>
+    <Thickness x:Key="Spacing.CardFooter">12,0</Thickness>
+    <Thickness x:Key="Spacing.CardBody">16,12</Thickness>
+    <Thickness x:Key="Spacing.ButtonWide">18,14</Thickness>
+    <Thickness x:Key="Spacing.HeaderInline">14,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderPadding">16,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderBrandMargin">0,0,14,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderLogoMargin">0,0,8,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderNameMargin">0,0,12,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderActionGap">0,0,6,0</Thickness>
+    <Thickness x:Key="Spacing.HeaderChipGap">0,2,0,0</Thickness>
+    <Thickness x:Key="Spacing.SidebarLabelMargin">16,10,16,4</Thickness>
+    <Thickness x:Key="Spacing.NavItemPadding">13,0,16,0</Thickness>
+    <Thickness x:Key="Spacing.NavIconMargin">0,0,9,0</Thickness>
+    <CornerRadius x:Key="Radius.SidebarBadge">7</CornerRadius>
+
+    <!-- Structural border thickness tokens -->
+    <Thickness x:Key="Thickness.BottomHairline">0,0,0,1</Thickness>
+    <Thickness x:Key="Thickness.BottomHalf">0,0,0,0.5</Thickness>
+
+    <!-- Dialog translation/list layout -->
+    <CornerRadius x:Key="Radius.IconBadge">7</CornerRadius>
+    <Thickness x:Key="Spacing.DialogErrorBannerMargin">16,10,16,0</Thickness>
+    <Thickness x:Key="Spacing.DialogListMargin">16,12,16,4</Thickness>
+    <Thickness x:Key="Spacing.DialogListHeaderGap">0,0,0,8</Thickness>
+    <Thickness x:Key="Spacing.DialogEditMargin">16,8,16,4</Thickness>
+    <Thickness x:Key="Spacing.DialogFieldGap">0,0,0,10</Thickness>
+
+    <!-- Settings form field bottom gaps -->
+    <Thickness x:Key="Spacing.Settings.LabelGap">0,0,0,5</Thickness>
+    <Thickness x:Key="Spacing.Settings.FieldGap">0,0,0,8</Thickness>
+    <Thickness x:Key="Spacing.Settings.ControlGap">0,0,0,12</Thickness>
+    <Thickness x:Key="Spacing.Settings.SectionGap">0,0,0,14</Thickness>
+    <Thickness x:Key="Spacing.Settings.BlockGap">0,0,0,20</Thickness>
+    <Thickness x:Key="Spacing.Settings.TitleGap">0,0,0,20</Thickness>
+    <Thickness x:Key="Spacing.Settings.DividerGap">0,20,0,20</Thickness>
+    <!-- Printer row inline gap (between ComboBox and Refresh button) -->
+    <Thickness x:Key="Spacing.Settings.InlineButtonGap">8,0,0,0</Thickness>
+
+    <sys:Double x:Key="Size.Icon.Sm">12</sys:Double>
+    <sys:Double x:Key="Size.Icon.Md">14</sys:Double>
+    <sys:Double x:Key="Size.Icon.Lg">16</sys:Double>
+    <sys:Double x:Key="Size.Control.Sm">26</sys:Double>
+    <sys:Double x:Key="Size.Control.Md">32</sys:Double>
+    <sys:Double x:Key="Size.Control.Lg">38</sys:Double>
+</ResourceDictionary>

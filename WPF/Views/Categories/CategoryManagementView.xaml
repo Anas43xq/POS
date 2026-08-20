@@ -1,0 +1,280 @@
+<UserControl x:Class="UI.Views.CategoryManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="1200" d:DesignHeight="820">
+
+    <Grid Background="{StaticResource Color.Brand.Light}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="{StaticResource Spacing.4}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{DynamicResource Manager.Categories.Title}"
+                       FontSize="{StaticResource Font.Size.Lg}"
+                       FontWeight="{StaticResource Font.Weight.Medium}"
+                       Foreground="{StaticResource Color.Text.Default}"
+                       VerticalAlignment="Center"/>
+        </Grid>
+
+        <Border Grid.Row="1"
+                Background="{StaticResource Color.Surface.Default}"
+                BorderBrush="{StaticResource Color.Border.Selection}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Lg}"
+                Padding="{StaticResource Spacing.3}"
+                Margin="{StaticResource Spacing.4}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <controls:CrudActionButtons Grid.Column="0"
+                                            AddCommand="{Binding AddCommand}"
+                                            AddLabel="{DynamicResource Common.Add}"
+                                            EditCommand="{Binding EditCommand}"
+                                            EditEnabled="{Binding HasSelection}"
+                                            EditLabel="{DynamicResource Common.Edit}"
+                                            DeleteCommand="{Binding DeleteCommand}"
+                                            DeleteEnabled="{Binding HasSelection}"
+                                            DeleteLabel="{DynamicResource Common.Delete}"
+                                            RefreshCommand="{Binding RefreshCommand}"
+                                            RefreshLabel="{DynamicResource Common.Refresh}"/>
+
+                <Border Grid.Column="2"
+                        Background="{StaticResource Color.Surface.Subtle}"
+                        BorderBrush="{StaticResource Color.Border.Selection}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource Radius.Md}"
+                        Height="{StaticResource Size.TouchTarget.Sm}"
+                        Width="220">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="28"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="🔍"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Grid.Column="1"
+                                  Style="{StaticResource POS.TextBox.SearchInline}"
+                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                  VerticalContentAlignment="Center"
+                                  Padding="{StaticResource Spacing.DialogFooterCancelGap}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="{StaticResource Spacing.4}">
+            <StackPanel>
+                <Border Background="{StaticResource Color.Surface.Default}"
+                        BorderBrush="{StaticResource Color.Border.Selection}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource Radius.Lg}"
+                        Padding="{StaticResource Spacing.4}"
+                        Margin="{StaticResource Spacing.2}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Manager.Categories.SectionCategories}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.Medium}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogSubtitleGap}"/>
+
+                        <Border Background="{StaticResource Color.Warning.Surface}"
+                                BorderBrush="{StaticResource Color.Warning.Border}"
+                                BorderThickness="1"
+                                CornerRadius="{StaticResource Radius.Md}"
+                                Padding="{StaticResource Spacing.3}"
+                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                Visibility="{Binding IsEmptySearch, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{DynamicResource Manager.Categories.EmptySearchMessage}"
+                                       FontSize="{StaticResource Font.Size.Base}"
+                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                       Foreground="{StaticResource Color.Warning.Default}"
+                                       TextAlignment="Center"/>
+                        </Border>
+
+                        <ItemsControl ItemsSource="{Binding FilteredCategories}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                        <Border Width="120"
+                                                Height="120"
+                                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                                Style="{StaticResource POS.Manager.CategoryCard}"
+                                                Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick"
+                                                          Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <Grid Margin="{StaticResource Spacing.3}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Top"
+                                                       Text="▸"
+                                                       FontSize="{StaticResource Font.Size.Sm}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       Visibility="{Binding HasSubcategories, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                            <Image Grid.Row="1"
+                                                   Source="pack://application:,,,/Assets/categories/category-card.png"
+                                                   Style="{StaticResource POS.Manager.CategoryCardImage}"
+                                                   Margin="{StaticResource Spacing.DialogFooterCancelGap}"/>
+                                            <TextBlock Grid.Row="2"
+                                                       Text="{Binding Name}"
+                                                       FontSize="{StaticResource Font.Size.Base}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Default}"
+                                                       HorizontalAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center"
+                                                       Margin="{StaticResource Spacing.Xxs}"/>
+                                            <TextBlock Grid.Row="3"
+                                                       Text="{Binding CountLabel}"
+                                                       FontSize="{StaticResource Font.Size.Sm}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       HorizontalAlignment="Center"
+                                                       TextAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="{StaticResource Color.Surface.Default}"
+                        BorderBrush="{StaticResource Color.Border.Selection}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource Radius.Lg}"
+                        Padding="{StaticResource Spacing.4}"
+                        Visibility="{Binding IsSubcategoriesPanelVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource Spacing.DialogSubtitleGap}">
+                            <Image Source="pack://application:,,,/Assets/categories/category-card.png"
+                                   Style="{StaticResource POS.Manager.CategoryCardImage}"
+                                   Margin="{StaticResource Spacing.RowIconGap}"/>
+                            <TextBlock FontSize="{StaticResource Font.Size.Base}"
+                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                       Foreground="{StaticResource Color.Text.Default}"
+                                       VerticalAlignment="Center">
+                                <Run Text="{Binding SelectedCategory.Name}"/>
+                                <Run Text="{DynamicResource Manager.Categories.SubcategoriesSuffix}"
+                                     Foreground="{StaticResource Color.Text.Muted}"
+                                     FontWeight="{StaticResource Font.Weight.Normal}"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Text="{DynamicResource Manager.Categories.EmptySubcategoriesMessage}"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogTitleGap}"
+                                   Visibility="{Binding IsSubcategoriesEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <WrapPanel Orientation="Horizontal">
+                            <ItemsControl ItemsSource="{Binding Subcategories}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border MinWidth="110"
+                                                Height="72"
+                                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                                Style="{StaticResource POS.Manager.SubcategoryCard}"
+                                                Cursor="Hand"
+                                                Padding="{StaticResource Spacing.3}">
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick"
+                                                              Command="{Binding DataContext.SelectSubcategoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                              CommandParameter="{Binding}"/>
+                                            </Border.InputBindings>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontSize="{StaticResource Font.Size.Base}"
+                                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                                           Foreground="{StaticResource Color.Text.Default}"
+                                                           TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding CountLabel}"
+                                                           FontSize="{StaticResource Font.Size.Sm}"
+                                                           Foreground="{StaticResource Color.Text.Muted}"
+                                                           Margin="{StaticResource Spacing.Xxs}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button MinWidth="110"
+                                    Height="72"
+                                    Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                    Cursor="Hand"
+                                    FocusVisualStyle="{x:Null}"
+                                    Command="{Binding AddSubcategoryCommand}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Bg"
+                                                CornerRadius="{StaticResource Radius.Md}"
+                                                Background="{StaticResource Color.Surface.Subtle}"
+                                                BorderBrush="{StaticResource Color.Border.Selection}"
+                                                BorderThickness="1.5"
+                                                Padding="{StaticResource Spacing.3}">
+                                            <StackPanel HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="＋"
+                                                           FontSize="{StaticResource Font.Size.Lg}"
+                                                           Foreground="{StaticResource Color.Brand.Dark}"
+                                                           HorizontalAlignment="Center"
+                                                           Margin="{StaticResource Spacing.DialogFooterCancelGap}"/>
+                                                <TextBlock Text="{DynamicResource Manager.Categories.AddSubcategory}"
+                                                           FontSize="{StaticResource Font.Size.Sm}"
+                                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                                           Foreground="{StaticResource Color.Brand.Dark}"
+                                                           HorizontalAlignment="Center"
+                                                           TextWrapping="Wrap"
+                                                           TextAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource Color.Surface.Subtle}"/>
+                                                <Setter TargetName="Bg" Property="BorderBrush" Value="{StaticResource Color.Brand.Dark}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

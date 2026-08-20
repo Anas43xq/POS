@@ -1,0 +1,77 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Transactions filter bar. Own control so the        ║
+    ║   date-range workflow and transaction actions stay    ║
+    ║   reusable across the sales surface.                 ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.TransactionsFilterPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="88"
+             d:DesignWidth="1420">
+
+    <Border Background="{StaticResource Color.Surface.Default}"
+            BorderBrush="{StaticResource Color.Border.Default}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource Radius.Default}"
+            Padding="{StaticResource Spacing.3}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <controls:DateRangeFilterControl
+                    DayCommand="{Binding LoadDayCommand}"
+                    WeekCommand="{Binding LoadWeekCommand}"
+                    MonthCommand="{Binding LoadMonthCommand}"
+                    PeriodCommand="{Binding LoadPeriodCommand}"
+                    ApplyCommand="{Binding ApplyPeriodCommand}"
+                    IsPeriodFilterVisible="{Binding IsPeriodFilterVisible}"
+                    FromDate="{Binding FromDate, Mode=TwoWay}"
+                    ToDate="{Binding ToDate, Mode=TwoWay}"
+                    DayLabel="{DynamicResource Common.Day}"
+                    WeekLabel="{DynamicResource Common.Week}"
+                    MonthLabel="{DynamicResource Common.Month}"
+                    PeriodLabel="{DynamicResource Common.Period}"
+                    FromLabel="{DynamicResource Common.From}"
+                    ToLabel="{DynamicResource Common.To}"
+                    ApplyButtonText="{DynamicResource Common.Apply}"/>
+
+                <TextBlock Text="{DynamicResource Manager.Transactions.StatusFilter}"
+                           VerticalAlignment="Center"
+                           Margin="{StaticResource Spacing.2}"
+                           FontSize="{StaticResource Font.Size.Sm}"
+                           Foreground="{StaticResource Color.Text.Muted}"/>
+
+                <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                          ItemContainerStyle="{StaticResource POS.ComboBox.Item}"
+                          ItemsSource="{Binding StatusOptions}"
+                          SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
+                          DisplayMemberPath="Label"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <Button Style="{StaticResource POS.Button.ToolbarDanger}"
+                        Content="{DynamicResource Manager.Transactions.VoidButton}"
+                        Command="{Binding VoidTransactionCommand}"
+                        CommandParameter="{Binding SelectedTransaction}"
+                        Visibility="{Binding SelectedTransaction.Status, Converter={StaticResource StatusToVoidVis}}"/>
+
+                <Button Style="{StaticResource POS.Button.Secondary}"
+                        Content="{DynamicResource Common.Refresh}"
+                        Command="{Binding RefreshCommand}"
+                        Margin="{StaticResource Spacing.2}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

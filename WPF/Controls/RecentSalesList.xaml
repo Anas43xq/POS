@@ -1,0 +1,99 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   RecentSalesList                                     ║
+    ║   Medium-density list of the last few sales. Lives    ║
+    ║   inside the cashier dashboard, so it sits between    ║
+    ║   the cashier's large 50–58px touch targets and the   ║
+    ║   manager module's compact 42px rows.  Visually       ║
+    ║   consistent with the rest of the app (uses the       ║
+    ║   shared POS.DataGrid chrome + CardBorder +           ║
+    ║   POS badge / secondary-button styles).               ║
+    ║                                                       ║
+    ║   Hosts:                                             ║
+    ║     • Receipt #  (text)                               ║
+    ║     • Date / time                                    ║
+    ║     • Payment method                                 ║
+    ║     • Status (shared badge style)                    ║
+    ║     • Total (right-aligned, CurrencyText)            ║
+    ║     • Open (secondary action → opens the receipt)    ║
+    ║                                                       ║
+    ║   Reuses the same chrome family as Transactions and  ║
+    ║   Shift Management so the cashier's "open" surface    ║
+    ║   feels like the rest of the app.                    ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Controls.RecentSalesList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:UI.Controls"
+             x:Name="root">
+
+    <Border Style="{StaticResource CardBorder}">
+        <DataGrid Style="{StaticResource POS.DataGrid.Default}"
+                  ItemsSource="{Binding ItemsSource, ElementName=root}">
+            <DataGrid.Columns>
+
+                <!-- Receipt number -->
+                <DataGridTextColumn Header="{DynamicResource Common.Receipt}"
+                                    Binding="{Binding ReceiptNumber}"
+                                    Width="*"
+                                    MinWidth="130"/>
+
+                <!-- Date / time -->
+                <DataGridTextColumn Header="{DynamicResource Common.Date}"
+                                    Binding="{Binding TransactionDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                    Width="155"/>
+
+                <!-- Payment method -->
+                <DataGridTextColumn Header="{DynamicResource Common.Payment}"
+                                    Binding="{Binding PaymentMethod}"
+                                    Width="110"/>
+
+                <!-- Status badge (Completed / Voided / Pending) -->
+                <DataGridTemplateColumn Header="{DynamicResource Common.Status}" Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Tag="{Binding Status}"
+                                    Style="{StaticResource POS.Badge.Status}">
+                                <TextBlock Text="{Binding Status}"
+                                           Style="{StaticResource POS.Badge.StatusText}"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Total (right-aligned, shared CurrencyText) -->
+                <DataGridTemplateColumn Header="{DynamicResource Common.Total}" Width="115">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource POS.DataGrid.ColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:CurrencyText Amount="{Binding GrandTotal}"
+                                                   AmountForeground="{StaticResource Color.Text.Primary}"
+                                                   HorizontalAlignment="Right"
+                                                   Margin="0,0,10,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Open action -->
+                <DataGridTemplateColumn Header="" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource POS.Button.Secondary}"
+                                    Content="{DynamicResource Common.Open}"
+                                    Padding="10,0"
+                                    Command="{Binding OpenCommand, ElementName=root}"
+                                    CommandParameter="{Binding TransactionId}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Border>
+</UserControl>

@@ -1,0 +1,106 @@
+<!--
+    Modifier Group Edit Form — inline UserControl
+    Shown/hidden via IsEditingGroup visibility toggle on the parent.
+    DataContext: ModifierGroupManagementViewModel
+-->
+<UserControl x:Class="UI.Views.Modifiers.ModifierGroupEditFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="400">
+
+    <Border Background="{StaticResource Color.Surface.Default}"
+            BorderBrush="{StaticResource Color.Border.Default}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource Radius.Lg}"
+            Padding="{StaticResource Spacing.3}"
+            Margin="{StaticResource Spacing.3}">
+        <StackPanel>
+            <TextBlock Text="{DynamicResource Manager.ModifierGroup.GroupDetails}"
+                       FontSize="{StaticResource Font.Size.Base}"
+                       FontWeight="{StaticResource Font.Weight.SemiBold}"
+                       Foreground="{StaticResource Color.Text.Default}"
+                       Margin="{StaticResource Spacing.3}"/>
+
+            <TextBlock Text="{DynamicResource Common.Name}"
+                       FontSize="{StaticResource Font.Size.Sm}"
+                       FontWeight="{StaticResource Font.Weight.Medium}"
+                       Foreground="{StaticResource Color.Text.Muted}"
+                       Margin="{StaticResource Spacing.1}"/>
+            <TextBox Text="{Binding EditGroupName, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource POS.TextBox.Default}"
+                     Margin="{StaticResource Spacing.3}"/>
+
+            <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectionType}"
+                       FontSize="{StaticResource Font.Size.Sm}"
+                       FontWeight="{StaticResource Font.Weight.Medium}"
+                       Foreground="{StaticResource Color.Text.Muted}"
+                       Margin="{StaticResource Spacing.1}"/>
+            <ComboBox SelectedValue="{Binding EditGroupType}"
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"
+                      ItemsSource="{Binding GroupTypeOptions}"
+                      Style="{StaticResource POS.ComboBox.Default}"
+                      Margin="{StaticResource Spacing.3}"/>
+
+            <StackPanel Orientation="Horizontal" Margin="{StaticResource Spacing.3}">
+                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Required}"
+                          IsChecked="{Binding EditIsRequired}"
+                          Style="{StaticResource POS.CheckBox.Default}"
+                          Margin="{StaticResource Spacing.4}"/>
+                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Active}"
+                          IsChecked="{Binding EditIsActive}"
+                          Style="{StaticResource POS.CheckBox.Default}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="{StaticResource Spacing.3}">
+                <StackPanel Margin="{StaticResource Spacing.3}">
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.MinSelections}"
+                               FontSize="{StaticResource Font.Size.Sm}"
+                               FontWeight="{StaticResource Font.Weight.Medium}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <TextBox Text="{Binding EditMinSelections, UpdateSourceTrigger=PropertyChanged}"
+                             Width="80"
+                             Style="{StaticResource POS.TextBox.Default}"/>
+                </StackPanel>
+                <StackPanel Margin="{StaticResource Spacing.3}">
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.MaxSelections}"
+                               FontSize="{StaticResource Font.Size.Sm}"
+                               FontWeight="{StaticResource Font.Weight.Medium}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <TextBox Text="{Binding EditMaxSelections, UpdateSourceTrigger=PropertyChanged}"
+                             Width="80"
+                             Style="{StaticResource POS.TextBox.Default}"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.DisplayOrder}"
+                               FontSize="{StaticResource Font.Size.Sm}"
+                               FontWeight="{StaticResource Font.Weight.Medium}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <TextBox Text="{Binding EditSortOrder, UpdateSourceTrigger=PropertyChanged}"
+                             Width="80"
+                             Style="{StaticResource POS.TextBox.Default}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource POS.Button.Primary}"
+                        Content="{DynamicResource Common.Save}"
+                        Command="{Binding SaveGroupCommand}"
+                        Margin="{StaticResource Spacing.2}"/>
+                <Button Style="{StaticResource POS.Button.Secondary}"
+                        Content="{DynamicResource Common.Cancel}"
+                        Command="{Binding CancelGroupEditCommand}"
+                        Margin="{StaticResource Spacing.2}"/>
+                <Button Style="{StaticResource POS.Button.Secondary}"
+                        Content="{DynamicResource Manager.ModifierGroup.TranslationsButton}"
+                        Command="{Binding GroupTranslationsCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

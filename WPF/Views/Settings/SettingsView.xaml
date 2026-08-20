@@ -1,0 +1,209 @@
+<UserControl x:Class="UI.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="400" d:DesignHeight="600">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="{StaticResource Spacing.5}">
+
+                <!-- Title -->
+                <TextBlock Text="{DynamicResource Settings.Title}"
+                           Style="{StaticResource POS.Settings.PageTitle}"/>
+
+                <!-- Language Selection -->
+                <StackPanel Margin="{StaticResource Spacing.Settings.FieldGap}">
+                    <TextBlock Text="{DynamicResource Settings.Language}"
+                               Style="{StaticResource POS.Settings.SectionHeader}"/>
+
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}">
+                        <ListBox ItemsSource="{Binding SupportedLanguages}"
+                                 SelectedItem="{Binding SelectedLanguage}"
+                                 DisplayMemberPath="DisplayName"
+                                 ItemContainerStyle="{StaticResource POS.ListBox.Item}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Manager-only section -->
+                <StackPanel Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                    <!-- Divider -->
+                    <Border Height="1"
+                            Background="{StaticResource Color.Border.Brand}"
+                            Margin="{StaticResource Spacing.Settings.DividerGap}"/>
+
+                    <!-- Printing Settings -->
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.Printing}"
+                                   Style="{StaticResource POS.Settings.SectionHeader}"/>
+
+                        <!-- Receipt Printer -->
+                        <TextBlock Text="{DynamicResource Settings.ReceiptPrinter}"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+
+                        <Grid Margin="{StaticResource Spacing.Settings.SectionGap}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+                                      Style="{StaticResource POS.ComboBox.Default}"
+                                      ItemsSource="{Binding AvailablePrinters}"
+                                      SelectedItem="{Binding SelectedReceiptPrinter}"/>
+
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource POS.Button.Secondary}"
+                                    Content="{DynamicResource Settings.Refresh}"
+                                    Width="80"
+                                    Margin="{StaticResource Spacing.Settings.InlineButtonGap}"
+                                    Command="{Binding RefreshPrintersCommand}"/>
+                        </Grid>
+
+                        <!-- Paper Width -->
+                        <TextBlock Text="{DynamicResource Settings.PaperWidth}"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+
+                        <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                  ItemsSource="{Binding PaperWidthOptions}"
+                                  SelectedItem="{Binding PaperWidth}"
+                                  Margin="{StaticResource Spacing.Settings.SectionGap}"/>
+
+                        <!-- Auto Print -->
+                        <CheckBox Content="{DynamicResource Settings.AutoPrintAfterPayment}"
+                                  IsChecked="{Binding AutoPrint}"
+                                  Margin="{StaticResource Spacing.Settings.FieldGap}"/>
+
+                        <!-- Show Print Dialog -->
+                        <CheckBox Content="{DynamicResource Settings.ShowWindowsPrintDialog}"
+                                  IsChecked="{Binding ShowPrintDialog}"
+                                  Margin="{StaticResource Spacing.Settings.SectionGap}"/>
+
+                        <!-- Copies -->
+                        <TextBlock Text="{DynamicResource Settings.Copies}"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+
+                        <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                Width="80" HorizontalAlignment="Left"
+                                Margin="{StaticResource Spacing.Settings.SectionGap}">
+                            <TextBox Text="{Binding Copies, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource POS.Input.BorderlessTextBox}"
+                                     VerticalContentAlignment="Center"/>
+                        </Border>
+
+                        <!-- Test Print Action -->
+                        <TextBlock Text="{DynamicResource Settings.TestPrintAction}"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+
+                        <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                  ItemsSource="{Binding TestPrintActionOptions}"
+                                  SelectedValue="{Binding TestPrintAction, Mode=TwoWay}"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Label"
+                                  Margin="{StaticResource Spacing.Settings.ControlGap}"
+                                  HorizontalAlignment="Stretch"/>
+
+                        <!-- Test Print -->
+                        <Button Style="{StaticResource POS.Button.Primary}"
+                                Content="{DynamicResource Settings.PrintTestReceipt}"
+                                Command="{Binding PrintTestReceiptCommand}"
+                                Width="160"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Border Height="1"
+                            Background="{StaticResource Color.Border.Brand}"
+                            Margin="{StaticResource Spacing.Settings.DividerGap}"/>
+
+                    <!-- PIN Security Section (Manager only) -->
+                    <StackPanel Margin="{StaticResource Spacing.Settings.SectionGap}">
+
+                        <TextBlock Text="Override PIN"
+                                   Style="{StaticResource POS.Settings.SectionHeader}"/>
+
+                        <TextBlock Style="{StaticResource POS.Settings.FieldLabel}"
+                                   Margin="{StaticResource Spacing.Settings.ControlGap}"
+                                   TextWrapping="Wrap">
+                            <Run Text="Set a 4-digit PIN used to approve voids and overrides at the terminal."/>
+                        </TextBlock>
+
+                        <!-- Status badge: PIN set vs not set -->
+                        <Border Style="{StaticResource POS.Settings.PinStatusBadge}"
+                                Margin="{StaticResource Spacing.Settings.ControlGap}">
+                            <TextBlock Style="{StaticResource POS.Settings.PinStatusText}"/>
+                        </Border>
+
+                        <!-- New PIN -->
+                        <TextBlock Text="New PIN (4 digits)"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+                        <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                Width="120"
+                                HorizontalAlignment="Left"
+                                Margin="{StaticResource Spacing.Settings.ControlGap}">
+                            <PasswordBox x:Name="PinBox"
+                                         Style="{StaticResource POS.PasswordBox.Default}"
+                                         MaxLength="4"
+                                         PasswordChanged="PinBox_PasswordChanged"/>
+                        </Border>
+
+                        <!-- Confirm PIN -->
+                        <TextBlock Text="Confirm PIN"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"/>
+                        <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                Width="120"
+                                HorizontalAlignment="Left"
+                                Margin="{StaticResource Spacing.Settings.ControlGap}">
+                            <PasswordBox x:Name="PinConfirmBox"
+                                         Style="{StaticResource POS.PasswordBox.Default}"
+                                         MaxLength="4"
+                                         PasswordChanged="PinConfirmBox_PasswordChanged"/>
+                        </Border>
+
+                        <!-- Validation message -->
+                        <TextBlock Text="{Binding PinErrorMessage}"
+                                   Foreground="{StaticResource Color.Text.Danger}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   Margin="{StaticResource Spacing.Settings.ControlGap}"
+                                   Visibility="{Binding HasPinError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <Button Style="{StaticResource POS.Button.Primary}"
+                                Content="Set PIN"
+                                Width="100"
+                                HorizontalAlignment="Left"
+                                Command="{Binding SetPinCommand}"/>
+
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Border Height="1"
+                            Background="{StaticResource Color.Border.Brand}"
+                            Margin="{StaticResource Spacing.Settings.DividerGap}"/>
+
+                    <!-- Keyboard Shortcuts Section -->
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.KeyboardShortcuts}"
+                                   Style="{StaticResource POS.Settings.SectionHeader}"/>
+
+                        <TextBlock Text="{DynamicResource Settings.KeyboardShortcutsDescription}"
+                                   Style="{StaticResource POS.Settings.FieldLabel}"
+                                   Margin="{StaticResource Spacing.Settings.ControlGap}"/>
+
+                        <Border Style="{StaticResource POS.Settings.WarningNotice}">
+                            <TextBlock Text="{DynamicResource Settings.KeyboardShortcutsNotAvailable}"
+                                       Style="{StaticResource POS.Settings.WarningText}"/>
+                        </Border>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!-- Bottom padding -->
+                <Border Height="20"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

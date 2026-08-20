@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DAL.Entities
+{
+    public class TransactionItem
+    {
+        public int TransactionItemId { get; set; }
+
+        public int TransactionId { get; set; }
+
+        public int VariantId { get; set; }
+
+        public string ProductName { get; set; } = string.Empty;
+
+        public decimal UnitPrice { get; set; }
+
+        public int Quantity { get; set; }
+
+        public decimal TaxRate { get; set; }
+
+        public decimal LineSubtotal { get; set; }
+
+        public decimal LineTax { get; set; }
+
+        public decimal LineTotal { get; set; }
+
+        public Transaction? Transaction { get; set; }
+
+        public ProductVariant ProductVariant { get; set; } = null!;
+
+        public ICollection<TransactionItemModifier> ModifierItems { get; set; } = new List<TransactionItemModifier>();
+    }
+}

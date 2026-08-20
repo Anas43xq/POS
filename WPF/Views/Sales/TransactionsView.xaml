@@ -1,0 +1,196 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Cafeteria Hawa POS  –  Sales · Transactions        ║
+    ║   Filter bar + transaction grid + pagination         ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.TransactionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:UI.Views"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="820">
+
+    <Grid Background="{StaticResource Color.Brand.Light}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <views:TransactionsFilterPanelControl Grid.Row="0"
+                                              Margin="{StaticResource Spacing.4}"/>
+
+        <Border Grid.Row="1"
+                Margin="{StaticResource Spacing.4}"
+                Background="{StaticResource Color.Surface.Default}"
+                BorderBrush="{StaticResource Color.Border.Default}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Default}"
+                Effect="{StaticResource Shadow.Default}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Background="{StaticResource Color.Surface.Subtle}"
+                        BorderBrush="{StaticResource Color.Border.Default}"
+                        BorderThickness="0,0,0,1"
+                        CornerRadius="{StaticResource Radius.Default}"
+                        Padding="{StaticResource Spacing.3}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{DynamicResource Manager.Transactions.TransactionsCardTitle}"
+                                   FontSize="{StaticResource Font.Size.Lg}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"/>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{DynamicResource Manager.Transactions.Loading}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                </Border>
+
+                <DataGrid x:Name="TransactionsGrid"
+                          Grid.Row="1"
+                          Style="{StaticResource POS.DataGrid.Default}"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          ItemsSource="{Binding TransactionsView}"
+                          SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColReceipt}"
+                                                Width="1.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding ReceiptNumber}"
+                                            Style="{StaticResource POS.Button.GridReceipt}"
+                                            Command="{Binding DataContext.OpenReceiptCommand,
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColAmount}"
+                                                Width="0.8*"
+                                                HeaderStyle="{StaticResource ManagerDataGridColumnHeader.Center}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding GrandTotal, StringFormat={}{0:N2}}"
+                                               FontSize="{StaticResource Font.Size.Base}"
+                                               TextAlignment="Right"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColPayment}"
+                                                Width="1.1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource POS.Badge.Payment}"
+                                            Tag="{Binding PaymentMethod}">
+                                        <TextBlock Text="{Binding PaymentMethod}"
+                                                   Style="{StaticResource POS.Badge.PaymentText}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColNotes}"
+                                                Width="2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Notes}"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Manager.Transactions.ColStatus}"
+                                                Width="1.1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource POS.Badge.Status}"
+                                            Tag="{Binding Status}">
+                                        <TextBlock Text="{Binding Status}"
+                                                   Style="{StaticResource POS.Badge.StatusText}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="{DynamicResource Manager.Transactions.ColDateTime}"
+                                            Binding="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
+                                            Width="0.9*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Border Grid.Row="2"
+                        Background="{StaticResource Color.Surface.Subtle}"
+                        BorderBrush="{StaticResource Color.Border.Default}"
+                        BorderThickness="0,1,0,0"
+                        Padding="{StaticResource Spacing.3}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock FontSize="{StaticResource Font.Size.Sm}"
+                                       Foreground="{StaticResource Color.Text.Muted}">
+                                <Run Text="{DynamicResource Common.Page}"/>
+                                <Run Text=" "/>
+                                <Run Text="{Binding PageInfo, Mode=OneWay}"/>
+                                <Run Text="  ·  "/>
+                                <Run Text="{Binding TotalCount, Mode=OneWay}"/>
+                                <Run Text=" "/>
+                                <Run Text="{DynamicResource Manager.Transactions.PagerSuffix}"/>
+                            </TextBlock>
+
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       FontSize="{StaticResource Font.Size.Sm}"
+                                       Foreground="{StaticResource Color.Danger.Default}"
+                                       Margin="{StaticResource Spacing.1}"
+                                       TextWrapping="Wrap"
+                                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button Style="{StaticResource POS.Button.Secondary}"
+                                    Content="{DynamicResource Common.Previous}"
+                                    Command="{Binding PreviousPageCommand}"/>
+
+                            <Button Style="{StaticResource POS.Button.Primary}"
+                                    Content="{DynamicResource Common.Next}"
+                                    Margin="{StaticResource Spacing.2}"
+                                    Command="{Binding NextPageCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

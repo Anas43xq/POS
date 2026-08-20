@@ -1,0 +1,100 @@
+using System.Data;
+using DAL.Entities;
+using DAL.Infrastructure;
+using DAL.Interfaces;
+using Microsoft.Data.SqlClient;
+using Contracts.Services;
+
+namespace DAL.Repositories
+{
+    public class ReportRepository : IReportRepository
+    {
+        private readonly ISqlConnectionStringProvider _connectionStringProvider;
+
+        public ReportRepository(ISqlConnectionStringProvider connectionStringProvider)
+        {
+            _connectionStringProvider = connectionStringProvider;
+        }
+
+        public async Task<List<TransactionReportEntity>> GetTransactionsReportAsync(
+            string periodType,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            await using var connection = new SqlConnection(_connectionStringProvider.ConnectionString);
+            await connection.OpenAsync();
+
+            await using var command = new SqlCommand("SP_GetTransactionsReport", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            // SP uses exclusive end-date logic: TransactionDate >= @FromDate AND TransactionDate < @ToDate
+            // So we pass the raw toDate as-is — the SP adds 1 day internally for the exclusive upper bound
+            command.Parameters.Add("@PeriodType", SqlDbType.NVarChar, 10).Value = periodType;
+            command.Parameters.Add("@FromDate", SqlDbType.DateTime2).Value = (object?)fromDate ?? DBNull.Value;
+            command.Parameters.Add("@ToDate", SqlDbType.DateTime2).Value = (object?)toDate ?? DBNull.Value;
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var items = new List<TransactionReportEntity>();
+
+            while (await reader.ReadAsync())
+            {
+
+                items.Add(new TransactionReportEntity
+                {
+                    TransactionId = reader.GetInt32(reader.GetOrdinal("TransactionId")),
+                    ReceiptNumber = Helpers.GetStringSafe(reader, "ReceiptNumber"),
+                    TransactionDate = reader.GetDateTime(reader.GetOrdinal("TransactionDate")),
+                    PaymentMethod = Helpers.GetStringSafe(reader, "PaymentMethod"),
+                    GrandTotal = reader.GetDecimal(reader.GetOrdinal("GrandTotal")),
+                    Status = Helpers.GetStringSafe(reader, "Status"),
+                    Note = Helpers.GetStringSafe(reader, "Notes")
+                });
+            }
+
+            return items;
+        }
+
+        public async Task<List<SalesAnalysisEntity>> GetSalesAnalysisReportAsync(
+            string periodType,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            await using var connection = new SqlConnection(_connectionStringProvider.ConnectionString);
+            await connection.OpenAsync();
+
+            await using var command = new SqlCommand("SP_GetSalesAnalysisReport", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add("@PeriodType", SqlDbType.NVarChar, 10).Value = periodType;
+            command.Parameters.Add("@FromDate", SqlDbType.DateTime2).Value = (object?)fromDate ?? DBNull.Value;
+            command.Parameters.Add("@ToDate", SqlDbType.DateTime2).Value = (object?)toDate ?? DBNull.Value;
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            var items = new List<SalesAnalysisEntity>();
+
+            while (await reader.ReadAsync())
+            {
+                items.Add(new SalesAnalysisEntity
+                {
+                    CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                    CategoryName = Helpers.GetStringSafe(reader, "CategoryName"),
+                    ProductId = reader.GetInt32(reader.GetOrdinal("ProductId")),
+                    ProductName = Helpers.GetStringSafe(reader, "ProductName"),
+                    SizeId = reader.GetInt32(reader.GetOrdinal("SizeId")),
+                    SizeName = Helpers.GetStringSafe(reader, "SizeName"),
+                    SizeDisplayOrder = reader.GetInt32(reader.GetOrdinal("SizeDisplayOrder")),
+                    Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                    LineTotal = reader.GetDecimal(reader.GetOrdinal("LineTotal"))
+                });
+            }
+
+            return items;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj" />
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.8" />
+    <PackageReference Include="QuestPDF" Version="2024.10.3" />
+    <PackageReference Include="VirtualizingWrapPanel" Version="2.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="CashierDashboardView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="shortcuts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+    <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\receiptlogo.png" />
+    <Resource Include="Assets\nav\home.png" />
+    <Resource Include="Assets\nav\transactions.png" />
+    <Resource Include="Assets\nav\shift.png" />
+    <Resource Include="Assets\nav\reports.png" />
+    <Resource Include="Assets\nav\products.png" />
+    <Resource Include="Assets\nav\categories.png" />
+    <Resource Include="Assets\nav\sizes.png" />
+    <Resource Include="Assets\nav\receipts.png" />
+    <Resource Include="Assets\nav\modifiers.png" />
+    <Resource Include="Assets\nav\settings.png" />
+    <Resource Include="Assets\nav\settings_dark.png" />
+    <Resource Include="Assets\categories\category-card.png" />
+	<Resource Include="Assets\ManagerLoginIllustration.png" />
+    <Resource Include="Assets\LoginAsIllustration.png" />
+  </ItemGroup>
+
+</Project>

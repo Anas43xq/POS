@@ -1,0 +1,215 @@
+<Window x:Class="UI.Views.TranslationDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="{DynamicResource TranslationDialog.WindowTitle}"
+        Width="520" Height="560"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Style="{StaticResource POS.Window.Overlay}">
+
+
+
+    <Grid x:Name="OverlayGrid"
+          Background="{StaticResource Color.Brand.Scrim}"
+          MouseDown="OverlayGrid_MouseDown">
+
+        <Border x:Name="DialogCard"
+                Width="480"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource POS.Dialog.Card}"
+                MouseDown="DialogCard_MouseDown">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Header -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Error -->
+                    <RowDefinition Height="*"/>
+                    <!-- Translation list -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Edit area -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Footer -->
+                </Grid.RowDefinitions>
+
+                <!-- HEADER -->
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.DialogHeader}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="28" Height="28" CornerRadius="{StaticResource Radius.IconBadge}"
+                                    Background="{StaticResource Color.Brand.Dark}"
+                                    Margin="{StaticResource Spacing.NavIconMargin}">
+                                <TextBlock Text="🌐" FontSize="{StaticResource Font.Size.Lg}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{Binding Title}"
+                                       FontSize="{StaticResource Font.Size.Md}" FontWeight="{StaticResource Font.Weight.Medium}"
+                                       Foreground="{StaticResource Color.Text.Primary}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="✕" FontSize="{StaticResource Font.Size.Md}"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Command="{Binding CloseCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- ERROR BANNER -->
+                <Border Grid.Row="1"
+                        Background="{StaticResource Color.Danger.ErrorSurface}"
+                        BorderBrush="{StaticResource Color.Danger.ErrorBorder}"
+                        BorderThickness="1" CornerRadius="{StaticResource Radius.IconBadge}"
+                        Padding="{StaticResource Spacing.DialogError}" Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚠ " FontSize="{StaticResource Font.Size.Md}" Foreground="{StaticResource Color.Danger.ErrorText}"/>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   FontSize="{StaticResource Font.Size.Sm}" Foreground="{StaticResource Color.Danger.ErrorText}"
+                                   TextWrapping="Wrap" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- TRANSLATION LIST -->
+                <Grid Grid.Row="2" Margin="{StaticResource Spacing.DialogListMargin}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource TranslationDialog.ExistingTranslations}"
+                                   Style="{StaticResource POS.Dialog.Label}" Margin="{StaticResource Spacing.DialogTitleGap}"
+                                   VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource POS.Button.Outline}"
+                                Margin="{StaticResource Spacing.HeaderActionGap}"
+                                Command="{Binding AddCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="＋" FontSize="{StaticResource Font.Size.Sm}"/>
+                                <TextBlock Text="{DynamicResource Common.Add}" FontSize="{StaticResource Font.Size.Sm}" Margin="{StaticResource Spacing.1}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="2"
+                                Style="{StaticResource POS.Button.Outline}"
+                                Margin="{StaticResource Spacing.HeaderActionGap}"
+                                Command="{Binding EditCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="✏" FontSize="{StaticResource Font.Size.Sm}"/>
+                                <TextBlock Text="{DynamicResource Common.Edit}" FontSize="{StaticResource Font.Size.Sm}" Margin="{StaticResource Spacing.1}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Style="{StaticResource POS.Button.Danger}"
+                                Command="{Binding DeleteCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🗑" FontSize="{StaticResource Font.Size.Sm}"/>
+                                <TextBlock Text="{DynamicResource Common.Delete}" FontSize="{StaticResource Font.Size.Sm}" Margin="{StaticResource Spacing.1}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <Border Grid.Row="1"
+                            Background="{StaticResource Color.Brand.Light}"
+                            BorderBrush="{StaticResource Color.Brand.Border}"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.IconBadge}"
+                            MinHeight="100">
+                        <DataGrid Style="{StaticResource POS.DataGrid.Default}"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  ItemsSource="{Binding Translations}"
+                                  SelectedItem="{Binding SelectedTranslation, Mode=TwoWay}"
+                                  BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{DynamicResource TranslationDialog.ColLanguage}" Binding="{Binding LanguageName}" Width="1*"/>
+                                <DataGridTextColumn Header="{DynamicResource TranslationDialog.ColTranslatedName}" Binding="{Binding TranslatedName}" Width="2*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+
+                <!-- EDIT AREA (visible when adding/editing) -->
+                <Border Grid.Row="3"
+                        Margin="{StaticResource Spacing.DialogEditMargin}"
+                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource TranslationDialog.FieldLanguage}" Style="{StaticResource POS.Dialog.Label}" Margin="{StaticResource Spacing.DialogTitleGap}"/>
+                        <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                  ItemsSource="{Binding Languages}"
+                                  SelectedItem="{Binding EditItem.SelectedLanguage}"
+                                  Margin="{StaticResource Spacing.DialogFieldGap}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="{DynamicResource TranslationDialog.FieldName}" Style="{StaticResource POS.Dialog.Label}" Margin="{StaticResource Spacing.DialogTitleGap}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding EditItem.TranslatedName, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="{StaticResource Spacing.DialogFieldGap}"/>
+
+                        <!-- Description (product only) -->
+                        <StackPanel Visibility="{Binding HasDescription, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{DynamicResource Common.Description}" Style="{StaticResource POS.Dialog.Label}" Margin="{StaticResource Spacing.DialogTitleGap}"/>
+                            <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                     Text="{Binding EditItem.TranslatedDescription, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="{StaticResource Spacing.DialogFieldGap}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- FOOTER -->
+                <Border Grid.Row="4"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource POS.Button.Outline}"
+                                Content="{DynamicResource Common.Cancel}"
+                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Command="{Binding CancelCommand}"/>
+                        <Button Style="{StaticResource POS.Button.Primary}"
+                                Content="{DynamicResource TranslationDialog.SaveButton}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Command="{Binding SaveCommand}"/>
+                        <Button Style="{StaticResource POS.Button.Outline}"
+                                Content="{DynamicResource Common.Close}"
+                                Visibility="{Binding IsNotEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Command="{Binding CloseCommand}"/>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

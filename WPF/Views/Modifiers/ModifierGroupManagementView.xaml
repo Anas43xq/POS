@@ -1,0 +1,334 @@
+<UserControl x:Class="UI.Views.Modifiers.ModifierGroupManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="820">
+
+    <Grid Margin="{StaticResource Spacing.4}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="{StaticResource Spacing.DialogListHeaderGap}">
+            <Border Style="{StaticResource POS.Dialog.IconBadge}"
+                    Margin="{StaticResource Spacing.RowIconGap}">
+                <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png"
+                       Style="{StaticResource POS.Manager.CategoryCardImage}"/>
+            </Border>
+            <TextBlock Text="{DynamicResource Manager.ModifierGroup.Title}"
+                       Style="{StaticResource POS.Dialog.Title}"/>
+        </StackPanel>
+
+        <Border Grid.Row="1"
+                Style="{StaticResource POS.FilterPanel}"
+                Margin="{StaticResource Spacing.DialogListHeaderGap}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <controls:CrudActionButtons Grid.Column="0"
+                                            AddCommand="{Binding AddGroupCommand}"
+                                            AddLabel="{DynamicResource Manager.ModifierGroup.AddGroup}"
+                                            EditCommand="{Binding EditGroupCommand}"
+                                            EditEnabled="{Binding HasSelection}"
+                                            EditLabel="{DynamicResource Common.Edit}"
+                                            DeleteCommand="{Binding DeleteGroupCommand}"
+                                            DeleteEnabled="{Binding HasSelection}"
+                                            DeleteLabel="{DynamicResource Common.Delete}"
+                                            RefreshCommand="{Binding RefreshCommand}"
+                                            RefreshLabel="{DynamicResource Common.Refresh}"/>
+
+                <Border Grid.Column="2"
+                        Style="{StaticResource POS.Dialog.InputBorder}"
+                        Width="{StaticResource Size.Manager.Search.Width}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="⌕"
+                                   Margin="{StaticResource Spacing.HeaderInline}"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   FontSize="{StaticResource Font.Size.Base}"/>
+
+                        <TextBox Grid.Column="1"
+                                 Style="{StaticResource POS.TextBox.SearchInline}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <ProgressBar Grid.Row="2"
+                     Margin="{StaticResource Spacing.DialogListHeaderGap}"
+                     Height="{StaticResource Size.TouchTarget.Sm}"
+                     IsIndeterminate="True"
+                     Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Style="{StaticResource POS.Manager.Card}"
+                    Width="{StaticResource Size.Manager.ModifierSidebar.Width}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Style="{StaticResource POS.Manager.CardHeader}">
+                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.Title}"
+                                   Style="{StaticResource POS.Manager.CardTitle}"/>
+                    </Border>
+
+                    <Grid Grid.Row="1">
+                        <ListBox ItemsSource="{Binding Groups}"
+                                 SelectedItem="{Binding SelectedGroup, Mode=TwoWay}"
+                                 BorderThickness="0"
+                                 Padding="{StaticResource Spacing.2}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ItemContainerStyle="{StaticResource POS.ListBox.Item}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource POS.Manager.ModifierGroupCard}"
+                                            Margin="{StaticResource Spacing.1}"
+                                            Padding="{StaticResource Spacing.3}">
+                                        <StackPanel>
+                                            <DockPanel Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                                                <Border DockPanel.Dock="Right"
+                                                        Style="{StaticResource POS.Manager.WarningBadge}"
+                                                        Visibility="{Binding IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                                    <TextBlock Text="{DynamicResource Manager.ModifierGroup.InactiveLabel}"
+                                                               Style="{StaticResource POS.Manager.WarningBadgeText}"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Name}"
+                                                           Style="{StaticResource POS.Manager.CardTitle}"
+                                                           TextWrapping="Wrap"/>
+                                            </DockPanel>
+
+                                            <TextBlock Text="{Binding GroupTypeDisplay}"
+                                                       Style="{StaticResource POS.Manager.ModifierMetaText}"/>
+
+                                            <TextBlock Style="{StaticResource POS.Manager.ModifierMetaText}">
+                                                <Run Text="{Binding OptionCount}"/>
+                                                <Run Text="{DynamicResource Manager.ModifierGroup.OptionsLabel}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.NoGroupsFound}"
+                                   Style="{StaticResource POS.Manager.EmptyStateText}"
+                                   Margin="{StaticResource Spacing.4}"
+                                   Visibility="{Binding IsGroupSearchEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="1"
+                  Margin="{StaticResource Spacing.RowSectionGap}">
+                <Border Style="{StaticResource POS.Manager.Card}"
+                        Visibility="{Binding HasDetail, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid Margin="{StaticResource Spacing.4}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0"
+                                Style="{StaticResource POS.Dialog.NoticeDanger}"
+                                Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Style="{StaticResource POS.Dialog.ErrorText}"
+                                       TextWrapping="Wrap"/>
+                        </Border>
+
+                        <Grid Grid.Row="1"
+                              Margin="{StaticResource Spacing.DialogErrorMargin}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Manager.ModifierGroup.GroupInformation}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"/>
+                                <TextBlock Text="{Binding SelectedGroup.Name}"
+                                           Style="{StaticResource POS.Dialog.Title}"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource POS.Button.Secondary}"
+                                    Content="{DynamicResource Common.Edit}"
+                                    Command="{Binding EditGroupCommand}"
+                                    MinHeight="{StaticResource Size.TouchTarget.Min}"/>
+                        </Grid>
+
+                        <Border Grid.Row="2"
+                                Style="{StaticResource POS.Dialog.PricePanel}"
+                                Margin="{StaticResource Spacing.DialogErrorMargin}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                           Text="{DynamicResource Manager.ModifierGroup.SelectionType}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldLabel}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                           Text="{DynamicResource Manager.ModifierGroup.MinSelections}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldLabel}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2"
+                                           Text="{DynamicResource Manager.ModifierGroup.MaxSelections}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldLabel}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="3"
+                                           Text="{DynamicResource Manager.ModifierGroup.DisplayOrder}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldLabel}"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding SelectedGroup.GroupTypeDisplay}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldValue}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                           Text="{Binding DetailMinSelections}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldValue}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2"
+                                           Text="{Binding DetailMaxSelections}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldValue}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="3"
+                                           Text="{Binding DetailSortOrder}"
+                                           Style="{StaticResource POS.Manager.ModifierFieldValue}"/>
+                            </Grid>
+                        </Border>
+
+                        <Grid Grid.Row="3"
+                              Margin="{StaticResource Spacing.DialogErrorMargin}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{DynamicResource Manager.ModifierGroup.ModifierOptions}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"
+                                           VerticalAlignment="Center"/>
+
+                                <controls:CrudActionButtons Grid.Column="1"
+                                                            AddCommand="{Binding AddOptionCommand}"
+                                                            AddLabel="{DynamicResource Manager.ModifierGroup.AddOption}"
+                                                            EditCommand="{Binding EditOptionCommand}"
+                                                            EditEnabled="{Binding HasOptionSelection}"
+                                                            EditLabel="{DynamicResource Manager.ModifierGroup.EditOption}"
+                                                            DeleteCommand="{Binding DeleteOptionCommand}"
+                                                            DeleteEnabled="{Binding HasOptionSelection}"
+                                                            DeleteLabel="{DynamicResource Manager.ModifierGroup.DeleteOption}"
+                                                            ShowRefresh="False"/>
+                            </Grid>
+
+                            <StackPanel Grid.Row="1"
+                                        Orientation="Horizontal"
+                                        Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Required}"
+                                          IsChecked="{Binding SelectedGroup.IsRequired}"
+                                          IsEnabled="False"
+                                          Style="{StaticResource POS.CheckBox.Default}"/>
+                                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Active}"
+                                          IsChecked="{Binding SelectedGroup.IsActive}"
+                                          IsEnabled="False"
+                                          Margin="{StaticResource Spacing.RowSectionGap}"
+                                          Style="{StaticResource POS.CheckBox.Default}"/>
+                            </StackPanel>
+
+                            <Grid Grid.Row="2"
+                                  Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                                <DataGrid Style="{StaticResource POS.DataGrid.Default}"
+                                          ItemsSource="{Binding Options}"
+                                          SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          Visibility="{Binding IsOptionsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="{DynamicResource Manager.Modifier.ColOptionName}"
+                                                            Binding="{Binding Name}"
+                                                            Width="*"/>
+                                        <DataGridTextColumn Header="{DynamicResource Manager.Modifier.ColPrice}"
+                                                            Binding="{Binding PriceAdd, StringFormat={}{0:N2}}"
+                                                            Width="Auto"/>
+                                        <DataGridCheckBoxColumn Header="{DynamicResource Manager.Modifier.ColDefault}"
+                                                                Binding="{Binding IsDefault}"
+                                                                Width="Auto"/>
+                                        <DataGridCheckBoxColumn Header="{DynamicResource Manager.Modifier.ColActive}"
+                                                                Binding="{Binding IsActive}"
+                                                                Width="Auto"/>
+                                        <DataGridTextColumn Header="{DynamicResource Manager.Modifier.ColOrder}"
+                                                            Binding="{Binding SortOrder}"
+                                                            Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <TextBlock Text="{DynamicResource Manager.ModifierGroup.NoOptionsYet}"
+                                           Style="{StaticResource POS.Manager.EmptyStateText}"
+                                           Margin="{StaticResource Spacing.4}"
+                                           Visibility="{Binding IsOptionsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource POS.Manager.Card}"
+                        Visibility="{Binding HasDetail, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <Border Style="{StaticResource POS.Dialog.IconBadge}"
+                                Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                            <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png"
+                                   Style="{StaticResource POS.Manager.CategoryCardImage}"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectEmptyTitle}"
+                                   Style="{StaticResource POS.Dialog.Title}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectEmptyHint}"
+                                   Style="{StaticResource POS.Manager.EmptyStateText}"
+                                   Margin="{StaticResource Spacing.2}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,209 @@
+<Window x:Class="UI.Views.Modifiers.ModifierGroupEditDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="{Binding GroupDialogTitle}"
+        Width="{StaticResource Size.Dialog.ModifierGroup.Width}"
+        Height="{StaticResource Size.Dialog.ModifierGroup.Height}"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Style="{StaticResource POS.Window.Overlay}"
+        KeyDown="ModifierGroupEditDialogView_KeyDown">
+
+    <Grid x:Name="OverlayGrid"
+          Style="{StaticResource POS.Dialog.Overlay}"
+          MouseDown="OverlayGrid_MouseDown">
+        <Border x:Name="DialogCard"
+                Style="{StaticResource POS.Dialog.Card}"
+                Width="{StaticResource Size.Dialog.ModifierGroup.Width}"
+                MaxHeight="{StaticResource Size.Dialog.ModifierGroup.Height}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="{StaticResource Spacing.DialogOuter}"
+                MouseDown="DialogCard_MouseDown">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.DialogHeader}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource POS.Dialog.IconBadge}"
+                                    Margin="{StaticResource Spacing.RowIconGap}">
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png"
+                                       Style="{StaticResource POS.Manager.CategoryCardImage}"/>
+                            </Border>
+                            <TextBlock Text="{Binding GroupDialogTitle}"
+                                       Style="{StaticResource POS.Dialog.Title}"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Content="✕"
+                                Command="{Binding CancelGroupEditCommand}"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Style="{StaticResource POS.Dialog.NoticeDanger}"
+                        Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Style="{StaticResource POS.Dialog.ErrorText}"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <ScrollViewer Grid.Row="2"
+                              VerticalScrollBarVisibility="Auto"
+                              Padding="{StaticResource Spacing.3}">
+                    <StackPanel>
+                        <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="{StaticResource Spacing.RowIconGap}">
+                                <TextBlock Text="{DynamicResource Common.Name}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                <TextBox x:Name="NameBox"
+                                         Text="{Binding EditGroupName, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource POS.TextBox.Default}"
+                                         IsEnabled="{Binding IsNotBusy}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0"
+                                        Grid.Column="1">
+                                <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectionType}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                <ComboBox SelectedValue="{Binding EditGroupType}"
+                                          SelectedValuePath="Key"
+                                          DisplayMemberPath="Value"
+                                          ItemsSource="{Binding GroupTypeOptions}"
+                                          Style="{StaticResource POS.ComboBox.Default}"
+                                          IsEnabled="{Binding IsNotBusy}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Orientation="Horizontal"
+                                        Margin="{StaticResource Spacing.DialogFieldGap}">
+                                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Required}"
+                                          IsChecked="{Binding EditIsRequired}"
+                                          Style="{StaticResource POS.CheckBox.Default}"
+                                          IsEnabled="{Binding IsNotBusy}"
+                                          Margin="{StaticResource Spacing.RowIconGap}"/>
+
+                                <CheckBox Content="{DynamicResource Manager.ModifierGroup.Active}"
+                                          IsChecked="{Binding EditIsActive}"
+                                          Style="{StaticResource POS.CheckBox.Default}"
+                                          IsEnabled="{Binding IsNotBusy}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                Padding="{StaticResource Spacing.2}">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Manager.ModifierGroup.SelectionRules}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0"
+                                                Margin="{StaticResource Spacing.RowIconGap}">
+                                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.MinSelections}"
+                                                   Style="{StaticResource POS.Dialog.Label}"
+                                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                        <TextBox Text="{Binding EditMinSelections, UpdateSourceTrigger=PropertyChanged}"
+                                                 Style="{StaticResource POS.TextBox.Default}"
+                                                 IsEnabled="{Binding IsNotBusy}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1"
+                                                Margin="{StaticResource Spacing.RowIconGap}">
+                                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.MaxSelections}"
+                                                   Style="{StaticResource POS.Dialog.Label}"
+                                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                        <TextBox Text="{Binding EditMaxSelections, UpdateSourceTrigger=PropertyChanged}"
+                                                 Style="{StaticResource POS.TextBox.Default}"
+                                                 IsEnabled="{Binding IsNotBusy}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="{DynamicResource Manager.ModifierGroup.DisplayOrder}"
+                                                   Style="{StaticResource POS.Dialog.Label}"
+                                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                        <TextBox Text="{Binding EditSortOrder, UpdateSourceTrigger=PropertyChanged}"
+                                                 Style="{StaticResource POS.TextBox.Default}"
+                                                 IsEnabled="{Binding IsNotBusy}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Border Grid.Row="3"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource POS.Button.Secondary}"
+                                Content="{DynamicResource Manager.ModifierGroup.TranslationsButton}"
+                                Command="{Binding GroupTranslationsCommand}"
+                                HorizontalAlignment="Left"
+                                IsEnabled="{Binding IsNotBusy}"/>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <Button Style="{StaticResource POS.Button.Secondary}"
+                                    Content="{DynamicResource Common.Cancel}"
+                                    Command="{Binding CancelGroupEditCommand}"
+                                    Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                    IsEnabled="{Binding IsNotBusy}"/>
+                            <Button Style="{StaticResource POS.Button.Primary}"
+                                    Content="{DynamicResource Common.Save}"
+                                    Command="{Binding SaveGroupCommand}"
+                                    IsEnabled="{Binding IsNotBusy}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

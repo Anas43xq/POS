@@ -1,0 +1,44 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Cafeteria Hawa POS  –  Manager · Home View          ║
+    ║   Filter bar + full-width KPI strip + 3-column row    ║
+    ║   of Top Products / Shift Summary / Recent Txns.       ║
+    ║   Composed from reusable UserControls — no duplicated ║
+    ║   layout/styling, all pieces inherit this VM.          ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:UI.Views"
+             mc:Ignorable="d" d:DesignHeight="820" Width="1225">
+
+    <Grid Background="{StaticResource Color.Brand.Light}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Filter bar -->
+            <RowDefinition Height="Auto"/>
+            <!-- KPI strip -->
+            <RowDefinition Height="*"/>
+            <!-- Top Products / Shift Summary / Recent Transactions -->
+        </Grid.RowDefinitions>
+
+        <views:FilterPanelControl Grid.Row="0" Margin="{StaticResource Spacing.2}"/>
+
+        <views:KpiMetricsControl Grid.Row="1" Margin="{StaticResource Spacing.2}"/>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.3*"/>
+            </Grid.ColumnDefinitions>
+
+            <views:TopProductsControl Grid.Column="0" Margin="{StaticResource Spacing.2}"/>
+            <views:ShiftSummaryControl Grid.Column="1" Margin="{StaticResource Spacing.2}"/>
+            <views:RecentTransactionsControl Grid.Column="2" Margin="{StaticResource Spacing.2}"/>
+        </Grid>
+    </Grid>
+</UserControl>

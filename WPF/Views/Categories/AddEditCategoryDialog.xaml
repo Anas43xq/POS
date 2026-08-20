@@ -1,0 +1,148 @@
+<Window x:Class="UI.Views.AddEditCategoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.openxmlformats.org/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="{DynamicResource Common.Category}"
+        Width="440" Height="420"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Style="{StaticResource POS.Window.Overlay}"
+        KeyDown="AddEditCategoryDialog_KeyDown">
+
+    <Grid x:Name="OverlayGrid"
+          Style="{StaticResource POS.Dialog.Overlay}"
+          MouseDown="OverlayGrid_MouseDown">
+
+        <Border x:Name="DialogCard"
+                Width="400"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource POS.Dialog.Card}"
+                MouseDown="DialogCard_MouseDown">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.DialogHeader}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Style="{StaticResource POS.Dialog.IconBadge}"
+                                    Margin="{StaticResource Spacing.RowIconGap}">
+                                <Image Source="pack://application:,,,/Assets/categories/category-card.png"
+                                       Width="{StaticResource Size.Icon.Default}"
+                                       Height="{StaticResource Size.Icon.Default}"/>
+                            </Border>
+                            <TextBlock Text="{Binding DialogTitle, FallbackValue='Add Category'}"
+                                       Style="{StaticResource POS.Dialog.Title}"/>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Content="✕"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Command="{Binding CancelCommand}"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource Color.Danger.ErrorSurface}"
+                        BorderBrush="{StaticResource Color.Danger.ErrorBorder}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource Radius.Md}"
+                        Padding="{StaticResource Spacing.DialogError}"
+                        Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚠ " FontSize="{StaticResource Font.Size.Lg}" Foreground="{StaticResource Color.Danger.ErrorText}"/>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   Foreground="{StaticResource Color.Danger.ErrorText}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <ProgressBar IsIndeterminate="True"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"
+                                 VerticalAlignment="Top"/>
+
+                <StackPanel Margin="{StaticResource Spacing.DialogContent}">
+                    <TextBlock Text="{DynamicResource Common.Name}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            Height="{StaticResource Size.TouchTarget.Min}"
+                            Margin="{StaticResource Spacing.DialogTitleGap}">
+                        <TextBox x:Name="NameBox"
+                                 Style="{StaticResource POS.TextBox.Borderless}"
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+
+                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryLabel}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                    <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                              ItemsSource="{Binding ParentCategoryOptions}"
+                              SelectedItem="{Binding SelectedParent}"
+                              DisplayMemberPath="DisplayName"
+                              Margin="{StaticResource Spacing.DialogTitleGap}"/>
+
+                    <TextBlock Text="{DynamicResource Manager.CategoryDialog.ParentCategoryHint}"
+                               FontSize="{StaticResource Font.Size.Sm}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.DialogSubtitleGap}"/>
+                </StackPanel>
+                </Grid>
+
+                <Border Grid.Row="3"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource POS.Button.Outline}"
+                                Command="{Binding TranslationsCommand}"
+                                HorizontalAlignment="Left"
+                                Padding="{StaticResource Spacing.3}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🌐" FontSize="{StaticResource Font.Size.Sm}"/>
+                                <TextBlock Text="{DynamicResource Common.Translations}"
+                                           FontSize="{StaticResource Font.Size.Sm}"
+                                           Margin="{StaticResource Spacing.RowSectionGap}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource POS.Button.Outline}"
+                                    Content="{DynamicResource Common.Cancel}"
+                                    Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                    Command="{Binding CancelCommand}"/>
+                            <Button Style="{StaticResource POS.Button.Primary}"
+                                    Content="{DynamicResource Common.Save}"
+                                    Command="{Binding SaveCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

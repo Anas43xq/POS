@@ -1,0 +1,289 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Purchase Receipt Form                               ║
+    ║   Add / Edit / View screen for VAT and Non-VAT        ║
+    ║   purchase receipts.  Same form, two layouts —        ║
+    ║   one for VAT (with rate / amount fields), one for    ║
+    ║   Non-VAT (single amount + notes).                    ║
+    ║                                                       ║
+    ║   No locally redefined resources — every style is     ║
+    ║   pulled from the App-level merged dictionaries       ║
+    ║   (Brushes / Buttons / Lists / DataGrid / FilterField)║
+    ║   so the form matches the rest of the Manager module. ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.PurchaseReceiptFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="900" d:DesignHeight="520">
+
+    <UserControl.InputBindings>
+        <!--
+            Esc always cancels (back to list) regardless of which
+            field has focus — no multiline guard needed here, unlike
+            Enter/Save which is handled in the code-behind so it can
+            check focus context (see PreviewKeyDown handler).
+        -->
+        <KeyBinding Key="Escape" Command="{Binding CancelReceiptCommand}"/>
+    </UserControl.InputBindings>
+
+    <Grid Background="{StaticResource Color.Brand.Light}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Header  -->
+            <RowDefinition Height="*"/>     <!-- Content -->
+            <RowDefinition Height="Auto"/>  <!-- Footer  -->
+        </Grid.RowDefinitions>
+
+        <!-- ═══ HEADER ═══ -->
+        <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="{StaticResource Spacing.4}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Style="{StaticResource POS.Button.Secondary}"
+                        Content="&#x2190;"
+                        Width="38"
+                        Padding="{StaticResource Spacing.0}"
+                        Margin="{StaticResource Spacing.3}"
+                        Command="{Binding CancelReceiptCommand}"
+                        ToolTip="{DynamicResource Common.Back}"/>
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding FormTitle}"
+                           FontSize="{StaticResource Font.Size.Lg}"
+                           FontWeight="{StaticResource Font.Weight.Medium}"
+                           Foreground="{StaticResource Color.Text.Default}"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="2"
+                           Text="{Binding StatusMessage}"
+                           Foreground="{StaticResource Color.Danger.Default}"
+                           FontSize="{StaticResource Font.Size.Sm}"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           MaxWidth="500"
+                           HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+
+        <!-- ═══ FORM CONTENT ═══ -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="{StaticResource Spacing.4}">
+            <Grid>
+                <!-- VAT mode form -->
+                <Grid Visibility="{Binding IsVatReceiptMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: Supplier | Receipt Number -->
+                    <StackPanel Grid.Column="0" Grid.Row="0">
+                        <TextBlock Text="{DynamicResource Common.Supplier}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                  ItemsSource="{Binding Suppliers}"
+                                  SelectedItem="{Binding SelectedSupplier}"
+                                  DisplayMemberPath="CompanyName"
+                                  IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0">
+                        <TextBlock Text="{DynamicResource Common.ReceiptNumber}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+
+                    <!-- Row 2: Date | Category -->
+                    <StackPanel Grid.Column="0" Grid.Row="2">
+                        <TextBlock Text="{DynamicResource Common.Date}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <DatePicker Style="{StaticResource DateInput}"
+                                    SelectedDate="{Binding InvoiceDate}"
+                                    IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="2">
+                        <TextBlock Text="{DynamicResource Common.Category}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+
+                    <!-- Row 4: Subtotal | VAT Rate -->
+                    <StackPanel Grid.Column="0" Grid.Row="4">
+                        <TextBlock Text="{DynamicResource Common.Subtotal}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Subtotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="4">
+                        <TextBlock Text="{DynamicResource Manager.Receipt.FieldVatRate}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding VatRate, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+
+                    <!-- Row 6: VAT Amount | Grand Total -->
+                    <StackPanel Grid.Column="0" Grid.Row="6">
+                        <TextBlock Text="{DynamicResource Manager.Receipt.FieldVatAmount}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                    <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding VatAmount, StringFormat=N2, Mode=OneWay}"
+                                 IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="6">
+                        <TextBlock Text="{DynamicResource Common.GrandTotal}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                    <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding GrandTotal, StringFormat=N2, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 FontWeight="{StaticResource Font.Weight.SemiBold}"/>
+                    </StackPanel>
+
+                    <!-- Row 8: Notes -->
+                    <StackPanel Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3">
+                        <TextBlock Text="{DynamicResource Common.Notes}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Non-VAT mode form -->
+                <Grid Visibility="{Binding IsNonVatReceiptMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: Supplier | Receipt Number -->
+                    <StackPanel Grid.Column="0" Grid.Row="0">
+                        <TextBlock Text="{DynamicResource Common.Supplier}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                  ItemsSource="{Binding Suppliers}"
+                                  SelectedItem="{Binding SelectedSupplier}"
+                                  DisplayMemberPath="CompanyName"
+                                  IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0">
+                        <TextBlock Text="{DynamicResource Common.ReceiptNumber}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+
+                    <!-- Row 2: Date | Category -->
+                    <StackPanel Grid.Column="0" Grid.Row="2">
+                        <TextBlock Text="{DynamicResource Common.Date}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <DatePicker Style="{StaticResource DateInput}"
+                                    SelectedDate="{Binding InvoiceDate}"
+                                    IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="2">
+                        <TextBlock Text="{DynamicResource Common.Category}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+
+                    <!-- Row 4: Amount | Notes -->
+                    <StackPanel Grid.Column="0" Grid.Row="4">
+                        <TextBlock Text="{DynamicResource Common.Amount}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Subtotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"
+                                 FontWeight="{StaticResource Font.Weight.SemiBold}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="4">
+                        <TextBlock Text="{DynamicResource Common.Notes}"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <TextBox Style="{StaticResource POS.TextBox.Default}"
+                                 Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsFormEditable}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- ═══ FOOTER ═══ -->
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}" Margin="{StaticResource Spacing.4}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource POS.Button.Primary}"
+                        Content="{DynamicResource Common.Save}"
+                        Margin="{StaticResource Spacing.2}"
+                        Command="{Binding SaveReceiptCommand}"
+                        Visibility="{Binding IsFormEditable, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Style="{StaticResource POS.Button.Secondary}"
+                        Content="{DynamicResource Common.Cancel}"
+                        Command="{Binding CancelReceiptCommand}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

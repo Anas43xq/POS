@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DropShadowEffect x:Key="Shadow.Sm"
+                      Color="Black"
+                      Opacity="0.08"
+                      BlurRadius="8"
+                      ShadowDepth="2"
+                      Direction="270"/>
+
+    <DropShadowEffect x:Key="Shadow.Default"
+                      Color="Black"
+                      Opacity="0.14"
+                      BlurRadius="16"
+                      ShadowDepth="4"
+                      Direction="270"/>
+
+    <DropShadowEffect x:Key="Shadow.Lg"
+                      Color="Black"
+                      Opacity="0.20"
+                      BlurRadius="32"
+                      ShadowDepth="8"
+                      Direction="270"/>
+
+    <DropShadowEffect x:Key="Shadow.None"
+                      Color="Black"
+                      Opacity="0"
+                      BlurRadius="0"
+                      ShadowDepth="0"/>
+</ResourceDictionary>

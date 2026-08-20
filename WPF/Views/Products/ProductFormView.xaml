@@ -1,0 +1,340 @@
+<Window x:Class="UI.Views.ProductFormView"
+        x:Name="RootWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="{Binding FormTitle}"
+        Width="{StaticResource Size.Dialog.Wide}"
+        Height="{StaticResource Size.Dialog.Tall}"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Style="{StaticResource POS.Window.Overlay}"
+        KeyDown="ProductFormView_KeyDown">
+
+    <Grid x:Name="OverlayGrid"
+          Style="{StaticResource POS.Dialog.Overlay}"
+          MouseDown="OverlayGrid_MouseDown">
+
+        <Border x:Name="DialogCard"
+                MaxWidth="{StaticResource Size.Dialog.Wide}"
+                Margin="{StaticResource Spacing.DialogOuter}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Style="{StaticResource POS.Dialog.Card}"
+                MouseDown="DialogCard_MouseDown">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.DialogHeader}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Style="{StaticResource POS.Dialog.IconBadge}"
+                                    Margin="{StaticResource Spacing.RowIconGap}">
+                                <TextBlock Text="📦"
+                                           Style="{StaticResource POS.Dialog.IconGlyph}"/>
+                            </Border>
+                            <TextBlock Text="{Binding FormTitle}"
+                                       Style="{StaticResource POS.Dialog.Title}"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="✕"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Command="{Binding CancelCommand}"/>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="1" Margin="{StaticResource Spacing.DialogErrorBannerMargin}">
+                    <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
+                            Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠ "
+                                       Style="{StaticResource POS.Dialog.ErrorText}"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Style="{StaticResource POS.Dialog.ErrorText}"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
+                            Visibility="{Binding ProductExistsWarning, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠ "
+                                       Style="{StaticResource POS.Dialog.ErrorText}"/>
+                            <TextBlock Text="{DynamicResource Manager.ProductForm.DuplicateWarning}"
+                                       Style="{StaticResource POS.Dialog.ErrorText}"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Grid Grid.Row="2">
+                    <ProgressBar IsIndeterminate="True"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"
+                                 VerticalAlignment="Top"/>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  PanningMode="VerticalOnly"
+                                  IsEnabled="{Binding IsNotBusy}">
+                        <Grid Margin="{StaticResource Spacing.DialogContent}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.SectionBasicInfo}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"
+                                           Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.FieldProductName}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                        Height="{StaticResource Size.TouchTarget.Min}"
+                                        Margin="{StaticResource Spacing.DialogFieldGap}">
+                                    <TextBox Style="{StaticResource POS.TextBox.Borderless}"
+                                             Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.FieldCategory}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                          ItemsSource="{Binding CategoryOptions}"
+                                          SelectedItem="{Binding SelectedCategory}"
+                                          Margin="{StaticResource Spacing.DialogSubtitleGap}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.SectionVisibilityNotes}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"
+                                           Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                                <Border Style="{StaticResource POS.Dialog.ActivePanel}"
+                                        Margin="{StaticResource Spacing.DialogSubtitleGap}">
+                                    <CheckBox Style="{StaticResource POS.CheckBox.Default}"
+                                              Content="{DynamicResource Manager.ProductForm.FieldIsActive}"
+                                              IsChecked="{Binding IsActive}"
+                                              FontWeight="{StaticResource Font.Weight.Medium}"/>
+                                </Border>
+
+                                <TextBlock Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}">
+                                    <Run Text="{DynamicResource Manager.ProductForm.FieldDescription}"/>
+                                    <Run Text="{DynamicResource Manager.ProductForm.DescriptionOptionalSuffix}"
+                                         FontWeight="{StaticResource Font.Weight.Normal}"/>
+                                </TextBlock>
+                                <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                                        MinHeight="{StaticResource Size.ProductForm.Description.MinHeight}">
+                                    <TextBox Style="{StaticResource POS.TextBox.Multiline}"
+                                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Border>
+                            </StackPanel>
+
+                            <Border Grid.Column="1"
+                                    Width="{StaticResource Size.Dialog.ColumnGap}"/>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.SectionPricingTax}"
+                                           Style="{StaticResource POS.Dialog.SectionLabel}"
+                                           Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.FieldSizesPrices}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+
+                                <Border Style="{StaticResource POS.Dialog.PricePanel}"
+                                        Margin="{StaticResource Spacing.DialogFieldGap}">
+                                    <StackPanel>
+                                        <Grid Margin="{StaticResource Spacing.DialogListHeaderGap}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"
+                                                                  MinWidth="{StaticResource Size.ProductForm.PriceColumn.Min}"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{DynamicResource Manager.ProductForm.FieldSize}"
+                                                       Style="{StaticResource POS.Dialog.TableHeaderText}"/>
+                                            <Border Grid.Column="1"
+                                                    Width="{StaticResource Size.Dialog.ColumnGap}"/>
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{DynamicResource Manager.ProductForm.FieldPrice}"
+                                                       Style="{StaticResource POS.Dialog.TableHeaderText}"/>
+                                        </Grid>
+
+                                        <ItemsControl ItemsSource="{Binding Variants}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"
+                                                                              MinWidth="{StaticResource Size.ProductForm.PriceColumn.Min}"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <ComboBox Grid.Column="0"
+                                                                  Style="{StaticResource POS.ComboBox.Default}"
+                                                                  ItemsSource="{Binding DataContext.SizeOptions, ElementName=RootWindow}"
+                                                                  SelectedItem="{Binding SelectedSize}">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding Name}"/>
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
+
+                                                        <Border Grid.Column="1"
+                                                                Width="{StaticResource Size.Dialog.ColumnGap}"/>
+
+                                                        <Border Grid.Column="2"
+                                                                Style="{StaticResource POS.Dialog.InputBorder}"
+                                                                Height="{StaticResource Size.TouchTarget.Min}">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Grid.Column="0"
+                                                                           Text="{DynamicResource Manager.ProductForm.CurrencyAED}"
+                                                                           Style="{StaticResource POS.Dialog.CurrencyPrefix}"
+                                                                           Margin="{StaticResource Spacing.RowSectionGap}"/>
+                                                                <TextBox Grid.Column="1"
+                                                                         Style="{StaticResource POS.TextBox.Borderless}"
+                                                                         Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"/>
+                                                            </Grid>
+                                                        </Border>
+
+                                                        <Button Grid.Column="3"
+                                                                Content="✕"
+                                                                Width="{StaticResource Size.TouchTarget.Min}"
+                                                                Style="{StaticResource POS.Button.Outline}"
+                                                                Command="{Binding DataContext.RemoveVariantCommand, ElementName=RootWindow}"
+                                                                CommandParameter="{Binding}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <Button Content="{DynamicResource Manager.ProductForm.AddSize}"
+                                                Style="{StaticResource POS.Button.Outline}"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding AddVariantCommand}"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <TextBlock Text="{DynamicResource Manager.ProductForm.FieldTax}"
+                                           Style="{StaticResource POS.Dialog.Label}"
+                                           Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                                <ComboBox Style="{StaticResource POS.ComboBox.Default}"
+                                          ItemsSource="{Binding TaxOptions}"
+                                          SelectedItem="{Binding SelectedTax}"
+                                          Margin="{StaticResource Spacing.DialogFieldGap}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Grid Margin="{StaticResource Spacing.DialogSubtitleGap}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0"
+                                              Style="{StaticResource POS.CheckBox.Default}"
+                                              Content="{DynamicResource Manager.ProductForm.FieldAdditionalTax}"
+                                              IsChecked="{Binding HasAdditionalTax}"
+                                              VerticalAlignment="Center"/>
+
+                                    <Border Grid.Column="1"
+                                            Width="{StaticResource Size.Dialog.ColumnGap}"/>
+
+                                    <Border Grid.Column="2"
+                                            Style="{StaticResource POS.Dialog.InputBorder}"
+                                            Height="{StaticResource Size.TouchTarget.Min}"
+                                            Visibility="{Binding HasAdditionalTax, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{DynamicResource Manager.ProductForm.CurrencyAED}"
+                                                       Style="{StaticResource POS.Dialog.CurrencyPrefix}"
+                                                       Margin="{StaticResource Spacing.RowSectionGap}"/>
+                                            <TextBox Grid.Column="1"
+                                                     Style="{StaticResource POS.TextBox.Borderless}"
+                                                     Text="{Binding AdditionalTaxAmount, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+
+                <Border Grid.Row="3"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource POS.Button.Outline}"
+                                Content="{DynamicResource Manager.ProductForm.TranslationsButton}"
+                                Command="{Binding TranslationsCommand}"
+                                HorizontalAlignment="Left"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource POS.Button.Outline}"
+                                    Content="{DynamicResource Common.Cancel}"
+                                    Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                    Command="{Binding CancelCommand}"/>
+                            <Button Style="{StaticResource POS.Button.Primary}"
+                                    Content="{Binding SaveButtonLabel}"
+                                    Command="{Binding SaveCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

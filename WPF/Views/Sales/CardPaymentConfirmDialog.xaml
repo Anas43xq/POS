@@ -1,0 +1,98 @@
+<Window x:Class="UI.Views.CardPaymentConfirmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:UI.Controls"
+        mc:Ignorable="d"
+        Title="{DynamicResource Payment.Card.Title}"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Grid Background="{StaticResource Color.Brand.Scrim}">
+        <Border Width="460"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource POS.Dialog.Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.RoleRowPadding}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="28"
+                                    Height="28"
+                                    CornerRadius="{StaticResource Radius.Sm}"
+                                    Background="{StaticResource Color.Brand.Dark}"
+                                    Margin="{StaticResource Spacing.HeaderLogoMargin}">
+                                <TextBlock Text="Card"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           FontWeight="{StaticResource Font.Weight.Bold}"
+                                           Foreground="{StaticResource Color.Text.OnBrand}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Payment.Card.Title}"
+                                           FontSize="{StaticResource Font.Size.Lg}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                                <TextBlock Text="{DynamicResource Payment.Card.Subtitle}"
+                                           FontSize="{StaticResource Font.Size.Sm}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.DialogTitleGap}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Content="x"
+                                Command="{Binding CancelCommand}"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource Color.Surface.Subtle}"
+                        BorderBrush="{StaticResource Color.Border.Default}"
+                        BorderThickness="0,0,0,1"
+                        Padding="{StaticResource Spacing.Xl}">
+                    <TextBlock Text="{Binding ConfirmMessage}"
+                               FontSize="{StaticResource Font.Size.Xl}"
+                               FontWeight="{StaticResource Font.Weight.Bold}"
+                               Foreground="{StaticResource Color.Text.Default}"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+                <Border Grid.Row="2"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Style="{StaticResource POS.Button.Secondary}"
+                                Content="{DynamicResource Common.Cancel}"
+                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                Command="{Binding CancelCommand}"
+                                IsCancel="True"/>
+                        <Button Style="{StaticResource POS.Button.Primary}"
+                                Content="{DynamicResource Payment.Card.Confirm}"
+                                Command="{Binding ConfirmCommand}"
+                                IsDefault="True"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

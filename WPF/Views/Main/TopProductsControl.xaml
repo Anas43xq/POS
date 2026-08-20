@@ -1,0 +1,76 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Top Products list. Header/row share one column      ║
+    ║   layout so text always starts at the same X.          ║
+    ║   Product = left, Sales = right (currency exception).  ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.TopProductsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" d:DesignHeight="360" d:DesignWidth="380">
+
+    <Border Style="{StaticResource CardBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource POS.Manager.HomeCardHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource POS.Manager.HomeCardTitle}">
+                        <Run Text="🏆  "/>
+                        <Run Text="{DynamicResource Manager.Home.TopProducts}"/>
+                    </TextBlock>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="{StaticResource Spacing.3}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{DynamicResource Manager.Home.ColProduct}" Style="{StaticResource BadgeText}"/>
+                <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColSales}"
+                           Style="{StaticResource BadgeText}"
+                           TextAlignment="Right"/>
+            </Grid>
+             <Border Grid.Row="1" BorderBrush="{StaticResource Color.Border.Default}" BorderThickness="{StaticResource Thickness.BottomHairline}"
+                    Margin="{StaticResource Spacing.3}" VerticalAlignment="Top"/>
+
+            <ScrollViewer Grid.Row="2" Padding="{StaticResource Spacing.3}" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding TopProducts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ListRow}" Padding="{StaticResource Spacing.1}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding ProductName}"
+                                               Style="{StaticResource POS.Manager.HomeListPrimaryText}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <controls:CurrencyText Grid.Column="1"
+                                                           Amount="{Binding TotalSales}"
+                                                           ShowIcon="False"
+                                                           FontSize="{StaticResource Font.Size.Base}"
+                                                           HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

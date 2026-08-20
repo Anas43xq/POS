@@ -1,0 +1,147 @@
+<Window x:Class="UI.Views.PaymentDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:UI.Controls"
+        mc:Ignorable="d"
+        Title="{DynamicResource Payment.Cash.Title}"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Grid Background="{StaticResource Color.Brand.Scrim}">
+        <Border Width="520"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource POS.Dialog.Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}"
+                        Padding="{StaticResource Spacing.RoleRowPadding}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="28"
+                                    Height="28"
+                                    CornerRadius="{StaticResource Radius.Sm}"
+                                    Background="{StaticResource Color.Brand.Dark}"
+                                    Margin="{StaticResource Spacing.HeaderLogoMargin}">
+                                <TextBlock Text="Cash"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           FontWeight="{StaticResource Font.Weight.Bold}"
+                                           Foreground="{StaticResource Color.Text.OnBrand}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Payment.Cash.Title}"
+                                           FontSize="{StaticResource Font.Size.Lg}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                                <TextBlock Text="{DynamicResource Payment.Cash.Subtitle}"
+                                           FontSize="{StaticResource Font.Size.Sm}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.DialogTitleGap}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Style="{StaticResource POS.Dialog.CloseButton}"
+                                Content="x"
+                                Command="{Binding CancelCommand}"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource Color.Surface.Subtle}"
+                        BorderBrush="{StaticResource Color.Border.Default}"
+                        BorderThickness="0,0,0,1"
+                        Padding="{StaticResource Spacing.RoleRowPadding}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource Payment.AmountDue}"
+                                   FontSize="{StaticResource Font.Size.DisplaySm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding PaymentTotal}"
+                                               AmountForeground="{StaticResource Color.Success.Default}"
+                                               FontSize="{StaticResource Font.Size.Display}"
+                                               FontWeight="{StaticResource Font.Weight.Bold}"
+                                               VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="2"
+                      Margin="{StaticResource Spacing.DialogContent}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Payment.CashReceived}"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+                        <Border Style="{StaticResource POS.Dialog.InputBorder}">
+                            <TextBox Text="{Binding CashReceivedText, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource POS.TextBox.Borderless}"
+                                     PreviewTextInput="CashReceived_PreviewTextInput"
+                                     DataObject.Pasting="CashReceived_Pasting"
+                                     IsTabStop="True"/>
+                        </Border>
+
+                        <Grid Margin="{StaticResource Spacing.Xl}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="{DynamicResource Common.Change}"
+                                       FontSize="{StaticResource Font.Size.Lg}"
+                                       Foreground="{StaticResource Color.Text.Muted}"
+                                       VerticalAlignment="Center"/>
+                            <controls:CurrencyText Grid.Column="1"
+                                                   Amount="{Binding ChangeAmount}"
+                                                   AmountForeground="{StaticResource Color.Brand.Dark}"
+                                                   FontSize="{StaticResource Font.Size.Xl}"
+                                                   FontWeight="{StaticResource Font.Weight.Bold}"
+                                                   VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <Border Grid.Row="3"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Style="{StaticResource POS.Button.Secondary}"
+                                Content="{DynamicResource Common.Cancel}"
+                                Margin="{StaticResource Spacing.DialogFooterCancelGap}"
+                                Command="{Binding CancelCommand}"
+                                IsCancel="True"/>
+                        <Button Style="{StaticResource POS.Button.Primary}"
+                                Content="{DynamicResource Payment.Cash.Confirm}"
+                                Command="{Binding ConfirmPaymentCommand}"
+                                IsDefault="True"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

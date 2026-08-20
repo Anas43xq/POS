@@ -1,0 +1,53 @@
+<UserControl x:Class="UI.Views.Cashier.ErrorBannerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="1600" d:DesignHeight="34">
+
+    <Border x:Name="RootBorder"
+            Background="{StaticResource Color.Danger.Surface}"
+            BorderBrush="{StaticResource Color.Danger.Border}"
+            BorderThickness="0,0,0,1"
+            Padding="{StaticResource Spacing.DialogError}"
+            Opacity="0"
+            Visibility="{Binding HasHeaderError, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="Border.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="RootBorder"
+                                         Storyboard.TargetProperty="Opacity"
+                                         From="0" To="1"
+                                         Duration="0:0:0.25">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Text="{Binding HeaderErrorMessage}"
+                       FontSize="{StaticResource Font.Size.Base}"
+                       FontWeight="{StaticResource Font.Weight.Medium}"
+                       Foreground="{StaticResource Color.Text.Danger}"
+                       VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Style="{StaticResource POS.Button.Ghost}"
+                    MinHeight="{StaticResource Size.TouchTarget.Min}"
+                    Command="{Binding DismissErrorCommand}"
+                    Content="{DynamicResource Common.Close}"/>
+        </Grid>
+    </Border>
+</UserControl>

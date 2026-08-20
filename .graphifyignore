@@ -1,0 +1,45 @@
+# ============================================================================
+# Graphify ignore file
+# ============================================================================
+# One pattern per line. Lines starting with '#' are blank/comment lines and
+# are skipped. Patterns are glob (fnmatch) style and are matched against:
+#   - the file/folder NAME
+#   - every path segment (so a bare token matches that name anywhere)
+#   - the whole path relative to this project, and any prefix of it
+#
+# NOTE: These are already excluded by the Graphify engine built-ins and do NOT
+# need to be listed here:
+#   node_modules, .git, venv/.venv, env/.env, __pycache__, dist, build,
+#   target, out, site-packages, lib64, lock files (package-lock.json, etc.),
+#   hidden files/folders (starting with '.')
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Compiled / generated build output - never part of the source architecture
+# (.NET emits obj/ and bin/ at each project root; artifacts/ holds built *.dll,
+#  *.pdb, *.exe and extracted *.deps.json payloads)
+# ---------------------------------------------------------------------------
+artifacts/
+bin/
+obj/
+
+# ---------------------------------------------------------------------------
+# Packaging / metadata markers that add no structure to the architecture graph
+# ---------------------------------------------------------------------------
+package.json
+package-lock.json
+
+# ---------------------------------------------------------------------------
+# OPTIONAL - uncomment any of these to exclude them too
+# ---------------------------------------------------------------------------
+# docs/                          # design/spec markdown (kept by default)
+# skills/                        # agent skill docs
+# prompts/                       # prompt engineering assets
+# .github/     
+# .vscode/                 
+# graphify-out/
+# *.ps1                          # PowerShell dev/test scripts
+# README.md
+# AGENTS.md
+# Memory.md
+# KownIssues.md

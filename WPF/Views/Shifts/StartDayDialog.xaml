@@ -1,0 +1,86 @@
+<Window x:Class="UI.Views.StartDayDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource Cashier.StartDay}" Height="320" Width="420"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Style="{StaticResource POS.Window.Overlay}"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Border Style="{StaticResource POS.Dialog.Card}" Margin="{StaticResource Spacing.3}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- Header -->
+                <RowDefinition Height="*"/>     <!-- Body   -->
+                <RowDefinition Height="Auto"/>  <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Style="{StaticResource POS.Dialog.Header}" Padding="{StaticResource Spacing.3}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="{StaticResource Radius.Default}"
+                                Background="{StaticResource Color.Brand.Dark}"
+                                Margin="{StaticResource Spacing.2}">
+                            <TextBlock Text="☀" FontSize="{StaticResource Font.Size.Md}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Shift.Start.Title}"
+                                   FontSize="{StaticResource Font.Size.Md}" FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource POS.Dialog.CloseButton}"
+                            Content="&#x2715;"
+                            Command="{Binding CancelCommand}"/>
+                </Grid>
+            </Border>
+
+            <!-- Body -->
+            <StackPanel Grid.Row="1" Margin="{StaticResource Spacing.4}">
+                <TextBlock Text="{DynamicResource Shift.Start.Description}"
+                           FontSize="{StaticResource Font.Size.Sm}" Foreground="{StaticResource Color.Text.Muted}"
+                           TextWrapping="Wrap" Margin="{StaticResource Spacing.4}"/>
+
+                <TextBlock Text="{DynamicResource Shift.OpeningCash}"
+                           Style="{StaticResource POS.Dialog.Label}"
+                           Margin="{StaticResource Spacing.2}"/>
+                <Border Style="{StaticResource POS.Dialog.InputBorder}" Height="{StaticResource Size.TouchTarget.Min}" CornerRadius="{StaticResource Radius.Default}">
+                    <TextBox x:Name="OpeningCashBox"
+                             Text="{Binding OpeningCash, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource POS.TextBox.Borderless}"
+                             VerticalContentAlignment="Center"
+                             Loaded="OpeningCashBox_Loaded"
+                             KeyDown="OpeningCashBox_KeyDown"
+                             PreviewTextInput="OpeningCashBox_PreviewTextInput"/>
+                </Border>
+
+            </StackPanel>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Style="{StaticResource POS.Dialog.Footer}" Padding="{StaticResource Spacing.3}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource POS.Button.Secondary}"
+                            Content="{DynamicResource Common.Cancel}"
+                            Margin="{StaticResource Spacing.2}"
+                            IsCancel="True"
+                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                            Command="{Binding CancelCommand}"/>
+                    <Button Style="{StaticResource POS.Button.Primary}"
+                            Content="{DynamicResource Shift.Start.Button}"
+                            IsDefault="True"
+                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                            Command="{Binding StartDayCommand}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

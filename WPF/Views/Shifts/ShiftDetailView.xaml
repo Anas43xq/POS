@@ -1,0 +1,454 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Cafeteria Hawa POS  –  Manager · Shift Detail      ║
+    ║   Modal: Identity · Cash Reconciliation · Schedule ·  ║
+    ║   Statistics · Transactions                           ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<Window x:Class="UI.Views.ShiftDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:UI.Controls"
+        Title="{DynamicResource Manager.Shifts.DetailTitle}"
+        Width="820" Height="720"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Style="{StaticResource POS.Window.Overlay}"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Border Style="{StaticResource POS.Dialog.Card}" Margin="{StaticResource Spacing.3}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource POS.Dialog.Header}" Padding="{StaticResource Spacing.3}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="{StaticResource Radius.Default}"
+                                Background="{StaticResource Color.Brand.Dark}"
+                                Margin="{StaticResource Spacing.2}">
+                            <TextBlock Text="☀"
+                                       FontSize="{StaticResource Font.Size.Md}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Manager.Shifts.DetailTitle}"
+                                   FontSize="{StaticResource Font.Size.Md}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource POS.Dialog.CloseButton}"
+                            Content="&#x2715;"
+                            Command="{Binding CloseCommand}"/>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="{StaticResource Spacing.4}">
+                <StackPanel>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            Padding="{StaticResource Spacing.4}"
+                            Margin="{StaticResource Spacing.3}"
+                            CornerRadius="{StaticResource Radius.Default}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding Detail.ShiftId}"
+                                       FontSize="{StaticResource Font.Size.Xl}"
+                                       FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                       Foreground="{StaticResource Color.Brand.Dark}"
+                                       VerticalAlignment="Center"/>
+
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    CornerRadius="{StaticResource Radius.Pill}"
+                                    Padding="{StaticResource Spacing.2}"
+                                    VerticalAlignment="Center"
+                                    Tag="{Binding Detail.StatusLabel}"
+                                    Style="{StaticResource POS.Badge.ShiftStatus}">
+                                <TextBlock Text="{Binding Detail.StatusLabel}"
+                                           Style="{StaticResource POS.Badge.ShiftStatusText}"/>
+                            </Border>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="{StaticResource Spacing.1}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashier}"
+                                           FontSize="{StaticResource Font.Size.Sm}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           VerticalAlignment="Center"
+                                           Margin="{StaticResource Spacing.2}"/>
+                                <TextBlock Text="{Binding Detail.CashierName}"
+                                           FontSize="{StaticResource Font.Size.Sm}"
+                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                           Foreground="{StaticResource Color.Text.Default}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashReconciliation}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            Padding="{StaticResource Spacing.4}"
+                            Margin="{StaticResource Spacing.3}"
+                            CornerRadius="{StaticResource Radius.Default}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource POS.Dialog.KpiLabel}" Text="{DynamicResource Manager.Shifts.DetailOpeningCash}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource POS.Dialog.KpiLabel}" Text="{DynamicResource Manager.Shifts.DetailTotalSales}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource POS.Dialog.KpiLabel}" Text="{DynamicResource Manager.Shifts.DetailExpectedCash}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource POS.Dialog.KpiLabel}" Text="{DynamicResource Manager.Shifts.DetailClosingCash}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource POS.Dialog.KpiLabel}" Text="{DynamicResource Manager.Shifts.DetailDifference}"/>
+
+                            <controls:CurrencyText Grid.Row="1" Grid.Column="0"
+                                                   Amount="{Binding Detail.OpeningCash}"
+                                                   Style="{StaticResource POS.Dialog.KpiValue}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="{StaticResource Spacing.2}"/>
+                            <controls:CurrencyText Grid.Row="1" Grid.Column="1"
+                                                   Amount="{Binding Detail.TotalSales}"
+                                                   Style="{StaticResource POS.Dialog.KpiValue}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="{StaticResource Spacing.2}"/>
+                            <controls:CurrencyText Grid.Row="1" Grid.Column="2"
+                                                   Amount="{Binding Detail.ExpectedCash}"
+                                                   Style="{StaticResource POS.Dialog.KpiValue}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="{StaticResource Spacing.2}"/>
+                            <controls:CurrencyText Grid.Row="1" Grid.Column="3"
+                                                   Amount="{Binding Detail.ClosingCash}"
+                                                   Style="{StaticResource POS.Dialog.KpiValue}"
+                                                   HorizontalAlignment="Left"/>
+
+                            <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="4"
+                                    Width="1"
+                                    Margin="{StaticResource Spacing.3}"
+                                    Background="{StaticResource Color.Border.Default}"/>
+
+                            <controls:CurrencyText Grid.Row="1" Grid.Column="5"
+                                                   Amount="{Binding Detail.CashDifference}"
+                                                   Style="{StaticResource POS.Dialog.KpiValueDifference}"
+                                                   HorizontalAlignment="Left"/>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailSchedule}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            Padding="{StaticResource Spacing.4}"
+                            Margin="{StaticResource Spacing.3}"
+                            CornerRadius="{StaticResource Radius.Default}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailOpenTime}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.OpenedAt, StringFormat='yyyy-MM-dd HH:mm'}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCloseTime}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.ClosedAt, StringFormat='yyyy-MM-dd HH:mm', TargetNullValue=--}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailDuration}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.DurationHours, StringFormat={}{0:F1}h}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailStatistics}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.1}"/>
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            Padding="{StaticResource Spacing.4}"
+                            Margin="{StaticResource Spacing.3}"
+                            CornerRadius="{StaticResource Radius.Default}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailTotalTransactions}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.TotalTransactions}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailTotalSales}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <controls:CurrencyText Amount="{Binding Detail.TotalSales}"
+                                                       HorizontalAlignment="Left"
+                                                       FontSize="{StaticResource Font.Size.Md}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashTransactions}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.CashTransactions}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCashSales}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <controls:CurrencyText Amount="{Binding Detail.CashSales}"
+                                                       HorizontalAlignment="Left"
+                                                       FontSize="{StaticResource Font.Size.Md}"
+                                                       Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCardTransactions}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.CardTransactions}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailCardSales}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <controls:CurrencyText Amount="{Binding Detail.CardSales}"
+                                                       HorizontalAlignment="Left"
+                                                       FontSize="{StaticResource Font.Size.Md}"
+                                                       Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="{StaticResource Spacing.2}">
+                                <TextBlock Text="{DynamicResource Manager.Shifts.DetailRefunds}"
+                                           FontSize="{StaticResource Font.Size.Xs}"
+                                           Foreground="{StaticResource Color.Text.Muted}"
+                                           Margin="{StaticResource Spacing.1}"/>
+                                <TextBlock Text="{Binding Detail.RefundsCount}"
+                                           FontSize="{StaticResource Font.Size.Md}"
+                                           Foreground="{StaticResource Color.Text.Default}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="{DynamicResource Manager.Shifts.DetailTransactions}"
+                               Style="{StaticResource POS.Dialog.Label}"
+                               Margin="{StaticResource Spacing.1}"/>
+
+                    <Border Style="{StaticResource POS.Dialog.InputBorder}"
+                            CornerRadius="{StaticResource Radius.Default}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0"
+                                    Background="{StaticResource Color.Surface.Subtle}"
+                                    BorderBrush="{StaticResource Color.Border.Default}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="{StaticResource Spacing.3}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{DynamicResource Manager.Transactions.ColReceipt}"
+                                               FontSize="{StaticResource Font.Size.Xs}"
+                                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                               Foreground="{StaticResource Color.Text.Muted}"/>
+                                    <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Transactions.ColDateTime}"
+                                               FontSize="{StaticResource Font.Size.Xs}"
+                                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                               Foreground="{StaticResource Color.Text.Muted}"/>
+                                    <TextBlock Grid.Column="2" Text="{DynamicResource Manager.Transactions.ColPayment}"
+                                               FontSize="{StaticResource Font.Size.Xs}"
+                                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                               Foreground="{StaticResource Color.Text.Muted}"/>
+                                    <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Transactions.ColAmount}"
+                                               FontSize="{StaticResource Font.Size.Xs}"
+                                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                               Foreground="{StaticResource Color.Text.Muted}"
+                                               HorizontalAlignment="Right"/>
+                                    <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Transactions.ColStatus}"
+                                               FontSize="{StaticResource Font.Size.Xs}"
+                                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                               Foreground="{StaticResource Color.Text.Muted}"/>
+                                </Grid>
+                            </Border>
+
+                            <ScrollViewer Grid.Row="1"
+                                          MaxHeight="220"
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <ItemsControl ItemsSource="{Binding Transactions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource Color.Border.Default}"
+                                                    BorderThickness="0,0,0,0.5"
+                                                    Padding="{StaticResource Spacing.3}"
+                                                    Background="{StaticResource Color.Surface.Default}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="140"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="100"/>
+                                                        <ColumnDefinition Width="90"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Button Grid.Column="0"
+                                                            Cursor="Hand"
+                                                            HorizontalAlignment="Left"
+                                                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                                                            Command="{Binding DataContext.OpenReceiptCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="Bg"
+                                                                        Background="{StaticResource Color.Surface.Subtle}"
+                                                                        CornerRadius="{StaticResource Radius.Default}"
+                                                                        Padding="{StaticResource Spacing.2}">
+                                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                                      VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="Bg" Property="Background" Value="{StaticResource Color.Brand.Light}"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                        <TextBlock Text="{Binding ReceiptNumber}"
+                                                                   FontSize="{StaticResource Font.Size.Sm}"
+                                                                   FontWeight="{StaticResource Font.Weight.Medium}"
+                                                                   Foreground="{StaticResource Color.Brand.Dark}"/>
+                                                    </Button>
+
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding TransactionDate, StringFormat='yyyy-MM-dd HH:mm'}"
+                                                               FontSize="{StaticResource Font.Size.Sm}"
+                                                               Foreground="{StaticResource Color.Text.Default}"
+                                                               VerticalAlignment="Center"/>
+
+                                                    <Border Grid.Column="2"
+                                                            Tag="{Binding PaymentMethod}"
+                                                            Style="{StaticResource POS.Badge.Payment}">
+                                                        <TextBlock Text="{Binding PaymentMethod}"
+                                                                   Style="{StaticResource POS.Badge.PaymentText}"/>
+                                                    </Border>
+
+                                                    <controls:CurrencyText Grid.Column="3"
+                                                                           Amount="{Binding GrandTotal}"
+                                                                           FontSize="{StaticResource Font.Size.Sm}"
+                                                                           Foreground="{StaticResource Color.Text.Default}"
+                                                                           HorizontalAlignment="Right"
+                                                                           VerticalAlignment="Center"/>
+
+                                                    <Border Grid.Column="4"
+                                                            Tag="{Binding Status}"
+                                                            Style="{StaticResource POS.Badge.Status}">
+                                                        <TextBlock Text="{Binding Status}"
+                                                                   Style="{StaticResource POS.Badge.StatusText}"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border Grid.Row="2" Style="{StaticResource POS.Dialog.Footer}" Padding="{StaticResource Spacing.3}">
+                <Button Style="{StaticResource POS.Button.Secondary}"
+                        Content="{DynamicResource Manager.Shifts.DetailClose}"
+                        HorizontalAlignment="Right"
+                        MinHeight="{StaticResource Size.TouchTarget.Min}"
+                        Command="{Binding CloseCommand}"/>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

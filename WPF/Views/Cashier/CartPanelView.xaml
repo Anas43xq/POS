@@ -1,0 +1,196 @@
+<UserControl x:Class="UI.Views.Cashier.CartPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="500" d:DesignHeight="900">
+
+    <Border Background="{StaticResource Color.Surface.Default}"
+            BorderBrush="{StaticResource Color.Border.Default}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource Radius.Md}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Background="{StaticResource Color.Surface.Subtle}"
+                    BorderBrush="{StaticResource Color.Border.Default}"
+                    BorderThickness="0,0,0,1"
+                    Padding="{StaticResource Spacing.CardInner}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource Cashier.CurrentOrder}"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               FontWeight="{StaticResource Font.Weight.Bold}"
+                               Foreground="{StaticResource Color.Text.Default}"
+                               VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource POS.Badge.Default}"
+                            Margin="{StaticResource Spacing.HeaderChipGap}"
+                            Visibility="{Binding SaleItemsCount, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}">
+                        <TextBlock Style="{StaticResource POS.Badge.Text}"
+                                   Text="{Binding CartCountDisplay, Mode=OneWay}"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="1">
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="{StaticResource Spacing.Lg}"
+                           TextAlignment="Center"
+                           Foreground="{StaticResource Color.Text.Muted}"
+                           FontSize="{StaticResource Font.Size.Base}"
+                           Visibility="{Binding SaleItemsCount, Converter={StaticResource ZeroToVisibilityConverter}}">
+                    <Run Text="{DynamicResource Cashier.CartEmptyTitle}"/>
+                    <LineBreak/>
+                    <Run Text="{DynamicResource Cashier.CartEmptySub}"/>
+                </TextBlock>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding SaleItems}"
+                                  Margin="{StaticResource Spacing.Xs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="{StaticResource Spacing.Xs}"
+                                      MinHeight="{StaticResource Size.TouchTarget.Min}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Grid.Column="0"
+                                            Style="{StaticResource POS.Button.Ghost}"
+                                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                                            Command="{Binding DataContext.EditCartLineCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                        <Grid HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Center"
+                                              Margin="{StaticResource Spacing.CardBody}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <WrapPanel Grid.Row="0"
+                                                       HorizontalAlignment="Left">
+                                                <TextBlock Text="{Binding LocalizedProductName}"
+                                                           FontSize="{StaticResource Font.Size.Sm}"
+                                                           FontWeight="{StaticResource Font.Weight.Medium}"
+                                                           Foreground="{StaticResource Color.Text.Default}"
+                                                           TextWrapping="Wrap"/>
+                                                <controls:CurrencyText Amount="{Binding LineTotal}"
+                                                                       AmountForeground="{StaticResource Color.Text.Default}"
+                                                                       FontSize="{StaticResource Font.Size.Sm}"
+                                                                       FontWeight="{StaticResource Font.Weight.Bold}"
+                                                                       Margin="{StaticResource Spacing.Xxs}"
+                                                                       ShowIcon="False"/>
+                                            </WrapPanel>
+
+                                            <TextBlock Grid.Row="1"
+                                                       Text="{Binding ModifierSummary}"
+                                                       FontSize="{StaticResource Font.Size.Caption}"
+                                                       Foreground="{StaticResource Color.Text.Secondary}"
+                                                       TextWrapping="Wrap"
+                                                       Margin="{StaticResource Spacing.Xxs}"
+                                                       Visibility="{Binding HasModifiers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                            <StackPanel Grid.Row="2"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Left"
+                                                        Margin="{StaticResource Spacing.Xxs}">
+                                                <TextBlock Text="{Binding Quantity, StringFormat={}{0}x}"
+                                                           FontSize="{StaticResource Font.Size.Caption}"
+                                                           Foreground="{StaticResource Color.Text.Secondary}"
+                                                           VerticalAlignment="Center"/>
+                                                <controls:CurrencyText Amount="{Binding UnitPrice}"
+                                                                       AmountForeground="{StaticResource Color.Text.Secondary}"
+                                                                       FontSize="{StaticResource Font.Size.Caption}"
+                                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                                       Margin="{StaticResource Spacing.Xxs}"
+                                                                       ShowIcon="False"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource POS.Button.Danger}"
+                                            MinHeight="{StaticResource Size.TouchTarget.Min}"
+                                            Width="{StaticResource Size.TouchTarget.Min}"
+                                            Command="{Binding DataContext.RemoveSaleItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{DynamicResource Cashier.RemoveItemTooltip}">
+                                        <TextBlock Text="x"
+                                                   FontSize="{StaticResource Font.Size.Base}"
+                                                   FontWeight="{StaticResource Font.Weight.Bold}"
+                                                   TextAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Border Grid.Row="2"
+                    Background="{StaticResource Color.Surface.Default}"
+                    BorderBrush="{StaticResource Color.Border.Default}"
+                    BorderThickness="0,1,0,0"
+                    Padding="{StaticResource Spacing.CardInner}">
+                <StackPanel>
+                    <Grid Margin="{StaticResource Spacing.Xs}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Subtotal}"
+                                   FontSize="{StaticResource Font.Size.DisplaySm}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding Subtotal}"
+                                               AmountForeground="{StaticResource Color.Text.Muted}"
+                                               FontSize="{StaticResource Font.Size.DisplaySm}"
+                                               FontWeight="{StaticResource Font.Weight.Medium}"/>
+                    </Grid>
+
+                    <Grid Margin="{StaticResource Spacing.Xs}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Tax}"
+                                   FontSize="{StaticResource Font.Size.DisplaySm}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding Tax}"
+                                               AmountForeground="{StaticResource Color.Text.Muted}"
+                                               FontSize="{StaticResource Font.Size.DisplaySm}"
+                                               FontWeight="{StaticResource Font.Weight.Medium}"/>
+                    </Grid>
+
+                    <Grid Margin="{StaticResource Spacing.HeaderChipGap}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Common.Total}"
+                                   FontSize="{StaticResource Font.Size.Xl}"
+                                   FontWeight="{StaticResource Font.Weight.Bold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding Total}"
+                                               AmountForeground="{StaticResource Color.Success.Default}"
+                                               FontSize="{StaticResource Font.Size.Xl}"
+                                               FontWeight="{StaticResource Font.Weight.Bold}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

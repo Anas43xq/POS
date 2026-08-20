@@ -1,0 +1,157 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Brand -->
+    <SolidColorBrush x:Key="Color.Brand.Primary" Color="#2589E0"/>
+    <SolidColorBrush x:Key="Color.Brand.Dark" Color="#1A6FC4"/>
+    <SolidColorBrush x:Key="Color.Brand.Hover" Color="#155A9E"/>
+    <SolidColorBrush x:Key="Color.Brand.Pressed" Color="#0F4A85"/>
+    <SolidColorBrush x:Key="Color.Brand.Light" Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="Color.Brand.Border" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="Color.Brand.BorderSoft" Color="#DBEEFF"/>
+    <SolidColorBrush x:Key="Color.Brand.BorderSubtle" Color="#E8F3FF"/>
+    <SolidColorBrush x:Key="Color.Brand.Surface" Color="#EAF4FF"/>
+    <SolidColorBrush x:Key="Color.Brand.SurfaceAlt" Color="#E1EEFC"/>
+    <SolidColorBrush x:Key="Color.Brand.SurfaceSoft" Color="#F6FAFF"/>
+    <SolidColorBrush x:Key="Color.Brand.SurfaceLighter" Color="#F8FBFF"/>
+    <SolidColorBrush x:Key="Color.Brand.SurfaceLightest" Color="#F8FCFF"/>
+    <SolidColorBrush x:Key="Color.Brand.SurfaceMuted" Color="#F9FBFF"/>
+    <SolidColorBrush x:Key="Color.Brand.Selection" Color="#EFF6FF"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlaySoft" Color="#FFFFFF" Opacity="0.07"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlayStrong" Color="#FFFFFF" Opacity="0.60"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlayWeak" Color="#FFFFFF" Opacity="0.13"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlayHover" Color="#FFFFFF" Opacity="0.16"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlayMedium" Color="#FFFFFF" Opacity="0.30"/>
+    <SolidColorBrush x:Key="Color.Brand.OverlayBorder" Color="#FFFFFF" Opacity="0.38"/>
+    <SolidColorBrush x:Key="Color.Brand.Scrim" Color="#000000" Opacity="0.28"/>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="Color.Text.Primary" Color="#1A3A5C"/>
+    <SolidColorBrush x:Key="Color.Text.Default" Color="#1F2937"/>
+    <SolidColorBrush x:Key="Color.Text.Muted" Color="#8AB0CC"/>
+    <SolidColorBrush x:Key="Color.Text.Secondary" Color="#5B8AB0"/>
+    <SolidColorBrush x:Key="Color.Text.Inverse" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Color.Text.OnBrand" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Color.Text.Disabled" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="Color.Text.Warning" Color="#92400E"/>
+    <SolidColorBrush x:Key="Color.Text.Danger" Color="#A32D2D"/>
+    <SolidColorBrush x:Key="Color.Text.DangerStrong" Color="#991B1B"/>
+
+    <!-- Surface -->
+    <SolidColorBrush x:Key="Color.Surface.Default" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Color.Surface.Subtle" Color="#F1F5F9"/>
+    <SolidColorBrush x:Key="Color.Surface.Muted" Color="#F0F7FF"/>
+    <SolidColorBrush x:Key="Color.Surface.Warning" Color="#FEF3C7"/>
+    <SolidColorBrush x:Key="Color.Surface.Danger" Color="#FEE2E2"/>
+    <SolidColorBrush x:Key="Color.Surface.Success" Color="#DCFCE7"/>
+    <SolidColorBrush x:Key="Color.Surface.Info" Color="#DBEAFE"/>
+    <SolidColorBrush x:Key="Color.Surface.Cool" Color="#EAF4FF"/>
+    <SolidColorBrush x:Key="Color.Surface.CoolAlt" Color="#E1EEFC"/>
+    <SolidColorBrush x:Key="Color.Surface.CoolSoft" Color="#F6FAFF"/>
+    <SolidColorBrush x:Key="Color.Surface.CoolLighter" Color="#F8FBFF"/>
+    <SolidColorBrush x:Key="Color.Surface.CoolLightest" Color="#F8FCFF"/>
+    <SolidColorBrush x:Key="Color.Surface.CoolMuted" Color="#F9FBFF"/>
+    <SolidColorBrush x:Key="Color.Surface.AppBackground" Color="#ECEEEA"/>
+    <SolidColorBrush x:Key="Color.Surface.PageNeutral" Color="#F5F6FA"/>
+    <SolidColorBrush x:Key="Color.Surface.WindowNeutral" Color="#F5F7FA"/>
+    <SolidColorBrush x:Key="Color.Surface.PaleBlue" Color="#E5EEF8"/>
+
+    <!-- Border -->
+    <SolidColorBrush x:Key="Color.Border.Default" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="Color.Border.Strong" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="Color.Border.Subtle" Color="#EFF6FF"/>
+    <SolidColorBrush x:Key="Color.Border.Brand" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="Color.Border.BrandSoft" Color="#DBEEFF"/>
+    <SolidColorBrush x:Key="Color.Border.BrandSubtle" Color="#E8F3FF"/>
+    <SolidColorBrush x:Key="Color.Border.Warning" Color="#FDE68A"/>
+    <SolidColorBrush x:Key="Color.Border.Danger" Color="#FECACA"/>
+    <SolidColorBrush x:Key="Color.Border.DangerSoft" Color="#F5C1C1"/>
+    <SolidColorBrush x:Key="Color.Border.Success" Color="#BBF7D0"/>
+    <SolidColorBrush x:Key="Color.Border.Info" Color="#BFDBFE"/>
+    <SolidColorBrush x:Key="Color.Border.Selection" Color="#B8D8F5"/>
+    <SolidColorBrush x:Key="Color.Border.AlertSoft" Color="#E3C4B7"/>
+    <SolidColorBrush x:Key="Color.Border.DeepShadow" Color="#0F2A4A" Opacity="0.30"/>
+
+    <!-- Success -->
+    <SolidColorBrush x:Key="Color.Success.Default" Color="#16A34A"/>
+    <SolidColorBrush x:Key="Color.Success.Dark" Color="#15803D"/>
+    <SolidColorBrush x:Key="Color.Success.Alt" Color="#10B981"/>
+    <SolidColorBrush x:Key="Color.Success.Bright" Color="#059669"/>
+    <SolidColorBrush x:Key="Color.Success.Light" Color="#DCFCE7"/>
+    <SolidColorBrush x:Key="Color.Success.Border" Color="#BBF7D0"/>
+    <SolidColorBrush x:Key="Color.Success.Surface" Color="#E8F5E9"/>
+    <SolidColorBrush x:Key="Color.Success.Fill" Color="#4CAF50"/>
+    <SolidColorBrush x:Key="Color.Success.Mid" Color="#22C55E"/>
+    <SolidColorBrush x:Key="Color.Success.Deep" Color="#2E7D32"/>
+    <SolidColorBrush x:Key="Color.Success.Muted" Color="#3F7551"/>
+    <SolidColorBrush x:Key="Color.Success.Tone" Color="#129534"/>
+    <SolidColorBrush x:Key="Color.Success.Teal" Color="#128272"/>
+    <SolidColorBrush x:Key="Color.Success.TealDark" Color="#128274"/>
+    <SolidColorBrush x:Key="Color.Success.Emphasis" Color="#059669"/>
+    <SolidColorBrush x:Key="Color.Success.Pressed" Color="#0E6E2E"/>
+
+    <!-- Warning -->
+    <SolidColorBrush x:Key="Color.Warning.Default" Color="#D97706"/>
+    <SolidColorBrush x:Key="Color.Warning.Dark" Color="#B45309"/>
+    <SolidColorBrush x:Key="Color.Warning.Light" Color="#FEF3C7"/>
+    <SolidColorBrush x:Key="Color.Warning.Border" Color="#FDE68A"/>
+    <SolidColorBrush x:Key="Color.Warning.Surface" Color="#FFF3CD"/>
+    <SolidColorBrush x:Key="Color.Warning.Fill" Color="#FFC107"/>
+    <SolidColorBrush x:Key="Color.Warning.Orange" Color="#F97316"/>
+    <SolidColorBrush x:Key="Color.Warning.OrangeDark" Color="#EA580C"/>
+    <SolidColorBrush x:Key="Color.Warning.Emphasis" Color="#F59E0B"/>
+
+    <!-- Danger / error -->
+    <SolidColorBrush x:Key="Color.Danger.Default" Color="#DC2626"/>
+    <SolidColorBrush x:Key="Color.Danger.Dark" Color="#B91C1C"/>
+    <SolidColorBrush x:Key="Color.Danger.Pressed" Color="#8F1616"/>
+    <SolidColorBrush x:Key="Color.Danger.Light" Color="#FEE2E2"/>
+    <SolidColorBrush x:Key="Color.Danger.Border" Color="#FECACA"/>
+    <SolidColorBrush x:Key="Color.Danger.Surface" Color="#FCE8E8"/>
+    <SolidColorBrush x:Key="Color.Danger.ErrorSurface" Color="#FFF0F0"/>
+    <SolidColorBrush x:Key="Color.Danger.ErrorBorder" Color="#F5C1C1"/>
+    <SolidColorBrush x:Key="Color.Danger.ErrorText" Color="#A32D2D"/>
+    <SolidColorBrush x:Key="Color.Danger.TextStrong" Color="#991B1B"/>
+    <SolidColorBrush x:Key="Color.Danger.Emphasis" Color="#EF4444"/>
+
+    <!-- Info -->
+    <SolidColorBrush x:Key="Color.Info.Default" Color="#2563EB"/>
+    <SolidColorBrush x:Key="Color.Info.Dark" Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="Color.Info.Light" Color="#DBEAFE"/>
+    <SolidColorBrush x:Key="Color.Info.Border" Color="#BFDBFE"/>
+    <SolidColorBrush x:Key="Color.Info.Surface" Color="#DBEAFE"/>
+    <SolidColorBrush x:Key="Color.Info.Pressed" Color="#1641B4"/>
+
+    <!-- Neutral / utility -->
+    <SolidColorBrush x:Key="Color.Neutral.Shadow" Color="#0F2A4A"/>
+    <SolidColorBrush x:Key="Color.Neutral.Black" Color="#000000"/>
+    <SolidColorBrush x:Key="Color.Neutral.Surface" Color="#F1F5F9"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceAlt" Color="#F5F6FA"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceAlt2" Color="#F5F7FA"/>
+    <SolidColorBrush x:Key="Color.Neutral.BorderSoft" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="Color.Neutral.BorderStrong" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceMuted" Color="#ECEEEA"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceCool" Color="#F6FAFF"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceCoolAlt" Color="#F8FBFF"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceCoolLight" Color="#F8FCFF"/>
+    <SolidColorBrush x:Key="Color.Neutral.SurfaceCoolMuted" Color="#F9FBFF"/>
+    <SolidColorBrush x:Key="Color.Neutral.Tint" Color="#E2ECF7"/>
+    <SolidColorBrush x:Key="Color.Neutral.TintSoft" Color="#C5E2FA"/>
+    <SolidColorBrush x:Key="Color.Neutral.TintBrand" Color="#C4DDF5"/>
+    <SolidColorBrush x:Key="Color.Neutral.TintBrandSoft" Color="#E1EEFC"/>
+    <SolidColorBrush x:Key="Color.Neutral.TintBrandLight" Color="#DBEEFF"/>
+    <SolidColorBrush x:Key="Color.Neutral.Warm" Color="#F5E4DF"/>
+    <SolidColorBrush x:Key="Color.Neutral.WarmBorder" Color="#E3C4B7"/>
+    <SolidColorBrush x:Key="Color.Neutral.WarmSoft" Color="#FDE8E4"/>
+    <SolidColorBrush x:Key="Color.Neutral.WarmLight" Color="#FFF3CD"/>
+    <SolidColorBrush x:Key="Color.Neutral.WarmBorderStrong" Color="#FFC107"/>
+    <SolidColorBrush x:Key="Color.Neutral.ShadowDeep" Color="#1A3F6B"/>
+    <SolidColorBrush x:Key="Color.Neutral.ShadowSoft" Color="#0F2A4A" Opacity="0.30"/>
+    <SolidColorBrush x:Key="Color.Neutral.SidebarTop" Color="#0F2A4A"/>
+    <SolidColorBrush x:Key="Color.Neutral.SidebarBottom" Color="#1A3F6B"/>
+
+    <!-- Navigation / sidebar overlays -->
+    <SolidColorBrush x:Key="Color.Nav.IdleForeground" Color="#FFFFFF" Opacity="0.60"/>
+    <SolidColorBrush x:Key="Color.Nav.HoverBackground" Color="#FFFFFF" Opacity="0.07"/>
+    <SolidColorBrush x:Key="Color.Nav.ActiveBackground" Color="#2589E0" Opacity="0.25"/>
+
+</ResourceDictionary>

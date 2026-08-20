@@ -1,0 +1,244 @@
+# ==========================================================
+# Node / package manager artifacts
+# ==========================================================
+
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+graphify-out/
+
+**/graphify-out/
+.npm/
+.DS_Store
+coverage/
+coverage-final.json
+build/
+dist/
+.next/
+out/
+.cache/
+.expo/
+web-build/
+.metro-health-check*
+
+# ==========================================================
+# IDEs
+# ==========================================================
+
+# Visual Studio
+.vs/
+*.code-workspace
+*.sln.docstates
+*.sln.ide
+*.suo
+*.user
+*.userosscache
+*.userprefs
+*.rsuser
+*.cache
+
+.mimocode/*
+
+# docs
+
+
+mobile-standalone/*
+
+
+# Rider
+.idea/
+*.sln.iml
+
+# AI / Editor Tools
+.codex/*
+.cline/*
+.cursor/*
+.zcode/*
+AGENT.md
+
+*wpftmp*
+
+# ==========================================================
+# Build Output
+# ==========================================================
+
+
+Mobile\node_modules\*
+bin/
+obj/
+
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+bld/
+artifacts/
+[Ll]og/
+
+# ==========================================================
+# Build Artifacts
+# ==========================================================
+
+*.dll
+*.exe
+*.pdb
+*.ipdb
+*.pidb
+*.iobj
+*.obj
+*.ilk
+*.pch
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.meta
+
+# ==========================================================
+# Logs & Diagnostics
+# ==========================================================
+
+*.log
+*.tlog
+*.svclog
+*.psess
+*.sap
+*.gpState
+*.VisualState.xml
+
+BenchmarkDotNet.Artifacts/
+
+# ==========================================================
+# NuGet
+# ==========================================================
+
+packages/
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+
+project.lock.json
+project.fragment.lock.json
+
+# ==========================================================
+# Test Results
+# ==========================================================
+
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# ==========================================================
+# Source Control Metadata
+# ==========================================================
+
+*.vspscc
+*.vssscc
+*.scc
+$tf/
+
+# ==========================================================
+# WPF / Visual Studio
+# ==========================================================
+
+*.dbmdl
+*.dbproj.schemaview
+.builds
+
+# ==========================================================
+# SQL Server
+# ==========================================================
+
+*.mdf
+*.ldf
+*.ndf
+
+# ==========================================================
+# Security
+# ==========================================================
+
+*.pfx
+*.publishsettings
+
+# ==========================================================
+# Extensions & Packages
+# ==========================================================
+
+*.vsix
+*.vsixmanifest
+*.appx
+*.appxbundle
+*.appxupload
+
+# ==========================================================
+# Microsoft Fakes
+# ==========================================================
+
+FakesAssemblies/
+
+# ==========================================================
+# StyleCop
+# ==========================================================
+
+StyleCopReport.xml
+
+# ==========================================================
+# Native / Generated Files
+# ==========================================================
+
+*_i.c
+*_p.c
+*_h.h
+
+# ==========================================================
+# Mono
+# ==========================================================
+
+mono_crash.*
+
+# ==========================================================
+# Misc
+# ==========================================================
+
+*.vsp
+*.vspx
+*.v11.suo
+*.ncrunch*
+zip-manager-views.ps1
+.mimocode/.cron-lock
+queries.py
+LOCALIZATION_STATUS.md
+POS.Api/appsettings.json
+
+.vscode/*
+
+prompts/*
+Mobile/RUN-ANDROID.md
+start-dev.ps1
+start-dev copy.ps1
+WPF/installer/PointOfSale.iss
+tools/tunnel.log.err
+docs/Phase4planimplementation.md
+Find-HardcodedXamlVisuals.ps1
+Find-DuplicateTokenKeys.ps1
+WPF_RESOURCE_COMPATIBILITY_CLEANUP_PLAN.md
+.graphify_semantic.json
+.graphify_python
+.graphify_extract.json
+.graphify_detect.json
+.graphify_ast.json
+.graphify_analysis.json
+.graphify_labels.json

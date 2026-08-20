@@ -1,0 +1,24 @@
+using BLL.DTOs;
+using BLL.Models;
+
+namespace BLL.Interfaces
+{
+    public interface ICategoryService
+    {
+        Task<Result<List<CategoryDto>>> GetAllCategoriesAsync();
+
+        Task<Result<List<CategoryDto>>> GetAllCategoriesWithChildrenAsync();
+
+        Task<Result<List<CategoryDto>>> GetAllCategoriesWithChildrenAsync(string languageCode);
+
+        Task<Result<List<CategoryDto>>> GetChildCategoriesAsync(int parentCategoryId);
+
+        Task<CategoryDto?> GetCategoryByIdAsync(int id);
+
+        Task<Result<bool>> AddCategoryAsync(CategoryDto category);
+
+        Task<Result<bool>> UpdateCategoryAsync(CategoryDto category);
+
+        Task DeleteCategoryAsync(int id);
+    }
+}

@@ -1,0 +1,32 @@
+namespace POS.Contracts.Localization;
+
+public static class SupportedLanguages
+{
+    public static IReadOnlyList<LanguageDto> All { get; } =
+    [
+         new()
+        {
+            Code = LanguageCode.English,
+            DisplayName = "English",
+            FilePrefix = "en",
+            IsRightToLeft = false
+        },
+        new()
+        {
+            Code = LanguageCode.Arabic,
+            DisplayName = "العربية",
+            FilePrefix = "ar",
+            IsRightToLeft = true
+        },
+        new()
+        {
+            Code = LanguageCode.Malayalam,
+            DisplayName = "മലയാളം",
+            FilePrefix = "ml",
+            IsRightToLeft = false
+        }
+       
+    ];
+
+    public static LanguageDto Defaultlanguage => All[0]; // LanguageCode.English
+}

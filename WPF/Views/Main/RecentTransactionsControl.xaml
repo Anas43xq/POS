@@ -1,0 +1,109 @@
+<!--
+    ╔══════════════════════════════════════════════════════╗
+    ║   Recent Transactions list. Receipt/Payment/Date are   ║
+    ║   left-aligned like every other column in the app;     ║
+    ║   only Amount (currency) keeps the right-align         ║
+    ║   exception. Previously Date was right-aligned with    ║
+    ║   nothing else matching it — that's fixed here.        ║
+    ╚══════════════════════════════════════════════════════╝
+-->
+<UserControl x:Class="UI.Views.RecentTransactionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:UI.Controls"
+             mc:Ignorable="d" d:DesignHeight="360" d:DesignWidth="460">
+
+    <Border Style="{StaticResource CardBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource POS.Manager.HomeCardHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource POS.Manager.HomeCardTitle}">
+                        <Run Text="📃  "/>
+                        <Run Text="{DynamicResource Manager.Home.RecentTransactions}"/>
+                    </TextBlock>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource POS.Button.HeaderAction}"
+                            Content="{DynamicResource Manager.Home.ShowAll}"
+                            Command="{Binding ShowAllTransactionsCommand}"/>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="{StaticResource Spacing.3}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.4*"/>
+                    <ColumnDefinition Width="1.1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{DynamicResource Manager.Home.ColReceipt}" Style="{StaticResource BadgeText}"/>
+                <TextBlock Grid.Column="1" Text="{DynamicResource Manager.Home.ColAmount}"
+                           Style="{StaticResource BadgeText}"
+                           TextAlignment="Right"/>
+                <Border Grid.Column="2" Width="{StaticResource Size.Icon.Sm}"/>
+                <TextBlock Grid.Column="3" Text="{DynamicResource Manager.Home.ColPayment}" Style="{StaticResource BadgeText}"/>
+                <TextBlock Grid.Column="4" Text="{DynamicResource Manager.Home.ColDate}" Style="{StaticResource BadgeText}"/>
+            </Grid>
+             <Border Grid.Row="1" BorderBrush="{StaticResource Color.Border.Default}" BorderThickness="{StaticResource Thickness.BottomHairline}"
+                    Margin="{StaticResource Spacing.3}" VerticalAlignment="Top"/>
+
+            <ScrollViewer Grid.Row="2" Padding="{StaticResource Spacing.3}" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding RecentTransactions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ListRow}" Padding="{StaticResource Spacing.1}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2.4*"/>
+                                        <ColumnDefinition Width="1.1*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Content="{Binding ReceiptNumber}"
+                                            Style="{StaticResource POS.Button.Secondary}"
+                                            Command="{Binding DataContext.OpenReceiptCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            HorizontalAlignment="Stretch"/>
+
+                                    <controls:CurrencyText Grid.Column="1"
+                                                           Amount="{Binding GrandTotal}"
+                                                           ShowIcon="False"
+                                                           FontSize="{StaticResource Font.Size.Base}"
+                                                           HorizontalAlignment="Right"
+                                                           VerticalAlignment="Center"/>
+
+                                    <Border Grid.Column="2" Width="{StaticResource Size.Icon.Sm}"/>
+
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding PaymentMethod}"
+                                               Style="{StaticResource BadgeText}"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="4"
+                                               Text="{Binding TransactionDate, StringFormat='dd/MM HH:mm'}"
+                                               Style="{StaticResource BadgeText}"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>
