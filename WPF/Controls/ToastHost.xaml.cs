@@ -57,26 +57,35 @@ namespace UI.Controls
             try
             {
                 Clipboard.SetText(toast.Message);
+                TxpTrace.WriteLine($"[TOAST] ToastHost.OnCopyClick — copied message: {toast.Message}");
             }
-            catch
+            catch (Exception ex)
             {
                 // Clipboard access can transiently fail (locked by another
                 // process); not worth surfacing a second toast for this.
+                TxpTrace.WriteLine($"[TOAST] ToastHost.OnCopyClick — clipboard error: {ex.Message}");
+                e.Handled = true;
                 return;
             }
 
             // Brief visual feedback: swap the label to a checkmark, then
             // restore it after a short delay.
-            string original = button.Content?.ToString() ?? "Copy";
+            // Fetch the resolved resource value, not the binding expression type name.
+            string original = (FindResource("Common.Copy") as string) ?? "Copy";
             button.Content = "✓";
+            TxpTrace.WriteLine($"[TOAST] ToastHost.OnCopyClick — showing checkmark, will restore after 1.2s");
 
             var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.2) };
             timer.Tick += (_, _) =>
             {
                 timer.Stop();
                 button.Content = original;
+                TxpTrace.WriteLine($"[TOAST] ToastHost.OnCopyClick — restored button text to '{original}'");
             };
             timer.Start();
+
+            // Consume the click so it never falls through to underlying controls.
+            e.Handled = true;
         }
     }
 }

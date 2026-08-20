@@ -67,6 +67,20 @@ public class PaymentDialogViewModel : BaseViewModel
         }
     }
 
+    private string _errorMessage = string.Empty;
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        private set
+        {
+            _errorMessage = value ?? string.Empty;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
+
     public ICommand ConfirmPaymentCommand { get; }
     public ICommand CancelCommand { get; }
 
@@ -92,16 +106,25 @@ public class PaymentDialogViewModel : BaseViewModel
 
     private async Task ConfirmPaymentAsync()
     {
-        await RunAsync(
-            () =>
-            {
-                return _transactionService.CreateTransactionAsync(BuildCreateTransactionRequest());
-            },
-            async transactionId =>
-            {
-                PaymentCompleted?.Invoke(transactionId);
-                CloseDialog();
-            });
+        ErrorMessage = string.Empty;
+
+        if (CashReceived < PaymentTotal)
+        {
+            ErrorMessage = System.Windows.Application.Current.TryFindResource("Payment.Underpaid") as string
+                ?? "Cash received is less than the amount due.";
+            return;
+        }
+
+        var result = await _transactionService.CreateTransactionAsync(BuildCreateTransactionRequest());
+        if (result.IsSuccess)
+        {
+            PaymentCompleted?.Invoke(result.Value!);
+            CloseDialog();
+        }
+        else
+        {
+            ErrorMessage = result.Error ?? "Payment failed. Please try again.";
+        }
     }
 
     private void CancelPayment(object? obj)

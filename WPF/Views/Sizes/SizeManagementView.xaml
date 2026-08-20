@@ -92,16 +92,11 @@
                                Foreground="{StaticResource Color.Text.Default}"
                                Margin="{StaticResource Spacing.3}"/>
 
-                    <Border Background="{StaticResource Color.Danger.Light}"
-                            BorderBrush="{StaticResource Color.Danger.Border}"
-                            BorderThickness="1"
-                            CornerRadius="{StaticResource Radius.Md}"
-                            Padding="{StaticResource Spacing.2}"
-                            Margin="{StaticResource Spacing.3}"
+                    <Border Style="{StaticResource POS.Dialog.NoticeDanger}"
+                            Margin="{StaticResource Spacing.DialogErrorBannerMargin}"
                             Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="{Binding ErrorMessage}"
-                                   FontSize="{StaticResource Font.Size.Sm}"
-                                   Foreground="{StaticResource Color.Danger.Dark}"
+                                   Style="{StaticResource POS.Dialog.ErrorText}"
                                    TextWrapping="Wrap"/>
                     </Border>
 

@@ -25,7 +25,6 @@ namespace UI.ViewModels
 
         private readonly ObservableCollection<TransactionListItemDto> _transactions = new();
         private ICollectionView? _transactionsView;
-        private string _errorMessage = string.Empty;
         private int _currentPage = 1;
         private int _pageSize = 50;
         private int _totalCount;
@@ -89,22 +88,6 @@ namespace UI.ViewModels
             }
         }
 
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            private set
-            {
-                if (_errorMessage == value)
-                    return;
-
-                _errorMessage = value ?? string.Empty;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasError));
-            }
-        }
-
-        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
-
         private TransactionFilterMode _currentFilterMode;
         public TransactionFilterMode CurrentFilterMode
         {
@@ -145,7 +128,6 @@ namespace UI.ViewModels
 
                 _selectedStatusFilter = value;
 
-                ErrorMessage = string.Empty;
                 CurrentPage = 1;
                 _ = LoadTransactions();
             }

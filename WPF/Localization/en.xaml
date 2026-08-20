@@ -219,6 +219,8 @@
 
     <sys:String x:Key="Payment.Card.Confirm">Confirm</sys:String>
 
+    <sys:String x:Key="Payment.Underpaid">Cash received is less than the amount due. Please collect the full amount before confirming.</sys:String>
+
     <!-- ========================================================= -->
     <!-- Shift -->
     <!-- ========================================================= -->

@@ -25,7 +25,6 @@ namespace UI.ViewModels
 
         private readonly ObservableCollection<ShiftListItemDto> _shifts = new();
         private ICollectionView? _shiftsView;
-        private string _errorMessage = string.Empty;
         private int _currentPage = 1;
         private int _pageSize = 50;
         private int _totalCount;
@@ -85,23 +84,6 @@ namespace UI.ViewModels
             }
         }
 
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            private set
-            {
-                if (_errorMessage == value)
-                    return;
-
-                _errorMessage = value ?? string.Empty;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasError));
-            }
-        }
-
-        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
-
-
         private ShiftFilterMode _currentFilterMode;
         public ShiftFilterMode CurrentFilterMode
         {
@@ -134,7 +116,6 @@ namespace UI.ViewModels
                     return;
 
                 _selectedShiftStatusFilter = value;
-                ErrorMessage = string.Empty;
                 CurrentPage = 1;
                 _ = LoadShifts();
             }

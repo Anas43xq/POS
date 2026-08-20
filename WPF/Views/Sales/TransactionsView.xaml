@@ -168,12 +168,6 @@
                                 <Run Text="{DynamicResource Manager.Transactions.PagerSuffix}"/>
                             </TextBlock>
 
-                            <TextBlock Text="{Binding ErrorMessage}"
-                                       FontSize="{StaticResource Font.Size.Sm}"
-                                       Foreground="{StaticResource Color.Danger.Default}"
-                                       Margin="{StaticResource Spacing.1}"
-                                       TextWrapping="Wrap"
-                                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1"

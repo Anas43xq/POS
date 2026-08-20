@@ -13,6 +13,45 @@
 
     <UserControl.Resources>
         <conv:ToastTypeToBrushConverter x:Key="ToastTypeToBrushConverter"/>
+        
+        <!-- Toast button style with press feedback -->
+        <Style x:Key="ToastButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="4">
+                            <ContentPresenter x:Name="contentPresenter"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                <Setter Property="Foreground" Value="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"/>
+                            </Trigger>
+                            <!-- Press effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E0E0E0"/>
+                                <Setter Property="Foreground" Value="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <!-- Outer grid fills the window; toasts dock top-right via margin.
@@ -22,7 +61,7 @@
          Top margin (64) clears the 52px app header so the toast stack
          and its ✕ button never sit directly over the top-right Logout
          button beneath. -->
-    <Grid>
+    <Grid IsHitTestVisible="False">
         <ItemsControl ItemsSource="{Binding Toasts}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Top"
@@ -38,67 +77,69 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type services:ToastMessage}">
-                    <Border Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Light}"
-                            BorderBrush="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Border}"
-                            BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="12,10"
-                            Margin="0,0,0,8"
-                            HorizontalAlignment="Stretch"
-                            IsHitTestVisible="True">
-                        <Border.Effect>
+                    <!-- Outer wrapper carries the shadow so it doesn't sit
+                         on the same element as IsHitTestVisible=True children.
+                         WPF BitmapEffect/Effect on a Border can swallow mouse
+                         events for inner elements — keeping the shadow on a
+                         non-interactive wrapper avoids that. -->
+                    <Grid Margin="0,0,0,8" IsHitTestVisible="True">
+                        <Grid.Effect>
                             <DropShadowEffect Color="Black" Opacity="0.20" BlurRadius="14" ShadowDepth="3" Direction="270"/>
-                        </Border.Effect>
+                        </Grid.Effect>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                        <Border Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Light}"
+                                BorderBrush="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Border}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="12,10"
+                                HorizontalAlignment="Stretch"
+                                IsHitTestVisible="True">
 
-                            <!-- Color accent bar -->
-                            <Border Grid.Column="0"
-                                    Width="4"
-                                    Margin="0,0,10,0"
-                                    CornerRadius="2"
-                                    Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Accent}"
-                                    VerticalAlignment="Stretch"/>
+                            <Grid IsHitTestVisible="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding Message}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"
-                                       FontSize="13"
-                                       Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"/>
+                                <!-- Color accent bar -->
+                                <Border Grid.Column="0"
+                                        Width="4"
+                                        Margin="0,0,10,0"
+                                        CornerRadius="2"
+                                        Background="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Accent}"
+                                        VerticalAlignment="Stretch"
+                                        IsHitTestVisible="False"/>
 
-                            <StackPanel Grid.Column="2"
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Top"
-                                        Margin="8,0,0,0">
-                                <Button x:Name="CopyButton"
-                                        Content="{DynamicResource Common.Copy}"
-                                        Padding="6,2"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        FontSize="11"
-                                        Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"
-                                        Click="OnCopyClick"
-                                        Tag="{Binding}"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Message}"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"
+                                           IsHitTestVisible="False"/>
 
-                                <Button Content="✕"
-                                        Padding="4"
-                                        Margin="4,0,0,0"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        Foreground="{Binding Type, Converter={StaticResource ToastTypeToBrushConverter}, ConverterParameter=Dark}"
-                                        Click="OnDismissClick"
-                                        Tag="{Binding}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                                <StackPanel Grid.Column="2"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Top"
+                                            Margin="8,0,0,0"
+                                            IsHitTestVisible="True">
+                                    <Button Style="{StaticResource ToastButtonStyle}"
+                                            Content="{DynamicResource Common.Copy}"
+                                            IsHitTestVisible="True"
+                                            Click="OnCopyClick"
+                                            Tag="{Binding}"/>
+
+                                    <Button Style="{StaticResource ToastButtonStyle}"
+                                            Content="✕"
+                                            Margin="4,0,0,0"
+                                            IsHitTestVisible="True"
+                                            Click="OnDismissClick"
+                                            Tag="{Binding}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

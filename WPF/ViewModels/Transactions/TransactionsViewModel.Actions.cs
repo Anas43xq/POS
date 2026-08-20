@@ -18,19 +18,18 @@ namespace UI.ViewModels
             try
             {
                 IsBusy = true;
-                ErrorMessage = string.Empty;
 
                 if (CurrentFilterMode == TransactionFilterMode.Period)
                 {
                     if (!FromDate.HasValue)
                     {
-                        ErrorMessage = "From date is required for a custom period.";
+                        _notifications.ShowError("From date is required for a custom period.");
                         return;
                     }
 
                     if (ToDate.HasValue && ToDate.Value < FromDate.Value)
                     {
-                        ErrorMessage = "To date cannot be earlier than From date.";
+                        _notifications.ShowError("To date cannot be earlier than From date.");
                         return;
                     }
                 }
@@ -73,7 +72,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                _notifications.ShowError(ex.Message);
             }
             finally
             {
@@ -131,11 +130,10 @@ namespace UI.ViewModels
         {
             if (!FromDate.HasValue)
             {
-                ErrorMessage = "From date is required for a custom period.";
+                _notifications.ShowError("From date is required for a custom period.");
                 return;
             }
 
-            ErrorMessage = string.Empty;
             CurrentFilterMode = TransactionFilterMode.Period;
             IsPeriodFilterVisible = true;
             CurrentPage = 1;
@@ -221,7 +219,6 @@ namespace UI.ViewModels
             try
             {
                 IsBusy = true;
-                ErrorMessage = string.Empty;
 
                 var result = await _transactionService.VoidTransactionAsync(
                     transaction.TransactionId,
@@ -231,8 +228,8 @@ namespace UI.ViewModels
 
                 if (!result.IsSuccess)
                 {
-                    ErrorMessage = result.Error
-                        ?? _localizationService.GetString("Transactions.VoidFailed");
+                    _notifications.ShowError(result.Error
+                        ?? _localizationService.GetString("Transactions.VoidFailed"));
                 }
                 else
                 {
@@ -243,7 +240,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                _notifications.ShowError(ex.Message);
             }
             finally
             {

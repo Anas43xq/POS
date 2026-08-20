@@ -25,7 +25,6 @@ namespace UI.ViewModels
         private readonly ITopProductService _topProductService;
         private readonly ITransactionService _transactionService;
         private readonly IReceiptDisplayService _receiptDisplayService;
-        private string _errorMessage = string.Empty;
         private bool _isInitialLoadBusy;
         private bool _hasLoadedOnce;
         public event Action? ViewAllShiftsRequested;
@@ -62,19 +61,6 @@ namespace UI.ViewModels
 
             CurrentFilterMode = DashboardFilterMode.Today;
         }
-
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            private set
-            {
-                _errorMessage = value ?? string.Empty;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasError));
-            }
-        }
-
-        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
         private bool _isBusy;
         public bool IsBusy
