@@ -14,15 +14,21 @@ namespace BLL.Services
         private readonly ICategoryRepository _categoryrepo;
         private readonly ICategoryTranslationService _categoryTranslationService;
         private readonly ILogger<CategoryService> _logger;
+        private readonly IAuditLogService _auditLogService;
+        private readonly ISessionService _sessionService;
 
         public CategoryService(
             ICategoryRepository CategoryRepo,
             ICategoryTranslationService categoryTranslationService,
-            ILogger<CategoryService> logger)
+            ILogger<CategoryService> logger,
+            IAuditLogService auditLogService,
+            ISessionService sessionService)
         {
             _categoryrepo = CategoryRepo;
             _categoryTranslationService = categoryTranslationService;
             _logger = logger;
+            _auditLogService = auditLogService;
+            _sessionService = sessionService;
         }
 
         public async Task<Result<List<CategoryDto>>> GetAllCategoriesAsync()
@@ -103,7 +109,10 @@ namespace BLL.Services
 
             try
             {
-                await _categoryrepo.AddAsync(MapToEntity(category));
+                var entity = MapToEntity(category);
+                await _categoryrepo.AddAsync(entity);
+                await _auditLogService.LogAsync("Create", "Category", entity.CategoryId, _sessionService.CurrentUser?.UserId,
+                    oldValue: null, newValue: MapToDto(entity));
                 return Result<bool>.Success(true);
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
@@ -125,7 +134,10 @@ namespace BLL.Services
 
             try
             {
+                var before = await _categoryrepo.GetByIdAsync(category.CategoryId);
                 await _categoryrepo.UpdateAsync(MapToEntity(category));
+                await _auditLogService.LogAsync("Update", "Category", category.CategoryId, _sessionService.CurrentUser?.UserId,
+                    oldValue: before is null ? null : MapToDto(before), newValue: category);
                 return Result<bool>.Success(true);
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
@@ -140,8 +152,13 @@ namespace BLL.Services
             }
         }
 
-        public async Task DeleteCategoryAsync(int id) =>
+        public async Task DeleteCategoryAsync(int id)
+        {
+            var before = await _categoryrepo.GetByIdAsync(id);
             await _categoryrepo.DeleteAsync(id);
+            await _auditLogService.LogAsync("Delete", "Category", id, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: null);
+        }
 
         /// <summary>
         /// Translates SQL Server errors that can surface from Category

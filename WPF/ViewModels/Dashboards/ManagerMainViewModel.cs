@@ -185,7 +185,7 @@ namespace UI.ViewModels
             ShowSetting = new AsyncRelayCommand(OpenSetting, onError: ex =>
             {
                 _logger.LogError(ex, "Failed to open Settings dialog");
-                _notifications.ShowError("Unable to open Settings. Please try again.");
+                _notifications.ShowError(_localizationService.GetString("Common.UnableToOpenSettings"));
             });
 
             _receiptManagementViewModel.NavigateToFormRequested += OnReceiptNavigateToForm;

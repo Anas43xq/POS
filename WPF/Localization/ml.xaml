@@ -866,6 +866,7 @@
     <!-- Settings                                                  -->
     <!-- ========================================================= -->
     <sys:String x:Key="Settings.KeyboardShortcutsNotAvailable">കീബോർഡ് കുറുക്കുവഴി കോൺഫിഗറേഷൻ ഇതുവരെ ലഭ്യമല്ല. ഈ സവിശേഷത ഭാവി അപ്ഡേറ്റിൽ പുനർരൂപകൽപ്പന ചെയ്യും.</sys:String>
+    <sys:String x:Key="Settings.PinUpdated">ഓവർറൈഡ് PIN വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു.</sys:String>
     <sys:String x:Key="Settings.TestReceiptSaved" xml:space="preserve">ടെസ്റ്റ് രസീത് ഇവിടെ സംരക്ഷിച്ചു:
 {0}</sys:String>
     <sys:String x:Key="Settings.PdfSaveFailed" xml:space="preserve">PDF സംരക്ഷിക്കാൻ കഴിഞ്ഞില്ല.

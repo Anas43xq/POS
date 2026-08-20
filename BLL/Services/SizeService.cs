@@ -13,11 +13,15 @@ public class SizeService : ISizeService
 {
     private readonly ISizeRepository _repo;
     private readonly ILogger<SizeService> _logger;
+    private readonly IAuditLogService _auditLogService;
+    private readonly ISessionService _sessionService;
 
-    public SizeService(ISizeRepository repo, ILogger<SizeService> logger)
+    public SizeService(ISizeRepository repo, ILogger<SizeService> logger, IAuditLogService auditLogService, ISessionService sessionService)
     {
         _repo = repo;
         _logger = logger;
+        _auditLogService = auditLogService;
+        _sessionService = sessionService;
     }
 
     public async Task<Result<List<SizeDto>>> GetAllSizesAsync()
@@ -49,6 +53,8 @@ public class SizeService : ISizeService
                 UpdatedAt = DateTime.UtcNow
             };
             await _repo.AddAsync(entity);
+            await _auditLogService.LogAsync("Create", "Size", entity.SizeId, _sessionService.CurrentUser?.UserId,
+                oldValue: null, newValue: MapToDto(entity));
             return Result<bool>.Success(true);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
@@ -74,11 +80,15 @@ public class SizeService : ISizeService
             if (existing is null)
                 return Result<bool>.Failure($"Size {size.SizeId} not found.");
 
+            var before = MapToDto(existing);
+
             existing.Name = size.Name;
             existing.DisplayOrder = size.DisplayOrder;
             existing.IsActive = size.IsActive;
             existing.UpdatedAt = DateTime.UtcNow;
             await _repo.UpdateAsync(existing);
+            await _auditLogService.LogAsync("Update", "Size", existing.SizeId, _sessionService.CurrentUser?.UserId,
+                oldValue: before, newValue: MapToDto(existing));
             return Result<bool>.Success(true);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
@@ -97,7 +107,10 @@ public class SizeService : ISizeService
     {
         try
         {
+            var before = await _repo.GetByIdAsync(id);
             await _repo.DeleteAsync(id);
+            await _auditLogService.LogAsync("Delete", "Size", id, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: null);
             return Result<bool>.Success(true);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)

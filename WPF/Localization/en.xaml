@@ -870,6 +870,7 @@
     <!-- Settings                                                  -->
     <!-- ========================================================= -->
     <sys:String x:Key="Settings.KeyboardShortcutsNotAvailable">Keyboard shortcut configuration is not available yet. This feature will be redesigned in a future update.</sys:String>
+    <sys:String x:Key="Settings.PinUpdated">Override PIN updated successfully.</sys:String>
     <sys:String x:Key="Settings.TestReceiptSaved" xml:space="preserve">Test receipt saved to:
 {0}</sys:String>
     <sys:String x:Key="Settings.PdfSaveFailed" xml:space="preserve">Could not save the PDF.

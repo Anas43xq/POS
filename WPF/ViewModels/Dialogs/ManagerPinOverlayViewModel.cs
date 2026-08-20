@@ -167,7 +167,7 @@ namespace UI.ViewModels
                 if (!await _pinService.HasPinAsync(userId.Value))
                 {
                     _notifications.ShowWarning(
-                        "No override PIN is set. Open Settings and set up a PIN first.");
+                        _localizationService.GetString("ManagerPin.ErrorNoPin"));
                     _tcs.TrySetResult(false);
                     _reasonTcs.TrySetResult(null);
                     CloseRequested?.Invoke();

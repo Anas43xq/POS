@@ -12,15 +12,21 @@ namespace BLL.Services
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITransactionCommandRepository _transactionCommandRepository;
         private readonly IShiftRepository _shiftRepository;
+        private readonly IAuditLogService _auditLogService;
+        private readonly ISessionService _sessionService;
 
         public TransactionService(
             ITransactionRepository transactionRepository,
             ITransactionCommandRepository transactionCommandRepository,
-            IShiftRepository shiftRepository)
+            IShiftRepository shiftRepository,
+            IAuditLogService auditLogService,
+            ISessionService sessionService)
         {
             _transactionRepository = transactionRepository;
             _transactionCommandRepository = transactionCommandRepository;
             _shiftRepository = shiftRepository;
+            _auditLogService = auditLogService;
+            _sessionService = sessionService;
         }
 
         public async Task<PagedResult<TransactionListItemDto>> GetTransactionsListAsync(
@@ -63,12 +69,18 @@ namespace BLL.Services
 
         public async Task UpdateTransactionAsync(TransactionDto transaction)
         {
+            var before = await _transactionRepository.GetByIdAsync(transaction.TransactionId);
             await _transactionRepository.UpdateAsync(MapToEntity(transaction));
+            await _auditLogService.LogAsync("Update", "Transaction", transaction.TransactionId, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: transaction);
         }
 
         public async Task DeleteTransactionAsync(int id)
         {
+            var before = await _transactionRepository.GetByIdAsync(id);
             await _transactionRepository.DeleteAsync(id);
+            await _auditLogService.LogAsync("Delete", "Transaction", id, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: null);
         }
 
         public async Task<Result<TransactionDto>> VoidTransactionAsync(int transactionId, string? voidReason)
@@ -79,6 +91,8 @@ namespace BLL.Services
             var normalizedReason = string.IsNullOrWhiteSpace(voidReason)
                 ? null
                 : voidReason.Trim();
+
+            var before = await _transactionRepository.GetByIdAsync(transactionId);
 
             bool updated = await _transactionRepository.VoidTransactionAsync(transactionId, normalizedReason);
             if (!updated)
@@ -92,7 +106,12 @@ namespace BLL.Services
             }
 
             var voided = await _transactionRepository.GetByIdAsync(transactionId);
-            return Result<TransactionDto>.Success(MapToDto(voided!));
+            var voidedDto = MapToDto(voided!);
+
+            await _auditLogService.LogAsync("Void", "Transaction", transactionId, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: voidedDto);
+
+            return Result<TransactionDto>.Success(voidedDto);
         }
 
         public async Task<Result<int>> CreateTransactionAsync(CreateTransactionRequest request)
@@ -106,7 +125,10 @@ namespace BLL.Services
             try
             {
                 int transactionId = await _transactionCommandRepository.CreateTransactionAsync(request);
-              
+
+                await _auditLogService.LogAsync("Create", "Transaction", transactionId, _sessionService.CurrentUser?.UserId,
+                    oldValue: null, newValue: request);
+
                 return Result<int>.Success(transactionId);
             }
             catch (Exception ex)

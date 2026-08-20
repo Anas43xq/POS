@@ -856,6 +856,7 @@
     <!-- Settings                                                  -->
     <!-- ========================================================= -->
     <sys:String x:Key="Settings.KeyboardShortcutsNotAvailable">تخصيص اختصارات لوحة المفاتيح غير متاح بعد. سيتم إعادة تصميم هذه الميزة في تحديث مستقبلي.</sys:String>
+    <sys:String x:Key="Settings.PinUpdated">تم تحديث رمز PIN للتجاوز بنجاح.</sys:String>
     <sys:String x:Key="Settings.TestReceiptSaved" xml:space="preserve">تم حفظ إيصال الاختبار في:
 {0}</sys:String>
     <sys:String x:Key="Settings.PdfSaveFailed" xml:space="preserve">تعذر حفظ ملف PDF.

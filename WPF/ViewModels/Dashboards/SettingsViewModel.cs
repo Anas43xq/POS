@@ -281,7 +281,7 @@ public class SettingsViewModel : BaseViewModel
             _pinEntry = string.Empty;
             _pinConfirmEntry = string.Empty;
             PinResetRequested?.Invoke();
-            _notifications.ShowSuccess("Override PIN updated successfully.");
+            _notifications.ShowSuccess(_localizationService.GetString("Settings.PinUpdated"));
         }
         catch (Exception ex)
         {
@@ -387,7 +387,7 @@ public class SettingsViewModel : BaseViewModel
                 ex,
                 "Failed to print receipt {ReceiptNumber}",
                 receipt?.ReceiptNumber);
-            _notifications.ShowError("Printing failed. Please check the printer and try again.");
+            _notifications.ShowError(_localizationService.GetString("Receipt.PrintingFailed"));
         }
     }
 
@@ -438,11 +438,12 @@ public class SettingsViewModel : BaseViewModel
                 receipt.ReceiptNumber,
                 filePath);
 
-            _notifications.ShowSuccess($"Test receipt saved to:\n{filePath}");        }
+            _notifications.ShowSuccess(_localizationService.GetString("Settings.TestReceiptSaved", filePath));
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to save test receipt as PDF");
-            _notifications.ShowError($"Could not save the PDF.\n\n{ex.Message}");
+            _notifications.ShowError(_localizationService.GetString("Settings.PdfSaveFailed", ex.Message));
         }
     }
 

@@ -8,10 +8,14 @@ namespace BLL.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepo;
+        private readonly IAuditLogService _auditLogService;
+        private readonly ISessionService _sessionService;
 
-        public UserService(IUserRepository userRepo)
+        public UserService(IUserRepository userRepo, IAuditLogService auditLogService, ISessionService sessionService)
         {
             _userRepo = userRepo;
+            _auditLogService = auditLogService;
+            _sessionService = sessionService;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
@@ -26,14 +30,29 @@ namespace BLL.Services
             return entity is null ? null : MapToDto(entity);
         }
 
-        public async Task AddUserAsync(UserDto user) =>
-            await _userRepo.AddAsync(MapToEntity(user));
+        public async Task AddUserAsync(UserDto user)
+        {
+            var entity = MapToEntity(user);
+            await _userRepo.AddAsync(entity);
+            await _auditLogService.LogAsync("Create", "User", entity.UserId, _sessionService.CurrentUser?.UserId,
+                oldValue: null, newValue: MapToDto(entity));
+        }
 
-        public async Task UpdateUserAsync(UserDto user) =>
+        public async Task UpdateUserAsync(UserDto user)
+        {
+            var before = await _userRepo.GetByIdAsync(user.UserId);
             await _userRepo.UpdateAsync(MapToEntity(user));
+            await _auditLogService.LogAsync("Update", "User", user.UserId, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: user);
+        }
 
-        public async Task DeleteUserAsync(int id) =>
+        public async Task DeleteUserAsync(int id)
+        {
+            var before = await _userRepo.GetByIdAsync(id);
             await _userRepo.DeleteAsync(id);
+            await _auditLogService.LogAsync("Delete", "User", id, _sessionService.CurrentUser?.UserId,
+                oldValue: before is null ? null : MapToDto(before), newValue: null);
+        }
 
         public async Task<bool?> IsActiveUser(int id) =>
             await _userRepo.IsActiveUser(id);

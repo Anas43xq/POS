@@ -190,6 +190,9 @@ GO
 :r .\DAL\db\StoredProcedures\dbo.SP_GetShiftDetail.StoredProcedure.sql
 GO
 
+:r .\DAL\db\StoredProcedures\dbo.SP_GetAuditLogs.StoredProcedure.sql
+GO
+
 /* -------------------------------------------------
    6. SEED DATA
    seed.sql aggregates all reference + transactional

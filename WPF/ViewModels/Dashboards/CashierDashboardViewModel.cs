@@ -336,7 +336,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ShowSetting = new AsyncRelayCommand(OpenSetting, onError: ex =>
         {
             _logger.LogError(ex, "Failed to open Settings dialog");
-            _notifications.ShowError("Unable to open Settings. Please try again.");
+            _notifications.ShowError(_localization.GetString("Common.UnableToOpenSettings"));
         });
 
         SelectCategoryCommand = new AsyncRelayCommand<CategoryDto>(SelectParentCategoryAsync);

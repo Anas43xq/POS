@@ -15,6 +15,8 @@ namespace BLL.Services
         private readonly ISizeTranslationService _sizeTranslationService;
         private readonly IProductModifierGroupRepository _productModifierGroupRepo;
         private readonly ICategoryModifierGroupRepository _categoryModifierGroupRepo;
+        private readonly IAuditLogService _auditLogService;
+        private readonly ISessionService _sessionService;
 
         public ProductService(
             IProductRepository ProductRepo,
@@ -22,7 +24,9 @@ namespace BLL.Services
             IProductTranslationService productTranslationService,
             ISizeTranslationService sizeTranslationService,
             IProductModifierGroupRepository productModifierGroupRepo,
-            ICategoryModifierGroupRepository categoryModifierGroupRepo)
+            ICategoryModifierGroupRepository categoryModifierGroupRepo,
+            IAuditLogService auditLogService,
+            ISessionService sessionService)
         {
             _productrepo = ProductRepo;
             _productVariantRepo = productVariantRepo;
@@ -30,6 +34,8 @@ namespace BLL.Services
             _sizeTranslationService = sizeTranslationService;
             _productModifierGroupRepo = productModifierGroupRepo;
             _categoryModifierGroupRepo = categoryModifierGroupRepo;
+            _auditLogService = auditLogService;
+            _sessionService = sessionService;
         }
 
         public async Task<Result<List<ProductSummaryDto>>> GetAllProductsAsync()
@@ -304,18 +310,32 @@ namespace BLL.Services
                     IsActive = variant.IsActive
                 });
             }
+
+            await _auditLogService.LogAsync("Create", "Product", entity.ProductId, _sessionService.CurrentUser?.UserId,
+                oldValue: null, newValue: product);
         }
 
         public async Task<List<string>> UpdateProductAsync(ProductWriteDto product)
         {
             ValidateVariants(product.Variants);
 
+            var before = await GetProductByIdAsync(product.ProductId);
             await _productrepo.UpdateAsync(MapToEntity(product));
-            return await ReconcileVariantsAsync(product.ProductId, product.Variants);
+            var deactivated = await ReconcileVariantsAsync(product.ProductId, product.Variants);
+
+            await _auditLogService.LogAsync("Update", "Product", product.ProductId, _sessionService.CurrentUser?.UserId,
+                oldValue: before, newValue: product);
+
+            return deactivated;
         }
 
-        public async Task DeleteProductAsync(int id) =>
+        public async Task DeleteProductAsync(int id)
+        {
+            var before = await GetProductByIdAsync(id);
             await _productrepo.DeleteAsync(id);
+            await _auditLogService.LogAsync("Delete", "Product", id, _sessionService.CurrentUser?.UserId,
+                oldValue: before, newValue: null);
+        }
 
         private static void ValidateVariants(List<ProductVariantWriteDto> variants)
         {

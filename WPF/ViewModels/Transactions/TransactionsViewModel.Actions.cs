@@ -234,7 +234,7 @@ namespace UI.ViewModels
 
                 var receiptNumber = result.Value?.ReceiptNumber ?? transaction.ReceiptNumber;
                 _notifications.ShowSuccess(
-                    $"Transaction {receiptNumber} voided successfully.");
+                    _localizationService.GetString("Transactions.VoidSuccess", receiptNumber));
 
                 await RefreshAsync();
             }
