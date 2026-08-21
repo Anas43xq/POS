@@ -145,14 +145,14 @@ namespace UI.Behaviors
                 {
                     new("CashPayment",        s.Cashier.CashPayment,        "PayCashCommand"),
                     new("CardPayment",        s.Cashier.CardPayment,        "PayCardCommand"),
-                    new("CompleteSale",       s.Cashier.CompleteSale,       "CompleteSaleCommand"),
+                    new("ShowRecentSales",    s.Cashier.ShowRecentSales,    "ShowRecentSalesCommand"),
+                    new("ReprintLastReceipt", s.Cashier.ReprintLastReceipt, "ReprintLastReceiptCommand"),
+                    new("ToggleShift",        s.Cashier.ToggleShift,        "ToggleShiftCommand"),
                     new("NewSale",            s.Cashier.NewSale,            "ClearSaleCommand"),
+                    new("FocusSearch",        s.Cashier.FocusSearch,        "FocusSearchCommand"),
                     new("RemoveItem",         s.Cashier.RemoveItem,         "RemoveSelectedSaleItemCommand"),
                     new("IncreaseQuantity",   s.Cashier.IncreaseQuantity,   "IncreaseSelectedQuantityCommand"),
                     new("DecreaseQuantity",   s.Cashier.DecreaseQuantity,   "DecreaseSelectedQuantityCommand"),
-                    new("FocusSearch",        s.Cashier.FocusSearch,        "FocusSearchCommand"),
-                    new("ToggleShift",        s.Cashier.ToggleShift,        "ToggleShiftCommand"),
-                    new("ReprintLastReceipt", s.Cashier.ReprintLastReceipt, "ReprintLastReceiptCommand"),
                 },
                 ShortcutRole.Manager => new List<ShortcutEntry>
                 {
@@ -164,7 +164,8 @@ namespace UI.Behaviors
                     new("Reports",           s.Manager.Reports,           "NavigateReportsCommand"),
                     new("ReceiptManagement", s.Manager.ReceiptManagement, "NavigateReceiptManagementCommand"),
                     new("ShiftManagement",   s.Manager.ShiftManagement,   "NavigateShiftManagementCommand"),
-                    new("Settings",          s.Manager.Settings,          "ShowSetting"),
+                    new("Settings",                  s.Manager.Settings,                  "ShowSetting"),
+                    new("ModifierGroupManagement",   s.Manager.ModifierGroupManagement,   "NavigateModifierGroupManagementCommand"),
                     new("Add",               s.Manager.Add,               "AddCommand"),
                     new("Edit",              s.Manager.Edit,              "EditCommand"),
                     new("Delete",            s.Manager.Delete,            "DeleteCommand"),

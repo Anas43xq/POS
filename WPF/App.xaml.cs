@@ -99,6 +99,7 @@ namespace UI
             services.AddTransient<EndDayDialogViewModel>();
             services.AddTransient<PaymentDialogViewModel>();
             services.AddTransient<RecentSalesDialogViewModel>();
+            services.AddTransient<ShortcutHelpViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<ManagerPinOverlayViewModel>();
             services.AddTransient<LoginWindowViewModel>();

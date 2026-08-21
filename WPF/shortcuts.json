@@ -6,19 +6,16 @@
       "ExecuteDefault": "Enter"
     },
     "Cashier": {
-      "CashPayment": "F8",
-      "CardPayment": "F9",
-      "CompleteSale": "F12",
+      "CashPayment": "F3",
+      "CardPayment": "F4",
+      "ShowRecentSales": "F5",
+      "ReprintLastReceipt": "F6",
+      "ToggleShift": "F10",
       "NewSale": "Ctrl+N",
+      "FocusSearch": "Ctrl+F",
       "RemoveItem": "Delete",
       "IncreaseQuantity": "Add",
-      "DecreaseQuantity": "Subtract",
-      "FocusSearch": "Ctrl+F",
-      "FocusCategories": "F2",
-      "FocusProducts": "F3",
-      "FocusCart": "F4",
-      "ReprintLastReceipt": "Ctrl+T",
-      "ToggleShift": "F10"
+      "DecreaseQuantity": "Subtract"
     },
     "Manager": {
       "Home": "Alt+H",
@@ -30,6 +27,8 @@
       "ReceiptManagement": "Alt+E",
       "ShiftManagement": "Alt+S",
       "Settings": "Alt+O",
+      "ModifierGroupManagement": "Alt+M",
+      "FocusSearch": "Ctrl+F",
       "Add": "Ctrl+N",
       "Edit": "Ctrl+E",
       "Delete": "Delete",

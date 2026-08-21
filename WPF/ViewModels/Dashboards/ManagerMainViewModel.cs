@@ -62,6 +62,8 @@ namespace UI.ViewModels
         /// </summary>
         public ICommand ShowSetting { get; set; } = null!;
 
+        public ICommand ShowShortcutHelpCommand { get; set; } = null!;
+
         public string ManagerName
         {
             get => _managerName;
@@ -186,6 +188,12 @@ namespace UI.ViewModels
             {
                 _logger.LogError(ex, "Failed to open Settings dialog");
                 _notifications.ShowError(_localizationService.GetString("Common.UnableToOpenSettings"));
+            });
+
+            ShowShortcutHelpCommand = new RelayCommand(_ =>
+            {
+                var vm = _viewModelFactory.Create<ShortcutHelpViewModel>();
+                _dialogService.ShowDialog<ShortcutHelpView>(vm);
             });
 
             _receiptManagementViewModel.NavigateToFormRequested += OnReceiptNavigateToForm;

@@ -238,6 +238,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     public ICommand ShowSetting { get; }
 
+    public ICommand ShowShortcutHelpCommand { get; }
+
     public RelayCommand CompleteSaleCommand { get; }
 
     public RelayCommand NewSaleCommand { get; }
@@ -337,6 +339,12 @@ public partial class CashierDashboardViewModel : BaseViewModel
             () => _session.CurrentUser != null);
 
         ShowRecentSalesCommand = new AsyncRelayCommand(ShowRecentSalesAsync);
+
+        ShowShortcutHelpCommand = new RelayCommand(_ =>
+        {
+            var vm = _viewModelFactory.Create<ShortcutHelpViewModel>();
+            _dialogService.ShowDialog<ShortcutHelpView>(vm);
+        });
 
         StartDayCommand = new RelayCommand(
             ShowStartDayDialog,

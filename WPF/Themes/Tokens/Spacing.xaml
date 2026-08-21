@@ -82,6 +82,10 @@
     <Thickness x:Key="Spacing.DialogListHeaderGap">0,0,0,8</Thickness>
     <Thickness x:Key="Spacing.DialogEditMargin">16,8,16,4</Thickness>
     <Thickness x:Key="Spacing.DialogFieldGap">0,0,0,10</Thickness>
+    <!-- Top margin for a second (non-first) section header inside a dialog body column -->
+    <Thickness x:Key="Spacing.DialogSectionNextGap">0,16,0,4</Thickness>
+    <!-- Right-side offset for a KeyHint badge overlaid top-right on a button -->
+    <Thickness x:Key="Spacing.KeyHintOverlayOffset">0,0,4,0</Thickness>
 
     <!-- Settings form field bottom gaps -->
     <Thickness x:Key="Spacing.Settings.LabelGap">0,0,0,5</Thickness>

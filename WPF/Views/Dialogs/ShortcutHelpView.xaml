@@ -1,0 +1,232 @@
+<Window x:Class="UI.Views.ShortcutHelpView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid Background="{StaticResource Color.Brand.Scrim}">
+        <Border Width="560"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource POS.Dialog.Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Style="{StaticResource POS.Dialog.Header}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="Keyboard shortcuts"
+                                   FontSize="{StaticResource Font.Size.Lg}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Default}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="Esc to close"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Body -->
+                <Grid Grid.Row="1"
+                      Margin="{StaticResource Spacing.DialogContent}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="{StaticResource Spacing.Lg}"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left column: Common + Cashier -->
+                    <StackPanel Grid.Column="0">
+
+                        <TextBlock Text="Common"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+
+                        <ItemsControl ItemsSource="{Binding CommonRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Label}"
+                                                   FontSize="{StaticResource Font.Size.Md}"
+                                                   Foreground="{StaticResource Color.Text.Default}"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1"
+                                                CornerRadius="{StaticResource Radius.Sm}"
+                                                Padding="5,2"
+                                                Background="{StaticResource Color.Surface.Subtle}"
+                                                BorderBrush="{StaticResource Color.Border.Default}"
+                                                BorderThickness="1">
+                                            <TextBlock Text="{Binding Key}"
+                                                       FontSize="{StaticResource Font.Size.Xs}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       FontFamily="Consolas, Courier New, monospace"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="Cashier"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogSectionNextGap}"/>
+
+                        <ItemsControl ItemsSource="{Binding CashierRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Label}"
+                                                   FontSize="{StaticResource Font.Size.Md}"
+                                                   Foreground="{StaticResource Color.Text.Default}"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1"
+                                                CornerRadius="{StaticResource Radius.Sm}"
+                                                Padding="5,2"
+                                                Background="{StaticResource Color.Surface.Subtle}"
+                                                BorderBrush="{StaticResource Color.Border.Default}"
+                                                BorderThickness="1">
+                                            <TextBlock Text="{Binding Key}"
+                                                       FontSize="{StaticResource Font.Size.Xs}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       FontFamily="Consolas, Courier New, monospace"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+                    <!-- Spacer column -->
+                    <Border Grid.Column="1"
+                            Width="1"
+                            Background="{StaticResource Color.Border.Default}"
+                            HorizontalAlignment="Center"/>
+
+                    <!-- Right column: Manager Nav + Manager CRUD -->
+                    <StackPanel Grid.Column="2">
+
+                        <TextBlock Text="Manager — Navigation"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogLabelGap}"/>
+
+                        <ItemsControl ItemsSource="{Binding ManagerNavRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Label}"
+                                                   FontSize="{StaticResource Font.Size.Md}"
+                                                   Foreground="{StaticResource Color.Text.Default}"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1"
+                                                CornerRadius="{StaticResource Radius.Sm}"
+                                                Padding="5,2"
+                                                Background="{StaticResource Color.Surface.Subtle}"
+                                                BorderBrush="{StaticResource Color.Border.Default}"
+                                                BorderThickness="1">
+                                            <TextBlock Text="{Binding Key}"
+                                                       FontSize="{StaticResource Font.Size.Xs}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       FontFamily="Consolas, Courier New, monospace"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="Manager — CRUD"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"
+                                   Margin="{StaticResource Spacing.DialogSectionNextGap}"/>
+
+                        <ItemsControl ItemsSource="{Binding ManagerCrudRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="{StaticResource Spacing.DialogFieldGap}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding Label}"
+                                                   FontSize="{StaticResource Font.Size.Md}"
+                                                   Foreground="{StaticResource Color.Text.Default}"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1"
+                                                CornerRadius="{StaticResource Radius.Sm}"
+                                                Padding="5,2"
+                                                Background="{StaticResource Color.Surface.Subtle}"
+                                                BorderBrush="{StaticResource Color.Border.Default}"
+                                                BorderThickness="1">
+                                            <TextBlock Text="{Binding Key}"
+                                                       FontSize="{StaticResource Font.Size.Xs}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Muted}"
+                                                       FontFamily="Consolas, Courier New, monospace"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- Footer -->
+                <Border Grid.Row="2"
+                        Style="{StaticResource POS.Dialog.Footer}"
+                        Padding="{StaticResource Spacing.DialogFooter}">
+                    <TextBlock Text="Press Escape or F1 to close"
+                               FontSize="{StaticResource Font.Size.Sm}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+            </Grid>
+        </Border>
+    </Grid>
+
+</Window>
