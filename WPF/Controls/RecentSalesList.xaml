@@ -33,11 +33,20 @@
                   ItemsSource="{Binding ItemsSource, ElementName=root}">
             <DataGrid.Columns>
 
-                <!-- Receipt number -->
-                <DataGridTextColumn Header="{DynamicResource Common.Receipt}"
-                                    Binding="{Binding ReceiptNumber}"
-                                    Width="*"
-                                    MinWidth="130"/>
+                <!-- Receipt number — tappable, opens receipt -->
+                <DataGridTemplateColumn Header="{DynamicResource Common.Receipt}"
+                                        Width="*"
+                                        MinWidth="130">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding ReceiptNumber}"
+                                    Style="{StaticResource POS.Button.Secondary}"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding OpenCommand, ElementName=root}"
+                                    CommandParameter="{Binding TransactionId}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <!-- Date / time -->
                 <DataGridTextColumn Header="{DynamicResource Common.Date}"
@@ -81,18 +90,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <!-- Open action -->
-                <DataGridTemplateColumn Header="" Width="90">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Style="{StaticResource POS.Button.Secondary}"
-                                    Content="{DynamicResource Common.Open}"
-                                    Padding="10,0"
-                                    Command="{Binding OpenCommand, ElementName=root}"
-                                    CommandParameter="{Binding TransactionId}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
     </Border>

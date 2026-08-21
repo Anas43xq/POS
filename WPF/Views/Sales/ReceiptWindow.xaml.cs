@@ -15,6 +15,12 @@ namespace UI.Views
             DataContext = viewModel;
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Owner?.Activate();
+            base.OnClosing(e);
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

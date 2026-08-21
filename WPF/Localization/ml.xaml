@@ -134,6 +134,7 @@
     <sys:String x:Key="Cashier.EndDay">ദിവസം അവസാനിപ്പിക്കുക</sys:String>
 
     <sys:String x:Key="Cashier.RecentSales">സമീപകാല വിൽപ്പനകൾ</sys:String>
+    <sys:String x:Key="Cashier.ReprintLast">അവസാനത്തേത് വീണ്ടും പ്രിന്റ് ചെയ്യുക</sys:String>
     <sys:String x:Key="Cashier.RecentTransactions">സമീപകാല ഇടപാടുകൾ</sys:String>
 
     <sys:String x:Key="Cashier.CurrentSale">നിലവിലെ വിൽപ്പന</sys:String>

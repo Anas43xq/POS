@@ -145,6 +145,7 @@
     <sys:String x:Key="Cashier.EndDay">إنهاء اليوم</sys:String>
 
     <sys:String x:Key="Cashier.RecentSales">المبيعات الأخيرة</sys:String>
+    <sys:String x:Key="Cashier.ReprintLast">إعادة طباعة الأخير</sys:String>
     <sys:String x:Key="Cashier.RecentTransactions">المعاملات الأخيرة</sys:String>
 
     <sys:String x:Key="Cashier.CurrentSale">البيع الحالي</sys:String>
