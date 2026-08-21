@@ -2,6 +2,7 @@ using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Models;
 using Contracts.Sales;
+using POS.Contracts.Localization;
 using Contracts.Transactions;
 using Contracts.Enum;
 using System;
@@ -250,6 +251,25 @@ public partial class CashierDashboardViewModel : BaseViewModel
 
     public AsyncRelayCommand<CartItem> EditCartLineCommand { get; }
 
+    public IReadOnlyList<LanguageDto> SupportedLanguages { get; }
+    public ICommand OpenLanguagePickerCommand { get; }
+    public ICommand CloseLanguagePickerCommand { get; }
+    public ICommand SelectLanguageCommand { get; }
+
+    private bool _isLanguagePickerOpen;
+    public bool IsLanguagePickerOpen
+    {
+        get => _isLanguagePickerOpen;
+        set
+        {
+            if (_isLanguagePickerOpen != value)
+            {
+                _isLanguagePickerOpen = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public CashierDashboardViewModel(
         ISessionService session,
         IShiftService shiftService,
@@ -388,6 +408,17 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ProductsView.Filter = FilterProduct;
 
         SelectedCategory = null;
+
+        SupportedLanguages = _localization.GetSupportedLanguages();
+
+        OpenLanguagePickerCommand  = new RelayCommand(_ => IsLanguagePickerOpen = true);
+        CloseLanguagePickerCommand = new RelayCommand(_ => IsLanguagePickerOpen = false);
+        SelectLanguageCommand = new AsyncRelayCommand<LanguageDto>(async lang =>
+        {
+            if (lang is null) return;
+            await _localization.SetLanguageAsync(lang.Code);
+            IsLanguagePickerOpen = false;
+        });
     }
 
     public async Task EnsureInitializedAsync()

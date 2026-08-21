@@ -68,6 +68,14 @@ Detailed known issues and historical fixes live in `KownIssues.md`. Check that f
 
 ## Recent sessions
 
+- 2026-08-21: **Settings role-aware lazy load + Cashier language picker popup.**
+  - `SettingsViewModel`: `LoadPrinters()` and both async loads are now role-gated — cashier pays zero cost on settings open (no print-queue enumeration, no DB reads). Manager runs `LoadPrinterSettingsAsync()` + `LoadPinStatusAsync()` concurrently via `Task.WhenAll` inside `InitializeAsync()`. `RefreshPrintersCommand` unchanged (calls `LoadPrinters()` directly, only surfaced in manager-only view section). `LoadPinStatusAsync` retains its inner `if (!IsManager) return` guard for defence in depth.
+  - `CashierDashboardViewModel`: Added `IsLanguagePickerOpen` bool, `SupportedLanguages` (in-memory `IReadOnlyList<LanguageDto>`, populated in constructor via `_localization.GetSupportedLanguages()`), `OpenLanguagePickerCommand`, `CloseLanguagePickerCommand`, `SelectLanguageCommand` (async `AsyncRelayCommand<LanguageDto>`, calls `_localization.SetLanguageAsync(lang.Code)` then sets `IsLanguagePickerOpen = false`). Added `using POS.Contracts.Localization`.
+  - Language picker: WPF `Popup` (`x:Name="LanguagePickerPopup"`) anchored to `FooterBar` (`PlacementTarget`, `Placement=Top`, `VerticalOffset=-8`), `StaysOpen=False` (click-outside closes free), `PopupAnimation=Fade`; `IsOpen` two-way bound to `IsLanguagePickerOpen`. `ItemsControl` (`x:Name="LanguageItemsControl"`) renders one `POS.Button.Ghost` per language. Focus on first language button deferred via `Dispatcher.BeginInvoke(DispatcherPriority.Loaded)` in code-behind `PropertyChanged` handler on `OnVmPropertyChanged`.
+  - Footer border named `x:Name="FooterBar"` for popup placement target.
+  - Shortcut: `Ctrl+L` → `OpenLanguagePickerCommand` added to Cashier scheme (`shortcuts.json`, `ShortcutSettings.CashierShortcuts.ChangeLanguage`, `ShortcutBindingsBehavior` Cashier entries).
+  - New token: `Spacing.PopupFooterGap` (`0,0,0,8`) added to `Spacing.xaml` after `Spacing.KeyHintOverlayOffset`.
+
 - 2026-08-21: **Shortcut system overhaul + KeyHint control + ShortcutHelp dialog.**
   - `WPF/shortcuts.json`: Cashier keys updated to F3/F4/F5/F6 (Cash/Card/RecentSales/Reprint); dead keys `CompleteSale`, `FocusCategories`, `FocusProducts`, `FocusCart` removed. Manager gained `ModifierGroupManagement = "Alt+M"`.
   - `WPF/Configuration/ShortcutSettings.cs`: `CashierShortcuts` updated (removed 4 dead properties, added `ShowRecentSales` with fallback `"F5"`, updated `CashPayment`→`"F3"`, `CardPayment`→`"F4"`, `ReprintLastReceipt`→`"F6"`). `ManagerShortcuts` gained `ModifierGroupManagement` with fallback `"Alt+M"`.

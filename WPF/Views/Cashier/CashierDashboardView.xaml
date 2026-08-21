@@ -35,7 +35,8 @@
             <cashier:CartPanelView Grid.Column="1"/>
         </Grid>
 
-        <Border Grid.Row="2"
+        <Border x:Name="FooterBar"
+                Grid.Row="2"
                 Background="{StaticResource Color.Surface.Default}"
                 BorderBrush="{StaticResource Color.Border.Default}"
                 BorderThickness="0,1,0,0"
@@ -149,5 +150,61 @@
                 </Button>
             </Grid>
         </Border>
+        <!-- Language picker popup — floats above the footer, anchored to FooterBar -->
+        <Popup x:Name="LanguagePickerPopup"
+               Grid.Row="2"
+               PlacementTarget="{Binding ElementName=FooterBar}"
+               Placement="Top"
+               VerticalOffset="-8"
+               StaysOpen="False"
+               IsOpen="{Binding IsLanguagePickerOpen, Mode=TwoWay}"
+               AllowsTransparency="True"
+               PopupAnimation="Fade">
+
+            <Border Background="{StaticResource Color.Surface.Default}"
+                    BorderBrush="{StaticResource Color.Border.Default}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource Radius.Md}"
+                    Padding="{StaticResource Spacing.CardBody}"
+                    Effect="{StaticResource Shadow.Lg}">
+
+                <StackPanel Orientation="Vertical">
+
+                    <!-- Header row -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="{StaticResource Spacing.DialogLabelGap}">
+                        <TextBlock Text="Language"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Text.Muted}"/>
+                        <controls:KeyHint Key="Ctrl+L"
+                                          BadgeStyle="Default"
+                                          VerticalAlignment="Center"
+                                          Margin="{StaticResource Spacing.HeaderActionGap}"/>
+                    </StackPanel>
+
+                    <!-- Language buttons — one per supported language -->
+                    <ItemsControl x:Name="LanguageItemsControl"
+                                  ItemsSource="{Binding SupportedLanguages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource POS.Button.Ghost}"
+                                        MinHeight="{StaticResource Size.TouchTarget.Min}"
+                                        Command="{Binding DataContext.SelectLanguageCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding DisplayName}"
+                                               FontSize="{StaticResource Font.Size.Md}"
+                                               FontWeight="{StaticResource Font.Weight.Medium}"
+                                               Foreground="{StaticResource Color.Text.Default}"/>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </StackPanel>
+            </Border>
+
+        </Popup>
     </Grid>
 </UserControl>

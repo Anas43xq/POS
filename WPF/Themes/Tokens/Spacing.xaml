@@ -86,6 +86,8 @@
     <Thickness x:Key="Spacing.DialogSectionNextGap">0,16,0,4</Thickness>
     <!-- Right-side offset for a KeyHint badge overlaid top-right on a button -->
     <Thickness x:Key="Spacing.KeyHintOverlayOffset">0,0,4,0</Thickness>
+    <!-- Vertical gap between a footer-anchored popup and the footer border -->
+    <Thickness x:Key="Spacing.PopupFooterGap">0,0,0,8</Thickness>
 
     <!-- Settings form field bottom gaps -->
     <Thickness x:Key="Spacing.Settings.LabelGap">0,0,0,5</Thickness>

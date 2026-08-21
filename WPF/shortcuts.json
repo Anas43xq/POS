@@ -15,7 +15,8 @@
       "FocusSearch": "Ctrl+F",
       "RemoveItem": "Delete",
       "IncreaseQuantity": "Add",
-      "DecreaseQuantity": "Subtract"
+      "DecreaseQuantity": "Subtract",
+      "ChangeLanguage": "Ctrl+L"
     },
     "Manager": {
       "Home": "Alt+H",

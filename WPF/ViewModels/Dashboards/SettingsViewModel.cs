@@ -218,9 +218,19 @@ public class SettingsViewModel : BaseViewModel
         PrintTestReceiptCommand = new RelayCommand(_ => _ = PrintTestReceiptAsync());
         SetPinCommand = new AsyncRelayCommand(SetPinAsync, () => !_isPinBusy);
 
-        LoadPrinters();
-        _ = LoadPrinterSettingsAsync();
-        _ = LoadPinStatusAsync();
+        _ = InitializeAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitializeAsync()
+    {
+        if (IsManager)
+        {
+            LoadPrinters();
+            await System.Threading.Tasks.Task.WhenAll(
+                LoadPrinterSettingsAsync(),
+                LoadPinStatusAsync()
+            );
+        }
     }
 
     public event System.Action? CloseRequested;

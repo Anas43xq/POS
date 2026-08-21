@@ -153,6 +153,7 @@ namespace UI.Behaviors
                     new("RemoveItem",         s.Cashier.RemoveItem,         "RemoveSelectedSaleItemCommand"),
                     new("IncreaseQuantity",   s.Cashier.IncreaseQuantity,   "IncreaseSelectedQuantityCommand"),
                     new("DecreaseQuantity",   s.Cashier.DecreaseQuantity,   "DecreaseSelectedQuantityCommand"),
+                    new("ChangeLanguage",     s.Cashier.ChangeLanguage,     "OpenLanguagePickerCommand"),
                 },
                 ShortcutRole.Manager => new List<ShortcutEntry>
                 {

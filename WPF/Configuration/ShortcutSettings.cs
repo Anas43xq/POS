@@ -58,6 +58,7 @@ public sealed class CashierShortcuts
     public string RemoveItem         => Get(nameof(RemoveItem),         "Delete");
     public string IncreaseQuantity   => Get(nameof(IncreaseQuantity),   "Add");
     public string DecreaseQuantity   => Get(nameof(DecreaseQuantity),   "Subtract");
+    public string ChangeLanguage     => Get(nameof(ChangeLanguage),     "Ctrl+L");
 }
 
 public sealed class ManagerShortcuts
