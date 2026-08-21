@@ -225,19 +225,6 @@ A known outstanding exception from the rebuild is logged in `Memory.md` — chec
 
 ## Old system — gone
 
-The following files no longer exist. Any reference to them is a mistake:
-
-```
-Resources/Common/Brushes.xaml        → Themes/Tokens/Colors.xaml
-Resources/Common/Buttons.xaml        → Themes/Controls/Buttons.xaml
-Resources/Common/DataGrid.xaml       → Themes/Controls/DataGrid.xaml
-Resources/Common/Lists.xaml          → Themes/Controls/Lists.xaml
-Resources/Common/FilterField.xaml    → Themes/Controls/Inputs.xaml
-Resources/DashboardChrome.xaml       → Themes/Chrome/AppChrome.xaml
-Resources/DialogChrome.xaml          → Themes/Controls/Dialogs.xaml
-Resources/CashierDashboardStyles.xaml → Themes/Chrome/CashierChrome.xaml
-Resources/AppChrome.xaml             → Themes/Chrome/AppChrome.xaml
-```
 
 Old key names that no longer exist:
 `BrandDark`, `BrandMid`, `BrandLight`, `PrimaryGradientBtn`, `OutlineBtn`, `DangerBtn`, `ModalCardBorder`, `DashboardCardBorder`, `DashboardCardTitle`, `FieldLabel`, `CrudNeutralBg`
@@ -260,7 +247,6 @@ Current keys follow the pattern: `Color.X.Y`, `Font.X.Y`, `Spacing.N`, `Radius.X
 `skills/wpf-performance/SKILL.md`
 `Memory.md`
 `KownIssues.md`
-`docs/EF_Optimization_Plan.md`
 
 ---
 

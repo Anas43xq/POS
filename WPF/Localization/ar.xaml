@@ -237,7 +237,7 @@
     <sys:String x:Key="Payment.Underpaid">المبلغ المستلم أقل من المبلغ المستحق. يرجى تحصيل المبلغ كاملاً قبل التأكيد.</sys:String>
 
     <!-- ========================================================= -->
-    <!-- Shift -->
+    <!-- Shift -->                                                   
     <!-- ========================================================= -->
 
     <sys:String x:Key="Shift.Start.Title">
@@ -394,7 +394,7 @@
     <sys:String x:Key="Modifiers.LoadGroupsFailed">فشل تحميل المجموعات.</sys:String>
     <sys:String x:Key="Modifiers.CreateGroupFailed">فشل إنشاء المجموعة.</sys:String>
     <sys:String x:Key="Modifiers.UpdateGroupFailed">فشل تحديث المجموعة.</sys:String>
-    <sys:String x:Key="Modifiers.DeleteGroupFailed">فشل حذف المجموعة.</sys:String>
+    <sys:String x:Key="Modifiers.DeleteGroupFailed">فشل حذف المجموعة.</sys:String>  
     <sys:String x:Key="Modifiers.PriceMustBeNumber">السعر يجب أن يكون رقمًا.</sys:String>
     <sys:String x:Key="Modifiers.CreateOptionFailed">فشل إنشاء الخيار.</sys:String>
     <sys:String x:Key="Modifiers.UpdateOptionFailed">فشل تحديث الخيار.</sys:String>
