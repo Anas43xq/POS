@@ -29,6 +29,7 @@ Compact record of WPF rebuild issues/rules. Check before debugging XAML runtime/
 - Toast stack must clear the 52px header: top-right `Margin="0,64,16,0"` (was `0,16,16,0`, sitting over the header Logout → "X logs me out"); `OnDismissClick` sets `e.Handled = true` so clicks never fall through.
 - Auto-dismiss **enabled**: non-Error toasts dismiss after 4s; Error toasts persist until ✕ / `Dismiss`.
 - Toast logging = lifecycle only: two `[TOAST]` lines in `NotificationService.Show` (show + persist-or-dismiss) and one in `ToastHost.OnDismissClick`. Don't reuse `[TOAST]` for payment-flow logging.
+- **`IsHitTestVisible="False"` on any ancestor kills all descendants — children cannot override it.** Never set it on the `UserControl` or any wrapping `Grid` of an overlay that contains interactive children. A `Grid`/`Border` with no `Background` (default `null`) is already non-hittable on its background, so clicks fall through to window content below for free — no explicit `False` is needed to achieve pass-through.
 
 ## List And DataGrid
 

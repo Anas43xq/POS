@@ -8,7 +8,6 @@
              mc:Ignorable="d"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
-             IsHitTestVisible="False"
              Focusable="False">
 
     <UserControl.Resources>
@@ -55,13 +54,17 @@
     </UserControl.Resources>
 
     <!-- Outer grid fills the window; toasts dock top-right via margin.
-         IsHitTestVisible="False" on the UserControl lets all clicks
-         pass through the transparent area. Each toast re-enables
-         hit-testing so its buttons still work.
+         No IsHitTestVisible="False" here or on the UserControl: WPF
+         propagates False from ANY ancestor to ALL descendants — children
+         cannot override it — so a False on the UserControl silently
+         killed the Copy and ✕ buttons even when they set True themselves.
+         Click-through on the empty canvas area works for free: a Grid
+         with no Background (null, the default) is not hit-testable on
+         its background, so clicks fall through to window content below.
          Top margin (64) clears the 52px app header so the toast stack
          and its ✕ button never sit directly over the top-right Logout
          button beneath. -->
-    <Grid IsHitTestVisible="False">
+    <Grid>
         <ItemsControl ItemsSource="{Binding Toasts}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Top"

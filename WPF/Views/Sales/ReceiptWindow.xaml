@@ -3,227 +3,388 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:UI.Controls"
         Title="Receipt"
-        Width="350"
+        Width="700"
         SizeToContent="Height"
+        MinHeight="320"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         WindowStyle="SingleBorderWindow"
-        Background="{StaticResource Color.Surface.Default}">
+        Background="{StaticResource Color.Surface.WindowNeutral}">
 
-    <StackPanel UseLayoutRounding="True"
-                SnapsToDevicePixels="True"
-                Margin="16">
+    <!--
+        Receipt window — horizontal card layout.
+        Three columns: left = store/meta, center = item list, right = totals/payment.
+        Footer row holds Print and Close actions.
+        No visual properties set directly; all styling via token StaticResource references.
+    -->
+    <Border Margin="{StaticResource Spacing.4}"
+            Background="{StaticResource Color.Surface.Default}"
+            BorderBrush="{StaticResource Color.Border.Default}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource Radius.Lg}"
+            UseLayoutRounding="True"
+            SnapsToDevicePixels="True">
 
-        <TextBlock Text="{Binding StoreName}"
-                   FontSize="14"
-                   FontWeight="Bold"
-                   TextAlignment="Center"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="4"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- body -->
+                <RowDefinition Height="Auto"/>
+                <!-- divider -->
+                <RowDefinition Height="Auto"/>
+                <!-- footer -->
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="SALES RECEIPT"
-                   FontSize="13"
-                   FontWeight="SemiBold"
-                   TextAlignment="Center"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="12"/>
+            <!-- ══════════════════════════════════════════════
+                 BODY — three-column card
+                 ══════════════════════════════════════════════ -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180"/>
+                    <!-- left: store/meta -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- v-separator -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- center: items -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- v-separator -->
+                    <ColumnDefinition Width="170"/>
+                    <!-- right: totals -->
+                </Grid.ColumnDefinitions>
 
-        <Image Source="pack://application:,,,/UI;component/Assets/receiptlogo.png"
-               Width="100"
-               Height="100"
-               Stretch="Uniform"
-               HorizontalAlignment="Center"
-               Margin="4"/>
+                <!-- ── LEFT: store / receipt meta ── -->
+                <StackPanel Grid.Column="0"
+                            Margin="{StaticResource Spacing.Lg}"
+                            VerticalAlignment="Top">
 
-        <TextBlock Text="{Binding ReceiptNumber, StringFormat=Receipt: {0}}"
-                   FontSize="13"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="4"/>
+                    <Image Source="pack://application:,,,/UI;component/Assets/receiptlogo.png"
+                           Width="48"
+                           Height="48"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Left"
+                           Margin="{StaticResource Spacing.DialogSectionGap}"/>
 
-        <TextBlock Text="{Binding TransactionDate, StringFormat=Date: {0:yyyy-MM-dd HH:mm}}"
-                   FontSize="13"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="4"/>
+                    <TextBlock Text="{Binding StoreName}"
+                               FontSize="{StaticResource Font.Size.Lg}"
+                               FontWeight="{StaticResource Font.Weight.Bold}"
+                               Foreground="{StaticResource Color.Text.Primary}"
+                               TextWrapping="Wrap"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
 
-        <Separator Margin="12"/>
+                    <!-- Paid badge -->
+                    <Border Background="{StaticResource Color.Surface.Success}"
+                            BorderBrush="{StaticResource Color.Border.Success}"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.Pill}"
+                            Padding="10,4"
+                            HorizontalAlignment="Left"
+                            Margin="{StaticResource Spacing.DialogSectionGap}">
+                        <TextBlock Text="Paid"
+                                   FontSize="{StaticResource Font.Size.Sm}"
+                                   FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                   Foreground="{StaticResource Color.Success.Deep}"/>
+                    </Border>
 
-        <TextBlock Text="ITEMS"
-                   FontWeight="Bold"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="4"/>
+                    <Border BorderBrush="{StaticResource Color.Border.Default}"
+                            BorderThickness="{StaticResource Thickness.BottomHairline}"
+                            Margin="0,6,0,10"/>
 
-        <ItemsControl ItemsSource="{Binding Items}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="4">
-                        <TextBlock Text="{Binding ProductName}"
-                                   TextWrapping="Wrap"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource Color.Text.Default}"/>
+                    <!-- Receipt # -->
+                    <TextBlock Text="Receipt"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding ReceiptNumber}"
+                               FontSize="{StaticResource Font.Size.Md}"
+                               FontWeight="{StaticResource Font.Weight.Medium}"
+                               Foreground="{StaticResource Color.Text.Default}"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
 
-                        <ItemsControl ItemsSource="{Binding Modifiers}"
-                                      Margin="6">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontSize="11"
-                                               Foreground="{StaticResource Color.Text.Secondary}"
-                                               Text="{Binding Converter={StaticResource ModifierLineConverter}}"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                    <!-- Date -->
+                    <TextBlock Text="Date"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding TransactionDate}"
+                               FontSize="{StaticResource Font.Size.Md}"
+                               Foreground="{StaticResource Color.Text.Default}"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
 
-                        <Grid Margin="6">
+                    <!-- Cashier -->
+                    <TextBlock Text="Cashier"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding CashierName}"
+                               FontSize="{StaticResource Font.Size.Md}"
+                               Foreground="{StaticResource Color.Text.Default}"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <!-- v-separator -->
+                <Border Grid.Column="1"
+                        Background="{StaticResource Color.Border.Default}"
+                        Width="1"
+                        Margin="0,12"/>
+
+                <!-- ── CENTER: item list ── -->
+                <StackPanel Grid.Column="2"
+                            Margin="16,14">
+
+                    <TextBlock Text="Items"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource Color.Border.Default}"
+                                        BorderThickness="{StaticResource Thickness.BottomHalf}"
+                                        Padding="0,7">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <!-- Product name -->
+                                            <TextBlock Text="{Binding ProductName}"
+                                                       FontSize="{StaticResource Font.Size.Md}"
+                                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                                       Foreground="{StaticResource Color.Text.Default}"
+                                                       TextWrapping="Wrap"/>
+
+                                            <!-- Modifiers (subtle, indented) -->
+                                            <ItemsControl ItemsSource="{Binding Modifiers}"
+                                                          Margin="0,2,0,0">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock FontSize="{StaticResource Font.Size.Sm}"
+                                                                   Foreground="{StaticResource Color.Text.Muted}"
+                                                                   Text="{Binding Converter={StaticResource ModifierLineConverter}}"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                            <!-- Qty × unit price -->
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,3,0,0">
+                                                <TextBlock FontSize="{StaticResource Font.Size.Base}"
+                                                           Foreground="{StaticResource Color.Text.Secondary}">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} ×">
+                                                            <Binding Path="Quantity"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <controls:CurrencyText Amount="{Binding UnitPrice}"
+                                                                        AmountForeground="{StaticResource Color.Text.Secondary}"
+                                                                        FontSize="{StaticResource Font.Size.Base}"
+                                                                        Margin="4,0,0,0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Line total (right-aligned) -->
+                                        <controls:CurrencyText Grid.Column="1"
+                                                               Amount="{Binding LineTotal}"
+                                                               AmountForeground="{StaticResource Color.Text.Default}"
+                                                               FontSize="{StaticResource Font.Size.Md}"
+                                                               VerticalAlignment="Center"
+                                                               Margin="12,0,0,0"
+                                                               TextElement.FontWeight="{StaticResource Font.Weight.Medium}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- v-separator -->
+                <Border Grid.Column="3"
+                        Background="{StaticResource Color.Border.Default}"
+                        Width="1"
+                        Margin="0,12"/>
+
+                <!-- ── RIGHT: totals + payment ── -->
+                <StackPanel Grid.Column="4"
+                            Margin="{StaticResource Spacing.Lg}"
+                            VerticalAlignment="Top">
+
+                    <TextBlock Text="Summary"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                    <!-- Subtotal -->
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Subtotal"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding Subtotal}"
+                                               AmountForeground="{StaticResource Color.Text.Secondary}"
+                                               FontSize="{StaticResource Font.Size.Base}"/>
+                    </Grid>
+
+                    <!-- Tax -->
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Tax"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding TaxTotal}"
+                                               AmountForeground="{StaticResource Color.Text.Secondary}"
+                                               FontSize="{StaticResource Font.Size.Base}"/>
+                    </Grid>
+
+                    <!-- Discount -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Discount"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding DiscountTotal}"
+                                               AmountForeground="{StaticResource Color.Text.Secondary}"
+                                               FontSize="{StaticResource Font.Size.Base}"/>
+                    </Grid>
+
+                    <!-- Grand total highlighted block -->
+                    <Border Background="{StaticResource Color.Brand.Surface}"
+                            BorderBrush="{StaticResource Color.Brand.Border}"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.Default}"
+                            Padding="10,8"
+                            Margin="0,0,0,12">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0"
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Quantity}"
-                                           FontSize="11"
-                                           Foreground="{StaticResource Color.Text.Default}"/>
-                                <TextBlock Text=" x "
-                                           FontSize="11"
-                                           Foreground="{StaticResource Color.Text.Default}"/>
-                                <controls:CurrencyText Amount="{Binding UnitPrice}"
-                                                       AmountForeground="{StaticResource Color.Text.Default}"
-                                                       FontSize="11"
-                                                       FontWeight="Medium"/>
-                            </StackPanel>
-
+                            <TextBlock Text="Total"
+                                       FontSize="{StaticResource Font.Size.Md}"
+                                       FontWeight="{StaticResource Font.Weight.Bold}"
+                                       Foreground="{StaticResource Color.Text.Primary}"
+                                       VerticalAlignment="Center"/>
                             <controls:CurrencyText Grid.Column="1"
-                                                   Amount="{Binding LineTotal}"
-                                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                                   FontWeight="Bold"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Center"/>
+                                                   Amount="{Binding GrandTotal}"
+                                                   AmountForeground="{StaticResource Color.Brand.Dark}"
+                                                   FontSize="{StaticResource Font.Size.Xl}"
+                                                   TextElement.FontWeight="{StaticResource Font.Weight.Bold}"/>
                         </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                    </Border>
 
-        <Separator Margin="12"/>
+                    <Border BorderBrush="{StaticResource Color.Border.Default}"
+                            BorderThickness="{StaticResource Thickness.BottomHairline}"
+                            Margin="0,0,0,10"/>
 
-        <Grid Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Subtotal"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding Subtotal}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   HorizontalAlignment="Right"/>
+                    <TextBlock Text="Payment"
+                               FontSize="{StaticResource Font.Size.Base}"
+                               FontWeight="{StaticResource Font.Weight.SemiBold}"
+                               Foreground="{StaticResource Color.Text.Muted}"
+                               Margin="{StaticResource Spacing.DialogSectionGap}"/>
+
+                    <!-- Method -->
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Method"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding PaymentMethod}"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   FontWeight="{StaticResource Font.Weight.Medium}"
+                                   Foreground="{StaticResource Color.Text.Default}"/>
+                    </Grid>
+
+                    <!-- Tendered -->
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Tendered"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding AmountTendered}"
+                                               AmountForeground="{StaticResource Color.Text.Default}"
+                                               FontSize="{StaticResource Font.Size.Base}"/>
+                    </Grid>
+
+                    <!-- Change -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Change"
+                                   FontSize="{StaticResource Font.Size.Base}"
+                                   Foreground="{StaticResource Color.Text.Secondary}"/>
+                        <controls:CurrencyText Grid.Column="1"
+                                               Amount="{Binding ChangeGiven}"
+                                               AmountForeground="{StaticResource Color.Text.Default}"
+                                               FontSize="{StaticResource Font.Size.Base}"
+                                               TextElement.FontWeight="{StaticResource Font.Weight.Medium}"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- ══════════════════════════════════════════════
+                 DIVIDER
+                 ══════════════════════════════════════════════ -->
+            <Border Grid.Row="1"
+                    BorderBrush="{StaticResource Color.Border.Default}"
+                    BorderThickness="{StaticResource Thickness.BottomHairline}"/>
+
+            <!-- ══════════════════════════════════════════════
+                 FOOTER — thank-you note + action buttons
+                 ══════════════════════════════════════════════ -->
+            <Grid Grid.Row="2"
+                  Margin="{StaticResource Spacing.DialogFooter}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Thank you!"
+                           FontSize="{StaticResource Font.Size.Base}"
+                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                           Foreground="{StaticResource Color.Text.Muted}"
+                           VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal">
+                    <Button Content="Print"
+                            Style="{StaticResource POS.Button.Primary}"
+                            Command="{Binding PrintReceiptCommand}"
+                            Margin="{StaticResource Spacing.DialogFooterCancelGap}"/>
+                    <Button Content="Close"
+                            Style="{StaticResource POS.Button.Secondary}"
+                            IsCancel="True"
+                            Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-
-        <Grid Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Tax"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding TaxTotal}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   HorizontalAlignment="Right"/>
-        </Grid>
-
-        <Grid Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Discount"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding DiscountTotal}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   HorizontalAlignment="Right"/>
-        </Grid>
-
-        <Grid Margin="12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="GRAND TOTAL"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding GrandTotal}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   FontSize="14"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Right"/>
-        </Grid>
-
-        <Separator Margin="4"/>
-
-        <Grid Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Payment:"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <TextBlock Grid.Column="1"
-                       Text="{Binding PaymentMethod}"
-                       TextAlignment="Right"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-        </Grid>
-
-        <Grid Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Amount Tendered:"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding AmountTendered}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   HorizontalAlignment="Right"/>
-        </Grid>
-
-        <Grid Margin="12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Change:"
-                       Foreground="{StaticResource Color.Text.Default}"/>
-            <controls:CurrencyText Grid.Column="1"
-                                   Amount="{Binding ChangeGiven}"
-                                   AmountForeground="{StaticResource Color.Text.Default}"
-                                   HorizontalAlignment="Right"/>
-        </Grid>
-
-        <TextBlock Text="Thank you!"
-                   TextAlignment="Center"
-                   FontWeight="SemiBold"
-                   Foreground="{StaticResource Color.Text.Default}"
-                   Margin="12"/>
-
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Content="Print"
-                    MinHeight="44"
-                    Style="{StaticResource POS.Button.Primary}"
-                    Command="{Binding PrintReceiptCommand}"/>
-
-            <Button Content="Close"
-                    MinHeight="44"
-                    Style="{StaticResource POS.Button.Secondary}"
-                    IsCancel="True"
-                    Click="CloseButton_Click"
-                    Margin="6"/>
-        </StackPanel>
-    </StackPanel>
+    </Border>
 </Window>
