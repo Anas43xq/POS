@@ -68,6 +68,16 @@ Detailed known issues and historical fixes live in `KownIssues.md`. Check that f
 
 ## Recent sessions
 
+- 2026-08-22: **Cashier localization direction + Manager sidebar selection + animated highlight.**
+  - `WPF/Services/LocalizationService.cs`: Removed `UpdateFlowDirection()` method and all three call sites. Localization no longer sets `MainWindow.FlowDirection`. WPF's Unicode bidi algorithm handles Arabic text direction in `TextBlock` elements automatically. Component layout is now stable across language changes.
+  - `WPF/Resources/Converters.xaml`: Registered `EnumToBooleanConverter` (already existed in `WPF/Converters/`, was not yet in the live dictionary).
+  - `WPF/ViewModels/Dashboards/ManagerMainViewModel.cs`: Added `ManagerPageId` enum (Home, Transactions, ShiftManagement, Reports, Products, Categories, Sizes, ReceiptManagement, ModifierGroups) and `ActivePage` property. This is the single authoritative selection state for both sidebar clicks and keyboard shortcuts.
+  - `WPF/ViewModels/Dashboards/ManagerMainViewModel.Navigation.cs`: Every `Navigate*` method now sets `ActivePage` before calling `ActivatePage`. `OnReceiptCloseRequested` also sets `ActivePage = Home`.
+  - `WPF/Views/Main/ManagerMainView.xaml`: Added `conv:` namespace for `EnumToBooleanConverter`, added `Loaded="OnLoaded"`. Sidebar reworked: RadioButtons now have `x:Name` and bind `IsChecked` to `ActivePage` via `EnumToBoolConverter` (`Mode=OneWay` — VM owns selection truth). Removed hardcoded `IsChecked="True"`. Added `SidebarHighlight` `Border` + `TranslateTransform x:Name="HighlightTranslate"` and `NavPanel` name on the StackPanel.
+  - `WPF/Views/Main/ManagerMainView.xaml.cs`: Added `OnLoaded`, `OnVmPropertyChanged`, `PlaceHighlightAt`. Animation uses `DoubleAnimation` on `TranslateTransform.YProperty` with `CubicEase EaseInOut`, 180 ms. Retargetable mid-flight via `BeginAnimation` replacement. Navigation never waits for animation. Initial placement snaps without animation.
+  - `AGENTS.md`: Added "Shortcut label formatting rule" (`Action - Key` convention) and "Localization direction rule" (no `FlowDirection` on window root from localization) to Hard rules section.
+
+
 - 2026-08-21: **Settings role-aware lazy load + Cashier language picker popup.**
   - `SettingsViewModel`: `LoadPrinters()` and both async loads are now role-gated — cashier pays zero cost on settings open (no print-queue enumeration, no DB reads). Manager runs `LoadPrinterSettingsAsync()` + `LoadPinStatusAsync()` concurrently via `Task.WhenAll` inside `InitializeAsync()`. `RefreshPrintersCommand` unchanged (calls `LoadPrinters()` directly, only surfaced in manager-only view section). `LoadPinStatusAsync` retains its inner `if (!IsManager) return` guard for defence in depth.
   - `CashierDashboardViewModel`: Added `IsLanguagePickerOpen` bool, `SupportedLanguages` (in-memory `IReadOnlyList<LanguageDto>`, populated in constructor via `_localization.GetSupportedLanguages()`), `OpenLanguagePickerCommand`, `CloseLanguagePickerCommand`, `SelectLanguageCommand` (async `AsyncRelayCommand<LanguageDto>`, calls `_localization.SetLanguageAsync(lang.Code)` then sets `IsLanguagePickerOpen = false`). Added `using POS.Contracts.Localization`.

@@ -13,11 +13,15 @@
              xmlns:views="clr-namespace:UI.Views"
              xmlns:modifiers="clr-namespace:UI.Views.Modifiers"
              xmlns:b="clr-namespace:UI.Behaviors"
+             xmlns:conv="clr-namespace:UI.Converters"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="1600"
-             b:ShortcutBindingsBehavior.Role="Manager">
+             b:ShortcutBindingsBehavior.Role="Manager"
+             Loaded="OnLoaded">
 
     <UserControl.Resources>
+        <conv:EnumToBooleanConverter x:Key="EnumToBoolConverter"/>
+
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView />
         </DataTemplate>
@@ -158,84 +162,116 @@
             <Border Grid.Column="0"
                     Background="{StaticResource POS.Manager.SidebarGradient}">
 
-                <StackPanel Margin="{StaticResource Spacing.2}">
+                <!-- Grid lets the animated highlight sit behind the nav items -->
+                <Grid>
+                    <Border x:Name="SidebarHighlight"
+                            Background="{StaticResource Color.Nav.ActiveBackground}"
+                            BorderBrush="{StaticResource Color.Brand.Primary}"
+                            BorderThickness="3,0,0,0"
+                            VerticalAlignment="Top"
+                            IsHitTestVisible="False">
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="HighlightTranslate"/>
+                        </Border.RenderTransform>
+                    </Border>
 
-                    <TextBlock Text="{DynamicResource Manager.Nav.Menu}" Style="{StaticResource POS.Manager.SidebarSectionLabel}"/>
+                    <StackPanel x:Name="NavPanel"
+                                Margin="{StaticResource Spacing.2}">
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 IsChecked="True"
-                                 Command="{Binding NavigateHomeCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/home.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Home}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <TextBlock Text="{DynamicResource Manager.Nav.Menu}" Style="{StaticResource POS.Manager.SidebarSectionLabel}"/>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateTransactionsCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/transactions.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Transactions}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavHome"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Home, Mode=OneWay}"
+                                     Command="{Binding NavigateHomeCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/home.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Home}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateShiftManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/shift.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.ShiftManagement}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavTransactions"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Transactions, Mode=OneWay}"
+                                     Command="{Binding NavigateTransactionsCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/transactions.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Transactions}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateReportsCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/reports.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Reports}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavShift"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ShiftManagement, Mode=OneWay}"
+                                     Command="{Binding NavigateShiftManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/shift.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.ShiftManagement}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateProductManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/products.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavReports"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Reports, Mode=OneWay}"
+                                     Command="{Binding NavigateReportsCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/reports.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Reports}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateCategoryManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/categories.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavProducts"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Products, Mode=OneWay}"
+                                     Command="{Binding NavigateProductManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/products.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Products}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateSizeManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/sizes.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.Sizes}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavCategories"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Categories, Mode=OneWay}"
+                                     Command="{Binding NavigateCategoryManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/categories.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Categories}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateReceiptManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/receipts.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavSizes"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Sizes, Mode=OneWay}"
+                                     Command="{Binding NavigateSizeManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/sizes.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.Sizes}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                    <RadioButton Style="{StaticResource POS.Manager.NavItem}"
-                                 Command="{Binding NavigateModifierGroupManagementCommand}">
-                        <RadioButton.Tag>
-                            <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
-                        </RadioButton.Tag>
-                        <TextBlock Text="{DynamicResource Manager.Nav.ModifierGroups}" Style="{StaticResource POS.Manager.NavLabel}"/>
-                    </RadioButton>
+                        <RadioButton x:Name="NavReceipts"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ReceiptManagement, Mode=OneWay}"
+                                     Command="{Binding NavigateReceiptManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/receipts.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.ReceiptManagement}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
 
-                </StackPanel>
+                        <RadioButton x:Name="NavModifiers"
+                                     Style="{StaticResource POS.Manager.NavItem}"
+                                     IsChecked="{Binding ActivePage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ModifierGroups, Mode=OneWay}"
+                                     Command="{Binding NavigateModifierGroupManagementCommand}">
+                            <RadioButton.Tag>
+                                <Image Source="pack://application:,,,/UI;component/Assets/nav/modifiers.png" Style="{StaticResource POS.Manager.NavIconImage}"/>
+                            </RadioButton.Tag>
+                            <TextBlock Text="{DynamicResource Manager.Nav.ModifierGroups}" Style="{StaticResource POS.Manager.NavLabel}"/>
+                        </RadioButton>
+
+                    </StackPanel>
+                </Grid>
             </Border>
 
             <!-- ─────────────────────────────────

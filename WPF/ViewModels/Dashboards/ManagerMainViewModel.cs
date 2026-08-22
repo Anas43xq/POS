@@ -17,6 +17,19 @@ using UI.Views;
 
 namespace UI.ViewModels
 {
+    public enum ManagerPageId
+    {
+        Home,
+        Transactions,
+        ShiftManagement,
+        Reports,
+        Products,
+        Categories,
+        Sizes,
+        ReceiptManagement,
+        ModifierGroups,
+    }
+
     public partial class ManagerMainViewModel : BaseViewModel
     {
         private readonly HomeViewModel _homeViewModel;
@@ -43,6 +56,7 @@ namespace UI.ViewModels
         private string _currentTime = string.Empty;
         private string _currentDateTime = string.Empty;
         private object? _currentPage = null;
+        private ManagerPageId _activePage = ManagerPageId.Home;
 
         public HomeViewModel HomeVM => _homeViewModel;
         public ICommand NavigateHomeCommand { get; set; } = null!;
@@ -113,6 +127,17 @@ namespace UI.ViewModels
             set
             {
                 _currentDateTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ManagerPageId ActivePage
+        {
+            get => _activePage;
+            set
+            {
+                if (_activePage == value) return;
+                _activePage = value;
                 OnPropertyChanged();
             }
         }

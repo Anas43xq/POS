@@ -108,6 +108,14 @@ A local value on an element in a view blocks all style triggers and control temp
 
 If a decorative glyph is used in XAML, it must be a valid Unicode character or a proper image asset. Never leave mojibake text such as `âš ` or `ðŸ§¾` in a view. If the visual is still a placeholder for a future image icon, keep the placeholder in place and mark it for replacement later; do not strip the icon location out of the layout.
 
+### Shortcut label formatting rule
+
+When a button displays its keyboard shortcut inline, format it as `Action - Key` with a space-dash-space separator (e.g. `Cash - F3`, `Card - F4`). Use the actual configured shortcut value from the shortcut system (`ShortcutSettings`); do not duplicate or hardcode shortcut key values. The `KeyHint` control satisfies this convention when placed alongside or overlaid on the action label. Do not crowd the action label and shortcut together without a clear separator.
+
+### Localization direction rule
+
+Localization may change text direction for a given language (e.g. Arabic → RTL rendering), but must **not** automatically mirror or rearrange WPF component structure via `FlowDirection` on the window root or any container unless a specific screen is explicitly designed for a mirrored layout. The WPF Unicode bidirectional algorithm handles Arabic text direction in `TextBlock` elements automatically. Do not call `MainWindow.FlowDirection = RightToLeft` from the localization service or any language-change handler. If a future screen genuinely requires a mirrored layout, document that decision explicitly here.
+
 ### Receipt exception
 
 `ReceiptWindow.xaml` and `ReceiptPrintView.xaml` are print surfaces, not interactive cashier UI. Fixed numeric layout values are allowed there when the receipt format needs exact spacing or sizing. Do not treat those hardcoded numbers as violations in other views.

@@ -83,7 +83,6 @@ public sealed class LocalizationService : ILocalizationService
         }
 
         CurrentLanguage = SupportedLanguages.Defaultlanguage;
-        UpdateFlowDirection(SupportedLanguages.Defaultlanguage);
 
         // 2) Saved language override (if different from English).
         try
@@ -100,7 +99,6 @@ public sealed class LocalizationService : ILocalizationService
 
             if (TryLoadLanguage(savedLanguage))
             {
-                UpdateFlowDirection(savedLanguage);
                 CurrentLanguage = savedLanguage;
                 _logger.LogInformation(
                     "Startup language loaded: {Language}.", savedLanguage.Code);
@@ -141,8 +139,6 @@ public sealed class LocalizationService : ILocalizationService
                 language.Code, CurrentLanguage.Code);
             return;
         }
-
-        UpdateFlowDirection(language);
 
         try
         {
@@ -211,15 +207,5 @@ public sealed class LocalizationService : ILocalizationService
         dictionaries.Add(localization);
     }
 
-    private static void UpdateFlowDirection(LanguageDto language)
-    {
-        var mainWindow = Application.Current?.MainWindow;
-        if (mainWindow == null)
-            return;
 
-        mainWindow.FlowDirection =
-            language.IsRightToLeft
-                ? FlowDirection.RightToLeft
-                : FlowDirection.LeftToRight;
-    }
 }

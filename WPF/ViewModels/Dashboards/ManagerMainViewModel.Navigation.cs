@@ -31,46 +31,55 @@ namespace UI.ViewModels
 
         private void NavigateToTransactions()
         {
+            ActivePage = ManagerPageId.Transactions;
             ActivatePage(_transactionsViewModel, nameof(TransactionsViewModel), () => _ = _transactionsViewModel.LoadAsync());
         }
 
         private void NavigateHome()
         {
+            ActivePage = ManagerPageId.Home;
             ActivatePage(_homeViewModel, nameof(HomeViewModel), () => _ = _homeViewModel.EnsureDataLoadedAsync());
         }
 
         private void NavigateToShiftManagement()
         {
+            ActivePage = ManagerPageId.ShiftManagement;
             ActivatePage(_shiftManagementViewModel, nameof(ShiftManagementViewModel), () => _ = _shiftManagementViewModel.LoadAsync());
         }
 
         private void NavigateToReports()
         {
+            ActivePage = ManagerPageId.Reports;
             ActivatePage(_reportViewModel, nameof(ReportViewModel));
         }
 
         private void NavigateToProductManagement()
         {
+            ActivePage = ManagerPageId.Products;
             ActivatePage(_productManagementViewModel, nameof(ProductManagementViewModel), () => _ = _productManagementViewModel.EnsureDataLoadedAsync());
         }
 
         private void NavigateToCategoryManagement()
         {
+            ActivePage = ManagerPageId.Categories;
             ActivatePage(_categoryManagementViewModel, nameof(CategoryManagementViewModel), () => _ = _categoryManagementViewModel.EnsureDataLoadedAsync());
         }
 
         private void NavigateToSizeManagement()
         {
+            ActivePage = ManagerPageId.Sizes;
             ActivatePage(_sizeManagementViewModel, nameof(SizeManagementViewModel), () => _ = _sizeManagementViewModel.EnsureDataLoadedAsync());
         }
 
         private void NavigateToReceiptManagement()
         {
+            ActivePage = ManagerPageId.ReceiptManagement;
             ActivatePage(_receiptManagementViewModel, nameof(ReceiptManagementViewModel), () => _ = _receiptManagementViewModel.EnsureDataLoadedAsync());
         }
 
         private void NavigateToModifierGroupManagement()
         {
+            ActivePage = ManagerPageId.ModifierGroups;
             ActivatePage(_modifierGroupManagementViewModel, nameof(ModifierGroupManagementViewModel), () => _ = _modifierGroupManagementViewModel.EnsureDataLoadedAsync());
         }
 
@@ -94,6 +103,7 @@ namespace UI.ViewModels
 
         private void OnReceiptCloseRequested()
         {
+            ActivePage = ManagerPageId.Home;
             ActivatePage(_homeViewModel, nameof(HomeViewModel));
         }
 
