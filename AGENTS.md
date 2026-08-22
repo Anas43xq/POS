@@ -110,11 +110,11 @@ If a decorative glyph is used in XAML, it must be a valid Unicode character or a
 
 ### Shortcut label formatting rule
 
-When a button displays its keyboard shortcut inline, format it as `Action - Key` with a space-dash-space separator (e.g. `Cash - F3`, `Card - F4`). Use the actual configured shortcut value from the shortcut system (`ShortcutSettings`); do not duplicate or hardcode shortcut key values. The `KeyHint` control satisfies this convention when placed alongside or overlaid on the action label. Do not crowd the action label and shortcut together without a clear separator.
+When a button displays its keyboard shortcut inline, format it as `Action - Key` with a clear visible separator and spacing (e.g. `Cash - F3`, `Card - F4`). Use the actual configured shortcut value from the shortcut system (`ShortcutSettings`); do not duplicate or hardcode shortcut key values. The `KeyHint` control satisfies this convention when placed alongside the action label. Do not crowd the action label and shortcut together or let the badge sit flush against the text.
 
 ### Localization direction rule
 
-Localization may change text direction for a given language (e.g. Arabic → RTL rendering), but must **not** automatically mirror or rearrange WPF component structure via `FlowDirection` on the window root or any container unless a specific screen is explicitly designed for a mirrored layout. The WPF Unicode bidirectional algorithm handles Arabic text direction in `TextBlock` elements automatically. Do not call `MainWindow.FlowDirection = RightToLeft` from the localization service or any language-change handler. If a future screen genuinely requires a mirrored layout, document that decision explicitly here.
+Localization may change text direction for a given language (e.g. Arabic → RTL rendering), but must **not** automatically mirror or rearrange WPF component structure via `FlowDirection` on the window root or any container unless a specific screen is explicitly designed for a mirrored layout. The WPF Unicode bidirectional algorithm handles Arabic text direction in `TextBlock` elements automatically. Do not call `MainWindow.FlowDirection = RightToLeft` from the localization service or any language-change handler, and do not auto-reverse component order as part of language switching. If a future screen genuinely requires a mirrored layout, document that decision explicitly here.
 
 ### Receipt exception
 

@@ -55,19 +55,29 @@
                         Command="{Binding PayCashCommand}">
                     <Grid>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <TextBlock Text="{DynamicResource Common.Cash}"
-                                       FontSize="{StaticResource Font.Size.Base}"
-                                       FontWeight="{StaticResource Font.Weight.SemiBold}"
-                                       TextAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Common.Cash}"
+                                           FontSize="{StaticResource Font.Size.Base}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           TextAlignment="Center"/>
+                                <TextBlock Text=" - "
+                                           FontSize="{StaticResource Font.Size.Base}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           TextAlignment="Center"/>
+                                <controls:KeyHint Key="{Binding CashPaymentShortcut}"
+                                                  BadgeStyle="OnBrand"
+                                                  VerticalAlignment="Center"
+                                                  Margin="{StaticResource Spacing.HeaderActionGap}"/>
+                            </StackPanel>
                             <controls:CurrencyText Amount="{Binding Total}"
-                                                   AmountForeground="{StaticResource Color.Text.OnBrand}"
-                                                   FontSize="{StaticResource Font.Size.Xl}"
-                                                   FontWeight="{StaticResource Font.Weight.Bold}"
-                                                   HorizontalAlignment="Center"/>
+                                                    AmountForeground="{StaticResource Color.Text.OnBrand}"
+                                                    FontSize="{StaticResource Font.Size.Xl}"
+                                                    FontWeight="{StaticResource Font.Weight.Bold}"
+                                                    Margin="{StaticResource Spacing.HeaderChipGap}"
+                                                    HorizontalAlignment="Center"/>
                         </StackPanel>
-                        <controls:KeyHint Key="F3" BadgeStyle="OnBrand"
-                                          HorizontalAlignment="Right" VerticalAlignment="Top"
-                                          Margin="{StaticResource Spacing.KeyHintOverlayOffset}"/>
                     </Grid>
                 </Button>
 
@@ -77,19 +87,29 @@
                         Command="{Binding PayCardCommand}">
                     <Grid>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <TextBlock Text="{DynamicResource Common.Card}"
-                                       FontSize="{StaticResource Font.Size.Base}"
-                                       FontWeight="{StaticResource Font.Weight.SemiBold}"
-                                       TextAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Common.Card}"
+                                           FontSize="{StaticResource Font.Size.Base}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           TextAlignment="Center"/>
+                                <TextBlock Text=" - "
+                                           FontSize="{StaticResource Font.Size.Base}"
+                                           FontWeight="{StaticResource Font.Weight.SemiBold}"
+                                           TextAlignment="Center"/>
+                                <controls:KeyHint Key="{Binding CardPaymentShortcut}"
+                                                  BadgeStyle="OnBrand"
+                                                  VerticalAlignment="Center"
+                                                  Margin="{StaticResource Spacing.HeaderActionGap}"/>
+                            </StackPanel>
                             <controls:CurrencyText Amount="{Binding Total}"
-                                                   AmountForeground="{StaticResource Color.Text.OnBrand}"
-                                                   FontSize="{StaticResource Font.Size.Xl}"
-                                                   FontWeight="{StaticResource Font.Weight.Bold}"
-                                                   HorizontalAlignment="Center"/>
+                                                    AmountForeground="{StaticResource Color.Text.OnBrand}"
+                                                    FontSize="{StaticResource Font.Size.Xl}"
+                                                    FontWeight="{StaticResource Font.Weight.Bold}"
+                                                    Margin="{StaticResource Spacing.HeaderChipGap}"
+                                                    HorizontalAlignment="Center"/>
                         </StackPanel>
-                        <controls:KeyHint Key="F4" BadgeStyle="OnBrand"
-                                          HorizontalAlignment="Right" VerticalAlignment="Top"
-                                          Margin="{StaticResource Spacing.KeyHintOverlayOffset}"/>
                     </Grid>
                 </Button>
 
@@ -112,9 +132,15 @@
                             <TextBlock Text="{DynamicResource Cashier.ReprintLast}"
                                        FontSize="{StaticResource Font.Size.Sm}"
                                        FontWeight="{StaticResource Font.Weight.Medium}"
-                                       TextAlignment="Center"
-                                       Margin="{StaticResource Spacing.HeaderActionGap}"/>
-                            <controls:KeyHint Key="F6" BadgeStyle="Default" VerticalAlignment="Center"/>
+                                       TextAlignment="Center"/>
+                            <TextBlock Text=" - "
+                                       FontSize="{StaticResource Font.Size.Sm}"
+                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                       TextAlignment="Center"/>
+                            <controls:KeyHint Key="{Binding ReprintLastReceiptShortcut}"
+                                              BadgeStyle="Default"
+                                              VerticalAlignment="Center"
+                                              Margin="{StaticResource Spacing.HeaderActionGap}"/>
                         </StackPanel>
                     </Button>
 
@@ -125,9 +151,15 @@
                             <TextBlock Text="{DynamicResource Cashier.RecentSales}"
                                        FontSize="{StaticResource Font.Size.Sm}"
                                        FontWeight="{StaticResource Font.Weight.Medium}"
-                                       TextAlignment="Center"
-                                       Margin="{StaticResource Spacing.HeaderActionGap}"/>
-                            <controls:KeyHint Key="F5" BadgeStyle="Default" VerticalAlignment="Center"/>
+                                       TextAlignment="Center"/>
+                            <TextBlock Text=" - "
+                                       FontSize="{StaticResource Font.Size.Sm}"
+                                       FontWeight="{StaticResource Font.Weight.Medium}"
+                                       TextAlignment="Center"/>
+                            <controls:KeyHint Key="{Binding ShowRecentSalesShortcut}"
+                                              BadgeStyle="Default"
+                                              VerticalAlignment="Center"
+                                              Margin="{StaticResource Spacing.HeaderActionGap}"/>
                         </StackPanel>
                     </Button>
 

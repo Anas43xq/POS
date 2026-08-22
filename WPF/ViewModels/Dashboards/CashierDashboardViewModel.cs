@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.Logging;
+using UI.Configuration;
 using UI.Commands;
 using UI.Services;
 using UI.Views;
@@ -44,6 +45,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
     private readonly ILogger<CashierDashboardViewModel> _logger;
     private readonly INotificationService _notifications;
     private bool _hasInitialized;
+    private readonly ShortcutSettings _shortcuts;
 
     private readonly ModifierPanelViewModel _modifierPanel;
     public ModifierPanelViewModel ModifierPanel => _modifierPanel;
@@ -252,6 +254,10 @@ public partial class CashierDashboardViewModel : BaseViewModel
     public AsyncRelayCommand<CartItem> EditCartLineCommand { get; }
 
     public IReadOnlyList<LanguageDto> SupportedLanguages { get; }
+    public string CashPaymentShortcut => _shortcuts.Cashier.CashPayment;
+    public string CardPaymentShortcut => _shortcuts.Cashier.CardPayment;
+    public string ShowRecentSalesShortcut => _shortcuts.Cashier.ShowRecentSales;
+    public string ReprintLastReceiptShortcut => _shortcuts.Cashier.ReprintLastReceipt;
     public ICommand OpenLanguagePickerCommand { get; }
     public ICommand CloseLanguagePickerCommand { get; }
     public ICommand SelectLanguageCommand { get; }
@@ -285,7 +291,8 @@ public partial class CashierDashboardViewModel : BaseViewModel
         ICartPricingService cartPricingService,
         IViewModelFactory viewModelFactory,
         ILogger<CashierDashboardViewModel> logger,
-        INotificationService notifications)
+        INotificationService notifications,
+        ShortcutSettings shortcuts)
     {
         _session = session;
         _shiftService = shiftService;
@@ -303,6 +310,7 @@ public partial class CashierDashboardViewModel : BaseViewModel
         _logger = logger;
         _notifications = notifications;
         Notifications = notifications;
+        _shortcuts = shortcuts;
 
         _modifierPanel = _viewModelFactory.Create<ModifierPanelViewModel>();
 

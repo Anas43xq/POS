@@ -76,6 +76,7 @@ Detailed known issues and historical fixes live in `KownIssues.md`. Check that f
   - `WPF/Views/Main/ManagerMainView.xaml`: Added `conv:` namespace for `EnumToBooleanConverter`, added `Loaded="OnLoaded"`. Sidebar reworked: RadioButtons now have `x:Name` and bind `IsChecked` to `ActivePage` via `EnumToBoolConverter` (`Mode=OneWay` — VM owns selection truth). Removed hardcoded `IsChecked="True"`. Added `SidebarHighlight` `Border` + `TranslateTransform x:Name="HighlightTranslate"` and `NavPanel` name on the StackPanel.
   - `WPF/Views/Main/ManagerMainView.xaml.cs`: Added `OnLoaded`, `OnVmPropertyChanged`, `PlaceHighlightAt`. Animation uses `DoubleAnimation` on `TranslateTransform.YProperty` with `CubicEase EaseInOut`, 180 ms. Retargetable mid-flight via `BeginAnimation` replacement. Navigation never waits for animation. Initial placement snaps without animation.
   - `AGENTS.md`: Added "Shortcut label formatting rule" (`Action - Key` convention) and "Localization direction rule" (no `FlowDirection` on window root from localization) to Hard rules section.
+  - `WPF/Views/Cashier/CashierDashboardView.xaml` + `WPF/ViewModels/Dashboards/CashierDashboardViewModel.cs`: Cash/card/recent-sales/reprint footer shortcuts now render inline as `Action - Key` using live values from `ShortcutSettings` on the ViewModel, with the key badge separated from the label instead of overlaid.
 
 
 - 2026-08-21: **Settings role-aware lazy load + Cashier language picker popup.**
